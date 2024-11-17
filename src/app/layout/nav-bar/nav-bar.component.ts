@@ -3,6 +3,9 @@ import { Component } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
   selector: 'app-nav-bar',
@@ -11,11 +14,18 @@ import { RouterModule } from '@angular/router';
     MatToolbarModule,
     MatButtonModule,
     CommonModule,
-    RouterModule
-  ],
+    RouterModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatListModule
+],
   templateUrl: './nav-bar.component.html',
   styleUrl: './nav-bar.component.css'
 })
 export class NavBarComponent {
+  sidenav: any;
 
+  toggleSidenav() {
+    this.sidenav.toggle();
+  }
 }
