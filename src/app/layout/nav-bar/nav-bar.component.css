@@ -1,3 +1,7 @@
+* {
+  background-color: white;
+  color: black;
+}
 .sidenav-container {
   height: 100vh;
 }
@@ -33,19 +37,34 @@ mat-nav-list {
 mat-list-item {
   display: flex;
   align-items: center;
+  color: #7C96FF;
 }
+
 
 mat-icon {
   margin-right: 10px;
+  color: #7C96FF;
+  background-color: #EEF2FF;
 }
 span {
   cursor: pointer;
   flex: 6;
   text-align: center;
 }
-div {
+.nav-right {
   cursor: pointer;
   flex:auto;
   display: flex;
   justify-content: flex-end;
+}
+a {
+  text-decoration: none;
+  color: #7C96FF;
+}
+.secondary {
+  background-color: #EEF2FF;
+  color: black;
+}
+h3 {
+  text-decoration: none;
 }

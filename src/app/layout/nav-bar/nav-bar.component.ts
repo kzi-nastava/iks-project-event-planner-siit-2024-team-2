@@ -23,9 +23,8 @@ import { MatListModule } from '@angular/material/list';
   styleUrl: './nav-bar.component.css'
 })
 export class NavBarComponent {
-  sidenav: any;
-
+  toggle: boolean = true
   toggleSidenav() {
-    this.sidenav.toggle();
+    this.toggle = !this.toggle;
   }
 }

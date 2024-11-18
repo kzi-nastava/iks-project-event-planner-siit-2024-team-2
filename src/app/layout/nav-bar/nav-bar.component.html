@@ -1,34 +1,34 @@
-<mat-toolbar color="primary">
+<mat-toolbar color="primary" class="secondary">
   <button mat-icon-button (click)="toggleSidenav()">
     <mat-icon>menu</mat-icon>
   </button>
-  <span [routerLink]="['']">Event Planner</span>
-  <div [routerLink]="['profile']"><mat-icon>account_circle</mat-icon></div>
+  <span [routerLink]="['']" class="secondary">Event Planner</span>
+  <div [routerLink]="['profile']" class="secondary nav-right"><mat-icon>account_circle</mat-icon></div>
 </mat-toolbar>
 
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #sidenav mode="side" opened>
-    <mat-nav-list>
-      <a mat-list-item [routerLink]="['']">
+<mat-sidenav-container class="sidenav-container secondary" >
+  <mat-sidenav #sidenav mode="side" class="secondary" [opened]="toggle">
+    <mat-nav-list class="secondary">
+      <mat-list-item [routerLink]="['']">
         <mat-icon>home</mat-icon>
         Home
-      </a>
-      <a mat-list-item [routerLink]="['chat']">
+      </mat-list-item>
+      <mat-list-item [routerLink]="['chat']">
         <mat-icon>chat</mat-icon>
         Chat
-      </a>
-      <a mat-list-item [routerLink]="['new']">
+      </mat-list-item>
+      <mat-list-item [routerLink]="['new']">
         <mat-icon>add</mat-icon>
         New
-      </a>
-      <a mat-list-item [routerLink]="['notifications']">
+      </mat-list-item>
+      <mat-list-item [routerLink]="['notifications']">
         <mat-icon>notifications</mat-icon>
         Notifications
-      </a>
-      <a mat-list-item [routerLink]="['calendar']">
+      </mat-list-item>
+      <mat-list-item [routerLink]="['calendar']">
         <mat-icon>calendar_today</mat-icon>
         My Events
-      </a>
+      </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
