@@ -1,16 +1,34 @@
 <div class="column-div">
 
-<div class="custom-combobox">
-    <label for="serviceCategories" class="custom-label">Service category</label>
-    <div class="custom-select-wrapper">
-        <select id="serviceCategories" class="custom-select"[(ngModel)]="selectedCategory">
-            <option *ngFor="let category of serviceCategories" [value]="category">{{ category }}</option>
-        </select>
-        <span class="custom-arrow">▼</span>
+    <div class="custom-combobox">
+        <label for="serviceCategories" class="custom-label">Service category</label>
+        <div class="custom-select-wrapper">
+            <select id="serviceCategories" class="custom-select"[(ngModel)]="selectedCategory">
+                <option *ngFor="let category of serviceCategories" [value]="category">{{ category }}</option>
+            </select>
+            <span class="custom-arrow">▼</span>
+        </div>
     </div>
-</div>
 
-<button>New category request</button>
+    <button>New category request</button>
+
+    <div class="form-container">
+    <label for="name" class="form-label">Name:</label>
+    <input type="text" id="name" class="form-input" placeholder="Enter the name">
+
+    <label for="description" class="form-label">Description:</label>
+    <textarea type="text" id="description" class="form-input" placeholder="Enter the description"></textarea>
+
+    <label for="specifies" class="form-label">Specifies:</label>
+    <textarea id="specifies" class="form-input" placeholder="Enter the specifies"></textarea>
+
+    <label for="price" class="form-label">Price (€):</label>
+    <input type="number" id="price" class="form-input" placeholder="Enter the price">
+
+    <label for="discount" class="form-label">Discount (€):</label>
+    <input type="number" id="discount" class="form-input" placeholder="Enter the discount">
+    
+    </div>
 
 </div>
 
