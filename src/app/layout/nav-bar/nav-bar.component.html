@@ -1,0 +1,37 @@
+<mat-toolbar color="primary" class="secondary">
+  <button mat-icon-button (click)="toggleSidenav()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span [routerLink]="['']" class="secondary">Event Planner</span>
+  <div [routerLink]="['profile']" class="secondary nav-right"><mat-icon>account_circle</mat-icon></div>
+</mat-toolbar>
+
+<mat-sidenav-container class="sidenav-container secondary" >
+  <mat-sidenav #sidenav mode="side" class="secondary" [opened]="toggle">
+    <mat-nav-list class="secondary">
+      <mat-list-item [routerLink]="['']">
+        <mat-icon>home</mat-icon>
+        Home
+      </mat-list-item>
+      <mat-list-item [routerLink]="['chat']">
+        <mat-icon>chat</mat-icon>
+        Chat
+      </mat-list-item>
+      <mat-list-item [routerLink]="['new']">
+        <mat-icon>add</mat-icon>
+        New
+      </mat-list-item>
+      <mat-list-item [routerLink]="['notifications']">
+        <mat-icon>notifications</mat-icon>
+        Notifications
+      </mat-list-item>
+      <mat-list-item [routerLink]="['calendar']">
+        <mat-icon>calendar_today</mat-icon>
+        My Events
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
