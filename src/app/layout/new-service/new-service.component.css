@@ -1,9 +1,12 @@
-/* Wrapper container styling */
+.column-div{
+    margin: 70px;
+    margin-top:15px;
+}
+
 .custom-combobox {
     display: flex;
     flex-direction: column;
     width: 300px;
-    margin: 20px;
 }
 
 /* Label styling */
@@ -59,4 +62,47 @@
 .custom-select:focus {
     border-color: #7C96FF;
     box-shadow: 0 0 8px rgba(25, 118, 210, 0.5);
+}
+
+/* Button styling */
+button {
+    margin-top: 100px;
+    padding: 12px 24px; /* Top and bottom padding, left and right padding */
+    font-size: 16px; /* Font size */
+    font-weight: bold; /* Bold text */
+    text-transform: uppercase; /* Uppercase text */
+    color: white; /* Text color */
+    background-color: #7C96FF; /* Button background color */
+    border: none; /* Remove default border */
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4); /* Shadow effect */
+    outline: none; /* Remove focus outline */
+}
+
+/* Hover effect */
+button:hover {
+    background-color: #0056b3; /* Darker background on hover */
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.6); /* Darker shadow on hover */
+}
+
+/* Focus effect */
+button:focus {
+    outline: 3px solid #ffcc00; /* Yellow outline on focus */
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.6); /* Subtle glow effect */
+}
+
+/* Active effect (when button is clicked) */
+button:active {
+    background-color: #004085; /* Even darker background when clicked */
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* Subtle shadow on click */
+}
+
+/* Disabled button */
+button:disabled {
+    background-color: #d6d6d6; /* Grey background for disabled state */
+    color: #999; /* Lighter text color */
+    cursor: not-allowed; /* Not allowed cursor */
+    box-shadow: none; /* No shadow for disabled state */
 }
