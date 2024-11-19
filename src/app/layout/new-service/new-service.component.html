@@ -1,0 +1,12 @@
+
+
+<div class="custom-combobox">
+    <label for="serviceCategories" class="custom-label">Service category</label>
+    <div class="custom-select-wrapper">
+        <select id="serviceCategories" class="custom-select"[(ngModel)]="selectedCategory">
+            <option *ngFor="let category of serviceCategories" [value]="category">{{ category }}</option>
+        </select>
+        <span class="custom-arrow">▼</span>
+    </div>
+</div>
+
