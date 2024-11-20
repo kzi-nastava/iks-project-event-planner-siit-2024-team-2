@@ -1,0 +1,23 @@
+<div class="services-container">
+    <div *ngFor="let service of myServices" class="card">
+      <!-- <img src="res/catering.jpeg" alt="{{ service.name }}" class="card-image" /> -->
+      <div class="card-content">
+        <h3>{{ service.name }}</h3>
+        <p>{{ service.description }}</p>
+        <ul>
+          <li *ngFor="let event of service.eventTypes">{{ event }}</li>
+        </ul>
+        <div class="row">
+          <p><strong>Price:</strong> {{ service.price }}</p>
+          <p><strong>Discount:</strong> {{ service.discount }}</p>
+        </div>
+
+        <div class="row" id="end">
+          <button>Edit</button>
+          <button id="delete">Delete</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
