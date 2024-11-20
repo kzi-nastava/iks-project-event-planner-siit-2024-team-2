@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { Service } from '../../model/service';
 import { CommonModule } from '@angular/common';
-
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { DialogComponent } from '../../dialog/dialog.component';
 
 @Component({
   selector: 'app-my-services',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatDialogModule],
   templateUrl: './my-services.component.html',
   styleUrl: './my-services.component.css'
 })
@@ -24,5 +25,10 @@ export class MyServicesComponent {
       }
     }
 
+    constructor(public dialog: MatDialog) {}
+
+    openDialog(): void {
+      this.dialog.open(DialogComponent);
+  }
     
 }

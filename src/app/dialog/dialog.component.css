@@ -1,0 +1,25 @@
+button {
+    padding: 6px 12px; /* Top and bottom padding, left and right padding */
+    font-size: 12px; /* Font size */
+    font-weight: bold; /* Bold text */
+    text-transform: uppercase; /* Uppercase text */
+    color: white; /* Text color */
+    background-color: #7C96FF; /* Button background color */
+    border: none; /* Remove default border */
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4); /* Shadow effect */
+    outline: none; /* Remove focus outline */
+    width: 130px;
+    margin: 10px;
+}
+
+button:hover {
+    background-color: #0056b3; /* Darker background on hover */
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.6); /* Darker shadow on hover */
+}
+
+#delete {
+    background-color: #e74c3c;
+}
