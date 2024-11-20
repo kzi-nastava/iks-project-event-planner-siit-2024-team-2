@@ -1,3 +1,19 @@
+<div class="row">
+
+  <div class="custom-select-wrapper custom-combobox">
+      <select id="filterCategories" class="custom-select" [(ngModel)]="selectedCategory">
+          <option *ngFor="let category of filterCategories" [value]="category">{{ category }}</option>
+      </select>
+      <span class="custom-arrow">▼</span>
+  </div>
+
+  <div class="searchbar">
+    <input id="search-box" type="text" placeholder="Search" />
+    <button id="search-btn" class="btn">🔍</button>
+  </div>
+  <button class="btn">Price list 📋</button>
+</div>
+
 <div class="services-container">
     <div *ngFor="let service of myServices" class="card">
       <!-- <img src="res/catering.jpeg" alt="{{ service.name }}" class="card-image" /> -->

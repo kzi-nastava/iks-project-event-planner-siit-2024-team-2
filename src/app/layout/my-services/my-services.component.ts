@@ -4,17 +4,21 @@ import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DialogComponent } from '../../dialog/dialog.component';
 import { Router } from '@angular/router';   
+import { FormsModule } from '@angular/forms';
+
 
 
 @Component({
   selector: 'app-my-services',
   standalone: true,
-  imports: [CommonModule, MatDialogModule],
+  imports: [CommonModule, MatDialogModule, FormsModule],
   templateUrl: './my-services.component.html',
   styleUrl: './my-services.component.css'
 })
 export class MyServicesComponent {
     myServices: Service[] = [];
+    filterCategories: string[] = ['Name', 'Price', 'Description', 'Category', 'Available events', 'Duration'];
+    selectedCategory: string = 'FILTER'; // Default selection
 
     ngOnInit(): void {
       this.initServices();
@@ -37,5 +41,4 @@ export class MyServicesComponent {
     navigateToEditService(serviceId: number): void {
       this.router.navigate(['/new-service'], { queryParams: { id: serviceId } });
     }
-    
 }

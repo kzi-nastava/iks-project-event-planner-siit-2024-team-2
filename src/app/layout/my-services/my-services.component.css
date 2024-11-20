@@ -80,6 +80,8 @@
     display: flex;
     gap: 30px; /* Space between combobox and listbox */
     align-items: flex-start; /* Align items to the top */
+    justify-content: center;
+    margin-bottom: 20px;
 }
 
 button {
@@ -126,5 +128,65 @@ button:disabled {
 
 #delete {
     background-color: #e74c3c;
+}
+
+#search-box {
+  padding: 12px 24px;
+  border-radius: 8px;
+}
+
+#search-btn {
+   width: 10px;
+   background-color: #EEF2FF;
+}
+
+.custom-combobox {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+}
+
+/* Select dropdown wrapper */
+.custom-select-wrapper {
+  position: relative;
+}
+
+/* Select dropdown styling */
+.custom-select {
+  font-size: 18px;
+  padding: 12px 40px 12px 15px; /* Space for the arrow on the right */
+  border: 2px solid #7C96FF; /* Blue border */
+  border-radius: 8px; /* Rounded corners */
+  background-color: #EEF2FF; /* Light gray background */
+  color: #333; /* Dark text color */
+  outline: none; /* Remove default outline */
+  transition: all 0.3s ease;
+  appearance: none; /* Remove default arrow */
+  -webkit-appearance: none; /* Safari-specific */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Custom arrow styling */
+.custom-arrow {
+  position: absolute;
+  right: 15px; /* Position arrow inside the wrapper */
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #7C96FF; /* Arrow color */
+  pointer-events: none; /* Arrow does not interfere with mouse events */
+}
+
+/* Hover effect for the dropdown */
+.custom-select:hover {
+  background-color: #EEF2FF;
+  border-color: #7C96FF;
+}
+
+/* Focus effect for the dropdown */
+.custom-select:focus {
+  border-color: #7C96FF;
+  box-shadow: 0 0 8px rgba(25, 118, 210, 0.5);
 }
   
