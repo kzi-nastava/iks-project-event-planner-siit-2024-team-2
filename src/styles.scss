@@ -1,9 +1,6 @@
 @use "@angular/material" as mat;
 @include mat.core();
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
-
 $event-planner-pallete: (
     50: #ff0000,
     100: #ff0000,
@@ -38,3 +35,6 @@ $event-planner-theme: mat.m2-define-light-theme((
     ),
 ));
 @include mat.all-component-themes($event-planner-theme);
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
