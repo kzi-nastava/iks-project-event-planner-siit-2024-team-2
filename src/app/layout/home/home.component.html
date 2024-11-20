@@ -1,4 +1,70 @@
-<div class="content">
+<!-- <div class="content">
   <h1>Welcome to Event planner!</h1>
   <p>This is your main content area</p>
+</div> -->
+<div class="row">
+  <div *ngFor="let event of topEvents">
+    <mat-card class="event-card" appearance="outlined">
+      <mat-card-header>
+        <img mat-card-avatar class="profile-picture" src="images/avatar.png" alt="Profile Picture" />
+        <mat-card-title-group>
+          <mat-card-title>Petar Jović</mat-card-title>
+          <mat-card-subtitle>petar.jovic&commat;gmail.com</mat-card-subtitle>
+        </mat-card-title-group>
+      </mat-card-header>
+      <mat-card-content>
+        <br>
+        <p class="name">Perin rođendan</p>
+        <p class="date">7th if February, 2025</p>
+        <br>
+        <p class="description">{{longText}}</p>
+        <br>
+      </mat-card-content>
+      <mat-card-actions align="start">
+        <button mat-flat-button color="primary">More info</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+  
 </div>
+
+<mat-card class="event-card" appearance="outlined">
+  <mat-card-header>
+    <img mat-card-avatar class="profile-picture" src="images/avatar.png" alt="Profile Picture" />
+    <mat-card-title-group>
+      <mat-card-title>Petar Jović</mat-card-title>
+      <mat-card-subtitle>petar.jovic&commat;gmail.com</mat-card-subtitle>
+    </mat-card-title-group>
+  </mat-card-header>
+  <mat-card-content>
+    <br>
+    <p class="name">Perin rođendan</p>
+    <p class="date">7th if February, 2025</p>
+    <br>
+    <p class="description">{{longText}}</p>
+    <br>
+  </mat-card-content>
+  <mat-card-actions align="start">
+    <button mat-flat-button color="primary">More info</button>
+  </mat-card-actions>
+</mat-card>
+<mat-card class="service-product-card" appearance="outlined">
+  <mat-card-header>
+    <img mat-card-avatar class="profile-picture" src="images/monogram.png" alt="Profile Picture" />
+    <mat-card-title-group>
+      <mat-card-title>Catering Peric</mat-card-title>
+      <mat-card-subtitle>marko.peric&commat;cperic.rs</mat-card-subtitle>
+    </mat-card-title-group>
+  </mat-card-header>
+  <mat-card-content>
+    <br>
+    <p class="name">Catering for all occasions</p>
+    <p class="date">Contact</p>
+    <br>
+    <p class="description">{{longText}}</p>
+    <br>
+  </mat-card-content>
+  <mat-card-actions align="start">
+    <button mat-flat-button color="primary">More info</button>
+  </mat-card-actions>
+</mat-card>
