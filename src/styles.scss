@@ -2,27 +2,27 @@
 @include mat.core();
 
 $event-planner-pallete: (
-    50: #ff0000,
-    100: #ff0000,
-    200: #ff0000,
-    300: #ff0000,
-    400: #ff0000,
-    500: #ff0000,
-    600: #ff0000,
-    700: #ff0000,
-    800: #ff0000,
-    900: #ff0000,
+    50: #7C96FF,
+    100: #7C96FF,
+    200: #7C96FF,
+    300: #7C96FF,
+    400: #7C96FF,
+    500: #7C96FF,
+    600: #7C96FF,
+    700: #7C96FF,
+    800: #7C96FF,
+    900: #7C96FF,
     contrast: (
-        50: #00ff00,
-        100: #00ff00,
-        200: #00ff00,
-        300: #00ff00,
-        400: #00ff00,
-        500: #00ff00,
-        600: #00ff00,
-        700: #00ff00,
-        800: #00ff00,
-        900: #00ff00
+        50: #EEF2FF,
+        100: #EEF2FF,
+        200: #EEF2FF,
+        300: #EEF2FF,
+        400: #EEF2FF,
+        500: #EEF2FF,
+        600: #EEF2FF,
+        700: #EEF2FF,
+        800: #EEF2FF,
+        900: #EEF2FF
     )
 );
 $event-planner-primary:    mat.m2-define-palette($event-planner-pallete);

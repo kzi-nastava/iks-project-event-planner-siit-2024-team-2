@@ -7,6 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,8 @@ import { RouterModule } from '@angular/router';
     MatIconModule,
     MatCheckboxModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    CommonModule
   ]
 })
 export class LoginComponent {

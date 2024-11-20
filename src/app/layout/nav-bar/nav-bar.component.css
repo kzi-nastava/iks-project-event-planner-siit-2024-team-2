@@ -66,16 +66,16 @@ mat-nav-list {
   color: #7C96FF !important;
 }
 ::ng-deep mat-list-item {
-  color: #7C96FF !important; /* Set the text color */
+  color: #7C96FF !important;
 }
 
 ::ng-deep mat-list-item:hover {
-  background-color: #EEF2FF !important; /* Optional hover background */
-  color: #5B78CC !important; /* Slightly darker text on hover */
+  background-color: #EEF2FF !important;
+  color: #5B78CC !important;
 }
 
 ::ng-deep mat-list-item .mat-line {
-  color: inherit !important; /* Ensure all text lines inside the list item inherit the color */
+  color: inherit !important;
 }
 
 
@@ -102,8 +102,5 @@ a {
 .secondary {
   background-color: #EEF2FF;
   color: black;
-}
-h3 {
-  text-decoration: none;
 }
 

@@ -11,13 +11,14 @@
 }
 
 ng:deep button {
-  margin-top: 10px;
-  background-color: #7C96FF;
-  color: white important!;
+  margin: 10px;
+  background-color: #7C96FF important!;
+  color: black important!;;
 }
 
 button:disabled {
   background-color: #D1D8FF;
+  color: gray;
 }
 
 .remember-me {
@@ -26,11 +27,4 @@ button:disabled {
 
 mat-form-field {
   margin-bottom: 15px; 
-}
-mat-label {
-  color: #7C96FF; 
-}
-
-mat-input {
-  color: #333; 
 }

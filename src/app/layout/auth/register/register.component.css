@@ -10,13 +10,15 @@
   width: 100%;
 }
 
-button {
-  margin-top: 10px;
-  background-color: #7C96FF;
-  color: white;
+ng:deep button {
+  margin: 10px;
+  background-color: #7C96FF important!;
+  color: black important!;;
 }
+
 button:disabled {
   background-color: #D1D8FF;
+  color: gray;
 }
 
 mat-form-field {
