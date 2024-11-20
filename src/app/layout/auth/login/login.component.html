@@ -1,0 +1,50 @@
+<mat-card class="login-card">
+  <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+    <mat-form-field class="full-width">
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        formControlName="email"
+        type="email"
+        placeholder="Enter your email"
+      />
+      <mat-error *ngIf="loginForm.get('email')?.hasError('required')"
+        >Email is required</mat-error
+      >
+      <mat-error *ngIf="loginForm.get('email')?.hasError('email')"
+        >Enter a valid email</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        formControlName="password"
+        type="password"
+        placeholder="Enter your password"
+      />
+      <mat-error *ngIf="loginForm.get('password')?.hasError('required')"
+        >Password is required</mat-error
+      >
+      <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')"
+        >Password must be at least 6 characters</mat-error
+      >
+    </mat-form-field>
+
+    <div class="remember-me">
+      <mat-checkbox formControlName="rememberMe">Remember Me</mat-checkbox>
+    </div>
+    <div style="gap: 10px;">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="loginForm.invalid"
+      >
+        Login
+      </button>
+      <a> <button color="primary" [routerLink]="['/signup']" mat-raised-button> Signup </button> </a>
+  </div>
+  </form>
+</mat-card>

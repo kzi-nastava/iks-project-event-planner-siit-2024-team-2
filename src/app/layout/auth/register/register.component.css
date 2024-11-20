@@ -1,0 +1,26 @@
+.register-card {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  background-color: #EEF2FF;
+  border-radius: 8px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+ng:deep button {
+  margin: 10px;
+  background-color: #7C96FF important!;
+  color: black important!;;
+}
+
+button:disabled {
+  background-color: #D1D8FF;
+  color: gray;
+}
+
+mat-form-field {
+  margin-bottom: 15px;
+}
