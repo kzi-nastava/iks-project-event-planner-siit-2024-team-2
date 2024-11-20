@@ -1,0 +1,40 @@
+@use "@angular/material" as mat;
+@include mat.core();
+
+$event-planner-pallete: (
+    50: #ff0000,
+    100: #ff0000,
+    200: #ff0000,
+    300: #ff0000,
+    400: #ff0000,
+    500: #ff0000,
+    600: #ff0000,
+    700: #ff0000,
+    800: #ff0000,
+    900: #ff0000,
+    contrast: (
+        50: #00ff00,
+        100: #00ff00,
+        200: #00ff00,
+        300: #00ff00,
+        400: #00ff00,
+        500: #00ff00,
+        600: #00ff00,
+        700: #00ff00,
+        800: #00ff00,
+        900: #00ff00
+    )
+);
+$event-planner-primary:    mat.m2-define-palette($event-planner-pallete);
+
+$event-planner-theme: mat.m2-define-light-theme((
+    color: (
+        primary: $event-planner-primary,
+        accent: $event-planner-primary,
+        warn: $event-planner-primary,
+    ),
+));
+@include mat.all-component-themes($event-planner-theme);
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
