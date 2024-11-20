@@ -14,7 +14,7 @@ export const routes: Routes = [
     {path: 'profile', component: ProfileComponent},
     {path: 'notifications', component: NotificationsComponent},
     {path: 'new-service', component: NewServiceComponent},
-    {path: 'my-services', component: MyServicesComponent}
+    {path: 'my-services', component: MyServicesComponent},
     {path: 'signin', component: LoginComponent},
     {path: 'signup', component: RegisterComponent},
     {path: '', redirectTo: 'home', pathMatch: 'full'},

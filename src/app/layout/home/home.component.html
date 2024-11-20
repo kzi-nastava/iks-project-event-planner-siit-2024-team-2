@@ -2,69 +2,81 @@
   <h1>Welcome to Event planner!</h1>
   <p>This is your main content area</p>
 </div> -->
+<h4>Top 5 events</h4>
 <div class="row">
   <div *ngFor="let event of topEvents">
-    <mat-card class="event-card" appearance="outlined">
-      <mat-card-header>
-        <img mat-card-avatar class="profile-picture" src="images/avatar.png" alt="Profile Picture" />
-        <mat-card-title-group>
-          <mat-card-title>Petar Jović</mat-card-title>
-          <mat-card-subtitle>petar.jovic&commat;gmail.com</mat-card-subtitle>
-        </mat-card-title-group>
-      </mat-card-header>
-      <mat-card-content>
-        <br>
-        <p class="name">Perin rođendan</p>
-        <p class="date">7th if February, 2025</p>
-        <br>
-        <p class="description">{{longText}}</p>
-        <br>
-      </mat-card-content>
-      <mat-card-actions align="start">
-        <button mat-flat-button color="primary">More info</button>
-      </mat-card-actions>
-    </mat-card>
+    <ng-template *ngTemplateOutlet="EventCard; context: {$implicit: event}"></ng-template>
   </div>
-  
+</div>
+<hr/>
+<h4>Explore events</h4>
+<div class="row">
+  <div *ngFor="let event of otherEvents">
+    <ng-template *ngTemplateOutlet="EventCard; context: {$implicit: event}"></ng-template>
+  </div>
 </div>
 
-<mat-card class="event-card" appearance="outlined">
-  <mat-card-header>
-    <img mat-card-avatar class="profile-picture" src="images/avatar.png" alt="Profile Picture" />
-    <mat-card-title-group>
-      <mat-card-title>Petar Jović</mat-card-title>
-      <mat-card-subtitle>petar.jovic&commat;gmail.com</mat-card-subtitle>
-    </mat-card-title-group>
-  </mat-card-header>
-  <mat-card-content>
-    <br>
-    <p class="name">Perin rođendan</p>
-    <p class="date">7th if February, 2025</p>
-    <br>
-    <p class="description">{{longText}}</p>
-    <br>
-  </mat-card-content>
-  <mat-card-actions align="start">
-    <button mat-flat-button color="primary">More info</button>
-  </mat-card-actions>
-</mat-card>
-<mat-card class="service-product-card" appearance="outlined">
-  <mat-card-header>
-    <img mat-card-avatar class="profile-picture" src="images/monogram.png" alt="Profile Picture" />
-    <mat-card-title-group>
-      <mat-card-title>Catering Peric</mat-card-title>
-      <mat-card-subtitle>marko.peric&commat;cperic.rs</mat-card-subtitle>
-    </mat-card-title-group>
-  </mat-card-header>
-  <mat-card-content>
-    <br>
-    <p class="name">Catering for all occasions</p>
-    <p class="date">Contact</p>
-    <br>
-    <p class="description">{{longText}}</p>
-    <br>
-  </mat-card-content>
-  <mat-card-actions align="start">
-    <button mat-flat-button color="primary">More info</button>
-  </mat-card-actions>
-</mat-card>
+<hr/>
+
+<h4>Top 5 services or products</h4>
+<div class="row">
+  <div *ngFor="let serviceProduct of topServiceProducts">
+    <ng-template *ngTemplateOutlet="ServiceProductCard; context: {$implicit: serviceProduct}"></ng-template>
+  </div>
+</div>
+<hr/>
+<h4>Explore services and products</h4>
+<div class="row">
+  <div *ngFor="let serviceProduct of otherServiceProducts">
+    <ng-template *ngTemplateOutlet="ServiceProductCard; context: {$implicit: serviceProduct}"></ng-template>
+  </div>
+</div>
+
+
+
+
+<ng-template #EventCard let-event>
+  <mat-card class="event-card" appearance="outlined">
+    <mat-card-header>
+      <img mat-card-avatar class="profile-picture" src="images/avatar.png" alt="Profile Picture" />
+      <mat-card-title-group>
+        <mat-card-title>Petar Jović</mat-card-title>
+        <mat-card-subtitle>petar.jovic&commat;gmail.com</mat-card-subtitle>
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-card-content>
+      <br>
+      <p class="name">{{event.name}}</p>
+      <p class="date">7th if February, 2025</p>
+      <br>
+      <p class="description">{{event.description}}</p>
+      <br>
+    </mat-card-content>
+    <mat-card-actions align="start">
+      <button mat-flat-button color="primary">More info</button>
+    </mat-card-actions>
+  </mat-card>
+</ng-template>
+
+<ng-template #ServiceProductCard let-serviceProduct>
+  <mat-card class="service-product-card" appearance="outlined">
+    <mat-card-header>
+      <img mat-card-avatar class="profile-picture" src="images/monogram.png" alt="Profile Picture" />
+      <mat-card-title-group>
+        <mat-card-title>Catering Peric</mat-card-title>
+        <mat-card-subtitle>marko.peric&commat;cperic.rs</mat-card-subtitle>
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-card-content>
+      <br>
+      <p class="name">{{serviceProduct.name}}</p>
+      <p class="price">Contact</p>
+      <br>
+      <p class="description">{{serviceProduct.description}}</p>
+      <br>
+    </mat-card-content>
+    <mat-card-actions align="start">
+      <button mat-flat-button color="primary">More info</button>
+    </mat-card-actions>
+  </mat-card>
+</ng-template>
