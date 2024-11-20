@@ -1,0 +1,192 @@
+/* Container for the cards */
+.services-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid */
+    gap: 20px;
+    padding: 20px;
+    justify-items: center;
+    margin-bottom: 70px;
+  }
+  
+  /* Styling for each card */
+  .card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 100%;
+    max-width: 320px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  /* Hover effect on the card */
+  .card:hover {
+    transform: translateY(-10px); /* Lifts the card on hover */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+  }
+  
+  /* Card image styling (optional, if you use images) */
+  .card-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-bottom: 2px solid #f1f1f1;
+  }
+  
+  /* Card content styling */
+  .card-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  /* Title styling */
+  .card-content h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  /* Description styling */
+  .card-content p {
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  /* List of events */
+  .card-content ul {
+    padding-left: 20px;
+    margin: 0;
+  }
+  
+  .card-content li {
+    list-style-type: disc;
+    color: #777;
+  }
+  
+  /* Price and discount styling */
+  .card-content strong {
+    font-weight: 700;
+    color: #333;
+  }
+  
+  .card-content p:last-child {
+    color: #e74c3c; /* Red for the discount */
+  }
+
+  .row {
+    display: flex;
+    gap: 30px; /* Space between combobox and listbox */
+    align-items: flex-start; /* Align items to the top */
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 12px 24px; /* Top and bottom padding, left and right padding */
+    font-size: 16px; /* Font size */
+    font-weight: bold; /* Bold text */
+    text-transform: uppercase; /* Uppercase text */
+    color: white; /* Text color */
+    background-color: #7C96FF; /* Button background color */
+    border: none; /* Remove default border */
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4); /* Shadow effect */
+    outline: none; /* Remove focus outline */
+    width: 200px;
+}
+
+/* Hover effect */
+button:hover {
+    background-color: #0056b3; /* Darker background on hover */
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.6); /* Darker shadow on hover */
+}
+
+/* Focus effect */
+button:focus{
+    outline: 3px solid #ffcc00; /* Yellow outline on focus */
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.6); /* Subtle glow effect */
+}
+
+/* Active effect (when button is clicked) */
+button:active {
+    background-color: #004085; /* Even darker background when clicked */
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* Subtle shadow on click */
+}
+
+/* Disabled button */
+button:disabled {
+    background-color: #d6d6d6; /* Grey background for disabled state */
+    color: #999; /* Lighter text color */
+    cursor: not-allowed; /* Not allowed cursor */
+    box-shadow: none; /* No shadow for disabled state */
+}
+
+#delete {
+    background-color: #e74c3c;
+}
+
+#search-box {
+  padding: 12px 24px;
+  border-radius: 8px;
+}
+
+#search-btn {
+   width: 10px;
+   background-color: #EEF2FF;
+}
+
+.custom-combobox {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+}
+
+/* Select dropdown wrapper */
+.custom-select-wrapper {
+  position: relative;
+}
+
+/* Select dropdown styling */
+.custom-select {
+  font-size: 18px;
+  padding: 12px 40px 12px 15px; /* Space for the arrow on the right */
+  border: 2px solid #7C96FF; /* Blue border */
+  border-radius: 8px; /* Rounded corners */
+  background-color: #EEF2FF; /* Light gray background */
+  color: #333; /* Dark text color */
+  outline: none; /* Remove default outline */
+  transition: all 0.3s ease;
+  appearance: none; /* Remove default arrow */
+  -webkit-appearance: none; /* Safari-specific */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Custom arrow styling */
+.custom-arrow {
+  position: absolute;
+  right: 15px; /* Position arrow inside the wrapper */
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #7C96FF; /* Arrow color */
+  pointer-events: none; /* Arrow does not interfere with mouse events */
+}
+
+/* Hover effect for the dropdown */
+.custom-select:hover {
+  background-color: #EEF2FF;
+  border-color: #7C96FF;
+}
+
+/* Focus effect for the dropdown */
+.custom-select:focus {
+  border-color: #7C96FF;
+  box-shadow: 0 0 8px rgba(25, 118, 210, 0.5);
+}
+  

@@ -1,0 +1,83 @@
+<div class="row" id="all">
+<div id="left-div">
+
+    <!-- Service categories combobox -->
+    <div class="custom-combobox">
+        <label for="serviceCategories" class="custom-label">Service category:</label>
+        <div class="custom-select-wrapper">
+            <select id="serviceCategories" class="custom-select"[(ngModel)]="selectedCategory">
+                <option *ngFor="let category of serviceCategories" [value]="category">{{ category }}</option>
+            </select>
+            <span class="custom-arrow">▼</span>
+        </div>
+    </div>
+
+    <button class="new" style="margin-top: 100px;">New category request</button>
+
+    <!-- 5 textboxes for: name, desc, spec, price and discount -->
+    <div class="form-container">
+    <label for="name" class="form-label">Name:</label>
+    <input [(ngModel)]=service.name type="text" id="name" class="form-input" placeholder="Enter the name">
+
+    <label for="description" class="form-label">Description:</label>
+    <textarea [(ngModel)]=service.description type="text" id="description" class="form-input" placeholder="Enter the description"></textarea>
+
+    <label for="specifies" class="form-label">Specifies:</label>
+    <textarea [(ngModel)]=service.specifies id="specifies" class="form-input" placeholder="Enter the specifies"></textarea>
+
+    <label for="price" class="form-label">Price (€):</label>
+    <input [(ngModel)]=service.price type="number" id="price" class="form-input" placeholder="Enter the price">
+
+    <label for="discount" class="form-label">Discount (€):</label>
+    <input [(ngModel)]=service.discount type="number" id="discount" class="form-input" placeholder="Enter the discount">
+    
+    </div>
+</div>
+
+<div id="right-div">
+    <label class="custom-label">Available events:</label>
+    <div class="listbox-container">
+        <div class="listbox">
+            <label class="listbox-item" *ngFor="let event of eventTypes">
+                <input type="checkbox" [(ngModel)]="selectedEvents[event]" />
+                <span>{{ event }}</span>
+            </label>
+        </div>
+    </div>
+
+
+    <label for="photos" class="form-label" style="margin-top: 35px;">Photos:</label>
+    <div class="row">
+        <textarea [(ngModel)]=service.photos id="photos" class="form-input" placeholder="Attach the photo(s)"></textarea>
+        <button id="spajalica">📎</button>
+    </div>
+
+    <div>
+        <input [(ngModel)]=service.visibility type="checkbox" name="visibility-checkbox" value="visibility"> visibility
+        <input [(ngModel)]=service.availability type="checkbox" name="availability-checkbox" value="availability" style="margin-left: 50px;"> availability
+        <input [(ngModel)]=service.automaticAcceptance type="checkbox" name="automaticAcceptance" value="automaticAcceptance"> automatic acceptance
+   
+    </div>
+
+
+    <!-- 3 other textboxes: duration and reservation and cancellation deadline -->
+    <div class="form-container" style="margin-top: 8px;">
+        <label for="duration" class="form-label">Duration:</label>
+        <input [(ngModel)]=service.duration type="number" id="duration" class="form-input" placeholder="Enter the duration" style="height: 35px;">
+
+        <label for="reservation-deadline" class="form-label">Reservation deadline:</label>
+        <input [(ngModel)]=service.reservationDeadline type="number" id="reservation-deadline" class="form-input" placeholder="Enter the deadline reservation">
+
+        <label for="cancellation-deadline" class="form-label">Cancellation deadline:</label>
+        <input [(ngModel)]=service.cancellationDeadline type="number" id="cancellation-deadline" class="form-input" placeholder="Enter the deadline cancellation">
+    </div>
+
+    
+</div>
+</div>
+
+<div class="row" id="end">
+    <button (click)="backToAllServicesPerhaps()" class="new">Save</button>
+    <button (click)="backToAllServicesPerhaps()" class="new" id="cancel">Cancel</button>
+</div>
+
