@@ -13,7 +13,7 @@
         </div>
 
         <div class="row" id="end">
-          <button>Edit</button>
+          <button mat-button (click)="navigateToEditService(service.id)">Edit</button>
           <button id="delete" (click)="openDialog()">Delete</button>
         </div>
 

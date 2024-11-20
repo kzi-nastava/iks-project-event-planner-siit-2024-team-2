@@ -3,6 +3,8 @@ import { Service } from '../../model/service';
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DialogComponent } from '../../dialog/dialog.component';
+import { Router } from '@angular/router';   
+
 
 @Component({
   selector: 'app-my-services',
@@ -25,10 +27,15 @@ export class MyServicesComponent {
       }
     }
 
-    constructor(public dialog: MatDialog) {}
+    constructor(public dialog: MatDialog, private router: Router) {}
 
     openDialog(): void {
       this.dialog.open(DialogComponent);
-  }
+    }
+
+
+    navigateToEditService(serviceId: number): void {
+      this.router.navigate(['/new-service'], { queryParams: { id: serviceId } });
+    }
     
 }
