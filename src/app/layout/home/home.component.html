@@ -1,4 +1,143 @@
-<div class="content">
-  <h1>Welcome to Event planner!</h1>
-  <p>This is your main content area</p>
+
+<h4>Top 5 events</h4>
+<div class="row">
+  <div *ngFor="let event of topEvents">
+    <ng-template *ngTemplateOutlet="EventCard; context: {$implicit: event}"></ng-template>
+  </div>
 </div>
+<hr/>
+<div class="options-row">
+  <div class="left-part">
+    <h4>Explore events</h4>
+  </div>
+  <div class="options row">
+    <div class="filter-checkboxes">
+      <mat-checkbox>Wedding</mat-checkbox>
+      <mat-checkbox>Birthday</mat-checkbox>
+      <mat-checkbox>Concert</mat-checkbox>
+    </div>
+    <mat-form-field appearance="fill" class="search-field" color="primary">
+      <mat-label>Search</mat-label>
+      <input matInput (input)="onSearch($event)" placeholder="Enter search term" />
+      <button mat-icon-button matSuffix aria-label="Search">
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="sort-field">
+      <mat-label>Sort by</mat-label>
+      <mat-select [(value)]="selectedSortOption">
+        <mat-option value="date">Most popular</mat-option>
+        <mat-option value="name">Least popular</mat-option>
+        <mat-option value="location">Closest</mat-option>
+        <mat-option value="popularity">Farthest</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
+<div class="row">
+  <div *ngFor="let event of otherEvents">
+    <ng-template *ngTemplateOutlet="EventCard; context: {$implicit: event}"></ng-template>
+  </div>
+</div>
+<mat-paginator [length]="100"
+              [pageSize]="10"
+              [pageSizeOptions]="[5, 10, 25, 100]"
+              aria-label="Select page" color="primary">
+</mat-paginator>
+
+<hr/>
+
+<h4>Top 5 services or products</h4>
+<div class="row">
+  <div *ngFor="let serviceProduct of topServiceProducts">
+    <ng-template *ngTemplateOutlet="ServiceProductCard; context: {$implicit: serviceProduct}"></ng-template>
+  </div>
+</div>
+<hr/>
+<div class="options-row">
+  <div class="left-part">
+    <h4>Explore services and products</h4>
+  </div>
+  <div class="options row">
+    <div class="filter-checkboxes">
+      <mat-checkbox>Caterring</mat-checkbox>
+      <mat-checkbox>Music</mat-checkbox>
+      <mat-checkbox>Balloons</mat-checkbox>
+    </div>
+    <mat-form-field appearance="fill" class="search-field" color="primary">
+      <mat-label>Search</mat-label>
+      <input matInput (input)="onSearch($event)" placeholder="Enter search term" />
+      <button mat-icon-button matSuffix aria-label="Search">
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="sort-field">
+      <mat-label>Sort by</mat-label>
+      <mat-select [(value)]="selectedSortOption">
+        <mat-option value="date">Most popular</mat-option>
+        <mat-option value="name">Least popular</mat-option>
+        <mat-option value="location">Least expensive</mat-option>
+        <mat-option value="popularity">Most expensive</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
+<div class="row">
+  <div *ngFor="let serviceProduct of otherServiceProducts">
+    <ng-template *ngTemplateOutlet="ServiceProductCard; context: {$implicit: serviceProduct}"></ng-template>
+  </div>
+</div>
+<mat-paginator [length]="100"
+              [pageSize]="10"
+              [pageSizeOptions]="[5, 10, 25, 100]"
+              aria-label="Select page">
+</mat-paginator>
+
+
+
+
+<ng-template #EventCard let-event>
+  <mat-card class="event-card" appearance="outlined">
+    <mat-card-header>
+      <img mat-card-avatar class="profile-picture" src="images/avatar.png" alt="Profile Picture" />
+      <mat-card-title-group>
+        <mat-card-title>Petar Jović</mat-card-title>
+        <mat-card-subtitle>petar.jovic&commat;gmail.com</mat-card-subtitle>
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-card-content>
+      <br>
+      <p class="name">{{event.name}}</p>
+      <p class="date">7th if February, 2025</p>
+      <br>
+      <p class="description">{{event.description}}</p>
+      <br>
+    </mat-card-content>
+    <mat-card-actions align="start">
+      <button mat-flat-button color="primary">More info</button>
+    </mat-card-actions>
+  </mat-card>
+</ng-template>
+
+<ng-template #ServiceProductCard let-serviceProduct>
+  <mat-card class="service-product-card" appearance="outlined">
+    <mat-card-header>
+      <img mat-card-avatar class="profile-picture" src="images/monogram.png" alt="Profile Picture" />
+      <mat-card-title-group>
+        <mat-card-title>Catering Peric</mat-card-title>
+        <mat-card-subtitle>marko.peric&commat;cperic.rs</mat-card-subtitle>
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-card-content>
+      <br>
+      <p class="name">{{serviceProduct.name}}</p>
+      <p class="price">Price: ${{serviceProduct.price}}</p>
+      <br>
+      <p class="description">{{serviceProduct.description}}</p>
+      <br>
+    </mat-card-content>
+    <mat-card-actions align="start">
+      <button mat-flat-button color="primary">More info</button>
+    </mat-card-actions>
+  </mat-card>
+</ng-template>

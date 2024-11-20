@@ -1,0 +1,59 @@
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    overflow-x: auto;
+}
+.event-card, .service-product-card{
+    max-width: 400px;
+    margin-bottom: 8px;
+    background: white;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    border-width: 0px;
+    flex: 0 0 auto;
+}
+.profile-picture {
+    width: 50px;
+    height: 50px;
+    padding-right: 10px;
+  }
+.mat-mdc-card-subtitle{
+    color:#222222;
+}
+.card-content{
+    padding-top: 50px;
+}
+.name{
+    font-size: large;
+    margin: 0;
+}
+.date, .price{
+    margin: 0;
+}
+.description{
+    margin: 0;
+}
+.options-row{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    overflow-x: auto;
+    justify-content: space-between;
+    align-self: center;
+    width: 100%;
+}
+.left-part {
+    flex: 1;
+}
+.options{
+    margin-left: auto;
+}
+.filter-checkboxes mat-checkbox {
+  margin-right: 8px; 
+  color: black !important;
+}
+.mdc-checkbox{
+    color: black !important;
+}
