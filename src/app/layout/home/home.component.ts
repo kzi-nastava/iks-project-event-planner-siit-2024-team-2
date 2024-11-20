@@ -9,12 +9,18 @@ import {MatCardModule} from '@angular/material/card';
 import { FormsModule } from '@angular/forms';
 import { EP_Event } from '../../model/ep_event';
 import { Service } from '../../model/service';
+import { MatFormField } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { BrowserModule } from '@angular/platform-browser';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatOption, MatSelect } from '@angular/material/select';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
-    MatSidenavModule, MatCardModule, MatButtonModule, CommonModule
+    MatSidenavModule, MatCardModule, MatButtonModule, CommonModule, MatFormField, MatInputModule, MatIconModule, MatCheckbox, MatSelect, MatOption, MatPaginatorModule
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -24,6 +30,8 @@ export class HomeComponent {
   otherEvents: EP_Event[] = [];
   topServiceProducts: Service[] = [];
   otherServiceProducts: Service[] = [];
+  searchTerm: string = '';
+  selectedSortOption: string = 'date';
   ngOnInit(): void {
     this.initEvents();
     this.initServices();
@@ -45,5 +53,10 @@ export class HomeComponent {
       this.otherServiceProducts.push(new Service(i+5, "Catering", "Peric catering", "We offer catering for lorem ipsum. Lorem ipsum lorem ipsum lorem ipsum.",
         "no specifies", 7, 1, ["catering.jpeg"], ["Wedding", "Birthday"], 1, 7, 3));
     }
+  }
+
+  onSearch(event: any): void {
+    this.searchTerm = event.target.value;
+    console.log('Search term:', this.searchTerm);
   }
 }

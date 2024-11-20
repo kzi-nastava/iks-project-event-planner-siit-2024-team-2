@@ -35,3 +35,25 @@
 .description{
     margin: 0;
 }
+.options-row{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    overflow-x: auto;
+    justify-content: space-between;
+    align-self: center;
+    width: 100%;
+}
+.left-part {
+    flex: 1;
+}
+.options{
+    margin-left: auto;
+}
+.filter-checkboxes mat-checkbox {
+  margin-right: 8px; 
+  color: black !important;
+}
+.mdc-checkbox{
+    color: black !important;
+}
