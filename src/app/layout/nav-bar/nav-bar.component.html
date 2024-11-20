@@ -1,19 +1,23 @@
-<mat-toolbar color="primary" class="secondary">
+<mat-toolbar color="primary">
   <button mat-icon-button (click)="toggleSidenav()">
     <mat-icon>menu</mat-icon>
   </button>
-  <span [routerLink]="['']" class="secondary">Event Planner</span>
-  <div [routerLink]="['profile']" class="secondary nav-right"><mat-icon>account_circle</mat-icon></div>
+  <span class="toolbar-title" [routerLink]="['home']">Event Planner</span>
+  <div class="toolbar-actions">
+    <a mat-flat-button [routerLink]="['signin']" class="custom-signin-button">Sign in</a>
+      <mat-icon [routerLink]="['profile']">account_circle</mat-icon>
+  </div>
 </mat-toolbar>
 
-<mat-sidenav-container class="sidenav-container secondary" >
+
+<mat-sidenav-container class="sidenav-container secondary">
   <mat-sidenav #sidenav mode="side" class="secondary" [opened]="toggle">
     <mat-nav-list class="secondary">
-      <mat-list-item [routerLink]="['']">
+      <mat-list-item [routerLink]="['home']">
         <mat-icon>home</mat-icon>
         Home
       </mat-list-item>
-      <mat-list-item [routerLink]="['chat']">
+      <mat-list-item [routerLink]="['chat']" >
         <mat-icon>chat</mat-icon>
         Chat
       </mat-list-item>

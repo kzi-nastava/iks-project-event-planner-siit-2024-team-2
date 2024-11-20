@@ -20,24 +20,62 @@ mat-sidenav-content {
 }
 
 mat-toolbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #EEF2FF;
+  padding: 0 16px;
+  height: 56x; 
+  line-height: 56px;
+  box-sizing: border-box;
 }
 
-.mat-sidenav-content {
-  margin-top: 64px;
+.toolbar-title {
+  background-color: #EEF2FF;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 1.2rem;
+  cursor: pointer;
 }
+
+.toolbar-actions {
+  background-color: #EEF2FF;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+::ng-deep .custom-signin-button {
+  background-color: #7C96FF !important;
+  color: white !important;
+}
+
+::ng-deep .custom-signin-button:hover {
+  background-color: #5B78CC !important;
+  color: white !important;
+}
+
 
 mat-nav-list {
   margin-top: 60px;
 }
 
-mat-list-item {
+::ng-deep mat-list-item {
   display: flex;
   align-items: center;
-  color: #7C96FF;
+  color: #7C96FF !important;
+}
+::ng-deep mat-list-item {
+  color: #7C96FF !important; /* Set the text color */
+}
+
+::ng-deep mat-list-item:hover {
+  background-color: #EEF2FF !important; /* Optional hover background */
+  color: #5B78CC !important; /* Slightly darker text on hover */
+}
+
+::ng-deep mat-list-item .mat-line {
+  color: inherit !important; /* Ensure all text lines inside the list item inherit the color */
 }
 
 
@@ -68,3 +106,4 @@ a {
 h3 {
   text-decoration: none;
 }
+
