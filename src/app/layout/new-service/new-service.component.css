@@ -1,6 +1,22 @@
-.column-div{
-    margin: 70px;
-    margin-top:15px;
+#left-div{
+    margin-right: 30px;
+    margin-top: 15px;
+}
+
+#right-div {
+    margin-top: 15px;
+    margin-left: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 300px
+}
+
+.row {
+    display: flex;
+    gap: 20px; /* Space between combobox and listbox */
+    align-items: flex-start; /* Align items to the top */
+    justify-content: center;
     padding-bottom: 20px;
 }
 
@@ -12,7 +28,7 @@
 
 /* Label styling */
 .custom-label {
-    width: 38%;
+    width: 39%;
     font-size: 14px;
     font-weight: bold;
     margin-bottom: 8px;
@@ -66,8 +82,7 @@
 }
 
 /* Button styling */
-button {
-    margin-top: 100px;
+.new {
     padding: 12px 24px; /* Top and bottom padding, left and right padding */
     font-size: 16px; /* Font size */
     font-weight: bold; /* Bold text */
@@ -84,25 +99,25 @@ button {
 }
 
 /* Hover effect */
-button:hover {
+.new:hover, #spajalica {
     background-color: #0056b3; /* Darker background on hover */
     box-shadow: 0 6px 12px rgba(0, 123, 255, 0.6); /* Darker shadow on hover */
 }
 
 /* Focus effect */
-button:focus {
+.new:focus{
     outline: 3px solid #ffcc00; /* Yellow outline on focus */
     box-shadow: 0 0 8px rgba(0, 123, 255, 0.6); /* Subtle glow effect */
 }
 
 /* Active effect (when button is clicked) */
-button:active {
+.new:active, #spajalica {
     background-color: #004085; /* Even darker background when clicked */
     box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* Subtle shadow on click */
 }
 
 /* Disabled button */
-button:disabled {
+.new:disabled {
     background-color: #d6d6d6; /* Grey background for disabled state */
     color: #999; /* Lighter text color */
     cursor: not-allowed; /* Not allowed cursor */
@@ -159,3 +174,71 @@ button:disabled {
     color: #aaa; /* Light gray text */
 }
 
+/* Light pink frame for the container */
+.listbox-container {
+    border: 2px solid #7C96FF; /* Light pink border */
+    border-radius: 8px; /* Rounded corners */
+    background-color: #EEF2FF; /* Light pink background */
+    width: 300px; /* Width of the container */
+    height: 140px;
+    align-content: center;
+    align-items: center;
+    
+    margin: 0 auto; /* Center the container */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Styling for each listbox item */
+.listbox {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    gap: 10px; /* Space between items */
+}
+
+.listbox-item {
+    display: flex;
+    align-items: center; /* Align text and checkbox */
+    font-size: 16px;
+    color: #333; /* Dark text */
+}
+
+/* Styling for the checkbox */
+.listbox-item input[type='checkbox'], input[type='checkbox'] {
+    margin: 5px 20px 5px 20px; /* Space between checkbox and text */
+    transform: scale(1.2); /* Make checkbox slightly larger */
+    accent-color: #7C96FF; /* Pink checkbox color (modern browsers) */
+}
+
+/* Hover effect for listbox items */
+.listbox-item:hover {
+    background-color: #7C96FF; /* Lighter pink background on hover */
+    border-radius: 4px; /* Slightly rounded corners on hover */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+#spajalica {
+    height: 58px;
+    width: 40px;
+    cursor: pointer;
+    vertical-align: middle;
+    background-color:#EEF2FF;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4);
+    border-radius: 8px;
+    border-color: #7C96FF;
+    
+}
+
+input[type=checkbox] {
+    margin: 40px 20px 13px 10px;
+    color: #7C96FF;
+}
+
+#end {
+    margin-bottom: 70px;
+    padding-bottom: 50px;
+}
+
+#cancel {
+    background-color: #EEF2FF; 
+    color: black;
+}

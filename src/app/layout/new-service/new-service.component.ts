@@ -14,5 +14,15 @@ import { MatSelectModule } from '@angular/material/select';
 export class NewServiceComponent {
   serviceCategories: string[] = ["Music", "Catering", "Waiter service"];
   selectedCategory: string = this.serviceCategories[0]; // Default selection
+
+  eventTypes: string[] = ['Wedding', 'Funeral', 'Birthday', 'Conference'];
+  selectedEvents: { [key: string]: boolean } = {};
+
+  constructor() {
+    // Initialize selectedEvents with default values
+    this.eventTypes.forEach((event) => {
+      this.selectedEvents[event] = false;
+    });
+  }
 }
 
