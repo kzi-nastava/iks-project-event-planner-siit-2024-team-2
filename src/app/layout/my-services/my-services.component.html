@@ -1,0 +1,39 @@
+<div class="row">
+
+  <div class="custom-select-wrapper custom-combobox">
+      <select id="filterCategories" class="custom-select" [(ngModel)]="selectedCategory">
+          <option *ngFor="let category of filterCategories" [value]="category">{{ category }}</option>
+      </select>
+      <span class="custom-arrow">▼</span>
+  </div>
+
+  <div class="searchbar">
+    <input id="search-box" type="text" placeholder="Search" />
+    <button id="search-btn" class="btn">🔍</button>
+  </div>
+  <button class="btn">Price list 📋</button>
+</div>
+
+<div class="services-container">
+    <div *ngFor="let service of myServices" class="card">
+      <!-- <img src="res/catering.jpeg" alt="{{ service.name }}" class="card-image" /> -->
+      <div class="card-content">
+        <h3>{{ service.name }}</h3>
+        <p>{{ service.description }}</p>
+        <ul>
+          <li *ngFor="let event of service.eventTypes">{{ event }}</li>
+        </ul>
+        <div class="row">
+          <p><strong>Price:</strong> {{ service.price }}</p>
+          <p><strong>Discount:</strong> {{ service.discount }}</p>
+        </div>
+
+        <div class="row" id="end">
+          <button mat-button (click)="navigateToEditService(service.id)">Edit</button>
+          <button id="delete" (click)="openDialog()">Delete</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
