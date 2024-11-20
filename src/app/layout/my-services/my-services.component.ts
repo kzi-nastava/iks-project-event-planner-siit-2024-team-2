@@ -17,7 +17,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class MyServicesComponent {
     myServices: Service[] = [];
-    filterCategories: string[] = ['Name', 'Price', 'Description', 'Category', 'Available events', 'Duration'];
+    filterCategories: string[] = ['Price', 'Category', 'Available events', 'Availability'];
     selectedCategory: string = 'FILTER'; // Default selection
 
     ngOnInit(): void {

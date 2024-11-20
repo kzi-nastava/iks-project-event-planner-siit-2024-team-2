@@ -54,11 +54,14 @@
 
     <div>
         <input [(ngModel)]=service.visibility type="checkbox" name="visibility-checkbox" value="visibility"> visibility
-        <input [(ngModel)]=service.availability type="checkbox" name="availability-checkbox" value="availability"> availability
+        <input [(ngModel)]=service.availability type="checkbox" name="availability-checkbox" value="availability" style="margin-left: 50px;"> availability
+        <input [(ngModel)]=service.automaticAcceptance type="checkbox" name="automaticAcceptance" value="automaticAcceptance"> automatic acceptance
+   
     </div>
 
+
     <!-- 3 other textboxes: duration and reservation and cancellation deadline -->
-    <div class="form-container">
+    <div class="form-container" style="margin-top: 8px;">
         <label for="duration" class="form-label">Duration:</label>
         <input [(ngModel)]=service.duration type="number" id="duration" class="form-input" placeholder="Enter the duration" style="height: 35px;">
 
