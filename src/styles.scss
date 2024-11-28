@@ -36,5 +36,15 @@ $event-planner-theme: mat.m2-define-light-theme((
 ));
 @include mat.all-component-themes($event-planner-theme);
 
+:root {
+    --mdc-dialog-container-color: #EEF2FF;
+    --mdc-filled-text-field-container-color: #EEF2FF !important;
+    --mdc-filled-text-field-label-text-color: black !important;
+    --mat-select-enabled-trigger-text-color: black !important;
+    --mdc-icon-button-icon-color: black !important;
+    --mdc-filled-text-field-focus-label-text-color:#{map-get($event-planner-pallete, 500)} !important;
+    --mdc-dialog-supporting-text-color:#{map-get($event-planner-pallete, 500)} !important;
+};
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}

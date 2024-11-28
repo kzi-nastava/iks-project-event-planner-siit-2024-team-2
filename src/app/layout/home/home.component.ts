@@ -15,6 +15,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatOption, MatSelect } from '@angular/material/select';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
+import { FilterDialogComponent } from '../../dialog/filter-dialog/filter-dialog.component';
 
 @Component({
   selector: 'app-home',
@@ -58,5 +60,15 @@ export class HomeComponent {
   onSearch(event: any): void {
     this.searchTerm = event.target.value;
     console.log('Search term:', this.searchTerm);
+  }
+
+  constructor(public dialog: MatDialog) {}
+  openFilterDialog(): void {
+    const dialogRef = this.dialog.open(FilterDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      // Here you can handle the selected filters if needed
+    });
   }
 }

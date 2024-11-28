@@ -11,11 +11,7 @@
     <h4>Explore events</h4>
   </div>
   <div class="options row">
-    <div class="filter-checkboxes">
-      <mat-checkbox>Wedding</mat-checkbox>
-      <mat-checkbox>Birthday</mat-checkbox>
-      <mat-checkbox>Concert</mat-checkbox>
-    </div>
+    <button mat-stroked-button color="primary" (click)="openFilterDialog()">Filter</button>
     <mat-form-field appearance="fill" class="search-field" color="primary">
       <mat-label>Search</mat-label>
       <input matInput (input)="onSearch($event)" placeholder="Enter search term" />
@@ -42,7 +38,7 @@
 <mat-paginator [length]="100"
               [pageSize]="10"
               [pageSizeOptions]="[5, 10, 25, 100]"
-              aria-label="Select page" color="primary">
+              aria-label="Select page">
 </mat-paginator>
 
 <hr/>
@@ -59,11 +55,7 @@
     <h4>Explore services and products</h4>
   </div>
   <div class="options row">
-    <div class="filter-checkboxes">
-      <mat-checkbox>Caterring</mat-checkbox>
-      <mat-checkbox>Music</mat-checkbox>
-      <mat-checkbox>Balloons</mat-checkbox>
-    </div>
+    <button mat-stroked-button color="primary" (click)="openFilterDialog()">Filter</button>
     <mat-form-field appearance="fill" class="search-field" color="primary">
       <mat-label>Search</mat-label>
       <input matInput (input)="onSearch($event)" placeholder="Enter search term" />
