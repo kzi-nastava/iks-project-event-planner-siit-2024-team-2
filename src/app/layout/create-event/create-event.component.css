@@ -1,0 +1,244 @@
+#left-div{
+    margin-right: 30px;
+    margin-top: 15px;
+}
+
+#right-div {
+    margin-top: 15px;
+    margin-left: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 300px
+}
+
+.row {
+    display: flex;
+    gap: 20px; /* Space between combobox and listbox */
+    align-items: flex-start; /* Align items to the top */
+    justify-content: center;
+    padding-bottom: 20px;
+}
+
+.custom-combobox {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+}
+
+/* Label styling */
+.custom-label {
+    width: 39%;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #7C96FF;
+    background-color: #EEF2FF;
+}
+
+/* Select dropdown wrapper */
+.custom-select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+/* Select dropdown styling */
+.custom-select {
+    font-size: 18px;
+    padding: 12px 40px 12px 15px; /* Space for the arrow on the right */
+    border: 2px solid #7C96FF; /* Blue border */
+    border-radius: 8px; /* Rounded corners */
+    background-color: #EEF2FF; /* Light gray background */
+    color: #333; /* Dark text color */
+    outline: none; /* Remove default outline */
+    transition: all 0.3s ease;
+    appearance: none; /* Remove default arrow */
+    -webkit-appearance: none; /* Safari-specific */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Custom arrow styling */
+.custom-arrow {
+    position: absolute;
+    right: 15px; /* Position arrow inside the wrapper */
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #7C96FF; /* Arrow color */
+    pointer-events: none; /* Arrow does not interfere with mouse events */
+}
+
+/* Hover effect for the dropdown */
+.custom-select:hover {
+    background-color: #EEF2FF;
+    border-color: #7C96FF;
+}
+
+/* Focus effect for the dropdown */
+.custom-select:focus {
+    border-color: #7C96FF;
+    box-shadow: 0 0 8px rgba(25, 118, 210, 0.5);
+}
+
+/* Button styling */
+.new {
+    padding: 12px 24px; /* Top and bottom padding, left and right padding */
+    font-size: 16px; /* Font size */
+    font-weight: bold; /* Bold text */
+    text-transform: uppercase; /* Uppercase text */
+    color: white; /* Text color */
+    background-color: #7C96FF; /* Button background color */
+    border: none; /* Remove default border */
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4); /* Shadow effect */
+    outline: none; /* Remove focus outline */
+    width: 300px;
+}
+
+/* Hover effect */
+.new:hover, #spajalica {
+    background-color: #0056b3; /* Darker background on hover */
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.6); /* Darker shadow on hover */
+}
+
+/* Focus effect */
+.new:focus{
+    outline: 3px solid #ffcc00; /* Yellow outline on focus */
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.6); /* Subtle glow effect */
+}
+
+/* Active effect (when button is clicked) */
+.new:active, #spajalica {
+    background-color: #004085; /* Even darker background when clicked */
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* Subtle shadow on click */
+}
+
+/* Disabled button */
+.new:disabled {
+    background-color: #d6d6d6; /* Grey background for disabled state */
+    color: #999; /* Lighter text color */
+    cursor: not-allowed; /* Not allowed cursor */
+    box-shadow: none; /* No shadow for disabled state */
+}
+
+/* Container for the form */
+.form-container {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    width: 300px; /* Adjust width as needed */
+    gap: 15px; /* Spacing between elements */
+}
+
+/* Label styling */
+.form-label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #7C96FF; /* Dark text */
+}
+
+/* Input field styling */
+.form-input {
+    font-size: 16px; /* Font size for input */
+    padding: 10px; /* Padding inside the input */
+    border: 2px solid #7C96FF; /* Blue border */
+    border-radius: 8px; /* Rounded corners */
+    background-color: #EEF2FF; /* Light gray background */
+    color: #333; /* Dark text */
+    outline: none; /* Remove default outline */
+    transition: all 0.3s ease;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle inner shadow */
+    margin-bottom: 20px;
+}
+
+/* Placeholder text color */
+.form-input::placeholder {
+    color: #888; /* Light gray for placeholder */
+}
+
+/* Focus effect for input fields */
+.form-input:focus {
+    border-color: #0056b3; /* Darker blue on focus */
+    background-color: #ffffff; /* White background on focus */
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); /* Glow effect */
+}
+
+/* Disabled input styling */
+.form-input:disabled {
+    background-color: #f5f5f5; /* Light gray background for disabled */
+    border-color: #ccc; /* Light gray border */
+    cursor: not-allowed; /* Not-allowed cursor */
+    color: #aaa; /* Light gray text */
+}
+
+/* Light pink frame for the container */
+.listbox-container {
+    border: 2px solid #7C96FF; /* Light pink border */
+    border-radius: 8px; /* Rounded corners */
+    background-color: #EEF2FF; /* Light pink background */
+    width: 300px; /* Width of the container */
+    height: 140px;
+    align-content: center;
+    align-items: center;
+    
+    margin: 0 auto; /* Center the container */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Styling for each listbox item */
+.listbox {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    gap: 10px; /* Space between items */
+}
+
+.listbox-item {
+    display: flex;
+    align-items: center; /* Align text and checkbox */
+    font-size: 16px;
+    color: #333; /* Dark text */
+}
+
+/* Styling for the checkbox */
+.listbox-item input[type='checkbox'], input[type='checkbox'] {
+    margin: 5px 20px 5px 20px; /* Space between checkbox and text */
+    transform: scale(1.2); /* Make checkbox slightly larger */
+    accent-color: #7C96FF; /* Pink checkbox color (modern browsers) */
+}
+
+/* Hover effect for listbox items */
+.listbox-item:hover {
+    background-color: #7C96FF; /* Lighter pink background on hover */
+    border-radius: 4px; /* Slightly rounded corners on hover */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+#spajalica {
+    height: 58px;
+    width: 40px;
+    cursor: pointer;
+    vertical-align: middle;
+    background-color:#EEF2FF;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4);
+    border-radius: 8px;
+    border-color: #7C96FF;
+    
+}
+
+input[type=checkbox] {
+    margin: 17px 20px 13px 10px;
+    color: #7C96FF;
+}
+
+#end {
+    margin-bottom: 70px;
+    padding-bottom: 50px;
+}
+
+#cancel {
+    background-color: #EEF2FF; 
+    color: black;
+}
