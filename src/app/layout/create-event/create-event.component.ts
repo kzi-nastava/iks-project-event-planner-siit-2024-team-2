@@ -5,25 +5,48 @@ import { MatSelectModule } from '@angular/material/select';
 import { Service } from '../../model/service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
+import { AgmCoreModule } from '@agm/core';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-create-event',
   standalone: true,
-  imports: [FormsModule, CommonModule, MatSelectModule],
+  imports: [
+      FormsModule,
+      CommonModule,
+      MatSelectModule,
+      HttpClientModule,
+    ],
   templateUrl: './create-event.component.html',
   styleUrl: './create-event.component.css'
 })
 export class CreateEventComponent {
-  serviceCategories: string[] = ["Music", "Catering", "Waiter service"];
-  selectedCategory: string = this.serviceCategories[0]; // Default selection
+  apiKey: string | null = null;
 
-  eventTypes: string[] = ['Wedding', 'Funeral', 'Birthday', 'Conference'];
-  selectedEvents: { [key: string]: boolean } = {};
 
-  constructor(private route: ActivatedRoute, private router: Router) {
+
+
+  private loadApiKey(): void {
+    this.apiKey = environment.googleMapsApiKey;
+    console.log(environment);
+    console.log(this.apiKey);
+    if (this.apiKey) {
+      AgmCoreModule.forRoot({
+        apiKey: this.apiKey
+      });
+      return;
+    }
+  }
+  eventTypes: string[] = ["Wedding", "Festival", "Party"];
+  selectedType: string = this.eventTypes[0]; // Default selection
+  // eventTypes: string[] = ['Wedding', 'Funeral', 'Birthday', 'Conference'];
+  // selectedEvents: { [key: string]: boolean } = {};
+
+  constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient) {
     // Initialize selectedEvents with default values
     this.eventTypes.forEach((event) => {
-      this.selectedEvents[event] = false;
+      //this.selectedEvents[event] = false;
     });
   }
 
@@ -31,6 +54,7 @@ export class CreateEventComponent {
   service: Service = new Service();
 
   ngOnInit(): void {
+    this.loadApiKey();
     // Get the service ID from query parameters
     this.route.queryParams.subscribe(params => {
       const serviceId = params['id'];
@@ -49,7 +73,7 @@ export class CreateEventComponent {
        'No specifies', 7, 1, ['catering.jpg'], ['Wedding', 'Birthday'], 1, 7, 3, true, true, true);
 
     this.service.eventTypes.forEach((event) => {
-      this.selectedEvents[event] = true;
+      //this.selectedEvents[event] = true;
     });
   }
 

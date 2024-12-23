@@ -3,14 +3,16 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "node scripts/load-secrets.js && ng serve",
+    "serve": "node scripts/load-secrets.js && ng serve",
+    "build": "node scripts/load-secrets.js && ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:event-planner": "node dist/event-planner/server/server.mjs"
   },
   "private": true,
   "dependencies": {
+    "@agm/core": "^3.0.0-beta.0",
     "@angular/animations": "^18.2.0",
     "@angular/cdk": "^18.2.13",
     "@angular/common": "^18.2.0",
