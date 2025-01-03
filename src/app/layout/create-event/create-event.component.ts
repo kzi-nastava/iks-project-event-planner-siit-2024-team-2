@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormGroup, FormsModule, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { Service } from '../../model/service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
-import { AgmCoreModule } from '@agm/core';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { MapComponent } from '../../shared/map/map.component';
 
 @Component({
   selector: 'app-create-event',
@@ -16,45 +14,65 @@ import { environment } from '../../../environments/environment';
       FormsModule,
       CommonModule,
       MatSelectModule,
-      HttpClientModule,
+      MapComponent,
+      ReactiveFormsModule,
     ],
+  providers: [MapComponent],
   templateUrl: './create-event.component.html',
   styleUrl: './create-event.component.css'
 })
 export class CreateEventComponent {
-  apiKey: string | null = null;
 
+  createEventForm = new FormGroup({
+    name: new FormControl(),
+    description: new FormControl(),
+    date: new FormControl(),
+    latitude: new FormControl(),
+    longitude: new FormControl(),
+    eventType: new FormControl(),
+    maxAttendances: new FormControl(),
+    isOpen: new FormControl()
+  });
+  
 
+  createEvent(): void {
+    const event = {
+      name: this.createEventForm.value.name,
+      description: this.createEventForm.value.description,
+      longitude: this.createEventForm.value.longitude,
+      latitude: this.createEventForm.value.latitude,
+      date: this.createEventForm.value.date,
+      eventType: this.createEventForm.value.eventType,
+      maxAttendances: this.createEventForm.value.maxAttendances,
+      isOpen: this.createEventForm.value.isOpen
+    };
+    console.log(event);}
 
-
-  private loadApiKey(): void {
-    this.apiKey = environment.googleMapsApiKey;
-    console.log(environment);
-    console.log(this.apiKey);
-    if (this.apiKey) {
-      AgmCoreModule.forRoot({
-        apiKey: this.apiKey
-      });
-      return;
-    }
-  }
   eventTypes: string[] = ["Wedding", "Festival", "Party"];
   selectedType: string = this.eventTypes[0]; // Default selection
   // eventTypes: string[] = ['Wedding', 'Funeral', 'Birthday', 'Conference'];
   // selectedEvents: { [key: string]: boolean } = {};
 
-  constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient) {
+  constructor(private route: ActivatedRoute, private router: Router) {
     // Initialize selectedEvents with default values
     this.eventTypes.forEach((event) => {
       //this.selectedEvents[event] = false;
     });
   }
 
+  // name: string,
+  // description: string,
+  // date: Date,
+  // latitude: number,
+  // longitude: number,
+  // eventType: number,
+  // maxAttandances: number,
+  // isOpen: boolean
   // binding to the service data, on which the user clicked
   service: Service = new Service();
+  event: { name?: string; description?: string; location?: string; date?: string; time?: string; eventType?: string } = {}
 
   ngOnInit(): void {
-    this.loadApiKey();
     // Get the service ID from query parameters
     this.route.queryParams.subscribe(params => {
       const serviceId = params['id'];

@@ -2,6 +2,8 @@
 
 # Secrets
 /secrets/
+src/environments/environment.ts
+
 # Compiled output
 /dist
 /tmp

@@ -242,3 +242,22 @@ input[type=checkbox] {
     background-color: #EEF2FF; 
     color: black;
 }
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+  }
+  
+  .form-checkbox {
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+    accent-color: #007bff; /* Adjust color to match your theme */
+  }
+  
+  .form-label {
+    font-size: 16px;
+    cursor: pointer;
+  }
+  

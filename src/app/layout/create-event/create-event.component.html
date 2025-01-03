@@ -1,46 +1,44 @@
-<div class="row" id="all">
+<div class="row" id="all" [formGroup]="createEventForm">
     <div id="left-div">
-    
-        <!-- Service categories combobox -->
-        <div class="custom-combobox">
-            <label for="serviceCategories" class="custom-label">Event type:</label>
-            <div class="custom-select-wrapper">
-                <select id="eventTypes" class="custom-select"[(ngModel)]="selectedType">
-                    <option *ngFor="let type of eventTypes" [value]="type">{{ type }}</option>
-                </select>
-                <span class="custom-arrow">▼</span>
-            </div>
+      <div class="custom-combobox">
+        <label for="serviceCategories" class="custom-label">Event type:</label>
+        <div class="custom-select-wrapper">
+          <select id="eventTypes" class="custom-select" formControlName="eventType">
+            <option *ngFor="let type of eventTypes" [value]="type">{{ type }}</option>
+          </select>
+          <span class="custom-arrow">▼</span>
         </div>
-    
-        <button class="new" style="margin-top: 100px;">New category request</button>
-    
-        <!-- 5 textboxes for: name, desc, spec, price and discount -->
-        <div class="form-container">
+      </div>
+  
+      <div class="form-container">
         <label for="name" class="form-label">Name:</label>
-        <input [(ngModel)]=service.name type="text" id="name" class="form-input" placeholder="Enter the name">
-    
+        <input type="text" id="name" class="form-input" placeholder="Enter the name" formControlName="name">
+  
         <label for="description" class="form-label">Description:</label>
-        <textarea [(ngModel)]=service.description type="text" id="description" class="form-input" placeholder="Enter the description"></textarea>
-    
-        <label for="specifies" class="form-label">Specifies:</label>
-        <textarea [(ngModel)]=service.specifies id="specifies" class="form-input" placeholder="Enter the specifies"></textarea>
-    
-        <label for="max-attendances" class="form-label">Max attendances:</label>
-        <input [(ngModel)]=service.cancellationDeadline type="number" id="max-attendances" class="form-input" placeholder="Enter Max attendances">
-        
-        </div>
+        <textarea id="description" class="form-input" placeholder="Enter the description" formControlName="description"></textarea>
+  
+        <label for="max-attendances" class="form-label">Max Attendances:</label>
+        <input type="number" id="max-attendances" class="form-input" placeholder="Enter Max attendances" formControlName="maxAttendances">
+  
+        <label for="is-open" class="form-label">Is the event open to everyone?</label>
+        <input type="checkbox" id="is-open" class="form-checkbox" formControlName="isOpen">
+      </div>
     </div>
-    
+  
     <div id="right-div">
-
+      <app-map></app-map>
+  
+      <div class="form-container">
+        <label for="date" class="form-label">Date:</label>
+        <input type="date" id="date" class="form-input" formControlName="date">
+      </div>
+    </div>
+  </div>
+  
     
-        
-    </div>
-    </div>
-    
-    <div class="row" id="end">
-        <button (click)="backToAllServicesPerhaps()" class="new">Save</button>
-        <button (click)="backToAllServicesPerhaps()" class="new" id="cancel">Cancel</button>
-    </div>
+<div class="row" id="end">
+    <button (click)="createEvent()" class="new">Save</button>
+    <button (click)="backToAllServicesPerhaps()" class="new" id="cancel">Cancel</button>
+</div>
     
     
