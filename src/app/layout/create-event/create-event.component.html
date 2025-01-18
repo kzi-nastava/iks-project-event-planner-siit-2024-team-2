@@ -1,14 +1,13 @@
 <div class="row" id="all" [formGroup]="createEventForm">
     <div id="left-div">
-      <div class="custom-combobox">
-        <label for="serviceCategories" class="custom-label">Event type:</label>
-        <div class="custom-select-wrapper">
-          <select id="eventTypes" class="custom-select" formControlName="eventType">
-            <option *ngFor="let type of eventTypes" [value]="type">{{ type }}</option>
-          </select>
-          <span class="custom-arrow">▼</span>
-        </div>
-      </div>
+      <mat-form-field appearance="fill">
+        <mat-label>Event Type</mat-label>
+        <mat-select formControlName="eventType">
+          <mat-option *ngFor="let eventType of eventTypes" [value]="eventType.id">
+            {{ eventType.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
   
       <div class="form-container">
         <label for="name" class="form-label">Name:</label>
@@ -26,8 +25,7 @@
     </div>
   
     <div id="right-div">
-      <app-map></app-map>
-  
+      <app-map (coordinatesSelected)="onCoordinatesSelected($event)"></app-map>
       <div class="form-container">
         <label for="date" class="form-label">Date:</label>
         <input type="date" id="date" class="form-input" formControlName="date">
@@ -38,7 +36,7 @@
     
 <div class="row" id="end">
     <button (click)="createEvent()" class="new">Save</button>
-    <button (click)="backToAllServicesPerhaps()" class="new" id="cancel">Cancel</button>
+    <button (click)="onCancel()" class="new" id="cancel">Cancel</button>
 </div>
     
     

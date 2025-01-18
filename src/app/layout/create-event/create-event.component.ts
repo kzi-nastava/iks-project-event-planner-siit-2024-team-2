@@ -2,10 +2,12 @@ import { Component } from '@angular/core';
 import { FormGroup, FormsModule, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
-import { Service } from '../../model/service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { MapComponent } from '../../shared/map/map.component';
+import { EventType } from '../../model/event-type';
+import { EventTypeService } from '../../services/event-type.service';
+import { EventService } from '../../services/event.service';
 
 @Component({
   selector: 'app-create-event',
@@ -34,7 +36,12 @@ export class CreateEventComponent {
     isOpen: new FormControl()
   });
   
-
+  eventTypes = [
+    { id: 1, name: "Wedding" },
+    { id: 2, name: "Festival" },
+    { id: 3, name: "Party" },
+  ];
+  
   createEvent(): void {
     const event = {
       name: this.createEventForm.value.name,
@@ -46,61 +53,44 @@ export class CreateEventComponent {
       maxAttendances: this.createEventForm.value.maxAttendances,
       isOpen: this.createEventForm.value.isOpen
     };
+    this.eventService.add(event).subscribe({
+      next: (event: any) => {
+        console.log('Event created:', event);
+        this.router.navigate(['../'], { relativeTo: this.route });
+      },
+      error: (err: any) => {
+        console.error('Failed to create event:', err);
+      }
+    });
     console.log(event);}
 
-  eventTypes: string[] = ["Wedding", "Festival", "Party"];
-  selectedType: string = this.eventTypes[0]; // Default selection
-  // eventTypes: string[] = ['Wedding', 'Funeral', 'Birthday', 'Conference'];
-  // selectedEvents: { [key: string]: boolean } = {};
-
-  constructor(private route: ActivatedRoute, private router: Router) {
-    // Initialize selectedEvents with default values
-    this.eventTypes.forEach((event) => {
-      //this.selectedEvents[event] = false;
-    });
-  }
-
-  // name: string,
-  // description: string,
-  // date: Date,
-  // latitude: number,
-  // longitude: number,
-  // eventType: number,
-  // maxAttandances: number,
-  // isOpen: boolean
-  // binding to the service data, on which the user clicked
-  service: Service = new Service();
-  event: { name?: string; description?: string; location?: string; date?: string; time?: string; eventType?: string } = {}
+  selectedType = this.eventTypes[0]; 
+  constructor(private route: ActivatedRoute, private router: Router, private eventService: EventService, private eventTypeService: EventTypeService) { }
+  event: { name?: string; description?: string; location?: string; date?: string; time?: string; eventType?: number, latitude?: number, longitude?: number } = {}
 
   ngOnInit(): void {
-    // Get the service ID from query parameters
-    this.route.queryParams.subscribe(params => {
-      const serviceId = params['id'];
-      if (serviceId) {
-        this.fetchServiceData(serviceId); // Fetch the data based on the ID
+    this.loadEventTypes();
+  }
+  loadEventTypes(): void {
+    this.eventTypeService.getAll().subscribe({
+      next: (types: EventType[]) => {
+        this.eventTypes = types;
+      },
+      error: (err: any) => {
+        console.error('Failed to load event types:', err);
       }
     });
   }
 
-  fetchServiceData(serviceId: number): void {
-    // UPDATE THIS LATER - IMPLEMENT getServiceById(serviceId)
-    // this.service = this.serviceService.getServiceById(serviceId);
-
-    // For demonstration purposes, we use a mock service:
-    this.service = new Service(serviceId, 'Catering', 'Peric catering', 'We offer catering for lorem ipsum. Lorem ipsum lorem ipsum lorem ipsum.',
-       'No specifies', 7, 1, ['catering.jpg'], ['Wedding', 'Birthday'], 1, 7, 3, true, true, true);
-
-    this.service.eventTypes.forEach((event) => {
-      //this.selectedEvents[event] = true;
+  onCoordinatesSelected(coordinates: { lat: number; lng: number }): void {
+    this.createEventForm.patchValue({
+      latitude: coordinates.lat,
+      longitude: coordinates.lng,
     });
   }
-
-  backToAllServicesPerhaps(): void {
-    if (this.service.id != -1) {
-      this.router.navigate(['/my-services']);
-    }
-  }
   
-
+  onCancel(): void {
+    this.router.navigate(['../'], { relativeTo: this.route });
+  }
 }
 

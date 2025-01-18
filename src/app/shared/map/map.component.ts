@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnInit, PLATFORM_ID, Inject } from '@angular/core';
+import { Component, AfterViewInit, OnInit, PLATFORM_ID, Inject, Output, EventEmitter } from '@angular/core';
 import { MapService } from './map.service';
 import { isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -16,6 +16,8 @@ export class MapComponent implements AfterViewInit, OnInit {
   L: any;
   private currentMarker: any;
   searchQuery: string = ''; // For binding to the input field
+
+  @Output() coordinatesSelected = new EventEmitter<{ lat: number; lng: number }>();
 
   constructor(
     private mapService: MapService,
@@ -44,10 +46,10 @@ export class MapComponent implements AfterViewInit, OnInit {
       this.registerOnClick();
     }
 
-    let DefaultIcon = this.L.icon({
-      iconUrl: 'https://unpkg.com/leaflet@1.6.0/dist/images/marker-icon.png',
-    });
-    this.L.Marker.prototype.options.icon = DefaultIcon;
+    // let DefaultIcon = this.L.icon({
+    //   iconUrl: 'https://unpkg.com/leaflet@1.6.0/dist/images/marker-icon.png',
+    // });
+    // this.L.Marker.prototype.options.icon = DefaultIcon;
   }
 
   onSearch(event: Event): void {
@@ -67,11 +69,10 @@ export class MapComponent implements AfterViewInit, OnInit {
   
         const lat = result[0].lat;
         const lon = result[0].lon;
-  
         if (this.currentMarker) {
           this.map.removeLayer(this.currentMarker);
         }
-  
+        this.coordinatesSelected.emit({ lat, lng: lon });
         this.currentMarker = this.L.marker([lat, lon])
           .addTo(this.map)
           .bindPopup(`Location: ${text}`)
@@ -98,11 +99,8 @@ export class MapComponent implements AfterViewInit, OnInit {
 
       this.currentMarker = new this.L.Marker([lat, lng]).addTo(this.map);
 
-      this.mapService.reverseSearch(lat, lng).subscribe((res) => {
-        console.log(res.display_name);
-      });
+      this.coordinatesSelected.emit({ lat, lng });
 
-      console.log(`You clicked the map at latitude: ${lat} and longitude: ${lng}`);
     });
   }
 
