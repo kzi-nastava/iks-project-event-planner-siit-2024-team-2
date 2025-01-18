@@ -1,0 +1,42 @@
+<div class="row" id="all" [formGroup]="createEventForm">
+    <div id="left-div">
+      <mat-form-field appearance="fill">
+        <mat-label>Event Type</mat-label>
+        <mat-select formControlName="eventType">
+          <mat-option *ngFor="let eventType of eventTypes" [value]="eventType.id">
+            {{ eventType.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+  
+      <div class="form-container">
+        <label for="name" class="form-label">Name:</label>
+        <input type="text" id="name" class="form-input" placeholder="Enter the name" formControlName="name">
+  
+        <label for="description" class="form-label">Description:</label>
+        <textarea id="description" class="form-input" placeholder="Enter the description" formControlName="description"></textarea>
+  
+        <label for="max-attendances" class="form-label">Max Attendances:</label>
+        <input type="number" id="max-attendances" class="form-input" placeholder="Enter Max attendances" formControlName="maxAttendances">
+  
+        <label for="is-open" class="form-label">Is the event open to everyone?</label>
+        <input type="checkbox" id="is-open" class="form-checkbox" formControlName="isOpen">
+      </div>
+    </div>
+  
+    <div id="right-div">
+      <app-map (coordinatesSelected)="onCoordinatesSelected($event)"></app-map>
+      <div class="form-container">
+        <label for="date" class="form-label">Date:</label>
+        <input type="date" id="date" class="form-input" formControlName="date">
+      </div>
+    </div>
+  </div>
+  
+    
+<div class="row" id="end">
+    <button (click)="createEvent()" class="new">Save</button>
+    <button (click)="onCancel()" class="new" id="cancel">Cancel</button>
+</div>
+    
+    
