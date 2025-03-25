@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Service } from '../../model/service';
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { DialogComponent } from '../../dialog/dialog.component';
+import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component';
 import { Router } from '@angular/router';   
 import { FormsModule } from '@angular/forms';
 
@@ -34,7 +34,7 @@ export class MyServicesComponent {
     constructor(public dialog: MatDialog, private router: Router) {}
 
     openDialog(): void {
-      this.dialog.open(DialogComponent);
+      this.dialog.open(DeleteDialogComponent);
     }
 
 
