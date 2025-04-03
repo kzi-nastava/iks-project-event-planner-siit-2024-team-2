@@ -7,11 +7,8 @@ import { NewServiceComponent } from './layout/new-service/new-service.component'
 import { MyServicesComponent } from './layout/my-services/my-services.component';
 import { LoginComponent } from './layout/auth/login/login.component';
 import { RegisterComponent } from './layout/auth/register/register.component';
-<<<<<<< HEAD
 import { NewEventTypeComponent } from './layout/new-event-type/new-event-type.component';
-=======
 import { CreateEventComponent } from './layout/create-event/create-event.component';
->>>>>>> develop
 
 export const routes: Routes = [
     {path: 'home', component: HomeComponent},
