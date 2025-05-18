@@ -60,7 +60,6 @@ export class LoginComponent {
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
-        console.log(this.loginForm.value);
         console.error('Login failed:', err);
     
         this.snackBar.open('Login failed. Please check your credentials.', 'Close', {
