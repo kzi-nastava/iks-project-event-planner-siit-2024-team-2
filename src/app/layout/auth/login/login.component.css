@@ -28,3 +28,8 @@ button:disabled {
 mat-form-field {
   margin-bottom: 15px; 
 }
+
+.snackbar-error {
+  background-color: #e53935;
+  color: white;
+}
