@@ -17,12 +17,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   selector: 'app-login',
   standalone: true,
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  styleUrls: ['./login.component.css'],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     RouterModule,
-    // Angular Material modules
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -56,8 +55,10 @@ export class LoginComponent {
 
     this.authService.login(email, password).subscribe({
       next: (response) => {
-        console.log('Login successful:', response);
         this.router.navigate(['/dashboard']);
+          this.snackBar.open('Login successful.', 'Close', {
+          duration: 4000,
+        });
       },
       error: (err) => {
         console.error('Login failed:', err);
