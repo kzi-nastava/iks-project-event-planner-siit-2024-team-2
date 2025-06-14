@@ -1,1 +1,141 @@
-<p>profile works!</p>
+<div class="profile-container">
+  <div class="profile-header">
+    <img [src]="userInfo.profilePicture" alt="Profile Picture" class="profile-picture">
+    <h1>{{ userInfo.firstName }} {{ userInfo.lastName }}</h1>
+    <p>{{ userInfo.email }}</p>
+  </div>
+
+  <div class="profile-sections">
+    <!-- Personal Information Section -->
+    <div class="profile-section">
+      <h2>Personal Information</h2>
+      <form (ngSubmit)="updatePersonalInfo()">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" [(ngModel)]="userInfo.firstName" name="firstName" required>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" [(ngModel)]="userInfo.lastName" name="lastName" required>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" [(ngModel)]="userInfo.email" name="email" disabled>
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" [(ngModel)]="userInfo.phone" name="phone">
+        </div>
+        <button type="submit">Update Personal Info</button>
+      </form>
+    </div>
+
+    <!-- Company Information Section (for PUP) -->
+    <div class="profile-section" *ngIf="userType === 'PUP'">
+      <h2>Company Information</h2>
+      <form (ngSubmit)="updateCompanyInfo()">
+        <div class="form-group">
+          <label>Company Name</label>
+          <input type="text" [(ngModel)]="companyInfo.name" name="companyName" disabled>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea [(ngModel)]="companyInfo.description" name="description"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Location</label>
+          <input type="text" [(ngModel)]="companyInfo.location" name="location">
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" [(ngModel)]="companyInfo.phone" name="companyPhone">
+        </div>
+        <button type="submit">Update Company Info</button>
+      </form>
+
+      <h3>Service Categories</h3>
+      <ul>
+        <li *ngFor="let category of serviceCategories">{{ category }}</li>
+      </ul>
+
+      <h3>Event Types</h3>
+      <div *ngFor="let type of eventTypes">
+        <label>
+          <input type="checkbox" 
+                 [checked]="selectedEventTypes.includes(type)"
+                 (change)="updateEventTypes()"
+                 [(ngModel)]="selectedEventTypes"
+                 [value]="type">
+          {{ type }}
+        </label>
+      </div>
+    </div>
+
+    <!-- Change Password Section -->
+    <div class="profile-section">
+      <h2>Change Password</h2>
+      <form (ngSubmit)="changePassword()">
+        <div class="form-group">
+          <label>Old Password</label>
+          <input type="password" [(ngModel)]="oldPassword" name="oldPassword" required>
+        </div>
+        <div class="form-group">
+          <label>New Password</label>
+          <input type="password" [(ngModel)]="newPassword" name="newPassword" required>
+        </div>
+        <div class="form-group">
+          <label>Confirm New Password</label>
+          <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required>
+        </div>
+        <button type="submit">Change Password</button>
+      </form>
+    </div>
+
+    <!-- Favorites Section -->
+    <div class="profile-section">
+      <h2>Favorites</h2>
+      <h3>Favorite Events</h3>
+      <div *ngIf="favoriteEvents.length > 0; else noFavoriteEvents">
+        <div *ngFor="let event of favoriteEvents" class="favorite-item">
+          {{ event.name }}
+        </div>
+      </div>
+      <ng-template #noFavoriteEvents>
+        <p>No favorite events yet.</p>
+      </ng-template>
+
+      <h3>Favorite Services/Products</h3>
+      <div *ngIf="favoriteServices.length > 0; else noFavoriteServices">
+        <div *ngFor="let service of favoriteServices" class="favorite-item">
+          {{ service.name }}
+        </div>
+      </div>
+      <ng-template #noFavoriteServices>
+        <p>No favorite services yet.</p>
+      </ng-template>
+    </div>
+
+    <!-- Calendar/Schedule Section -->
+    <div class="profile-section">
+      <h2>Upcoming Events</h2>
+      <div *ngIf="upcomingEvents.length > 0; else noUpcomingEvents">
+        <div *ngFor="let event of upcomingEvents" class="event-item">
+          <h4>{{ event.title }}</h4>
+          <p>{{ event.date | date }}</p>
+        </div>
+      </div>
+      <ng-template #noUpcomingEvents>
+        <p>No upcoming events.</p>
+      </ng-template>
+    </div>
+
+    <!-- Account Deactivation -->
+    <div class="profile-section danger-zone">
+      <h2>Account Settings</h2>
+      <button type="button" class="danger-button" (click)="deactivateAccount()">
+        Deactivate Account
+      </button>
+      <p *ngIf="userType === 'PUP'">Note: Deactivating your PUP profile cannot be undone.</p>
+    </div>
+  </div>
+</div>
