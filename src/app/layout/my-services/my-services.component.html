@@ -1,16 +1,11 @@
 <div class="row">
-
-  <div class="custom-select-wrapper custom-combobox">
-      <select id="filterCategories" class="custom-select" [(ngModel)]="selectedCategory">
-          <option *ngFor="let category of filterCategories" [value]="category">{{ category }}</option>
-      </select>
-      <span class="custom-arrow">▼</span>
-  </div>
+  <button class="btn" (click)="openFilterDialog()">Filter 🔽</button>
 
   <div class="searchbar">
     <input id="search-box" type="text" placeholder="Search" />
     <button id="search-btn" class="btn">🔍</button>
   </div>
+
   <button class="btn">Price list 📋</button>
 </div>
 
