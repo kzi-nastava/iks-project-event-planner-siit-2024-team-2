@@ -1,0 +1,35 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { User } from './dtos/user';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ProfileService {
+  private usersUrl = `${environment.apiHost}api/users`; 
+  private authUrl = `${environment.apiHost}api/auth`; 
+
+  constructor(private http: HttpClient) {}
+
+  getUserData(userId: number): Observable<User> {
+    return this.http.get<User>(`${this.usersUrl}/${userId}`);
+  }
+
+  updatePersonalInfo(userInfo: any): Observable<User> {
+    return this.http.put<User>(this.usersUrl, userInfo);
+  }
+
+  changePassword(oldPassword: string, newPassword: string): Observable<any> {
+    return this.http.post(`${this.authUrl}/reset-password`, { oldPassword, newPassword });
+  }
+
+  deactivateAccount(): Observable<any> {
+    return this.http.delete(this.usersUrl);
+  }
+
+  updateEventTypes(selectedEventTypes: string[]): Observable<any> {
+    return this.http.put(`${this.usersUrl}/event-types`, { eventTypes: selectedEventTypes });
+  }
+}

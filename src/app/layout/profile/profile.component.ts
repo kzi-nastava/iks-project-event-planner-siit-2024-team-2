@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ProfileService } from '../../services/profile.service'; 
 
 @Component({
   selector: 'app-profile',
@@ -10,106 +11,78 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent {
-  // User type identification
-  userType: 'OD' | 'PUP' | 'AK' | 'A' = 'OD'; // This would come from auth service in real app
-  
-  // Personal information
-  userInfo = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    profilePicture: '',
-    phone: ''
-  };
+  userType: 'OD' | 'PUP' | 'AK' | 'A' = 'OD';
 
-  // Company information (for PUP)
-  companyInfo = {
-    name: '',
-    description: '',
-    location: '',
-    phone: '',
-    photos: [] as string[]
-  };
-
-  // Password change
+  userInfo = { firstName: '', lastName: '', email: '', profilePicture: '', phone: '' };
+  companyInfo = { name: '', description: '', location: '', phone: '', photos: [] as string[] };
   oldPassword = '';
   newPassword = '';
   confirmPassword = '';
-
-  // Favorites
   favoriteEvents: any[] = [];
   favoriteServices: any[] = [];
-
-  // Calendar/schedule
   upcomingEvents: any[] = [];
-
-  // Service categories (for PUP)
   serviceCategories: any[] = [];
   eventTypes: any[] = [];
   selectedEventTypes: any[] = [];
 
-  constructor() {
-    // In a real app, you would fetch this data from a service
+  constructor(private profileService: ProfileService) {
     this.loadUserData();
   }
 
   loadUserData() {
-    // Mock data - in real app this would come from API
-    this.userInfo = {
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john.doe@example.com',
-      profilePicture: 'assets/default-profile.jpg',
-      phone: '+1234567890'
-    };
+    this.profileService.getUserData(1).subscribe({
+      next: (data) => {
+        console.log('User data loaded:', data);
+        this.userInfo = {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          profilePicture: data.profilePicture,
+          phone: data.phoneNumber
+        };
+        console.log('User info:', this.userInfo);
+        this.favoriteEvents = data.favoriteEvents;
+        this.favoriteServices = data.favoriteServices;
+        this.upcomingEvents = data.upcomingEvents;
 
-    if (this.userType === 'PUP') {
-      this.companyInfo = {
-        name: 'Example Company',
-        description: 'We provide excellent services',
-        location: '123 Main St, City',
-        phone: '+1234567890',
-        photos: ['assets/company1.jpg', 'assets/company2.jpg']
-      };
-      this.serviceCategories = ['Catering', 'Decoration', 'Music'];
-      this.eventTypes = ['Wedding', 'Birthday', 'Corporate'];
-      this.selectedEventTypes = ['Wedding', 'Birthday'];
-    }
+        if (data.userType === 'PUP') {
+          this.companyInfo = data.companyInfo;
+          this.serviceCategories = data.serviceCategories;
+          this.eventTypes = data.eventTypes;
+          this.selectedEventTypes = data.selectedEventTypes;
+        }
+      },
+      error: (err) => {
+        console.error('Error loading user data:', err);
+      }
+    });
 
-    this.favoriteEvents = [{ id: 1, name: 'Summer Party' }];
-    this.favoriteServices = [{ id: 1, name: 'Wedding Catering' }];
-    this.upcomingEvents = [{ id: 1, title: 'Client Meeting', date: new Date() }];
   }
 
   updatePersonalInfo() {
-    console.log('Updating personal info:', this.userInfo);
-    // API call would go here
+    this.profileService.updatePersonalInfo(this.userInfo);
   }
 
   updateCompanyInfo() {
     if (this.userType !== 'PUP') return;
     console.log('Updating company info:', this.companyInfo);
-    // API call would go here
   }
 
   changePassword() {
     if (this.newPassword !== this.confirmPassword) {
-      alert('New passwords do not match!');
+      alert('New password and confirmation do not match.');
       return;
     }
-    console.log('Changing password');
-    // API call would go here
+    const result = this.profileService.changePassword(this.oldPassword, this.newPassword);
   }
 
   deactivateAccount() {
     if (confirm('Are you sure you want to deactivate your account?')) {
-      console.log('Deactivating account');
-      // API call would go here
+      this.profileService.deactivateAccount();
     }
   }
 
   updateEventTypes() {
-    console.log('Selected event types:', this.selectedEventTypes);
-    // API call would go here
+    this.profileService.updateEventTypes(this.selectedEventTypes);
   }
 }

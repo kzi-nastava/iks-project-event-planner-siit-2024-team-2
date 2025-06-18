@@ -1,6 +1,6 @@
 <div class="profile-container">
   <div class="profile-header">
-    <img [src]="userInfo.profilePicture" alt="Profile Picture" class="profile-picture">
+    <!-- <img [src]="userInfo.profilePicture" alt="Profile Picture" class="profile-picture"> -->
     <h1>{{ userInfo.firstName }} {{ userInfo.lastName }}</h1>
     <p>{{ userInfo.email }}</p>
   </div>
@@ -92,7 +92,7 @@
     </div>
 
     <!-- Favorites Section -->
-    <div class="profile-section">
+    <!-- <div class="profile-section">
       <h2>Favorites</h2>
       <h3>Favorite Events</h3>
       <div *ngIf="favoriteEvents.length > 0; else noFavoriteEvents">
@@ -113,10 +113,10 @@
       <ng-template #noFavoriteServices>
         <p>No favorite services yet.</p>
       </ng-template>
-    </div>
+    </div> -->
 
     <!-- Calendar/Schedule Section -->
-    <div class="profile-section">
+    <!-- <div class="profile-section">
       <h2>Upcoming Events</h2>
       <div *ngIf="upcomingEvents.length > 0; else noUpcomingEvents">
         <div *ngFor="let event of upcomingEvents" class="event-item">
@@ -127,7 +127,7 @@
       <ng-template #noUpcomingEvents>
         <p>No upcoming events.</p>
       </ng-template>
-    </div>
+    </div> -->
 
     <!-- Account Deactivation -->
     <div class="profile-section danger-zone">
