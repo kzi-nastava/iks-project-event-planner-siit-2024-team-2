@@ -1,12 +1,12 @@
 <div class="row">
-  <button class="btn" (click)="openFilterDialog()">Filter 🔽</button>
+  <button class="fancy-button" (click)="openFilterDialog()">Filter 🔽</button>
 
   <div class="searchbar">
     <input id="search-box" type="text" placeholder="Search" />
-    <button id="search-btn" class="btn">🔍</button>
+    <button id="search-btn" class="fancy-button">🔍</button>
   </div>
 
-  <button class="btn">Price list 📋</button>
+  <button class="fancy-button">Price list 📋</button>
 </div>
 
 <div class="services-container">
@@ -24,8 +24,8 @@
         </div>
 
         <div class="row" id="end">
-          <button mat-button (click)="navigateToEditService(service.id)">Edit</button>
-          <button id="delete" (click)="openDialog()">Delete</button>
+          <button mat-button class="fancy-button" (click)="navigateToEditService(service.id)">Edit</button>
+          <button id="delete" class="fancy-button" (click)="openDialog()">Delete</button>
         </div>
 
       </div>
