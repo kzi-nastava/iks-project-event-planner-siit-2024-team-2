@@ -11,4 +11,30 @@
             <input type="number" class="form-input">
         </div>
     </div>
+
+    <div class="filter-category">
+        <h5>Availability</h5>
+        <mat-checkbox>available</mat-checkbox>
+    </div>
+
+    <div class="filter-category">
+        <h5>Service categories</h5>
+        <select id="serviceCategories" class="custom-select"[formControl]="selectedCategories" multiple>
+            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+        </select>
+    </div>
+
+    <div class="filter-category">
+        <h5>Event types</h5>
+        <select id="eventTypes" class="custom-select"[formControl]="selectedEventTypes" multiple>
+            <option *ngFor="let eventType of eventTypes" [value]="eventType">{{ eventType }}</option>
+        </select>
+    </div>
+    
+    <div class="row">
+        <button (click)="close()" class="fancy-button">Filter</button>
+        <button (click)="close()" class="fancy-button" id="cancel">Cancel</button>
+    </div>
+
+
 </mat-dialog-content>

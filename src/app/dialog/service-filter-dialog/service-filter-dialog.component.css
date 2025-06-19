@@ -28,6 +28,10 @@ h5 {
     background-color: darkred;
 }
 
+.filter-category {
+    margin-bottom: 15px;
+}
+
 .same-row {
     display: flex;
     align-items: center;
@@ -45,4 +49,8 @@ p {
     padding: 6px 6px;
     border-radius: 8px;
     margin-right: 8px;
+}
+
+button {
+    width: 150px;
 }
