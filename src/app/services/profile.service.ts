@@ -17,12 +17,16 @@ export class ProfileService {
     return this.http.get<User>(`${this.usersUrl}/${userId}`);
   }
 
-  updatePersonalInfo(userInfo: any): Observable<User> {
-    return this.http.put<User>(this.usersUrl, userInfo);
+  updatePersonalInfo(userInfo: any, userId: string): Observable<User> {
+    return this.http.put<User>(`${this.usersUrl}/${userId}`, userInfo);
+  }
+  
+  updateCompanyInfo(companyInfo: any, userId: string): Observable<User> {
+    return this.http.put<User>(`${this.usersUrl}/company/${userId}`, companyInfo);
   }
 
-  changePassword(oldPassword: string, newPassword: string): Observable<any> {
-    return this.http.post(`${this.authUrl}/reset-password`, { oldPassword, newPassword });
+  changePassword(oldPassword: string, newPassword: string, userId: string): Observable<any> {
+    return this.http.post(`${this.authUrl}/reset-password/${userId}`, { oldPassword, newPassword });
   }
 
   deactivateAccount(): Observable<any> {

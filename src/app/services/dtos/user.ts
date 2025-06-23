@@ -4,6 +4,7 @@ export interface User {
     email: string;
     profilePicture: string;
     phoneNumber: string;
+    address: string;
     favoriteEvents: any[];
     favoriteServices: any[];
     upcomingEvents: any[];
@@ -17,5 +18,5 @@ export interface User {
     serviceCategories: any[];
     eventTypes: any[];
     selectedEventTypes: any[];
-    userType: 'OD' | 'PUP' | 'AK' | 'A';
+    userRole: 'OD' | 'PUP' | 'AK' | 'A';
 }
