@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProfileService } from '../../services/profile.service'; 
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '../../dialog/dialog.component';
 
 @Component({
   selector: 'app-profile',
@@ -12,10 +14,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent {
-  userRole: 'OD' | 'PUP' | 'AK' | 'A' = 'OD';
+  userRole: 'EVENT_ORGANIZER' | 'SERVICE_PRODUCT_PROVIDER' | 'ADMIN' = 'EVENT_ORGANIZER' 
 
   userInfo = { firstName: '', lastName: '', email: '', profilePicture: '', address: '', phoneNumber: '' };
-  companyInfo = { name: '', description: '' };
+  companyInfo = { companyName: '', companyDescription: '' };
   oldPassword = '';
   newPassword = '';
   confirmPassword = '';
@@ -26,7 +28,7 @@ export class ProfileComponent {
   eventTypes: any[] = [];
   selectedEventTypes: any[] = [];
 
-  constructor(private profileService: ProfileService, private snackBar: MatSnackBar,) {
+  constructor(private profileService: ProfileService, private snackBar: MatSnackBar, private dialog: MatDialog,) {
     this.loadUserData();
   }
 
@@ -39,6 +41,7 @@ export class ProfileComponent {
       this.profileService.getUserData(Number(userId)).subscribe({
         next: (data) => {
           console.log('User data loaded:', data);
+          this.userRole = data.userRole;
           this.userInfo = {
             firstName: data.firstName,
             lastName: data.lastName,
@@ -51,11 +54,22 @@ export class ProfileComponent {
           this.favoriteServices = data.favoriteServices;
           this.upcomingEvents = data.upcomingEvents;
 
-          if (data.userRole === 'PUP') {
-            this.companyInfo = data.companyInfo;
-            this.serviceCategories = data.serviceCategories;
-            this.eventTypes = data.eventTypes;
-            this.selectedEventTypes = data.selectedEventTypes;
+          if (data.userRole === 'SERVICE_PRODUCT_PROVIDER') {
+            this.profileService.getCompanyData(Number(userId)).subscribe({
+              next: (companyData) => {
+                console.log('Company data loaded:', companyData);
+                this.companyInfo = {
+                  companyName: companyData.companyName,
+                  companyDescription: companyData.companyDescription,
+                };
+                this.serviceCategories = companyData.serviceCategories;
+                this.eventTypes = companyData.eventTypes;
+                this.selectedEventTypes = companyData.selectedEventTypes;
+              },
+              error: (err) => {
+                console.error('Error loading company data:', err);
+              }
+            });
           }
         },
         error: (err) => {
@@ -88,8 +102,23 @@ export class ProfileComponent {
   }
 
   updateCompanyInfo() {
-    if (this.userRole !== 'PUP') return;
+    if (this.userRole !== 'SERVICE_PRODUCT_PROVIDER') return;
     console.log('Updating company info:', this.companyInfo);
+        if (localStorage.getItem('userId') === null) {
+      console.error('User ID not found in local storage.');
+      return;
+    }
+    this.profileService.updateCompanyInfo(this.companyInfo, localStorage.getItem('userId')!).subscribe({
+      next: (data) => {
+        this.snackBar.open('Personal information updated successfully', 'Close', {
+          duration: 4000,
+          });
+          this.companyInfo = {
+            companyName: data.companyName,
+            companyDescription: data.companyDescription,
+          };
+      },
+    });
   }
 
   changePassword() {
@@ -120,11 +149,35 @@ export class ProfileComponent {
     });
   }
 
-  deactivateAccount() {
-    if (confirm('Are you sure you want to deactivate your account?')) {
-      this.profileService.deactivateAccount();
+deactivateAccount() {
+  const dialogRef = this.dialog.open(DialogComponent, {
+    data: {
+      title: 'Deactivate Account',
+      message: 'Are you sure you want to deactivate your account? This action is irreversible.',
+      confirmButtonText: 'Deactivate',
+      cancelButtonText: 'Cancel',
     }
-  }
+  });
+
+  dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+    if (confirmed) {
+      this.profileService.deactivateAccount(Number(localStorage.getItem('userId'))).subscribe({
+        next: () => {
+          this.snackBar.open('Account deactivated successfully', 'Close', {
+            duration: 4000,
+          });
+        },
+        error: (err) => {
+          console.error('Error deactivating account:', err);
+          this.snackBar.open('Failed to deactivate account. Please try again.', 'Close', {
+            duration: 4000,
+            panelClass: ['snackbar-error']
+          });
+        }
+      });
+    }
+  });
+}
 
   updateEventTypes() {
     this.profileService.updateEventTypes(this.selectedEventTypes);

@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import {MatRadioModule} from '@angular/material/radio';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth-service.service';
@@ -33,7 +33,11 @@ export class RegisterComponent {
   registerForm!: FormGroup;
   isEventOrganizer = true;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {}
+  constructor(
+    private fb: FormBuilder, 
+    private authService: AuthService, 
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
@@ -105,6 +109,7 @@ export class RegisterComponent {
           next: (response) => {
             if (response) {
               console.log('Registration successful');
+              this.router.navigate(['/dashboard']);
             } else {
               console.error('Registration failed');
             }

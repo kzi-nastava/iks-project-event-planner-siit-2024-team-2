@@ -20,17 +20,21 @@ export class ProfileService {
   updatePersonalInfo(userInfo: any, userId: string): Observable<User> {
     return this.http.put<User>(`${this.usersUrl}/${userId}`, userInfo);
   }
+
+  getCompanyData(userId: number): Observable<User> {
+    return this.http.get<User>(`${this.usersUrl}/company/${userId}`);
+  }
   
   updateCompanyInfo(companyInfo: any, userId: string): Observable<User> {
     return this.http.put<User>(`${this.usersUrl}/company/${userId}`, companyInfo);
   }
 
   changePassword(oldPassword: string, newPassword: string, userId: string): Observable<any> {
-    return this.http.post(`${this.authUrl}/reset-password/${userId}`, { oldPassword, newPassword });
+    return this.http.post(`${this.authUrl}/reset-password/${Number(userId)}`, { oldPassword, newPassword });
   }
 
-  deactivateAccount(): Observable<any> {
-    return this.http.delete(this.usersUrl);
+  deactivateAccount(userId: number): Observable<any> {
+    return this.http.delete(`${this.usersUrl}/${userId}`);
   }
 
   updateEventTypes(selectedEventTypes: string[]): Observable<any> {

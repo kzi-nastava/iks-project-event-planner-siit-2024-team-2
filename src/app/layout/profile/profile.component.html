@@ -35,17 +35,18 @@
     </div>
 
     <!-- Company Information Section (for PUP) -->
-    <div class="profile-section" *ngIf="userRole === 'PUP'">
+    <div class="profile-section" *ngIf="userRole === 'SERVICE_PRODUCT_PROVIDER'">
       <h2>Company Information</h2>
       <form (ngSubmit)="updateCompanyInfo()">
         <div class="form-group">
           <label>Company Name</label>
-          <input type="text" [(ngModel)]="companyInfo.name" name="companyName" disabled>
+          <input type="text" [(ngModel)]="companyInfo.companyName" name="companyName" disabled>
         </div>
         <div class="form-group">
           <label>Description</label>
-          <textarea [(ngModel)]="companyInfo.description" name="description"></textarea>
+          <textarea [(ngModel)]="companyInfo.companyDescription" name="description"></textarea>
         </div>
+        <button type="submit">Update Company Info</button>
       </form>
 
       <h3>Service Categories</h3>
@@ -90,7 +91,7 @@
     <!-- <div class="profile-section">
       <h2>Favorites</h2>
       <h3>Favorite Events</h3>
-      <div *ngIf="favoriteEvents.length > 0; else noFavoriteEvents">
+      <div *ngIf="favoriteEvents.length && favoriteEvents.length > 0; else noFavoriteEvents">
         <div *ngFor="let event of favoriteEvents" class="favorite-item">
           {{ event.name }}
         </div>
@@ -100,7 +101,7 @@
       </ng-template>
 
       <h3>Favorite Services/Products</h3>
-      <div *ngIf="favoriteServices.length > 0; else noFavoriteServices">
+      <div *ngIf="favoriteServices.length && favoriteServices.length > 0; else noFavoriteServices">
         <div *ngFor="let service of favoriteServices" class="favorite-item">
           {{ service.name }}
         </div>
@@ -113,7 +114,7 @@
     <!-- Calendar/Schedule Section -->
     <!-- <div class="profile-section">
       <h2>Upcoming Events</h2>
-      <div *ngIf="upcomingEvents.length > 0; else noUpcomingEvents">
+      <div *ngIf="upcomingEvents.length && upcomingEvents.length > 0; else noUpcomingEvents">
         <div *ngFor="let event of upcomingEvents" class="event-item">
           <h4>{{ event.title }}</h4>
           <p>{{ event.date | date }}</p>
@@ -130,7 +131,7 @@
       <button type="button" class="danger-button" (click)="deactivateAccount()">
         Deactivate Account
       </button>
-      <p *ngIf="userRole === 'PUP'">Note: Deactivating your PUP profile cannot be undone.</p>
+      <p>Note: Deactivating your profile cannot be undone.</p>
     </div>
   </div>
 </div>

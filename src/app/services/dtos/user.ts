@@ -8,15 +8,12 @@ export interface User {
     favoriteEvents: any[];
     favoriteServices: any[];
     upcomingEvents: any[];
-    companyInfo: {
-        name: string;
-        description: string;
-        location: string;
-        phone: string;
-        photos: string[];
-    };
+    // Additional properties for SERVICE_PRODUCT_PROVIDER
+    companyName: string;
+    companyDescription: string;
+
     serviceCategories: any[];
     eventTypes: any[];
     selectedEventTypes: any[];
-    userRole: 'OD' | 'PUP' | 'AK' | 'A';
+    userRole: 'EVENT_ORGANIZER' | 'SERVICE_PRODUCT_PROVIDER' | 'ADMIN';
 }

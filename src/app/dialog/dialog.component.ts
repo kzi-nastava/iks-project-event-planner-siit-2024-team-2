@@ -10,10 +10,19 @@ import { MatDialogRef } from '@angular/material/dialog';
   templateUrl: './dialog.component.html',
   styleUrl: './dialog.component.css'
 })
-export class DialogComponent {
+export class 
+DialogComponent {
   constructor(private dialogRef: MatDialogRef<DialogComponent>) { }
 
   close() {
     this.dialogRef.close();
+  }
+
+  onConfirm(): void {
+    this.dialogRef.close(true);
+  }
+
+  onCancel(): void {
+    this.dialogRef.close(false);
   }
 }
