@@ -7,12 +7,11 @@ import { MatDialogRef } from '@angular/material/dialog';
   selector: 'app-dialog',
   standalone: true,
   imports: [MatDialogModule],
-  templateUrl: './dialog.component.html',
-  styleUrl: './dialog.component.css'
+  templateUrl: './delete-dialog.component.html',
+  styleUrl: './delete-dialog.component.css'
 })
-export class 
-DialogComponent {
-  constructor(private dialogRef: MatDialogRef<DialogComponent>) { }
+export class DeleteDialogComponent {
+  constructor(private dialogRef: MatDialogRef<DeleteDialogComponent>) { }
 
   close() {
     this.dialogRef.close();

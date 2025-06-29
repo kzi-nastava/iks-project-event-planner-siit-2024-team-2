@@ -1,0 +1,10 @@
+button {
+    padding: 6px 12px; /* Top and bottom padding, left and right padding */
+    font-size: 12px; /* Font size */
+    width: 130px;
+    margin: 10px;
+}
+
+#delete {
+    background-color: #e74c3c;
+}

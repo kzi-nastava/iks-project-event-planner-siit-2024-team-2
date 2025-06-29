@@ -2,17 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
-import { FormsModule } from '@angular/forms';
 import { EP_Event } from '../../model/ep_event';
 import { Service } from '../../model/service';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { BrowserModule } from '@angular/platform-browser';
-import { MatCheckbox } from '@angular/material/checkbox';
 import { MatOption, MatSelect } from '@angular/material/select';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
@@ -22,7 +17,7 @@ import { FilterDialogComponent } from '../../dialog/filter-dialog/filter-dialog.
   selector: 'app-home',
   standalone: true,
   imports: [
-    MatSidenavModule, MatCardModule, MatButtonModule, CommonModule, MatFormField, MatInputModule, MatIconModule, MatCheckbox, MatSelect, MatOption, MatPaginatorModule
+    MatSidenavModule, MatCardModule, MatButtonModule, CommonModule, MatFormField, MatInputModule, MatIconModule, MatSelect, MatOption, MatPaginatorModule
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'

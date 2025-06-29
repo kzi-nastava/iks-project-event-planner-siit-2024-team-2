@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ProfileService } from '../../services/profile.service'; 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogComponent } from '../../dialog/dialog.component';
+import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component'; 
 
 @Component({
   selector: 'app-profile',
@@ -150,7 +150,7 @@ export class ProfileComponent {
   }
 
 deactivateAccount() {
-  const dialogRef = this.dialog.open(DialogComponent, {
+  const dialogRef = this.dialog.open(DeleteDialogComponent, {
     data: {
       title: 'Deactivate Account',
       message: 'Are you sure you want to deactivate your account? This action is irreversible.',
