@@ -8,18 +8,28 @@ import { LoginResponse } from './dtos/login-response';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = `${environment.apiHost}api/auth/login`; 
+
+  private apiUrl = `${environment.apiHost}api/auth`; 
 
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(this.apiUrl, { email, password }).pipe(
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, { email, password }).pipe(
       tap(response => {
         if (response.jwt) {
           localStorage.setItem('token', response.jwt); 
+          localStorage.setItem('userId', response.id.toString());
         }
       })
     );
+  }
+
+  register(email: string, password: string, firstName: string, lastName: string, address: string, phoneNumber: string, userRole: 2 | 3): Observable<boolean> {
+    return this.http.post<boolean>(`${this.apiUrl}/signup`, { email, password, firstName, lastName, address, phoneNumber, userRole });
+  }
+
+  registerCompany(email: string, password: string, firstName: string, lastName: string, companyName: string, companyDescription: string, address: string, phoneNumber: string, userRole: 2 | 3): Observable<boolean> {
+    return this.http.post<boolean>(`${this.apiUrl}/signup/company`, { email, password, firstName, lastName, companyName, companyDescription, address, phoneNumber, userRole });
   }
 
   logout() {

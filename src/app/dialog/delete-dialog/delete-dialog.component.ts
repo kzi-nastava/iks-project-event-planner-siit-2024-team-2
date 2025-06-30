@@ -16,4 +16,12 @@ export class DeleteDialogComponent {
   close() {
     this.dialogRef.close();
   }
+
+  onConfirm(): void {
+    this.dialogRef.close(true);
+  }
+
+  onCancel(): void {
+    this.dialogRef.close(false);
+  }
 }

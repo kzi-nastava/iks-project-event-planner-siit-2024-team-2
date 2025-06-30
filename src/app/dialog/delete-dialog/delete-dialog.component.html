@@ -3,6 +3,6 @@
       <p>Do you really want to delete this service? This process can not be undone.</p>
     </mat-dialog-content>
     <mat-dialog-actions>
-      <button mat-button (click)="close()" id="delete" class="fancy-button" >Yes, delete</button>
-      <button mat-button (click)="close()" class="fancy-button">No, stay</button>
+      <button mat-button (click)="onConfirm()" id="delete" class="fancy-button" >Yes, delete</button>
+      <button mat-button (click)="onCancel()" class="fancy-button">No, stay</button>
     </mat-dialog-actions>
