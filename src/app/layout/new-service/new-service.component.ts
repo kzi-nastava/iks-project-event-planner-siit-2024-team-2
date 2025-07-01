@@ -59,7 +59,5 @@ export class NewServiceComponent {
       this.router.navigate(['/my-services']);
     }
   }
-  
-
 }
 

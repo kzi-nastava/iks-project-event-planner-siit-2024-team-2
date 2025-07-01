@@ -54,10 +54,29 @@
     </div>
 
     <div *ngIf="!isEventOrganizer">
+      
+      <mat-form-field class="full-width">
+        <mat-label>First Name</mat-label>
+        <input matInput formControlName="firstName" placeholder="Enter your first name">
+        <mat-error *ngIf="registerForm.get('firstName')?.hasError('required')">First Name is required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Last Name</mat-label>
+        <input matInput formControlName="lastName" placeholder="Enter your last name">
+        <mat-error *ngIf="registerForm.get('lastName')?.hasError('required')">Last Name is required</mat-error>
+      </mat-form-field>
+
       <mat-form-field class="full-width">
         <mat-label>Company Name</mat-label>
         <input matInput formControlName="companyName" placeholder="Enter your company name">
         <mat-error *ngIf="registerForm.get('companyName')?.hasError('required')">Company Name is required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Company Description</mat-label>
+        <textarea matInput formControlName="companyDescription" placeholder="Describe your company"></textarea>
+        <mat-error *ngIf="registerForm.get('companyDescription')?.hasError('required')">Description is required</mat-error>
       </mat-form-field>
 
       <mat-form-field class="full-width">
@@ -82,12 +101,6 @@
       </mat-form-field>
 
       <mat-form-field class="full-width">
-        <mat-label>Contact Name</mat-label>
-        <input matInput formControlName="contactName" placeholder="Enter the contact name">
-        <mat-error *ngIf="registerForm.get('contactName')?.hasError('required')">Contact Name is required</mat-error>
-      </mat-form-field>
-
-      <mat-form-field class="full-width">
         <mat-label>Address</mat-label>
         <textarea matInput formControlName="address" placeholder="Enter your address"></textarea>
         <mat-error *ngIf="registerForm.get('address')?.hasError('required')">Address is required</mat-error>
@@ -100,11 +113,6 @@
         <mat-error *ngIf="registerForm.get('phone')?.hasError('pattern')">Enter a valid phone number</mat-error>
       </mat-form-field>
 
-      <mat-form-field class="full-width">
-        <mat-label>Company Description</mat-label>
-        <textarea matInput formControlName="companyDescription" placeholder="Describe your company"></textarea>
-        <mat-error *ngIf="registerForm.get('companyDescription')?.hasError('required')">Description is required</mat-error>
-      </mat-form-field>
     </div>
 
     <button mat-raised-button color="primary" type="submit" [disabled]="registerForm.invalid">Register</button>
