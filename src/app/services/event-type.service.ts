@@ -11,15 +11,16 @@ import { CreateEventType } from '../model/create-event-type';
 })
 export class EventTypeService {
 
+    private apiUrl = `${environment.apiHost}api/event-types`;
+
     constructor(private httpClient: HttpClient) { }
   
     add(eventType: CreateEventType) : Observable<EventType> {
-      console.log(eventType);
-      return this.httpClient.post<EventType>(environment.apiHost + "api/event-types/", eventType)
+      return this.httpClient.post<EventType>(this.apiUrl, eventType)
     }
   
     getEventType(id: number): Observable<EventType> {
-      return this.httpClient.get<EventType>(environment.apiHost + "api/event-types/" + id)
+      return this.httpClient.get<EventType>(`${this.apiUrl}/` + id)
     }
   
     getAll() : Observable<EventType[]> {

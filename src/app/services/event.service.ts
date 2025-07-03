@@ -9,14 +9,17 @@ import { PagedResponse } from '../shared/model/paged-response.model';
 })
 export class EventService {
 
+  private apiUrl = `${environment.apiHost}api/events`;
+
   constructor(private httpClient: HttpClient) { }
 
   add(Event: Event) : Observable<Event> {
-    return this.httpClient.post<Event>(environment.apiHost + "api/events/", Event)
+    console.table(Event);
+    return this.httpClient.post<Event>(this.apiUrl, Event)
   }
 
   getEvent(id: number): Observable<Event> {
-    return this.httpClient.get<Event>(environment.apiHost + "api/events/" + id)
+    return this.httpClient.get<Event>(`${this.apiUrl}/${id}`);
   }
 
   getAll(pageProperties?: any) : Observable<PagedResponse<Event>> {
@@ -26,6 +29,6 @@ export class EventService {
       .set('page', pageProperties.page)
       .set('size', pageProperties.pageSize)
     }
-    return this.httpClient.get<PagedResponse<Event>>(environment.apiHost + `api/events/`, { params: params});
+    return this.httpClient.get<PagedResponse<Event>>(this.apiUrl, { params: params});
   }
 }

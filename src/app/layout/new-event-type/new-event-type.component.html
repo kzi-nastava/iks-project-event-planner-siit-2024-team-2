@@ -10,6 +10,17 @@
           Minimum 1 character is required.
         </mat-error>
       </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Event Type Description</mat-label>
+        <textarea matInput placeholder="Enter event type description" formControlName="description" > </textarea>
+        <mat-error *ngIf="inputForm.controls.name?.hasError('required')">
+          This field is required.
+        </mat-error>
+        <mat-error *ngIf="inputForm.controls.name?.hasError('minlength')">
+          Minimum 1 character is required.
+        </mat-error>
+      </mat-form-field>
   
       <mat-form-field appearance="fill">
         <mat-label>Recommended Services</mat-label>

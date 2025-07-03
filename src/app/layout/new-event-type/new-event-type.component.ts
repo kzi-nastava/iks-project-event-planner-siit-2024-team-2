@@ -12,6 +12,7 @@ import { EventTypeService } from '../../services/event-type.service';
 import { EventType } from '../../model/event-type';
 import { CreateEventType } from '../../model/create-event-type';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ServiceService } from '../../services/service.service';
 
 
 @Component({
@@ -35,8 +36,11 @@ export class NewEventTypeComponent {
     private route: ActivatedRoute,
     private router: Router,
     private eventTypeService: EventTypeService,
-    private snackBar: MatSnackBar
-  ) {}
+    private snackBar: MatSnackBar,
+    private serviceService: ServiceService
+  ) {
+
+  }
   services = [
     { id: 1, name: 'Catering' },
     { id: 2, name: 'Photography' },
@@ -45,14 +49,38 @@ export class NewEventTypeComponent {
   ];
   inputForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(1)]),
-    recommendedServices: new FormControl([], Validators.required),
+    description: new FormControl('', [Validators.required, Validators.minLength(1)]),
+    recommendedServices: new FormControl([]),
   });
+  loadServices() {
+    this.serviceService.getAll().subscribe({
+      next: (response: any) => {
+        console.log('Services loaded:', response);
+        this.services = (response.items || []).map((service: any) => ({
+          id: service.id,
+          name: service.name
+        }));
+      },
+      error: (err) => {
+        console.error('Error loading services:', err);
+        this.snackBar.open('Failed to load services. Please try again.', 'Close',
+          {
+            duration: 3000,
+            panelClass: ['snack-error']
+          });
+      }
+    });
+  }
+  ngOnInit() {
+    this.loadServices();
+  }
   onSubmit() {
     if (this.inputForm.valid) {
       console.log('Form Submitted:', this.inputForm.value);
   
       const eventType: CreateEventType = {
         name: this.inputForm.value.name,
+        description: this.inputForm.value.description, 
         recommendedServiceProducts: this.inputForm.value.recommendedServices,
       };
   
@@ -69,7 +97,6 @@ export class NewEventTypeComponent {
         },
         error: (err) => {
           console.error('Error creating event type:', err);
-  
           this.snackBar.open('Failed to create Event Type. Please try again.', 'Close', {
             duration: 3000,
             panelClass: ['snack-error']
