@@ -14,10 +14,10 @@
       <mat-form-field appearance="fill">
         <mat-label>Event Type Description</mat-label>
         <textarea matInput placeholder="Enter event type description" formControlName="description" > </textarea>
-        <mat-error *ngIf="inputForm.controls.name?.hasError('required')">
+        <mat-error *ngIf="inputForm.controls.description?.hasError('required')">
           This field is required.
         </mat-error>
-        <mat-error *ngIf="inputForm.controls.name?.hasError('minlength')">
+        <mat-error *ngIf="inputForm.controls.description?.hasError('minlength')">
           Minimum 1 character is required.
         </mat-error>
       </mat-form-field>

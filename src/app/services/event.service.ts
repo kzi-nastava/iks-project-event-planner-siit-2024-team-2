@@ -13,9 +13,8 @@ export class EventService {
 
   constructor(private httpClient: HttpClient) { }
 
-  add(Event: Event) : Observable<Event> {
-    console.table(Event);
-    return this.httpClient.post<Event>(this.apiUrl, Event)
+  add(event: Event) : Observable<Event> {
+    return this.httpClient.post<Event>(this.apiUrl, event)
   }
 
   getEvent(id: number): Observable<Event> {
