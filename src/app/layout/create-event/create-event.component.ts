@@ -43,6 +43,11 @@ export class CreateEventComponent {
   ];
   
   createEvent(): void {
+    if (!localStorage.getItem('userId')) {
+      console.error('User is not logged in. Cannot create event.');
+      this.router.navigate(['/login']);
+      return;
+    }
     const event = {
       name: this.createEventForm.value.name,
       description: this.createEventForm.value.description,
@@ -50,6 +55,7 @@ export class CreateEventComponent {
       latitude: this.createEventForm.value.latitude,
       date: this.createEventForm.value.date,
       eventType: this.createEventForm.value.eventType,
+      eventOrganizer: Number(localStorage.getItem('userId')),
       maxAttendances: this.createEventForm.value.maxAttendances,
       open: this.createEventForm.value.open
     };
