@@ -3,7 +3,7 @@
 
     <!-- Service categories combobox -->
     <div class="custom-combobox">
-        <label for="serviceCategories" class="custom-label">Service category:</label>
+        <label for="serviceCategories" class="custom-label" style="width: fit-content;">Product category:</label>
         <div class="custom-select-wrapper">
             <select id="serviceCategories" class="custom-select"[(ngModel)]="selectedCategory">
                 <option *ngFor="let category of productCategories" [value]="category">{{ category }}</option>
@@ -57,19 +57,6 @@
         <input [(ngModel)]=service.availability type="checkbox" name="availability-checkbox" value="availability" style="margin-left: 50px;"> availability
         <input [(ngModel)]=service.automaticAcceptance type="checkbox" name="automaticAcceptance" value="automaticAcceptance"> automatic acceptance
    
-    </div>
-
-
-    <!-- 3 other textboxes: duration and reservation and cancellation deadline -->
-    <div class="form-container" style="margin-top: 8px;">
-        <label for="duration" class="form-label">Duration:</label>
-        <input [(ngModel)]=service.duration type="number" id="duration" class="form-input" placeholder="Enter the duration" style="height: 35px;">
-
-        <label for="reservation-deadline" class="form-label">Reservation deadline:</label>
-        <input [(ngModel)]=service.reservationDeadline type="number" id="reservation-deadline" class="form-input" placeholder="Enter the deadline reservation">
-
-        <label for="cancellation-deadline" class="form-label">Cancellation deadline:</label>
-        <input [(ngModel)]=service.cancellationDeadline type="number" id="cancellation-deadline" class="form-input" placeholder="Enter the deadline cancellation">
     </div>
 
     
