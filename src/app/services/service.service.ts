@@ -9,7 +9,7 @@ import { PagedResponse } from '../shared/model/paged-response.model';
 })
 export class ServiceService {
 
-  private apiUrl = `${environment.apiHost}api/service-products`; 
+  private apiUrl = `${environment.apiHost}api/services`; 
 
   constructor(private httpClient: HttpClient) { }
 
@@ -19,6 +19,10 @@ export class ServiceService {
 
   getService(id: number): Observable<Service> {
     return this.httpClient.get<Service>(`${this.apiUrl}/${id}`);
+  }
+
+  getMyServices(): Observable<Service[]> {
+    return this.httpClient.get<Service[]>(this.apiUrl);
   }
 
   getAll(pageProperties?: any) : Observable<PagedResponse<Service>> {
