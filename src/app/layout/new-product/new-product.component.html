@@ -5,8 +5,8 @@
     <div class="custom-combobox">
         <label for="serviceCategories" class="custom-label" style="width: fit-content;">Product category:</label>
         <div class="custom-select-wrapper">
-            <select id="serviceCategories" class="custom-select"[(ngModel)]="selectedCategory">
-                <option *ngFor="let category of productCategories" [value]="category">{{ category }}</option>
+            <select id="serviceCategories" class="custom-select"[(ngModel)]="selectedCategoryId">
+                <option *ngFor="let category of productCategories" [value]="category">{{ category.name }}</option>
             </select>
             <span class="custom-arrow">▼</span>
         </div>
@@ -39,8 +39,8 @@
     <div class="listbox-container">
         <div class="listbox">
             <label class="listbox-item" *ngFor="let event of eventTypes">
-                <input type="checkbox" [(ngModel)]="selectedEvents[event]" />
-                <span>{{ event }}</span>
+                <input type="checkbox" [(ngModel)]="selectedEvents[event.id]" />
+                <span>{{ event.name }}</span>
             </label>
         </div>
     </div>
@@ -55,7 +55,6 @@
     <div>
         <input [(ngModel)]=service.visibility type="checkbox" name="visibility-checkbox" value="visibility"> visibility
         <input [(ngModel)]=service.availability type="checkbox" name="availability-checkbox" value="availability" style="margin-left: 50px;"> availability
-        <input [(ngModel)]=service.automaticAcceptance type="checkbox" name="automaticAcceptance" value="automaticAcceptance"> automatic acceptance
    
     </div>
 
