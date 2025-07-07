@@ -7,6 +7,7 @@ import { NewServiceComponent } from './layout/new-service/new-service.component'
 import { MyServicesComponent } from './layout/my-services/my-services.component';
 import { LoginComponent } from './layout/auth/login/login.component';
 import { RegisterComponent } from './layout/auth/register/register.component';
+import { NewEventTypeComponent } from './layout/new-event-type/new-event-type.component';
 import { CreateEventComponent } from './layout/create-event/create-event.component';
 
 export const routes: Routes = [
@@ -15,6 +16,7 @@ export const routes: Routes = [
     {path: 'profile', component: ProfileComponent},
     {path: 'notifications', component: NotificationsComponent},
     {path: 'new-service', component: NewServiceComponent},
+    {path: 'new-event-type', component: NewEventTypeComponent},
     {path: 'my-services', component: MyServicesComponent},
     {path: 'signin', component: LoginComponent},
     {path: 'signup', component: RegisterComponent},

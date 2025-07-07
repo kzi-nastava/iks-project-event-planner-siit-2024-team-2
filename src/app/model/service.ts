@@ -5,4 +5,4 @@ export class Service {
         public cancellationDeadline: number = 0, public visibility: boolean = false, public availability: boolean = false,
         public automaticAcceptance: boolean = false) {
     }
-}
+}  

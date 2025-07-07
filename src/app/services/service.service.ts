@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Event } from '../model/event';
+import { Service } from '../model/service';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
@@ -7,28 +7,27 @@ import { PagedResponse } from '../shared/model/paged-response.model';
 @Injectable({
   providedIn: 'root'
 })
-export class EventService {
+export class ServiceService {
 
-  private apiUrl = `${environment.apiHost}api/events`;
+  private apiUrl = `${environment.apiHost}api/service-products`; 
 
   constructor(private httpClient: HttpClient) { }
 
-  add(event: Event) : Observable<Event> {
-    console.log(this.apiUrl)
-    return this.httpClient.post<Event>(this.apiUrl, event)
+  add(service: Service) : Observable<Service> {
+    return this.httpClient.post<Service>(this.apiUrl, service);
   }
 
-  getEvent(id: number): Observable<Event> {
-    return this.httpClient.get<Event>(`${this.apiUrl}/${id}`);
+  getService(id: number): Observable<Service> {
+    return this.httpClient.get<Service>(`${this.apiUrl}/${id}`);
   }
 
-  getAll(pageProperties?: any) : Observable<PagedResponse<Event>> {
+  getAll(pageProperties?: any) : Observable<PagedResponse<Service>> {
     let params = new HttpParams();
     if(pageProperties) {
       params = params
       .set('page', pageProperties.page)
       .set('size', pageProperties.pageSize)
     }
-    return this.httpClient.get<PagedResponse<Event>>(this.apiUrl, { params: params});
+    return this.httpClient.get<PagedResponse<Service>>(this.apiUrl, { params: params});
   }
 }
