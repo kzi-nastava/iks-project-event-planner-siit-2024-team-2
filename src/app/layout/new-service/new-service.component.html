@@ -46,16 +46,16 @@
     </div>
 
 
-    <label for="photos" class="form-label" style="margin-top: 35px;">Photos:</label>
+    <label for="images" names="images" class="form-label" style="margin-top: 35px;">Images:</label>
     <div class="row">
-        <textarea [(ngModel)]=service.photos id="photos" class="form-input" placeholder="Attach the photo(s)"></textarea>
+        <textarea [(ngModel)]=service.images id="images" class="form-input" placeholder="Attach the photo(s)"></textarea>
         <button id="spajalica">📎</button>
     </div>
 
     <div>
-        <input [(ngModel)]=service.visibility type="checkbox" name="visibility-checkbox" value="visibility"> visibility
-        <input [(ngModel)]=service.availability type="checkbox" name="availability-checkbox" value="availability" style="margin-left: 50px;"> availability
-        <input [(ngModel)]=service.automaticAcceptance type="checkbox" name="automaticAcceptance" value="automaticAcceptance"> automatic acceptance
+        <input [(ngModel)]=service.visible type="checkbox" name="visible-checkbox" value="visible"> visibility
+        <input [(ngModel)]=service.available type="checkbox" name="available-checkbox" value="available" style="margin-left: 50px;"> availability
+        <input [(ngModel)]=service.automaticReserved type="checkbox" name="automaticReserved" value="automaticReserved"> automatic acceptance
    
     </div>
 
@@ -65,11 +65,11 @@
         <label for="duration" class="form-label">Duration:</label>
         <input [(ngModel)]=service.duration type="number" id="duration" class="form-input" placeholder="Enter the duration" style="height: 35px;">
 
-        <label for="reservation-deadline" class="form-label">Reservation deadline:</label>
-        <input [(ngModel)]=service.reservationDeadline type="number" id="reservation-deadline" class="form-input" placeholder="Enter the deadline reservation">
+        <label for="reservation-deadline" class="form-label">Reservation deadline (days):</label>
+        <input [(ngModel)]=service.reservationDaysDeadline type="number" id="reservation-days-deadline" class="form-input" placeholder="Enter the deadline reservation">
 
-        <label for="cancellation-deadline" class="form-label">Cancellation deadline:</label>
-        <input [(ngModel)]=service.cancellationDeadline type="number" id="cancellation-deadline" class="form-input" placeholder="Enter the deadline cancellation">
+        <label for="cancellation-deadline" class="form-label">Cancellation deadline (days):</label>
+        <input [(ngModel)]=service.cancellationDaysDeadline type="number" id="cancellation-days-deadline" class="form-input" placeholder="Enter the deadline cancellation">
     </div>
 
     

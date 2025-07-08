@@ -16,7 +16,7 @@
         <h3>{{ service.name }}</h3>
         <p>{{ service.description }}</p>
         <ul>
-          <li *ngFor="let event of service.eventTypes">{{ event }}</li>
+          <li *ngFor="let event of service.availableEventTypes_id">{{ event }}</li>
         </ul>
         <div class="row">
           <p><strong>Price:</strong> {{ service.price }}</p>

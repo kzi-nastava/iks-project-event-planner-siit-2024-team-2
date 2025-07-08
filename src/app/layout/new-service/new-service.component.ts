@@ -5,6 +5,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { Service } from '../../model/service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
+import { ServiceService } from '../../services/service.service';
 
 
 @Component({
@@ -21,7 +22,7 @@ export class NewServiceComponent {
   eventTypes: string[] = ['Wedding', 'Funeral', 'Birthday', 'Conference'];
   selectedEvents: { [key: string]: boolean } = {};
 
-  constructor(private route: ActivatedRoute, private router: Router) {
+  constructor(private route: ActivatedRoute, private router: Router, private serviceService: ServiceService) {
     // Initialize selectedEvents with default values
     this.eventTypes.forEach((event) => {
       this.selectedEvents[event] = false;
@@ -42,16 +43,13 @@ export class NewServiceComponent {
   }
 
   fetchServiceData(serviceId: number): void {
-    // UPDATE THIS LATER - IMPLEMENT getServiceById(serviceId)
-    // this.service = this.serviceService.getServiceById(serviceId);
-
-    // For demonstration purposes, we use a mock service:
-    this.service = new Service(serviceId, 'Catering', 'Peric catering', 'We offer catering for lorem ipsum. Lorem ipsum lorem ipsum lorem ipsum.',
-       'No specifies', 7, 1, ['catering.jpg'], ['Wedding', 'Birthday'], 1, 7, 3, true, true, true);
-
-    this.service.eventTypes.forEach((event) => {
-      this.selectedEvents[event] = true;
+    this.serviceService.getService(serviceId).subscribe(service => {
+      this.service = service;
+      console.log(this.service);
     });
+    // this.service.eventTypes.forEach((event) => {
+    //   this.selectedEvents[event] = true;
+    // });
   }
 
   backToAllServicesPerhaps(): void {
