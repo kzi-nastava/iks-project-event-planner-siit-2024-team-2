@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { Service } from '../../model/service';
@@ -9,13 +9,21 @@ import { EventTypeService } from '../../services/event-type.service';
 import { EventType } from '../../model/event-type';
 import { ServiceCategoryService } from '../../services/service-category.service';
 import { ServiceCategory } from '../../model/service-category';
+import { ProductService } from '../../services/product.service';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 
 @Component({
   selector: 'app-new-product',
   standalone: true,
-  imports: [FormsModule, CommonModule, MatSelectModule],
+  imports: [
+    FormsModule, 
+    CommonModule, 
+    MatSelectModule, 
+    ReactiveFormsModule,
+  ],
   templateUrl: './new-product.component.html',
   styleUrl: './new-product.component.css'
 })
@@ -28,18 +36,17 @@ export class NewProductComponent {
   selectedCategoryId: number = this.productCategories[0].id;
 
   eventTypes: EventType[] = [{name: 'Wedding', id: 1}, {name: 'Funeral', id: 2}, {name: 'Birthday', id: 3}, {name: 'Conference', id: 4}];
-  selectedEvents: { [key: number]: boolean } = {};
-
+  selectedEvents: number[] = [];
+  
   constructor(
     private route: ActivatedRoute, 
     private router: Router, 
     private eventTypeService: EventTypeService, 
-    private serviceCategoryService: ServiceCategoryService
+    private serviceCategoryService: ServiceCategoryService,
+    private productService: ProductService,    
+    private snackBar: MatSnackBar,
   ) {
     // Initialize selectedEvents with default values
-    this.eventTypes.forEach((event) => {
-      this.selectedEvents[event.id] = false;
-    });
   }
 
   // binding to the service data, on which the user clicked
@@ -48,12 +55,7 @@ export class NewProductComponent {
     // Fetch event types from the service
     this.eventTypeService.getAll().subscribe(
       (eventTypes) => {
-        console.log('Fetched event types:', eventTypes);
         this.eventTypes = eventTypes;
-        // Initialize selectedEvents with the fetched event types
-        this.eventTypes.forEach((event) => {
-          this.selectedEvents[event.id] = false;
-        });
       }
       ,
       (error) => {
@@ -66,7 +68,6 @@ export class NewProductComponent {
     // Fetch categories from the service
     this.serviceCategoryService.getAll().subscribe(
       (categories) => {
-        console.log('Fetched categories:', categories);
         this.productCategories = categories;
       }
       ,
@@ -79,27 +80,70 @@ export class NewProductComponent {
   ngOnInit(): void {
     this.loadEventTypes();
     this.loadServiceCategories();
-    // Get the service ID from query parameters
-    this.route.queryParams.subscribe(params => {
-      const serviceId = params['id'];
-      if (serviceId) {
-        this.fetchServiceData(serviceId); // Fetch the data based on the ID
-      }
-    });
   }
 
-  fetchServiceData(serviceId: number): void {
-    // UPDATE THIS LATER - IMPLEMENT getServiceById(serviceId)
-    // this.service = this.serviceService.getServiceById(serviceId);
+  createProductForm = new FormGroup({
+    name: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    description: new FormControl('', [Validators.required, Validators.minLength(5)]),
+    specifies: new FormControl('', [Validators.required]),
+    price: new FormControl(0, [Validators.required, Validators.min(0)]),
+    discount: new FormControl(0, [Validators.min(0)]),
+    productCategory: new FormControl(null, [Validators.required]),
+    available: new FormControl(false),
+    visible: new FormControl(false)
+  });
 
-    // For demonstration purposes, we use a mock service:
-    this.service = new Service(serviceId, 'Catering', 'Peric catering', 'We offer catering for lorem ipsum. Lorem ipsum lorem ipsum lorem ipsum.',
-       'No specifies', 7, 1, ['catering.jpg'], ['Wedding', 'Birthday'], 1, 7, 3, true, true, true);
-
-    // this.service.eventTypes.forEach((event) => {
-    //   this.selectedEvents[event] = true;
+  createProduct(): void {
+    if (this.createProductForm.invalid) {
+      this.createProductForm.markAllAsTouched();
+      console.warn('Form is invalid:', this.createProductForm.errors);
+      this.snackBar.open('Please fill out all required fields correctly.', 'Close', {
+        duration: 4000,
+        panelClass: ['snackbar-error']
+      });
+      return; 
+    }
+    const product = {
+      name: this.createProductForm.value.name,
+      description: this.createProductForm.value.description,
+      specifies: this.createProductForm.value.specifies,
+      price: this.createProductForm.value.price,
+      discount: this.createProductForm.value.discount,
+      availableEventTypesIds: this.selectedEvents,
+      categoryId: Number(this.createProductForm.value.productCategory), 
+      available: this.createProductForm.value.available,
+      visible: this.createProductForm.value.visible,
+      serviceProductProviderId: Number(localStorage.getItem('userId')),
+    };
+    // this.productService.add(product).subscribe({
+    //   next: (event: any) => {
+    //     console.log('Event created:', event);
+    //     this.router.navigate(['../'], { relativeTo: this.route });
+    //   },
+    //   error: (err: any) => {
+    //     console.error('Failed to create event:', err);
+    //   }
     // });
+    console.log(product);
+    this.snackBar.open('Product created successfully!', 'Close', {
+      duration: 3000,
+      panelClass: ['snackbar-success']
+    });
+    this.router.navigate(['../'], { relativeTo: this.route });
   }
+
+  onCancel(): void {
+    this.router.navigate(['../'], { relativeTo: this.route });
+  }
+
+  onEventCheckboxChange(event: any, eventTypeId: number) {
+    if (this.selectedEvents.includes(eventTypeId)) {
+      this.selectedEvents = this.selectedEvents.filter(id => id !== eventTypeId);
+    } else {
+      this.selectedEvents.push(eventTypeId);
+    }
+  }
+
 
   backToAllServicesPerhaps(): void {
     if (this.service.id != -1) {
