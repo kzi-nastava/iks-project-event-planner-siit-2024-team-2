@@ -7,6 +7,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { ServiceService } from '../../services/service.service';
 import { ServiceProductCategoryService } from '../../services/service-product-category.service';
+import { EventTypeService } from '../../services/event-type.service';
+import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -18,18 +20,18 @@ import { ServiceProductCategoryService } from '../../services/service-product-ca
 })
 export class NewServiceComponent {
   serviceCategories : string[] = [];
-  eventTypes: string[] = ['Wedding', 'Funeral', 'Birthday', 'Conference'];
-  selectedEvents: { [key: string]: boolean } = {};
+  eventTypes: string[] = [];
+  selectedEvents: { [key: string]: boolean } = {};  // default all false
   
   // binding to the service data, on which the user clicked
   service: Service = new Service();
-  
+
   constructor(private route: ActivatedRoute, private router: Router, private serviceService: ServiceService,
-    private SPCategoryService: ServiceProductCategoryService) {
+    private SPCategoryService: ServiceProductCategoryService, private eventTypeService: EventTypeService) {
     // Initialize selectedEvents with default values
-    this.eventTypes.forEach((event) => {
-      this.selectedEvents[event] = false;
-    });
+    eventTypeService.getAll().subscribe(allTypes => {
+      this.eventTypes = allTypes.map(t => t.name);
+    })
   }
 
   ngOnInit(): void {
@@ -38,22 +40,34 @@ export class NewServiceComponent {
       const serviceId = params['id'];
       if (serviceId) {
         this.fetchServiceData(serviceId); // Fetch the data based on the ID
+      } 
+      else // in case of creating new service
+      {   // RELOAD THE PAGE and get categories
+        this.SPCategoryService.getAll().subscribe(allCategories => {
+          this.serviceCategories = allCategories.map(c => c.name);
+        })
+        this.service = new Service();
+        this.eventTypes.forEach((event) => {
+          this.selectedEvents[event] = false;
+        });
       }
     });
   }
 
   fetchServiceData(serviceId: number): void {
-    this.serviceService.getService(serviceId).subscribe(service => {
-      this.service = service;
-      console.log(this.service);
-    });
-    this.SPCategoryService.getAll().subscribe(categories => {
-      this.serviceCategories = categories.map(c => c.name);
-    });
 
-    // this.service.eventTypes.forEach((event) => {
-    //   this.selectedEvents[event] = true;
-    // });
+    forkJoin({
+      service: this.serviceService.getService(serviceId),
+      categories: this.SPCategoryService.getAll()
+    }).subscribe(({ service, categories }) => {
+      this.service = service;
+      this.serviceCategories = categories.map(c => c.name);
+
+      // waits for service and serviceCategories assigning
+      this.service.availableEventTypes.forEach((event) => {
+        this.selectedEvents[event.name] = true;
+      });
+    });
   }
 
   backToAllServicesPerhaps(): void {
@@ -62,4 +76,3 @@ export class NewServiceComponent {
     }
   }
 }
-

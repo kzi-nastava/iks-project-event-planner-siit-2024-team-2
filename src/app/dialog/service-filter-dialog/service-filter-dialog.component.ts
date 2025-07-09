@@ -3,6 +3,9 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ServiceProductCategory } from '../../model/service-product-category';
+import { ServiceProductCategoryService } from '../../services/service-product-category.service';
+import { EventTypeService } from '../../services/event-type.service';
 
 @Component({
   selector: 'app-service-filter-dialog',
@@ -12,14 +15,25 @@ import { CommonModule } from '@angular/common';
   styleUrl: './service-filter-dialog.component.css'
 })
 export class ServiceFilterDialogComponent {
-  constructor(private dialogRef: MatDialogRef<ServiceFilterDialogComponent>) { }
+  categories: any[] = [];
+  eventTypes: any[] = [];
+
+  constructor(private dialogRef: MatDialogRef<ServiceFilterDialogComponent>,
+    private categoryService: ServiceProductCategoryService, private eventTypesService: EventTypeService) { }
   close() {
     this.dialogRef.close();
   }
 
-  categories = ['Music', 'Catering', 'Waiter service'];
-  selectedCategories = new FormControl([]);
+  ngOnInit(): void {
+    this.categoryService.getAll().subscribe((data) => {
+      this.categories = data.map(c => c.name);
+    });
 
-  eventTypes: string[] = ['Wedding', 'Funeral', 'Birthday', 'Conference'];
+    this.eventTypesService.getAll().subscribe((data) => {
+      this.eventTypes = data.map(e => e.name);
+    })
+  }
+  
+  selectedCategories = new FormControl([]);
   selectedEventTypes = new FormControl([]);
 }
