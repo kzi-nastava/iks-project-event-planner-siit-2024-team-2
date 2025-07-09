@@ -6,6 +6,7 @@ import { Service } from '../../model/service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { ServiceService } from '../../services/service.service';
+import { ServiceProductCategoryService } from '../../services/service-product-category.service';
 
 
 @Component({
@@ -16,21 +17,20 @@ import { ServiceService } from '../../services/service.service';
   styleUrl: './new-service.component.css'
 })
 export class NewServiceComponent {
-  serviceCategories: string[] = ["Music", "Catering", "Waiter service"];
-  selectedCategory: string = this.serviceCategories[0]; // Default selection
-
+  serviceCategories : string[] = [];
   eventTypes: string[] = ['Wedding', 'Funeral', 'Birthday', 'Conference'];
   selectedEvents: { [key: string]: boolean } = {};
-
-  constructor(private route: ActivatedRoute, private router: Router, private serviceService: ServiceService) {
+  
+  // binding to the service data, on which the user clicked
+  service: Service = new Service();
+  
+  constructor(private route: ActivatedRoute, private router: Router, private serviceService: ServiceService,
+    private SPCategoryService: ServiceProductCategoryService) {
     // Initialize selectedEvents with default values
     this.eventTypes.forEach((event) => {
       this.selectedEvents[event] = false;
     });
   }
-
-  // binding to the service data, on which the user clicked
-  service: Service = new Service();
 
   ngOnInit(): void {
     // Get the service ID from query parameters
@@ -47,6 +47,10 @@ export class NewServiceComponent {
       this.service = service;
       console.log(this.service);
     });
+    this.SPCategoryService.getAll().subscribe(categories => {
+      this.serviceCategories = categories.map(c => c.name);
+    });
+
     // this.service.eventTypes.forEach((event) => {
     //   this.selectedEvents[event] = true;
     // });
