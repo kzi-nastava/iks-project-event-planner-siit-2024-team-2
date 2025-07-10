@@ -6,7 +6,7 @@ export interface Product {
     discount?: number,
     categoryId?: number,
     availableEventTypesIds?: number[],
-    visibility: boolean,
-    availability: boolean,
+    visible: boolean,
+    available: boolean,
     serviceProductProviderId?: number,
 }

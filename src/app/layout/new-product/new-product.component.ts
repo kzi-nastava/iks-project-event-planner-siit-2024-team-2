@@ -104,26 +104,25 @@ export class NewProductComponent {
       return; 
     }
     const product = {
-      name: this.createProductForm.value.name,
-      description: this.createProductForm.value.description,
-      specifies: this.createProductForm.value.specifies,
-      price: this.createProductForm.value.price,
-      discount: this.createProductForm.value.discount,
+      name: this.createProductForm.value.name ?? '',
+      description: this.createProductForm.value.description ?? '',
+      specifies: this.createProductForm.value.specifies ?? '',
+      price: this.createProductForm.value.price ?? 0,
+      discount: this.createProductForm.value.discount ?? 0,
       availableEventTypesIds: this.selectedEvents,
       categoryId: Number(this.createProductForm.value.productCategory), 
-      available: this.createProductForm.value.available,
-      visible: this.createProductForm.value.visible,
+      available: this.createProductForm.value.available ?? false,
+      visible: this.createProductForm.value.visible ?? false,
       serviceProductProviderId: Number(localStorage.getItem('userId')),
     };
-    // this.productService.add(product).subscribe({
-    //   next: (event: any) => {
-    //     console.log('Event created:', event);
-    //     this.router.navigate(['../'], { relativeTo: this.route });
-    //   },
-    //   error: (err: any) => {
-    //     console.error('Failed to create event:', err);
-    //   }
-    // });
+    this.productService.add(product).subscribe({
+      next: (event: any) => {
+        this.router.navigate(['../'], { relativeTo: this.route });
+      },
+      error: (err: any) => {
+        console.error('Failed to create event:', err);
+      }
+    });
     console.log(product);
     this.snackBar.open('Product created successfully!', 'Close', {
       duration: 3000,
