@@ -3,7 +3,6 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ServiceProductCategory } from '../../model/service-product-category';
 import { ServiceProductCategoryService } from '../../services/service-product-category.service';
 import { EventTypeService } from '../../services/event-type.service';
 
