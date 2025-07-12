@@ -14,23 +14,25 @@
 
     <button class="fancy-button" style="margin-top: 100px;">New category request</button>
 
-    <!-- 5 textboxes for: name, desc, spec, price and discount -->
+    <!-- 6 textboxes for: name, desc, spec, price, discount, and reservation deadline-->
     <div class="form-container">
-    <label for="name" class="form-label">Name:</label>
-    <input [(ngModel)]=service.name type="text" id="name" class="form-input" placeholder="Enter the name">
+        <label for="name" class="form-label">Name:</label>
+        <input [(ngModel)]=service.name type="text" id="name" class="form-input" placeholder="Enter the name">
 
-    <label for="description" class="form-label">Description:</label>
-    <textarea [(ngModel)]=service.description type="text" id="description" class="form-input" placeholder="Enter the description"></textarea>
+        <label for="description" class="form-label">Description:</label>
+        <textarea [(ngModel)]=service.description type="text" id="description" class="form-input" placeholder="Enter the description"></textarea>
 
-    <label for="specifies" class="form-label">Specifies:</label>
-    <textarea [(ngModel)]=service.specifies id="specifies" class="form-input" placeholder="Enter the specifies"></textarea>
+        <label for="specifies" class="form-label">Specifies:</label>
+        <textarea [(ngModel)]=service.specifies id="specifies" class="form-input" placeholder="Enter the specifies"></textarea>
 
-    <label for="price" class="form-label">Price (€):</label>
-    <input [(ngModel)]=service.price type="number" id="price" class="form-input" placeholder="Enter the price">
+        <label for="price" class="form-label">Price (€):</label>
+        <input [(ngModel)]=service.price type="number" id="price" class="form-input" placeholder="Enter the price">
 
-    <label for="discount" class="form-label">Discount (€):</label>
-    <input [(ngModel)]=service.discount type="number" id="discount" class="form-input" placeholder="Enter the discount">
-    
+        <label for="discount" class="form-label">Discount (€):</label>
+        <input [(ngModel)]=service.discount type="number" id="discount" class="form-input" placeholder="Enter the discount">
+        
+        <label for="reservation-deadline" class="form-label">Reservation deadline (days):</label>
+        <input [(ngModel)]=service.reservationDaysDeadline type="number" id="reservation-days-deadline" class="form-input" placeholder="Enter the deadline reservation">
     </div>
 </div>
 
@@ -60,13 +62,16 @@
     </div>
 
 
-    <!-- 3 other textboxes: duration and reservation and cancellation deadline -->
+    <!-- 4 other textboxes: duration, min and max min-engagement-duration cancellation deadline -->
     <div class="form-container" style="margin-top: 8px;">
         <label for="duration" class="form-label">Duration:</label>
         <input [(ngModel)]=service.duration type="number" id="duration" class="form-input" placeholder="Enter the duration" style="height: 35px;">
 
-        <label for="reservation-deadline" class="form-label">Reservation deadline (days):</label>
-        <input [(ngModel)]=service.reservationDaysDeadline type="number" id="reservation-days-deadline" class="form-input" placeholder="Enter the deadline reservation">
+        <label for="min-engagement-duration" class="form-label">Minimum engagement duration (hours):</label>
+        <input [(ngModel)]=service.minEngagementDuration type="number" id="min-engagement-duration" class="form-input" placeholder="Enter the minimum duration">
+
+        <label for="max-engagement-duration" class="form-label">Maximum engagement duration (hours):</label>
+        <input [(ngModel)]=service.maxEngagementDuration type="number" id="max-engagement-duration" class="form-input" placeholder="Enter the maximum duration">
 
         <label for="cancellation-deadline" class="form-label">Cancellation deadline (days):</label>
         <input [(ngModel)]=service.cancellationDaysDeadline type="number" id="cancellation-days-deadline" class="form-input" placeholder="Enter the deadline cancellation">

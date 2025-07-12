@@ -3,6 +3,6 @@ export class Service {
         public specifies: string = '', public price: number = 0, public discount: number = 0, public images: string[] = [], 
         public availableEventTypes: any[] = [], public duration: number = 0, public reservationDaysDeadline: number = 0, 
         public cancellationDaysDeadline: number = 0, public visible: boolean = false, public available: boolean = false,
-        public automaticReserved: boolean = false) {
+        public automaticReserved: boolean = false, public minEngagementDuration: number = 0, public maxEngagementDuration: number = 0) {
     }
 }  
