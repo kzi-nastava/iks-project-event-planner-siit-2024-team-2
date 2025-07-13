@@ -23,13 +23,13 @@ export class ProductService {
     return this.httpClient.get<Product>(`${this.apiHost}/${id}`)
   }
 
-  getAll(pageProperties?: any) : Observable<PagedResponse<Product>> {
+  getAll(pageProperties?: any) : Observable<Product[]> {
     let params = new HttpParams();
     if(pageProperties) {
       params = params
       .set('page', pageProperties.page)
       .set('size', pageProperties.pageSize)
     }
-    return this.httpClient.get<PagedResponse<Product>>(this.apiHost, { params: params});
+    return this.httpClient.get<Product[]>(this.apiHost, { params: params});
   }
 }

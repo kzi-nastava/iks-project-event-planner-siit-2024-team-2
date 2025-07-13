@@ -9,6 +9,7 @@ import { MyServicesComponent } from './layout/my-services/my-services.component'
 import { LoginComponent } from './layout/auth/login/login.component';
 import { RegisterComponent } from './layout/auth/register/register.component';
 import { CreateEventComponent } from './layout/create-event/create-event.component';
+import { MyProductsComponent } from './layout/my-products/my-products.component';
 
 export const routes: Routes = [
     {path: 'home', component: HomeComponent},
@@ -18,6 +19,7 @@ export const routes: Routes = [
     {path: 'new-service', component: NewServiceComponent},
     {path: 'new-product', component: NewProductComponent}, 
     {path: 'my-services', component: MyServicesComponent},
+    {path: 'my-products', component: MyProductsComponent},
     {path: 'signin', component: LoginComponent},
     {path: 'signup', component: RegisterComponent},
     {path: 'new-event', component: CreateEventComponent},
