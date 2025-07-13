@@ -5,6 +5,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { Service } from '../../model/service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
+import { ServiceService } from '../../services/service.service';
+import { ServiceProductCategoryService } from '../../services/service-product-category.service';
+import { EventTypeService } from '../../services/event-type.service';
+import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -15,21 +19,20 @@ import { Router } from '@angular/router';
   styleUrl: './new-service.component.css'
 })
 export class NewServiceComponent {
-  serviceCategories: string[] = ["Music", "Catering", "Waiter service"];
-  selectedCategory: string = this.serviceCategories[0]; // Default selection
-
-  eventTypes: string[] = ['Wedding', 'Funeral', 'Birthday', 'Conference'];
-  selectedEvents: { [key: string]: boolean } = {};
-
-  constructor(private route: ActivatedRoute, private router: Router) {
-    // Initialize selectedEvents with default values
-    this.eventTypes.forEach((event) => {
-      this.selectedEvents[event] = false;
-    });
-  }
-
+  serviceCategories : string[] = [];
+  eventTypes: string[] = [];
+  selectedEvents: { [key: string]: boolean } = {};  // default all false
+  
   // binding to the service data, on which the user clicked
   service: Service = new Service();
+
+  constructor(private route: ActivatedRoute, private router: Router, private serviceService: ServiceService,
+    private SPCategoryService: ServiceProductCategoryService, private eventTypeService: EventTypeService) {
+    // Initialize selectedEvents with default values
+    eventTypeService.getAll().subscribe(allTypes => {
+      this.eventTypes = allTypes.map(t => t.name);
+    })
+  }
 
   ngOnInit(): void {
     // Get the service ID from query parameters
@@ -37,20 +40,33 @@ export class NewServiceComponent {
       const serviceId = params['id'];
       if (serviceId) {
         this.fetchServiceData(serviceId); // Fetch the data based on the ID
+      } 
+      else // in case of creating new service
+      {   // RELOAD THE PAGE and get categories
+        this.SPCategoryService.getAll().subscribe(allCategories => {
+          this.serviceCategories = allCategories.map(c => c.name);
+        })
+        this.service = new Service();
+        this.eventTypes.forEach((event) => {
+          this.selectedEvents[event] = false;
+        });
       }
     });
   }
 
   fetchServiceData(serviceId: number): void {
-    // UPDATE THIS LATER - IMPLEMENT getServiceById(serviceId)
-    // this.service = this.serviceService.getServiceById(serviceId);
 
-    // For demonstration purposes, we use a mock service:
-    this.service = new Service(serviceId, 'Catering', 'Peric catering', 'We offer catering for lorem ipsum. Lorem ipsum lorem ipsum lorem ipsum.',
-       'No specifies', 7, 1, ['catering.jpg'], ['Wedding', 'Birthday'], 1, 7, 3, true, true, true);
+    forkJoin({
+      service: this.serviceService.getService(serviceId),
+      categories: this.SPCategoryService.getAll()
+    }).subscribe(({ service, categories }) => {
+      this.service = service;
+      this.serviceCategories = categories.map(c => c.name);
 
-    this.service.eventTypes.forEach((event) => {
-      this.selectedEvents[event] = true;
+      // waits for service and serviceCategories assigning
+      this.service.availableEventTypes.forEach((event) => {
+        this.selectedEvents[event.name] = true;
+      });
     });
   }
 
@@ -60,4 +76,3 @@ export class NewServiceComponent {
     }
   }
 }
-

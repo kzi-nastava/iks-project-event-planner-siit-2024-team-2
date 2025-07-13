@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormsModule, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormsModule, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute } from '@angular/router';
@@ -26,14 +26,14 @@ import { EventService } from '../../services/event.service';
 export class CreateEventComponent {
 
   createEventForm = new FormGroup({
-    name: new FormControl(),
-    description: new FormControl(),
-    date: new FormControl(),
-    latitude: new FormControl(),
-    longitude: new FormControl(),
-    eventType: new FormControl(),
-    maxAttendances: new FormControl(),
-    isOpen: new FormControl()
+    name: new FormControl('', [Validators.required, Validators.minLength(1)]),
+    description: new FormControl('', [Validators.required, Validators.minLength(1)]),
+    date: new FormControl('', [Validators.required]),
+    latitude: new FormControl(0, [Validators.required]),
+    longitude: new FormControl(0, [Validators.required]),
+    eventType: new FormControl(0, [Validators.required]),
+    maxAttendances: new FormControl(0, [Validators.required]),
+    open: new FormControl()
   });
   
   eventTypes = [
@@ -43,6 +43,11 @@ export class CreateEventComponent {
   ];
   
   createEvent(): void {
+    if (!localStorage.getItem('userId')) {
+      console.error('User is not logged in. Cannot create event.');
+      this.router.navigate(['/login']);
+      return;
+    }
     const event = {
       name: this.createEventForm.value.name,
       description: this.createEventForm.value.description,
@@ -50,8 +55,9 @@ export class CreateEventComponent {
       latitude: this.createEventForm.value.latitude,
       date: this.createEventForm.value.date,
       eventType: this.createEventForm.value.eventType,
+      eventOrganizer: Number(localStorage.getItem('userId')),
       maxAttendances: this.createEventForm.value.maxAttendances,
-      isOpen: this.createEventForm.value.isOpen
+      open: this.createEventForm.value.open
     };
     this.eventService.add(event).subscribe({
       next: (event: any) => {
@@ -62,11 +68,10 @@ export class CreateEventComponent {
         console.error('Failed to create event:', err);
       }
     });
-    console.log(event);}
+  }
 
   selectedType = this.eventTypes[0]; 
   constructor(private route: ActivatedRoute, private router: Router, private eventService: EventService, private eventTypeService: EventTypeService) { }
-  event: { name?: string; description?: string; location?: string; date?: string; time?: string; eventType?: number, latitude?: number, longitude?: number } = {}
 
   ngOnInit(): void {
     this.loadEventTypes();

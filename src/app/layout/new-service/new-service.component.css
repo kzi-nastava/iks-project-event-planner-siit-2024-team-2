@@ -115,6 +115,8 @@
     
     margin: 0 auto; /* Center the container */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    overflow-y: auto;
+    scroll-behavior: smooth;
 }
 
 /* Styling for each listbox item */

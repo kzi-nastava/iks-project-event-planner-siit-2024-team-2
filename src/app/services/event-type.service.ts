@@ -4,20 +4,23 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { PagedResponse } from '../shared/model/paged-response.model';
+import { CreateEventType } from '../model/create-event-type';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventTypeService {
 
+    private apiUrl = `${environment.apiHost}api/event-types`;
+
     constructor(private httpClient: HttpClient) { }
   
-    add(EventType: EventType) : Observable<EventType> {
-      return this.httpClient.post<EventType>(environment.apiHost + "api/event-types/", EventType)
+    add(eventType: CreateEventType) : Observable<EventType> {
+      return this.httpClient.post<EventType>(this.apiUrl, eventType)
     }
   
     getEventType(id: number): Observable<EventType> {
-      return this.httpClient.get<EventType>(environment.apiHost + "api/event-types/" + id)
+      return this.httpClient.get<EventType>(`${this.apiUrl}/` + id)
     }
   
     getAll() : Observable<EventType[]> {
