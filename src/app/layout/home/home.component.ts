@@ -43,12 +43,12 @@ export class HomeComponent {
   }
   initServices(): void {
     for (let i = 0; i < 5; i++) {
-      this.topServiceProducts.push(new Service(i, "Catering", "Peric catering", "We offer catering for lorem ipsum. Lorem ipsum lorem ipsum lorem ipsum.",
-        "no specifies", 7, 1, ["catering.jpeg"], ["Wedding", "Birthday"], 1, 7, 3));
+      this.topServiceProducts.push(new Service(i, 2, "Peric catering", "We offer catering for lorem ipsum. Lorem ipsum lorem ipsum lorem ipsum.",
+        "no specifies", 7, 1, ["catering.jpeg"], [1, 3], 1, 7, 3));
     }
     for (let i = 0; i < 10; i++) {
-      this.otherServiceProducts.push(new Service(i+5, "Catering", "Peric catering", "We offer catering for lorem ipsum. Lorem ipsum lorem ipsum lorem ipsum.",
-        "no specifies", 7, 1, ["catering.jpeg"], ["Wedding", "Birthday"], 1, 7, 3));
+      this.otherServiceProducts.push(new Service(i+5, 2, "Peric catering", "We offer catering for lorem ipsum. Lorem ipsum lorem ipsum lorem ipsum.",
+        "no specifies", 7, 1, ["catering.jpeg"], [1, 3], 1, 7, 3));
     }
   }
 

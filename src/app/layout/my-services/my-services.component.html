@@ -11,13 +11,10 @@
 
 <div class="services-container">
     <div *ngFor="let service of myServices" class="card">
-      <img src="images/catering.jpeg" alt="{{ service.name }}" class="card-image" />
+      <img src="http://localhost:8080/{{service.images[0]}}" alt="{{ service.name }}" class="card-image" />
       <div class="card-content">
         <h3>{{ service.name }}</h3>
         <p>{{ service.description }}</p>
-        <ul>
-          <li *ngFor="let event of service.eventTypes">{{ event }}</li>
-        </ul>
         <div class="row">
           <p><strong>Price:</strong> {{ service.price }}</p>
           <p><strong>Discount:</strong> {{ service.discount }}</p>
