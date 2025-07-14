@@ -1,0 +1,105 @@
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    overflow-x: auto;
+}
+.event-card, .service-product-card{
+    max-width: 400px;
+    height: 430px;
+    margin-bottom: 8px;
+    background: white;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    border-width: 0px;
+    flex: 0 0 auto;
+}
+mat-card-content {
+  flex: 1 0 auto;
+}
+.profile-picture {
+    width: 50px;
+    height: 50px;
+    padding-right: 10px;
+    background-size: cover;
+}
+.mat-mdc-card-subtitle, .mat-mdc-card-title{
+    max-width: 180px;
+}
+.mat-mdc-card-subtitle{
+    color:#222222;
+}
+.card-content{
+    padding-top: 50px;
+}
+.name{
+    font-size: large;
+    margin: 0;
+}
+.date, .price{
+    margin: 0;
+}
+.description{
+    margin: 0;
+    text-overflow: ellipsis;
+    overflow:hidden;
+    -webkit-line-clamp: 6;
+    line-clamp: 6;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    text-align: justify;
+}
+.options-row{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    overflow-x: auto;
+    justify-content: space-between;
+    align-self: center;
+    width: 100%;
+}
+.left-part {
+    flex: 1;
+}
+.options{
+    margin-left: auto;
+}
+.filter-checkboxes mat-checkbox {
+  margin-right: 8px; 
+  color: black !important;
+}
+.mdc-checkbox{
+    color: black !important;
+}
+.mat-mdc-paginator{
+    background: #EEF2FF;
+    color: black;
+}
+
+.drag-scroll-container {
+  gap: 0.5rem;
+  padding: 0.5rem;
+  /* height: auto !important; */
+}
+
+.drag-scroll-item {
+  white-space: normal;
+  max-width: 400px;
+}
+drag-scroll {
+  user-select: none;
+}
+mat-paginator {
+  margin: -20px;
+}
+.card-image{
+  height: 100px;
+  width: auto;
+  object-fit: contain;
+}
+@media (hover: none) and (pointer: coarse) { /* Re-enables scrollbar on mobile to fix an issue with drag-scroll */
+  ::ng-deep .drag-scroll-content {
+    overflow: auto hidden !important; 
+  }
+}
