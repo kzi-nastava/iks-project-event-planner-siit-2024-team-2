@@ -25,13 +25,38 @@ $event-planner-pallete: (
         900: #EEF2FF
     )
 );
+$event-planner-warn-pallete: (
+    50: #ffd52f,
+    100: #ffd52f,
+    200: #ffd52f,
+    300: #ffd52f,
+    400: #ffd52f,
+    500: #ffd52f,
+    600: #ffd52f,
+    700: #ffd52f,
+    800: #ffd52f,
+    900: #ffd52f,
+    contrast: (
+        50: #EEF2FF,
+        100: #EEF2FF,
+        200: #EEF2FF,
+        300: #EEF2FF,
+        400: #EEF2FF,
+        500: #EEF2FF,
+        600: #EEF2FF,
+        700: #EEF2FF,
+        800: #EEF2FF,
+        900: #EEF2FF
+    )
+);
 $event-planner-primary:    mat.m2-define-palette($event-planner-pallete);
+$event-planner-warn:    mat.m2-define-palette($event-planner-warn-pallete);
 
 $event-planner-theme: mat.m2-define-light-theme((
     color: (
         primary: $event-planner-primary,
         accent: $event-planner-primary,
-        warn: $event-planner-primary,
+        warn: $event-planner-warn,
     ),
 ));
 @include mat.all-component-themes($event-planner-theme);
@@ -46,7 +71,10 @@ $event-planner-theme: mat.m2-define-light-theme((
     --mdc-dialog-supporting-text-color:#{map-get($event-planner-pallete, 500)} !important;
 };
 
-html, body { height: 100%; }
+html, body { 
+    height: 100%; 
+    // overflow: hidden !important; /* Disable body scroll */
+}
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
 
 /* Select dropdown styling */
@@ -95,7 +123,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
 }
 
 /* Hover effect */
-.fancy-button:hover, #spajalica {
+.fancy-button:hover, #attachmentBtn {
     background-color: #0056b3; /* Darker background on hover */
     box-shadow: 0 6px 12px rgba(0, 123, 255, 0.6); /* Darker shadow on hover */
 }
@@ -107,7 +135,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
 }
 
 /* Active effect (when button is clicked) */
-.fancy-button:active, #spajalica {
+.fancy-button:active, #attachmentBtn {
     background-color: #004085; /* Even darker background when clicked */
     box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* Subtle shadow on click */
 }
