@@ -1,74 +1,36 @@
 @use "@angular/material" as mat;
 @include mat.core();
 
-$event-planner-pallete: (
-    50: #7C96FF,
-    100: #7C96FF,
-    200: #7C96FF,
-    300: #7C96FF,
-    400: #7C96FF,
-    500: #7C96FF,
-    600: #7C96FF,
-    700: #7C96FF,
-    800: #7C96FF,
-    900: #7C96FF,
-    contrast: (
-        50: #EEF2FF,
-        100: #EEF2FF,
-        200: #EEF2FF,
-        300: #EEF2FF,
-        400: #EEF2FF,
-        500: #EEF2FF,
-        600: #EEF2FF,
-        700: #EEF2FF,
-        800: #EEF2FF,
-        900: #EEF2FF
-    )
-);
-$event-planner-warn-pallete: (
-    50: #ffd52f,
-    100: #ffd52f,
-    200: #ffd52f,
-    300: #ffd52f,
-    400: #ffd52f,
-    500: #ffd52f,
-    600: #ffd52f,
-    700: #ffd52f,
-    800: #ffd52f,
-    900: #ffd52f,
-    contrast: (
-        50: #EEF2FF,
-        100: #EEF2FF,
-        200: #EEF2FF,
-        300: #EEF2FF,
-        400: #EEF2FF,
-        500: #EEF2FF,
-        600: #EEF2FF,
-        700: #EEF2FF,
-        800: #EEF2FF,
-        900: #EEF2FF
-    )
-);
-$event-planner-primary:    mat.m2-define-palette($event-planner-pallete);
-$event-planner-warn:    mat.m2-define-palette($event-planner-warn-pallete);
-
-$event-planner-theme: mat.m2-define-light-theme((
-    color: (
-        primary: $event-planner-primary,
-        accent: $event-planner-primary,
-        warn: $event-planner-warn,
-    ),
-));
-@include mat.all-component-themes($event-planner-theme);
+$primary: #7C96FF;
+$warn: #FFD52F;
+$primary-container: #EEF2FF;
+$selection-color: #C2CFFF;
+$secondary-container: #D8E0FF;
+$secondary-container-night: #425283;
+$pickled-bluewood: #2B3352;
+$placeholder-text-color: #49454FB5;
+$cod-gray: #1E1E1E;
+$dark-gray: #4D4D4D;
+$gray: #8A8A8A;
+$light-gray: #B6B6B6;
+$transparent: #FFFFFF00;
 
 :root {
-    --mdc-dialog-container-color: #EEF2FF;
-    --mdc-filled-text-field-container-color: #EEF2FF !important;
-    --mdc-filled-text-field-label-text-color: black !important;
-    --mat-select-enabled-trigger-text-color: black !important;
-    --mdc-icon-button-icon-color: black !important;
-    --mdc-filled-text-field-focus-label-text-color:#{map-get($event-planner-pallete, 500)} !important;
-    --mdc-dialog-supporting-text-color:#{map-get($event-planner-pallete, 500)} !important;
+    --mdc-dialog-container-color: $primary-container;
+    --mdc-filled-text-field-container-color: $primary-container !important;
+    --mdc-filled-text-field-label-text-color: $cod-gray !important;
+    --mat-select-enabled-trigger-text-color: $cod-gray !important;
+    --mdc-icon-button-icon-color: $cod-gray !important;
+    --mdc-filled-text-field-focus-label-text-color: $primary !important;
+    --mdc-dialog-supporting-text-color: $primary!important;
+
+  @include mat.paginator-overrides((
+    container-text-color: $cod-gray,
+    container-background-color: $primary-container,
+  ));
+  @include mat.button-overrides((
+    container-color: $primary
+  ));
 };
 
 html, body { 

@@ -19,8 +19,8 @@
 <hr/>
 <mat-tab-group>
   <mat-tab label="Events">
-    <div class="options-row">
-      <div class="left-part">
+    <div class="tab-start row">
+      <div class="tab-label">
         <h4>Explore events</h4>
       </div>
       <div class="options row">
@@ -50,8 +50,8 @@
     </div>
 </mat-tab>
 <mat-tab label="Services/Products">
-  <div class="options-row">
-    <div class="left-part">
+  <div class="tab-start row">
+    <div class="tab-label">
       <h4>Explore services and products</h4>
     </div>
     <div class="options row">
@@ -84,6 +84,7 @@
 <mat-paginator [length]="96"
 [pageSize]="12"
 [pageSizeOptions]="[12, 24, 48]"
+[showFirstLastButtons]="true"
 aria-label="Select page">
 </mat-paginator>
 
