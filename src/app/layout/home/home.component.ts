@@ -14,7 +14,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { FilterDialogComponent } from '../../dialog/filter-dialog/filter-dialog.component';
 import { EventService } from '../../services/event.service';
 import { ActivatedRoute, EventType, Router } from '@angular/router';
-import { PagedResponse } from '../../shared/model/paged-response.model';
+import { PagedModel } from '../../shared/model/paged-model';
 import { Event } from '../../model/event';
 import { EventSummaryDto } from '../../services/dtos/event/event-summary.dto';
 import { EventFilterParams } from '../../parameters/event-filter-params';
@@ -126,13 +126,13 @@ export class HomeComponent {
     this.eventService.getAllSummaries(this.eventFilter)
       .pipe(finalize(() => this.isLoadingEvents = false))
       .subscribe({
-          next: (response : PagedResponse<EventSummaryDto>) => {
-            this.eventTotalElements = response.totalElements;
+          next: (response : PagedModel<EventSummaryDto>) => {
+            this.eventTotalElements = response.page.totalElements;
             // this.eventPageIndex = 0;
             // this.eventFilter.page = 0;
             if (this.selectedTabIndex == 0) {
               // this.pageIndex = 0;
-              this.totalElements = response.totalElements;
+              this.totalElements = response.page.totalElements;
             }
             this.otherEvents = response.content;
             this.addEmailBreaks(this.otherEvents);
@@ -149,13 +149,13 @@ export class HomeComponent {
     this.serviceProductService.getAllSummaries(this.serviceProductFilter)
       .pipe(finalize(() => this.isLoadingServiceProducts = false))
       .subscribe({
-          next: (response : PagedResponse<ServiceProductSummaryDto>) => {
-            this.serviceProductTotalElements = response.totalElements;
+          next: (response : PagedModel<ServiceProductSummaryDto>) => {
+            this.serviceProductTotalElements = response.page.totalElements;
             // this.serviceProductPageIndex = 0;
             // this.serviceProductFilter.page = 0;
             if (this.selectedTabIndex == 1) {
               // this.pageIndex = 0;
-              this.totalElements = response.totalElements;
+              this.totalElements = response.page.totalElements;
             }
             this.otherServiceProducts = response.content;
             this.addEmailBreaks(this.otherServiceProducts);

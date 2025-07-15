@@ -3,7 +3,7 @@ import { Event } from '../model/event';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
-import { PagedResponse } from '../shared/model/paged-response.model';
+import { PagedModel } from '../shared/model/paged-model';
 import { EventFilterParams } from '../parameters/event-filter-params';
 import { EventSummaryDto } from './dtos/event/event-summary.dto';
 import { buildHttpParams } from '../utils/http-utils';
@@ -25,14 +25,14 @@ export class EventService {
     return this.httpClient.get<Event>(`${this.apiUrl}/${id}`);
   }
 
-  getAll(filters?: EventFilterParams): Observable<PagedResponse<Event>> {
+  getAll(filters?: EventFilterParams): Observable<PagedModel<Event>> {
     const params = buildHttpParams(filters)
-    return this.httpClient.get<PagedResponse<Event>>(this.apiUrl, { params });
+    return this.httpClient.get<PagedModel<Event>>(this.apiUrl, { params });
   }
 
-  getAllSummaries(filters?: EventFilterParams): Observable<PagedResponse<EventSummaryDto>> {
+  getAllSummaries(filters?: EventFilterParams): Observable<PagedModel<EventSummaryDto>> {
     const params = buildHttpParams(filters)
-    return this.httpClient.get<PagedResponse<EventSummaryDto>>(this.apiUrl + "/summaries", { params });
+    return this.httpClient.get<PagedModel<EventSummaryDto>>(this.apiUrl + "/summaries", { params });
   }
 
   getTop5(): Observable<EventSummaryDto[]> {

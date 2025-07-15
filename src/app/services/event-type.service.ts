@@ -3,7 +3,7 @@ import { EventType } from '../model/event-type';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { PagedResponse } from '../shared/model/paged-response.model';
+import { PagedModel } from '../shared/model/paged-model';
 import { CreateEventType } from '../model/create-event-type';
 
 @Injectable({
