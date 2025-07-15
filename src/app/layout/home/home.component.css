@@ -58,7 +58,7 @@ mat-progress-spinner {
 
 /* Cards */
 .event-card, .service-product-card{
-  max-width: 400px;
+  width: 400px;
   height: 430px;
   margin-bottom: 8px;
   background: white;
@@ -78,7 +78,7 @@ mat-card-content {
   background-size: cover;
 }
 .mat-mdc-card-subtitle, .mat-mdc-card-title{
-  max-width: 160px;
+  max-width: 170px;
 }
 .mat-mdc-card-subtitle{
   color:#222222;

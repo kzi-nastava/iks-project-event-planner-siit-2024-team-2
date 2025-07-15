@@ -118,7 +118,7 @@ aria-label="Select page">
     <mat-card-content>
       <br>
       <p class="name">{{eventSummary.name}}</p>
-      <p class="date">{{eventSummary.date}}</p>
+      <p class="date">{{eventSummary.date | date: 'MMMM d, yyyy'}}</p>
       <br>
       <p class="description">{{eventSummary.description}}</p>
       <br>
@@ -134,8 +134,8 @@ aria-label="Select page">
     <mat-card-header>
       <img mat-card-avatar class="profile-picture" src="images/monogram.png" alt="Profile Picture" />
       <mat-card-title-group>
-        <mat-card-title>Catering Peric</mat-card-title>
-        <mat-card-subtitle>marko.peric&commat;cperic.rs</mat-card-subtitle>
+        <mat-card-title [innerHTML]="serviceProduct.creatorName"></mat-card-title>
+        <mat-card-subtitle [innerHTML]="serviceProduct.creatorEmail"></mat-card-subtitle>
         <img mat-card-lg-image class="card-image" src="https://material.angular.dev/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
       </mat-card-title-group>
     </mat-card-header>

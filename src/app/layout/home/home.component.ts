@@ -76,7 +76,7 @@ export class HomeComponent {
   pageIndex: number = 0; // same as for totalElements
   eventPageIndex: number = 0;
   serviceProductPageIndex: number = 0;
-  pageSize: number = pageSize;
+  pageSize: number = pageSize; // same as for totalElements
   eventPageSize: number = pageSize;
   serviceProductPageSize: number = pageSize;
 
