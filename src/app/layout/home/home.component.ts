@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, importProvidersFrom, inject } from '@angular/core';
+import { Component, importProvidersFrom, inject, ViewChild } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,7 +9,7 @@ import { Service } from '../../model/service';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
-import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterDialogComponent } from '../../dialog/filter-dialog/filter-dialog.component';
 import { EventService } from '../../services/event.service';
@@ -22,14 +22,21 @@ import { SortDirection } from '../../shared/model/sort-direction';
 import { DragScrollComponent, DragScrollItemDirective } from 'ngx-drag-scroll';
 import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
-import {MatTabsModule} from '@angular/material/tabs';
+import {MatTabChangeEvent, MatTabsModule} from '@angular/material/tabs';
+import { ServiceProductSummaryDto } from '../../services/dtos/service-product/service-product-summary.dto';
+import { ServiceProductFilterParams } from '../../parameters/service-product-filter-params';
+import { ServiceProductService } from '../../services/service-product/service-product.service';
+import {MatProgressSpinner, MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { finalize } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
+const pageSize = 12;
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
     MatSidenavModule, MatCardModule, MatButtonModule, CommonModule, MatFormField, MatInputModule, MatIconModule, MatTabsModule,
-    MatSelect, MatOption, MatPaginatorModule, DragScrollComponent, DragScrollItemDirective,
+    MatSelect, MatOption, MatPaginatorModule, MatProgressSpinnerModule, DragScrollComponent, DragScrollItemDirective,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -37,71 +44,171 @@ import {MatTabsModule} from '@angular/material/tabs';
 })
 export class HomeComponent {
   topEvents: EventSummaryDto[] = [];
-  otherEvents: EPEvent[] = [];
-  topServiceProducts: Service[] = [];
-  otherServiceProducts: Service[] = [];
+  otherEvents: EventSummaryDto[] = [];
+  topServiceProducts: ServiceProductSummaryDto[] = [];
+  otherServiceProducts: ServiceProductSummaryDto[] = [];
   searchTerm: string = '';
-  selectedSortOption: string = 'date-desc';
+  eventSelectedSortOption: string = 'date-desc';
+  serviceProductSelectedSortOption: string = 'name-asc';
+  isBrowser: boolean;
+  eventFilter: EventFilterParams = {size:pageSize, sortBy: "date", sortDirection: SortDirection.DESC};
+  serviceProductFilter: ServiceProductFilterParams = {size: pageSize, sortBy: "name", sortDirection: SortDirection.ASC};
+  isLoadingTopEvents: boolean = true;
+  isLoadingTopServiceProducts: boolean = true;
+  isLoadingEvents: boolean = true;
+  isLoadingServiceProducts: boolean = true;
+  selectedTabIndex = 0;
+  showedLoadError = false;
+  
+  // Injected
   dialog = inject(MatDialog);
   route = inject(ActivatedRoute);
   router = inject(Router);
   eventService = inject(EventService);  
+  serviceProductService = inject(ServiceProductService);  
   platformId = inject(PLATFORM_ID);
-  isBrowser: boolean;
+  snackBar = inject(MatSnackBar);
+
+  // Pagination
+  totalElements: number = pageSize * 8; // this variable is reference, other two are for storing the value between switching
+  eventTotalElements: number = this.totalElements; 
+  serviceProductTotalElements: number = this.totalElements;
+  pageIndex: number = 0; // same as for totalElements
+  eventPageIndex: number = 0;
+  serviceProductPageIndex: number = 0;
+  pageSize: number = pageSize;
+  eventPageSize: number = pageSize;
+  serviceProductPageSize: number = pageSize;
+
   constructor() {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
   ngOnInit(): void {
-    this.initEvents();
-    this.initServices();
-  }
-  initEvents(): void {
-    for (let i = 0; i < 5; i++) {
-      let event: EventSummaryDto = {
-        id: i,
-        name: "Birthday",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-        creatorEmail: "this.is.a.very.long.email@gmail.mail.com",
-        creatorName: "Petar Petrović Peterović",
-        date: 10000000,
-        isOpen: true,
-        latitude: 1, longitude: 1, maxAttendances: 1,
-        type:{name: "test", recommendedServiceProductIds:null}
-      }
-      if (event.creatorEmail != null)
-        event.creatorEmail = event.creatorEmail.replace(/\./g, '.<wbr>');
-      this.topEvents.push(event);
-    }
-    for (let i = 0; i < 12; i++) {
-      this.otherEvents.push(new EPEvent(i+5, "Birthday", "Perin rođendan", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"));
-    }
-  }
-  initServices(): void {
-    for (let i = 0; i < 5; i++) {
-      this.topServiceProducts.push(new Service(i, "Catering", "Peric catering", "We offer catering for lorem ipsum. Lorem ipsum lorem ipsum lorem ipsum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.",
-        "no specifies", 7, 1, ["catering.jpeg"], ["Wedding", "Birthday"], 1, 7, 3));
-    }
-    for (let i = 0; i < 12; i++) {
-      this.otherServiceProducts.push(new Service(i+5, "Catering", "Peric catering", "We offer catering for lorem ipsum. Lorem ipsum lorem ipsum lorem ipsum.",
-        "no specifies", 7, 1, ["catering.jpeg"], ["Wedding", "Birthday"], 1, 7, 3));
-    }
+    this.fetchTop5();
+    this.fetchEvents();
+    this.fetchServiceProducts();
   }
 
-  sort(): void {
-    let sortTokens = this.selectedSortOption.split('-');
-    const filters: EventFilterParams = {
-      sortDirection: sortTokens[1] == "asc" ? SortDirection.ASC : SortDirection.DESC,
-      sortBy: sortTokens[0]
-    }
-    this.eventService.getAllSummaries(filters).subscribe({
-          next: (response : PagedResponse<EventSummaryDto>) => {
-            console.log(response.content);
+  fetchTop5(): void {
+    this.isLoadingTopEvents = true;
+    this.isLoadingTopServiceProducts = true;
+    this.topEvents = [];
+    this.topServiceProducts = [];
+    this.eventService.getTop5()
+      .pipe(finalize(() => this.isLoadingTopEvents = false))
+      .subscribe({
+          next: (response : EventSummaryDto[]) => {
+            this.topEvents = response;
+            this.addEmailBreaks(this.topEvents);
           },
           error: (err: any) => {
-            console.error('Failed to load event types:', err);
+            console.error('Failed to load top events:', err);
+            this.showLoadError();
           }
         });
+    this.serviceProductService.getTop5()
+      .pipe(finalize(() => this.isLoadingTopServiceProducts = false))
+      .subscribe({
+          next: (response : ServiceProductSummaryDto[]) => {
+            this.topServiceProducts = response;
+            this.addEmailBreaks(this.topServiceProducts);
+          },
+          error: (err: any) => {
+            console.error('Failed to load top serviceproducts:', err);
+            this.showLoadError();
+          }
+        });
+  }
+  fetchEvents(): void {
+    this.isLoadingEvents = true;
+    this.otherEvents = [];
+    this.eventService.getAllSummaries(this.eventFilter)
+      .pipe(finalize(() => this.isLoadingEvents = false))
+      .subscribe({
+          next: (response : PagedResponse<EventSummaryDto>) => {
+            this.eventTotalElements = response.totalElements;
+            // this.eventPageIndex = 0;
+            // this.eventFilter.page = 0;
+            if (this.selectedTabIndex == 0) {
+              // this.pageIndex = 0;
+              this.totalElements = response.totalElements;
+            }
+            this.otherEvents = response.content;
+            this.addEmailBreaks(this.otherEvents);
+          },
+          error: (err: any) => {
+            console.error('Failed to load events:', err);
+            this.showLoadError();
+          }
+        });
+  }
+  fetchServiceProducts(): void {
+    this.isLoadingServiceProducts = true;
+    this.otherServiceProducts = [];
+    this.serviceProductService.getAllSummaries(this.serviceProductFilter)
+      .pipe(finalize(() => this.isLoadingServiceProducts = false))
+      .subscribe({
+          next: (response : PagedResponse<ServiceProductSummaryDto>) => {
+            this.serviceProductTotalElements = response.totalElements;
+            // this.serviceProductPageIndex = 0;
+            // this.serviceProductFilter.page = 0;
+            if (this.selectedTabIndex == 1) {
+              // this.pageIndex = 0;
+              this.totalElements = response.totalElements;
+            }
+            this.otherServiceProducts = response.content;
+            this.addEmailBreaks(this.otherServiceProducts);
+          },
+          error: (err: any) => {
+            console.error('Failed to load serviceproducts:', err);
+            this.showLoadError();
+          }
+        });
+  }
+
+  onSortEvents(): void {
+    let sortTokens = this.eventSelectedSortOption.split('-');
+    this.eventFilter.sortDirection = sortTokens[1] == "asc" ? SortDirection.ASC : SortDirection.DESC;
+    this.eventFilter.sortBy = sortTokens[0];
+    this.fetchEvents();
+  }
+  onSortServiceProducts(): void {
+    let sortTokens = this.serviceProductSelectedSortOption.split('-');
+    this.serviceProductFilter.sortDirection = sortTokens[1] == "asc" ? SortDirection.ASC : SortDirection.DESC;
+    this.serviceProductFilter.sortBy = sortTokens[0];
+    this.fetchServiceProducts();
+  }
+
+  onTabChange(event: MatTabChangeEvent): void {
+    if (event.index == 0) {
+      this.totalElements = this.eventTotalElements;
+      this.pageIndex = this.eventPageIndex;
+      this.pageSize = this.eventPageSize;
+    } else {
+      this.totalElements = this.serviceProductTotalElements;
+      this.pageIndex = this.serviceProductPageIndex;
+      this.pageSize = this.serviceProductPageSize;
+    }
+    this.selectedTabIndex = event.index;
+  }
+  
+  onPageChange(event: PageEvent): void {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    if (this.selectedTabIndex === 0) {
+      this.eventPageIndex = event.pageIndex;
+      this.eventFilter.page = this.eventPageIndex;
+      this.eventPageSize = event.pageSize;
+      this.eventFilter.size = this.eventPageSize;
+      this.fetchEvents();
+    } else {
+      this.serviceProductPageIndex = event.pageIndex;
+      this.serviceProductFilter.page = this.serviceProductPageIndex;
+      this.serviceProductPageSize = event.pageSize;
+      this.serviceProductFilter.size = this.serviceProductPageSize;
+      this.fetchServiceProducts();
+    }
   }
 
   onSearch(event: any): void {
@@ -115,6 +222,23 @@ export class HomeComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
+    });
+  }
+
+  showLoadError(): void {
+    if (!this.showedLoadError) {
+      this.snackBar.open('Failed to load data. Please try again later.', 'Close', {
+        duration: 6000,
+        panelClass: ['snack-error']
+      });
+      this.showedLoadError = true;
+    }
+  }
+
+  addEmailBreaks(array: EventSummaryDto[] | ServiceProductSummaryDto[]) {
+    array.forEach(element => {
+      if (element.creatorEmail != null)
+        element.creatorEmail = element.creatorEmail.replace(/\./g, '.<wbr>');
     });
   }
 }

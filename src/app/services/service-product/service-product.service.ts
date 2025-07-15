@@ -4,6 +4,9 @@ import { ServiceProduct } from '../../model/service-product/service-product';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { PagedResponse } from '../../shared/model/paged-response.model';
+import { ServiceProductFilterParams } from '../../parameters/service-product-filter-params';
+import { ServiceProductSummaryDto } from '../dtos/service-product/service-product-summary.dto';
+import { buildHttpParams } from '../../utils/http-utils';
 
 @Injectable({
   providedIn: 'root'
@@ -16,13 +19,17 @@ export class ServiceProductService {
     return this.httpClient.get<ServiceProduct>(`${this.apiUrl}/${id}`);
   }
 
-  getAll(pageProperties?: any) : Observable<PagedResponse<ServiceProduct>> {
-    let params = new HttpParams();
-    if(pageProperties) {
-      params = params
-      .set('page', pageProperties.page)
-      .set('size', pageProperties.pageSize)
-    }
-    return this.httpClient.get<PagedResponse<ServiceProduct>>(this.apiUrl, { params: params});
+  getAll(filters?: ServiceProductFilterParams): Observable<PagedResponse<Event>> {
+    const params = buildHttpParams(filters)
+    return this.httpClient.get<PagedResponse<Event>>(this.apiUrl, { params });
+  }
+
+  getAllSummaries(filters?: ServiceProductFilterParams): Observable<PagedResponse<ServiceProductSummaryDto>> {
+    const params = buildHttpParams(filters)
+    return this.httpClient.get<PagedResponse<ServiceProductSummaryDto>>(this.apiUrl + "/summaries", { params });
+  }
+
+  getTop5(): Observable<ServiceProductSummaryDto[]> {
+    return this.httpClient.get<ServiceProductSummaryDto[]>(this.apiUrl + "/top5");
   }
 }

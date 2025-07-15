@@ -45,6 +45,16 @@ drag-scroll {
     overflow: auto hidden !important; 
   }
 }
+.progress-spinner-container {
+  height: 430px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+mat-progress-spinner {
+  height: 70px !important;
+  width: 70px !important;
+}
 
 /* Cards */
 .event-card, .service-product-card{
@@ -68,7 +78,7 @@ mat-card-content {
   background-size: cover;
 }
 .mat-mdc-card-subtitle, .mat-mdc-card-title{
-  max-width: 180px;
+  max-width: 160px;
 }
 .mat-mdc-card-subtitle{
   color:#222222;
