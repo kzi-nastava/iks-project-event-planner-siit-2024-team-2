@@ -29,8 +29,10 @@ import { ServiceProductService } from '../../services/service-product/service-pr
 import {MatProgressSpinner, MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { finalize } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { environment } from '../../../environments/environment';
 
 const pageSize = 12;
+const imagesApi = "api/images/";
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -95,30 +97,33 @@ export class HomeComponent {
     this.isLoadingTopServiceProducts = true;
     this.topEvents = [];
     this.topServiceProducts = [];
+    console.log("getTop5 events");
     this.eventService.getTop5()
-      .pipe(finalize(() => this.isLoadingTopEvents = false))
-      .subscribe({
-          next: (response : EventSummaryDto[]) => {
-            this.topEvents = response;
-            this.addEmailBreaks(this.topEvents);
-          },
-          error: (err: any) => {
-            console.error('Failed to load top events:', err);
-            this.showLoadError();
-          }
-        });
+    .pipe(finalize(() => this.isLoadingTopEvents = false))
+    .subscribe({
+      next: (response : EventSummaryDto[]) => {
+        this.topEvents = response.map(obj => ({ ...obj }));
+        this.addEmailBreaks(this.topEvents);
+      },
+      error: (err: any) => {
+        console.error('Failed to load top events:', err);
+        this.showLoadError();
+      }
+    });
+    console.log("getTop5 sp");
     this.serviceProductService.getTop5()
-      .pipe(finalize(() => this.isLoadingTopServiceProducts = false))
-      .subscribe({
-          next: (response : ServiceProductSummaryDto[]) => {
-            this.topServiceProducts = response;
-            this.addEmailBreaks(this.topServiceProducts);
-          },
-          error: (err: any) => {
-            console.error('Failed to load top serviceproducts:', err);
-            this.showLoadError();
-          }
-        });
+    .pipe(finalize(() => this.isLoadingTopServiceProducts = false))
+    .subscribe({
+      next: (response : ServiceProductSummaryDto[]) => {
+        this.topServiceProducts = response.map(obj => ({ ...obj }));
+        this.addEmailBreaks(this.topServiceProducts);
+        this.convertImageUrls(this.topServiceProducts);
+      },
+      error: (err: any) => {
+        console.error('Failed to load top serviceproducts:', err);
+        this.showLoadError();
+      }
+    });
   }
   fetchEvents(): void {
     this.isLoadingEvents = true;
@@ -134,7 +139,7 @@ export class HomeComponent {
               // this.pageIndex = 0;
               this.totalElements = response.page.totalElements;
             }
-            this.otherEvents = response.content;
+            this.otherEvents = response.content.map(obj => ({ ...obj }));
             this.addEmailBreaks(this.otherEvents);
           },
           error: (err: any) => {
@@ -157,8 +162,9 @@ export class HomeComponent {
               // this.pageIndex = 0;
               this.totalElements = response.page.totalElements;
             }
-            this.otherServiceProducts = response.content;
+            this.otherServiceProducts = response.content.map(obj => ({ ...obj }));
             this.addEmailBreaks(this.otherServiceProducts);
+            this.convertImageUrls(this.otherServiceProducts);
           },
           error: (err: any) => {
             console.error('Failed to load serviceproducts:', err);
@@ -239,6 +245,12 @@ export class HomeComponent {
     array.forEach(element => {
       if (element.creatorEmail != null)
         element.creatorEmail = element.creatorEmail.replace(/\./g, '.<wbr>');
+    });
+  }
+  convertImageUrls(array: ServiceProductSummaryDto[]) {
+    array.forEach(element => {
+      if (element.image != null)
+        element.image = environment.apiHost + imagesApi + element.image;
     });
   }
 }

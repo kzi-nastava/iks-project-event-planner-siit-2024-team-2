@@ -80,6 +80,9 @@ mat-card-content {
 .mat-mdc-card-subtitle, .mat-mdc-card-title{
   max-width: 170px;
 }
+.mat-mdc-card-subtitle.event-creator-email, .mat-mdc-card-title.event-creator-name{
+  max-width: 250px;
+}
 .mat-mdc-card-subtitle{
   color:#222222;
 }
@@ -97,8 +100,8 @@ mat-card-content {
   margin: 0;
   text-overflow: ellipsis;
   overflow:hidden;
-  -webkit-line-clamp: 6;
-  line-clamp: 6;
+  -webkit-line-clamp: 7;
+  line-clamp: 7;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   text-align: justify;
@@ -106,5 +109,7 @@ mat-card-content {
 .card-image{
   height: 100px;
   width: auto;
+  max-width: 150px;
   object-fit: contain;
+  object-position: top;
 }

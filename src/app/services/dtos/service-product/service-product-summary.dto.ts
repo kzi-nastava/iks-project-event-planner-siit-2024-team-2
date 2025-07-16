@@ -10,6 +10,7 @@ export interface ServiceProductSummaryDto {
     available: boolean | null;
     creatorName: string | null;
     creatorEmail: string | null;
+    image: string | null;
 }
 /*
     private long id;
