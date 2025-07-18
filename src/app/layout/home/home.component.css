@@ -14,17 +14,11 @@
 .options{
   margin-left: auto;
 }
-/* .filter-checkboxes mat-checkbox {
-  margin-right: 8px; 
-  color: black !important;
-} */
-.mdc-checkbox{
-  color: black !important;
-}
 .mat-mdc-paginator{
-  /* background: #EEF2FF; */
-  /* color: black; */
   margin: -20px;
+}
+.filter-btn{
+  margin-top: 10px;
 }
 
 .drag-scroll-container {

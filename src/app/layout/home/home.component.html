@@ -30,7 +30,8 @@
         <h4>Explore events</h4>
       </div>
       <div class="options row">
-        <button mat-stroked-button color="primary" (click)="openEventFilterDialog()" [disabled]="!fetchedEventTypes || !fetchedMaxAttendances">Filter</button>
+        <button mat-stroked-button color="primary" (click)="openEventFilterDialog()" 
+          [disabled]="!fetchedEventTypes || !fetchedMaxAttendances" class="filter-btn">Filter</button>
         <mat-form-field appearance="fill" class="search-field" color="primary">
           <mat-label>Search</mat-label>
           <input matInput (input)="onSearch($event)" placeholder="Enter search term" />
@@ -64,7 +65,7 @@
         <h4>Explore services and products</h4>
       </div>
       <div class="options row">
-        <button mat-stroked-button color="primary" (click)="openServiceProductFilterDialog()" [disabled]="!fetchedFilteringValues">Filter</button>
+        <button mat-stroked-button color="primary" (click)="openServiceProductFilterDialog()" [disabled]="!fetchedFilteringValues" class="filter-btn">Filter</button>
         <mat-form-field appearance="fill" class="search-field" color="primary">
           <mat-label>Search</mat-label>
           <input matInput (input)="onSearch($event)" placeholder="Enter search term" />
@@ -141,7 +142,7 @@ aria-label="Select page">
     <mat-card-content>
       <br>
       <p class="name">{{serviceProduct.name}}</p>
-      <p class="price">Price: ${{serviceProduct.price}}</p>
+      <p class="price">Price: €{{serviceProduct.price}}</p>
       <br>
       <p class="description">{{serviceProduct.description}}</p>
       <br>

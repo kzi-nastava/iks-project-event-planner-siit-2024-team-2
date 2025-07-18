@@ -1,4 +1,4 @@
 export interface ServiceProductCategory {
-    id: number | null;
+    id: number;
     name: string | null;
 }

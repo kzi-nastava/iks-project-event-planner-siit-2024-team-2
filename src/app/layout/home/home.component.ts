@@ -35,6 +35,7 @@ import { HomeEventFilterDialogParams } from '../../parameters/home-event-filter-
 import { HomeServiceProductFilterDialogParams } from '../../parameters/home-service-product-filter-dialog-params';
 import { City } from '../../model/utils/city';
 import { JsonService } from '../../services/utils/json.service';
+import { ServiceProductCategory } from '../../model/service-product/service-product-category';
 
 const pageSize = 12;
 const imagesApi = "api/images/";
@@ -76,6 +77,9 @@ export class HomeComponent {
   fetchedFilteringValues: boolean = false;
   cities: City[] = [];
   selectedCities: City[] = [];
+  selectedCategories: ServiceProductCategory[] = [];
+  selectedAvailableTypes: EventType[] = [];
+  
 
 
   // Injected
@@ -311,14 +315,18 @@ export class HomeComponent {
     if (this.filteringValues == undefined)
       return;
     let data: HomeServiceProductFilterDialogParams = { // we will clone all data in case filter dialog tries to change them
-      filter: {...this.eventFilter},
-      filteringValues: {...this.filteringValues}
+      filter: {...this.serviceProductFilter},
+      filteringValues: {...this.filteringValues},
+      selectedCategories: [...this.selectedCategories],
+      selectedEventTypes: [...this.selectedAvailableTypes]
     }
     const dialogRef = this.dialog.open(HomeServiceProductFilterDialogComponent, {data: data});
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: HomeServiceProductFilterDialogParams) => {
       if (result) {
-        this.serviceProductFilter = result;
+        this.serviceProductFilter = result.filter;
+        this.selectedCategories = result.selectedCategories;
+        this.selectedAvailableTypes = result.selectedEventTypes;
         this.fetchServiceProducts();
       }
     });

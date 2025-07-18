@@ -20,7 +20,7 @@
       <input matSliderThumb [formControl]="maxDistance">
     </mat-slider>
     <mat-form-field>
-      <mat-label>Locations:</mat-label>
+      <mat-label>Location:</mat-label>
       <mat-select [formControl]="cities" multiple>
         @for (city of allCities; track city) {
           <mat-option [value]="city">{{city.city}}</mat-option>

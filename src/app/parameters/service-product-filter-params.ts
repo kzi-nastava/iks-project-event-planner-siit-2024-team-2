@@ -9,7 +9,7 @@ export interface ServiceProductFilterParams {
   name?: string;
   description?: string;
   type?: ServiceProductDType;
-  categories?: number[];
+  categoryIds?: number[];
   available?:boolean;
   visible?:boolean;
   minPrice?:number;

@@ -68,9 +68,6 @@ export class HomeEventFilterDialogComponent {
     if (this.data.filter.types) {
       this.eventTypes.setValue(this.data.selectedEventTypes);
     }
-    // if (this.data.filter.minMaxAttendances && this.data.filter.maxMaxAttendances) {
-    //   this.maxAttendances.setValue([this.data.filter.minMaxAttendances, this.data.filter.maxMaxAttendances]);
-    // }
     if (this.data.filter.latitudes) {
       this.cities.setValue(this.data.selectedCities)
       this.maxDistance.setValue(this.data.filter.maxDistance || 50);

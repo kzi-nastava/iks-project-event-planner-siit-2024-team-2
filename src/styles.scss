@@ -23,7 +23,8 @@ $transparent: #FFFFFF00;
     --mat-select-enabled-trigger-text-color: $cod-gray !important;
     --mdc-icon-button-icon-color: $cod-gray !important;
     --mdc-filled-text-field-focus-label-text-color: $primary !important;
-    --mdc-dialog-supporting-text-color: $primary!important;
+    --mdc-dialog-supporting-text-color: $primary !important;
+    --mdc-checkbox-selected-icon-color: $primary !important;
 
   @include mat.paginator-overrides((
     container-text-color: $cod-gray,
@@ -54,6 +55,9 @@ $transparent: #FFFFFF00;
   @include mat.pseudo-checkbox-overrides((
     selected-icon-color: $primary,
   ));
+  @include mat.checkbox-overrides((
+    selected-icon-color: $primary,
+  ));
   @include mat.tabs-overrides((
     active-focus-indicator-color: $primary,
   ));
@@ -77,6 +81,15 @@ $transparent: #FFFFFF00;
   @include mat.button-overrides((
     label-text-color: $primary
 ));}
+
+mat-checkbox { // the intended color override doesn't seem to work so this is a neccessary workaround
+  input[aria-checked="mixed"], .mdc-checkbox--selected {
+    ~ .mdc-checkbox__background {
+      background-color: $primary !important;
+      border-color: $primary !important;
+    }
+  }
+}
 
 html, body { 
     height: 100%; 
