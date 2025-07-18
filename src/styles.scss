@@ -4,6 +4,7 @@
 $primary: #7C96FF;
 $warn: #FFD52F;
 $primary-container: #EEF2FF;
+$lighter-primary-container: #eff2fa;
 $selection-color: #C2CFFF;
 $secondary-container: #D8E0FF;
 $secondary-container-night: #425283;
@@ -30,17 +31,52 @@ $transparent: #FFFFFF00;
     enabled-icon-color: $primary
   ));
   @include mat.button-overrides((
-    container-color: $primary,
+    label-text-color: $primary
   ));
   @include mat.progress-spinner-overrides((
     active-indicator-color: $primary,
   ));
-};
-.mat-mdc-outlined-button {
-  @include mat.button-overrides((
-    label-text-color: $primary,
+  @include mat.dialog-overrides((
+    container-color: $primary-container,
+    subhead-color: $cod-gray,
+  ));
+  @include mat.slider-overrides((
+    active-track-color: $selection-color,
+    handle-color: $primary,
+    focus-handle-color: $primary,
+    label-container-color: $primary
+  ));
+  @include mat.select-overrides((
+    panel-background-color: $lighter-primary-container,
+    enabled-arrow-color : $primary,
+    focused-arrow-color : $primary,
+  ));
+  @include mat.pseudo-checkbox-overrides((
+    selected-icon-color: $primary,
+  ));
+  @include mat.tabs-overrides((
+    active-focus-indicator-color: $primary,
+  ));
+  @include mat.datepicker-overrides((
+    // calendar-body-label-text-color: orange,
+    calendar-container-background-color: $lighter-primary-container,
+    calendar-date-today-outline-color: $primary,
+    calendar-date-selected-state-background-color: $primary
   ));
 }
+.mat-mdc-outlined-button {
+  @include mat.button-overrides((
+    label-text-color: $primary
+));}
+.mat-mdc-raised-button, .mat-mdc-unelevated-button{
+  @include mat.button-overrides((
+    container-color: $primary,
+    label-text-color: white
+));}
+.mat-mdc-text-button {
+  @include mat.button-overrides((
+    label-text-color: $primary
+));}
 
 html, body { 
     height: 100%; 
@@ -130,4 +166,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
     align-items: flex-start; /* Align items to the top */
     justify-content: center;
     padding-bottom: 20px;
+}
+.hide-ripple .mat-ripple{
+  display: none !important;
 }

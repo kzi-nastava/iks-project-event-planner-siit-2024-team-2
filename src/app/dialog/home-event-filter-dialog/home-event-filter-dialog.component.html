@@ -1,0 +1,48 @@
+<h2 mat-dialog-title>Filters:</h2>
+<mat-dialog-content>
+  <div class="form-container">
+    <mat-form-field>
+      <mat-label>Event type:</mat-label>
+      <mat-select [formControl]="eventTypes" multiple>
+        @for (eventType of allEventTypes; track eventType) {
+          <mat-option [value]="eventType">{{eventType.name}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-label class="slider-label">Max attendances:</mat-label>
+    <mat-slider [min]="fullMaxAttendancesRange[0]" [max]="fullMaxAttendancesRange[1]"
+      step="1" discrete class="hide-ripple" [disabled]="disabledAttendancesSlider">
+      <input matSliderStartThumb [(value)]="data.filter.minMaxAttendances">
+      <input matSliderEndThumb [(value)]="data.filter.maxMaxAttendances"> 
+    </mat-slider>
+    <mat-label class="slider-label">Maximum distance (km):</mat-label>
+    <mat-slider min="10" max="1000" step="10" discrete class="hide-ripple">
+      <input matSliderThumb [formControl]="maxDistance">
+    </mat-slider>
+    <mat-form-field>
+      <mat-label>Locations:</mat-label>
+      <mat-select [formControl]="cities" multiple>
+        @for (city of allCities; track city) {
+          <mat-option [value]="city">{{city.city}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Enter a date range</mat-label>
+      <mat-date-range-input [rangePicker]="picker" [formGroup]="dateRange">
+        <input matStartDate placeholder="Start date" formControlName="start">
+        <input matEndDate placeholder="End date" formControlName="end">
+      </mat-date-range-input>
+      <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker-toggle matIconSuffix (click)="clearDate()">
+        <mat-icon matDatepickerToggleIcon>cancel</mat-icon>
+      </mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+  </mat-form-field>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-dialog-close mat-button>Cancel</button>
+  <button type="submit" (click)="applyFilter()" mat-dialog-close mat-button>Apply</button>
+</mat-dialog-actions>

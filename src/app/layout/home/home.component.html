@@ -30,7 +30,7 @@
         <h4>Explore events</h4>
       </div>
       <div class="options row">
-        <button mat-stroked-button color="primary" (click)="openFilterDialog()">Filter</button>
+        <button mat-stroked-button color="primary" (click)="openEventFilterDialog()" [disabled]="!fetchedEventTypes || !fetchedMaxAttendances">Filter</button>
         <mat-form-field appearance="fill" class="search-field" color="primary">
           <mat-label>Search</mat-label>
           <input matInput (input)="onSearch($event)" placeholder="Enter search term" />
@@ -64,7 +64,7 @@
         <h4>Explore services and products</h4>
       </div>
       <div class="options row">
-        <button mat-stroked-button color="primary" (click)="openFilterDialog()">Filter</button>
+        <button mat-stroked-button color="primary" (click)="openServiceProductFilterDialog()" [disabled]="!fetchedFilteringValues">Filter</button>
         <mat-form-field appearance="fill" class="search-field" color="primary">
           <mat-label>Search</mat-label>
           <input matInput (input)="onSearch($event)" placeholder="Enter search term" />

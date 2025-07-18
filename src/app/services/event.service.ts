@@ -11,7 +11,6 @@ import { buildHttpParams } from '../utils/http-utils';
   providedIn: 'root'
 })
 export class EventService {
-
   private apiUrl = `${environment.apiHost}api/events`;
 
   constructor(private httpClient: HttpClient) { }
@@ -37,5 +36,9 @@ export class EventService {
 
   getTop5(): Observable<EventSummaryDto[]> {
     return this.httpClient.get<EventSummaryDto[]>(this.apiUrl + "/top5");
+  }
+  
+  getMaxAttendancesRange(): Observable<number[]> {
+    return this.httpClient.get<number[]>(this.apiUrl + "/max-attendances-range");
   }
 }

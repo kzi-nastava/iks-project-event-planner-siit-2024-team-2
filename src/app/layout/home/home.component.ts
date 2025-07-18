@@ -1,35 +1,40 @@
 import { CommonModule } from '@angular/common';
-import { Component, importProvidersFrom, inject, ViewChild } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import {MatCardModule} from '@angular/material/card';
-import { EPEvent } from '../../model/ep-event';
-import { Service } from '../../model/service';
+import { MatCardModule } from '@angular/material/card';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
-import {MatPaginatorModule, PageEvent} from '@angular/material/paginator';
-import { MatDialog } from '@angular/material/dialog';
-import { FilterDialogComponent } from '../../dialog/filter-dialog/filter-dialog.component';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { EventService } from '../../services/event.service';
-import { ActivatedRoute, EventType, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PagedModel } from '../../shared/model/paged-model';
-import { Event } from '../../model/event';
 import { EventSummaryDto } from '../../services/dtos/event/event-summary.dto';
 import { EventFilterParams } from '../../parameters/event-filter-params';
 import { SortDirection } from '../../shared/model/sort-direction';
 import { DragScrollComponent, DragScrollItemDirective } from 'ngx-drag-scroll';
 import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
-import {MatTabChangeEvent, MatTabsModule} from '@angular/material/tabs';
+import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
 import { ServiceProductSummaryDto } from '../../services/dtos/service-product/service-product-summary.dto';
 import { ServiceProductFilterParams } from '../../parameters/service-product-filter-params';
 import { ServiceProductService } from '../../services/service-product/service-product.service';
-import {MatProgressSpinner, MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { finalize } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from '../../../environments/environment';
+import { HomeEventFilterDialogComponent } from '../../dialog/home-event-filter-dialog/home-event-filter-dialog.component';
+import { HomeServiceProductFilterDialogComponent } from '../../dialog/home-service-product-filter-dialog/home-service-product-filter-dialog.component';
+import { EventType } from '../../model/event-type';
+import { EventTypeService } from '../../services/event-type.service';
+import { ServiceProductFilteringValues } from '../../services/dtos/service-product/service-product-filtering-values.dto';
+import { HomeEventFilterDialogParams } from '../../parameters/home-event-filter-dialog-params';
+import { HomeServiceProductFilterDialogParams } from '../../parameters/home-service-product-filter-dialog-params';
+import { City } from '../../model/utils/city';
+import { JsonService } from '../../services/utils/json.service';
 
 const pageSize = 12;
 const imagesApi = "api/images/";
@@ -38,11 +43,10 @@ const imagesApi = "api/images/";
   standalone: true,
   imports: [
     MatSidenavModule, MatCardModule, MatButtonModule, CommonModule, MatFormField, MatInputModule, MatIconModule, MatTabsModule,
-    MatSelect, MatOption, MatPaginatorModule, MatProgressSpinnerModule, DragScrollComponent, DragScrollItemDirective,
+    MatDialogModule, MatSelect, MatOption, MatPaginatorModule, MatProgressSpinnerModule, DragScrollComponent, DragScrollItemDirective,
   ],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
-  host: { 'class': 'no-padding-page' }
+  styleUrl: './home.component.scss'
 })
 export class HomeComponent {
   topEvents: EventSummaryDto[] = [];
@@ -53,23 +57,37 @@ export class HomeComponent {
   eventSelectedSortOption: string = 'date-desc';
   serviceProductSelectedSortOption: string = 'name-asc';
   isBrowser: boolean;
-  eventFilter: EventFilterParams = {size:pageSize, sortBy: "date", sortDirection: SortDirection.DESC};
-  serviceProductFilter: ServiceProductFilterParams = {size: pageSize, sortBy: "name", sortDirection: SortDirection.ASC};
   isLoadingTopEvents: boolean = true;
   isLoadingTopServiceProducts: boolean = true;
   isLoadingEvents: boolean = true;
   isLoadingServiceProducts: boolean = true;
   selectedTabIndex = 0;
   showedLoadError = false;
-  
+
+  // Filtering
+  eventFilter: EventFilterParams = {size:pageSize, sortBy: "date", sortDirection: SortDirection.DESC};
+  serviceProductFilter: ServiceProductFilterParams = {size: pageSize, sortBy: "name", sortDirection: SortDirection.ASC};
+  allEventTypes: EventType[] = [];
+  selectedEventTypes: EventType[] = [];
+  fullMaxAttendancesRange: number[] = [];
+  filteringValues?: ServiceProductFilteringValues;
+  fetchedEventTypes: boolean = false;
+  fetchedMaxAttendances: boolean = false;
+  fetchedFilteringValues: boolean = false;
+  cities: City[] = [];
+  selectedCities: City[] = [];
+
+
   // Injected
-  dialog = inject(MatDialog);
-  route = inject(ActivatedRoute);
-  router = inject(Router);
-  eventService = inject(EventService);  
-  serviceProductService = inject(ServiceProductService);  
-  platformId = inject(PLATFORM_ID);
-  snackBar = inject(MatSnackBar);
+  readonly dialog = inject(MatDialog);
+  readonly route = inject(ActivatedRoute);
+  readonly router = inject(Router);
+  readonly eventService = inject(EventService);  
+  readonly eventTypeService = inject(EventTypeService);  
+  readonly serviceProductService = inject(ServiceProductService);  
+  readonly jsonService = inject(JsonService);
+  readonly platformId = inject(PLATFORM_ID);
+  readonly snackBar = inject(MatSnackBar);
 
   // Pagination
   totalElements: number = pageSize * 8; // this variable is reference, other two are for storing the value between switching
@@ -81,7 +99,6 @@ export class HomeComponent {
   pageSize: number = pageSize; // same as for totalElements
   eventPageSize: number = pageSize;
   serviceProductPageSize: number = pageSize;
-
   constructor() {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
@@ -90,6 +107,8 @@ export class HomeComponent {
     this.fetchTop5();
     this.fetchEvents();
     this.fetchServiceProducts();
+    this.fetchFilteringValue();
+    this.loadCities();
   }
 
   fetchTop5(): void {
@@ -97,12 +116,11 @@ export class HomeComponent {
     this.isLoadingTopServiceProducts = true;
     this.topEvents = [];
     this.topServiceProducts = [];
-    console.log("getTop5 events");
     this.eventService.getTop5()
     .pipe(finalize(() => this.isLoadingTopEvents = false))
     .subscribe({
       next: (response : EventSummaryDto[]) => {
-        this.topEvents = response.map(obj => ({ ...obj }));
+        this.topEvents = JSON.parse(JSON.stringify(response));
         this.addEmailBreaks(this.topEvents);
       },
       error: (err: any) => {
@@ -110,12 +128,11 @@ export class HomeComponent {
         this.showLoadError();
       }
     });
-    console.log("getTop5 sp");
     this.serviceProductService.getTop5()
     .pipe(finalize(() => this.isLoadingTopServiceProducts = false))
     .subscribe({
       next: (response : ServiceProductSummaryDto[]) => {
-        this.topServiceProducts = response.map(obj => ({ ...obj }));
+        this.topServiceProducts = JSON.parse(JSON.stringify(response));
         this.addEmailBreaks(this.topServiceProducts);
         this.convertImageUrls(this.topServiceProducts);
       },
@@ -139,7 +156,7 @@ export class HomeComponent {
               // this.pageIndex = 0;
               this.totalElements = response.page.totalElements;
             }
-            this.otherEvents = response.content.map(obj => ({ ...obj }));
+            this.otherEvents = JSON.parse(JSON.stringify(response.content));
             this.addEmailBreaks(this.otherEvents);
           },
           error: (err: any) => {
@@ -162,7 +179,7 @@ export class HomeComponent {
               // this.pageIndex = 0;
               this.totalElements = response.page.totalElements;
             }
-            this.otherServiceProducts = response.content.map(obj => ({ ...obj }));
+            this.otherServiceProducts = JSON.parse(JSON.stringify(response.content));
             this.addEmailBreaks(this.otherServiceProducts);
             this.convertImageUrls(this.otherServiceProducts);
           },
@@ -171,6 +188,53 @@ export class HomeComponent {
             this.showLoadError();
           }
         });
+  }
+  fetchFilteringValue(): void {
+    this.eventTypeService.getAll()
+      .subscribe({
+          next: (response : EventType[]) => {
+            this.allEventTypes = response.map(obj => ({ ...obj }));
+            this.fetchedEventTypes = true;
+          },
+          error: (err: any) => {
+            console.error('Failed to load event types:', err);
+            this.showLoadError();
+          }
+        });
+    this.eventService.getMaxAttendancesRange()
+      .subscribe({
+          next: (response : number[]) => {
+            this.fullMaxAttendancesRange = response.map(num => num);
+            this.fetchedMaxAttendances = true;
+          },
+          error: (err: any) => {
+            console.error('Failed to load max attendances range:', err);
+            this.showLoadError();
+          }
+        });
+    this.serviceProductService.getFilteringValues()
+      .subscribe({
+          next: (response : ServiceProductFilteringValues) => {
+            this.filteringValues = JSON.parse(JSON.stringify(response));
+            this.fetchedFilteringValues = true;
+          },
+          error: (err: any) => {
+            console.error('Failed to load service product filtering values:', err);
+            this.showLoadError();
+          }
+        });
+  }
+  loadCities(): void {
+    this.jsonService.getCities()
+      .subscribe({
+          next: (response : City[]) => {
+            this.cities = response.map(obj => ({ ...obj })).sort((a, b) => a.city.localeCompare(b.city));
+          },
+          error: (err: any) => {
+            console.error('Failed to load cities:', err);
+            this.showLoadError();
+          }
+      })
   }
 
   onSortEvents(): void {
@@ -221,13 +285,42 @@ export class HomeComponent {
     this.searchTerm = event.target.value;
     console.log('Search term:', this.searchTerm);
   }
-
   
-  openFilterDialog(): void {
-    const dialogRef = this.dialog.open(FilterDialogComponent);
+  openEventFilterDialog(): void {
+    let data: HomeEventFilterDialogParams = { // we will clone all data in case filter dialog tries to change them
+      filter: {...this.eventFilter},
+      allEventTypes: [...this.allEventTypes],
+      selectedEventTypes: [...this.selectedEventTypes],
+      fullMaxAttendancesRange: [...this.fullMaxAttendancesRange],
+      allCities: [...this.cities],
+      selectedCities: [...this.selectedCities]
+    }
+    const dialogRef = this.dialog.open(HomeEventFilterDialogComponent, {data: data});
+
+    dialogRef.afterClosed().subscribe((result: HomeEventFilterDialogParams) => {
+      if (result) {
+        this.eventFilter = result.filter;
+        this.selectedCities = result.selectedCities;
+        this.selectedEventTypes = result.selectedEventTypes;
+        this.fetchEvents();
+      }
+    });
+  }
+  
+  openServiceProductFilterDialog(): void {
+    if (this.filteringValues == undefined)
+      return;
+    let data: HomeServiceProductFilterDialogParams = { // we will clone all data in case filter dialog tries to change them
+      filter: {...this.eventFilter},
+      filteringValues: {...this.filteringValues}
+    }
+    const dialogRef = this.dialog.open(HomeServiceProductFilterDialogComponent, {data: data});
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      if (result) {
+        this.serviceProductFilter = result;
+        this.fetchServiceProducts();
+      }
     });
   }
 

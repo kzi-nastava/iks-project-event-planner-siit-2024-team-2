@@ -7,6 +7,7 @@ import { PagedModel } from '../../shared/model/paged-model';
 import { ServiceProductFilterParams } from '../../parameters/service-product-filter-params';
 import { ServiceProductSummaryDto } from '../dtos/service-product/service-product-summary.dto';
 import { buildHttpParams } from '../../utils/http-utils';
+import { ServiceProductFilteringValues } from '../dtos/service-product/service-product-filtering-values.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -31,5 +32,9 @@ export class ServiceProductService {
 
   getTop5(): Observable<ServiceProductSummaryDto[]> {
     return this.httpClient.get<ServiceProductSummaryDto[]>(this.apiUrl + "/top5");
+  }
+
+  getFilteringValues(): Observable<ServiceProductFilteringValues> {
+    return this.httpClient.get<ServiceProductFilteringValues>(this.apiUrl + "/filtering-values");
   }
 }

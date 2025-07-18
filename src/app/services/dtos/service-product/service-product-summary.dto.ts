@@ -22,4 +22,5 @@ export interface ServiceProductSummaryDto {
     private String description;
     private String creatorName;
     private String creatorEmail;
+    private String image;
 */
