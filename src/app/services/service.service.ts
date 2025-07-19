@@ -9,7 +9,7 @@ import { PagedModel } from '../shared/model/paged-model';
 })
 export class ServiceService {
 
-  private apiUrl = `${environment.apiHost}api/service-products`; 
+  private apiUrl = `${environment.apiHost}api/services`; 
 
   constructor(private httpClient: HttpClient) { }
 
