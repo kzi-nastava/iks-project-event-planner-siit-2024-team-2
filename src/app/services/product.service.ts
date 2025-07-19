@@ -9,17 +9,20 @@ import { Product } from '../model/product';
   providedIn: 'root'
 })
 export class ProductService {
-
   
   private apiHost = `${environment.apiHost}api/products`;
-
+  
   constructor(private httpClient: HttpClient) { }
-
+  
   add(product: Product) : Observable<Product> {
     return this.httpClient.post<Product>(this.apiHost, product)
   }
 
-  getEvent(id: number): Observable<Product> {
+  update(product: Product, id: number): Observable<Product> {
+    return this.httpClient.put<Product>(`${this.apiHost}/${id}`, product);
+  }
+
+  getProduct(id: number): Observable<Product> {
     return this.httpClient.get<Product>(`${this.apiHost}/${id}`)
   }
 
@@ -30,6 +33,29 @@ export class ProductService {
       .set('page', pageProperties.page)
       .set('size', pageProperties.pageSize)
     }
-    return this.httpClient.get<Product[]>(this.apiHost, { params: params});
+    return this.httpClient.get<Product[]>(`${this.apiHost}/mine`, { params: params});
+  }
+
+  deleteProduct(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`${this.apiHost}/${id}`);
+  }
+  filter(categories?: number[], eventTypes?: number[], minPrice?: number, maxPrice?: number, available?: boolean): Observable<Product[]> {
+    let params = new HttpParams();
+    if (categories && categories.length > 0) {
+      params = params.set('categories', categories.join(','));
+    }
+    if (eventTypes && eventTypes.length > 0) {
+      params = params.set('eventTypes', eventTypes.join(','));
+    }
+    if (minPrice !== undefined) {
+      params = params.set('minPrice', minPrice.toString());
+    }
+    if (maxPrice !== undefined) {
+      params = params.set('maxPrice', maxPrice.toString());
+    }
+    if (available !== undefined) {
+      params = params.set('available', available.toString());
+    }
+    return this.httpClient.get<Product[]>(`${this.apiHost}/filter`, { params });
   }
 }

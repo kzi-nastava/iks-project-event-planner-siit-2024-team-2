@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { MatCheckbox } from '@angular/material/checkbox';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogContent, MatDialogRef } from '@angular/material/dialog';
-import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import { MatCheckbox } from '@angular/material/checkbox';
 import { CommonModule } from '@angular/common';
 import { ServiceProductCategoryService } from '../../services/service-product-category.service';
 import { EventTypeService } from '../../services/event-type.service';
@@ -14,14 +14,21 @@ import { EventTypeService } from '../../services/event-type.service';
   styleUrl: './service-filter-dialog.component.css'
 })
 export class ServiceFilterDialogComponent {
-  categories: any[] = [];
-  eventTypes: any[] = [];
+  categories: string[] = [];
+  eventTypes: string[] = [];
 
-  constructor(private dialogRef: MatDialogRef<ServiceFilterDialogComponent>,
-    private categoryService: ServiceProductCategoryService, private eventTypesService: EventTypeService) { }
-  close() {
-    this.dialogRef.close();
-  }
+  // Form controls
+  minPrice = new FormControl();
+  maxPrice = new FormControl();
+  available = new FormControl(false);
+  selectedCategories = new FormControl([]);
+  selectedEventTypes = new FormControl([]);
+
+  constructor(
+    private dialogRef: MatDialogRef<ServiceFilterDialogComponent>,
+    private categoryService: ServiceProductCategoryService,
+    private eventTypesService: EventTypeService
+  ) {}
 
   ngOnInit(): void {
     this.categoryService.getAll().subscribe((data) => {
@@ -30,9 +37,20 @@ export class ServiceFilterDialogComponent {
 
     this.eventTypesService.getAll().subscribe((data) => {
       this.eventTypes = data.map(e => e.name);
-    })
+    });
   }
-  
-  selectedCategories = new FormControl([]);
-  selectedEventTypes = new FormControl([]);
+
+  close() {
+    this.dialogRef.close();
+  }
+
+  filter() {
+    this.dialogRef.close({
+      categories: this.selectedCategories.value,
+      eventTypes: this.selectedEventTypes.value,
+      minPrice: this.minPrice.value,
+      maxPrice: this.maxPrice.value,
+      available: this.available.value
+    });
+  }
 }

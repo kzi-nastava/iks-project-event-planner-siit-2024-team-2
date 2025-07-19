@@ -12,6 +12,7 @@ import { ServiceCategory } from '../../model/service-category';
 import { ProductService } from '../../services/product.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Product } from '../../model/product';
 
 
 
@@ -34,7 +35,7 @@ export class NewProductComponent {
     { id: 3, name: "Waiter product" }
   ];
   selectedCategoryId: number = this.productCategories[0].id;
-
+  id: number = -1;
   eventTypes: EventType[] = [{name: 'Wedding', id: 1}, {name: 'Funeral', id: 2}, {name: 'Birthday', id: 3}, {name: 'Conference', id: 4}];
   selectedEvents: number[] = [];
   
@@ -50,7 +51,6 @@ export class NewProductComponent {
   }
 
   // binding to the service data, on which the user clicked
-  service: Service = new Service();
   loadEventTypes(): void {
     // Fetch event types from the service
     this.eventTypeService.getAll().subscribe(
@@ -65,7 +65,6 @@ export class NewProductComponent {
   }
 
   loadServiceCategories(): void {
-    // Fetch categories from the service
     this.serviceCategoryService.getAll().subscribe(
       (categories) => {
         this.productCategories = categories;
@@ -80,7 +79,47 @@ export class NewProductComponent {
   ngOnInit(): void {
     this.loadEventTypes();
     this.loadServiceCategories();
+    this.route.queryParams.subscribe(params => {
+      const productId = params['id'];
+      if (productId) {
+        this.fetchServiceData(productId); 
+      }
+      this.id = productId ? Number(productId) : -1;
+    });
   }
+
+    fetchServiceData(productId: number): void {
+      this.productService.getProduct(productId).subscribe(
+        (service: Product) => {
+          this.createProductForm.patchValue({
+            name: service.name,
+            description: service.description,
+            specifies: service.specifies,
+            price: service.price,
+            discount: service.discount,
+            productCategory: service.categoryId,
+            available: service.available,
+            visible: service.visible
+          });
+          this.selectedEvents = service.availableEventTypesIds || [];
+          this.selectedCategoryId = service.categoryId || this.productCategories[0].id;
+          this.snackBar.open('Product data loaded successfully!', 'Close', {
+            duration: 3000,
+            panelClass: ['snackbar-success']
+          });
+        },
+        (error) => {
+          console.error('Error fetching product data:', error);
+          this.snackBar.open('Failed to load product data.', 'Close', {
+            duration: 3000,
+            panelClass: ['snackbar-error']
+          });
+        }
+      );
+      this.loadServiceCategories()
+      this.loadEventTypes();
+
+    }
 
   createProductForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
@@ -88,7 +127,7 @@ export class NewProductComponent {
     specifies: new FormControl('', [Validators.required]),
     price: new FormControl(0, [Validators.required, Validators.min(0)]),
     discount: new FormControl(0, [Validators.min(0)]),
-    productCategory: new FormControl(null, [Validators.required]),
+    productCategory: new FormControl(0, [Validators.required]),
     available: new FormControl(false),
     visible: new FormControl(false)
   });
@@ -103,7 +142,7 @@ export class NewProductComponent {
       });
       return; 
     }
-    const product = {
+    const product: Product = {
       name: this.createProductForm.value.name ?? '',
       description: this.createProductForm.value.description ?? '',
       specifies: this.createProductForm.value.specifies ?? '',
@@ -115,16 +154,27 @@ export class NewProductComponent {
       visible: this.createProductForm.value.visible ?? false,
       serviceProductProviderId: Number(localStorage.getItem('userId')),
     };
-    this.productService.add(product).subscribe({
-      next: (event: any) => {
-        this.router.navigate(['../'], { relativeTo: this.route });
-      },
-      error: (err: any) => {
-        console.error('Failed to create event:', err);
-      }
-    });
+    if (this.id !== -1) { // Indicates an update
+      this.productService.update(product, this.id).subscribe({
+        next: (event: any) => {
+          this.router.navigate(['../'], { relativeTo: this.route });
+        },
+        error: (err: any) => {
+          console.error('Failed to update product:', err);
+        }
+      });
+    } else {
+      this.productService.add(product).subscribe({
+        next: (event: any) => {
+          this.router.navigate(['../'], { relativeTo: this.route });
+        },
+        error: (err: any) => {
+          console.error('Failed to create product:', err);
+        }
+      });
+    }
     console.log(product);
-    this.snackBar.open('Product created successfully!', 'Close', {
+    this.snackBar.open('Product saved successfully!', 'Close', {
       duration: 3000,
       panelClass: ['snackbar-success']
     });
@@ -144,12 +194,11 @@ export class NewProductComponent {
   }
 
 
-  backToAllServicesPerhaps(): void {
-    if (this.service.id != -1) {
-      this.router.navigate(['/my-products'], {
-        queryParams: { id: this.service.id }
-      });
-    }
-  }
+  // backToAllServicesPerhaps(): void {
+  //   if (this.service.id != -1) {
+  //     this.router.navigate(['/my-products'], {
+  //       queryParams: { id: this.service.id }
+  //     });
+  //   }
+  // }
 }
-
