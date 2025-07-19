@@ -23,8 +23,8 @@ export class MyServicesComponent implements OnInit {
   constructor (public dialog: MatDialog, private router: Router, private serviceService: ServiceService) {}
 
   ngOnInit(): void {
-    this.serviceService.getMyServices().subscribe(data => {
-      this.myServices = data;
+    this.serviceService.getAll().subscribe(data => {
+      this.myServices = data.content;
     });
   }
 
