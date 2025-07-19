@@ -34,7 +34,7 @@
           [disabled]="!fetchedEventTypes || !fetchedMaxAttendances" class="filter-btn">Filter</button>
         <mat-form-field appearance="fill" class="search-field" color="primary">
           <mat-label>Search</mat-label>
-          <input matInput (input)="onSearch($event)" placeholder="Enter search term" />
+          <input type="search" matInput (change)="onSearch($event)" placeholder="Enter search term" />
           <button mat-icon-button matSuffix aria-label="Search">
             <mat-icon>search</mat-icon>
           </button>
@@ -68,7 +68,7 @@
         <button mat-stroked-button color="primary" (click)="openServiceProductFilterDialog()" [disabled]="!fetchedFilteringValues" class="filter-btn">Filter</button>
         <mat-form-field appearance="fill" class="search-field" color="primary">
           <mat-label>Search</mat-label>
-          <input matInput (input)="onSearch($event)" placeholder="Enter search term" />
+          <input matInput (change)="onSearch($event)" placeholder="Enter search term" />
           <button mat-icon-button matSuffix aria-label="Search">
             <mat-icon>search</mat-icon>
           </button>

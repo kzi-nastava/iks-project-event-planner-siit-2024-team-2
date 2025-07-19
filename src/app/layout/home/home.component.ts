@@ -154,12 +154,17 @@ export class HomeComponent {
       .subscribe({
           next: (response : PagedModel<EventSummaryDto>) => {
             this.eventTotalElements = response.page.totalElements;
-            // this.eventPageIndex = 0;
-            // this.eventFilter.page = 0;
-            if (this.selectedTabIndex == 0) {
-              // this.pageIndex = 0;
-              this.totalElements = response.page.totalElements;
+            
+            if (this.eventTotalElements <= this.eventPageSize * this.eventPageIndex ) {
+              this.eventPageIndex = 0;
+              this.eventFilter.page = 0;
+              if (this.selectedTabIndex == 0)
+                this.pageIndex = 0;
             }
+
+            if (this.selectedTabIndex == 0)
+              this.totalElements = response.page.totalElements;
+
             this.otherEvents = JSON.parse(JSON.stringify(response.content));
             this.addEmailBreaks(this.otherEvents);
           },
@@ -177,12 +182,9 @@ export class HomeComponent {
       .subscribe({
           next: (response : PagedModel<ServiceProductSummaryDto>) => {
             this.serviceProductTotalElements = response.page.totalElements;
-            // this.serviceProductPageIndex = 0;
-            // this.serviceProductFilter.page = 0;
-            if (this.selectedTabIndex == 1) {
-              // this.pageIndex = 0;
+
+            if (this.selectedTabIndex == 1)
               this.totalElements = response.page.totalElements;
-            }
             this.otherServiceProducts = JSON.parse(JSON.stringify(response.content));
             this.addEmailBreaks(this.otherServiceProducts);
             this.convertImageUrls(this.otherServiceProducts);
@@ -285,9 +287,22 @@ export class HomeComponent {
     }
   }
 
-  onSearch(event: any): void {
-    this.searchTerm = event.target.value;
-    console.log('Search term:', this.searchTerm);
+  onSearch(event: Event): void {
+    this.searchTerm = (event.target as HTMLInputElement).value;
+    
+    if (this.selectedTabIndex == 0) {
+      this.eventFilter.name = this.searchTerm === '' ? undefined : this.searchTerm;
+      this.eventPageIndex = 0;
+      this.pageIndex = 0;
+      this.eventFilter.page = 0;
+      this.fetchEvents();
+    } else {
+      this.serviceProductFilter.name = this.searchTerm === '' ? undefined : this.searchTerm;
+      this.serviceProductPageIndex = 0;
+      this.pageIndex = 0;
+      this.serviceProductFilter.page = 0;
+      this.fetchServiceProducts();
+    }
   }
   
   openEventFilterDialog(): void {
@@ -306,6 +321,10 @@ export class HomeComponent {
         this.eventFilter = result.filter;
         this.selectedCities = result.selectedCities;
         this.selectedEventTypes = result.selectedEventTypes;
+        this.eventPageIndex = 0;
+        if (this.selectedTabIndex == 0)
+          this.pageIndex = 0;
+        this.eventFilter.page = 0;
         this.fetchEvents();
       }
     });
@@ -327,6 +346,10 @@ export class HomeComponent {
         this.serviceProductFilter = result.filter;
         this.selectedCategories = result.selectedCategories;
         this.selectedAvailableTypes = result.selectedEventTypes;
+        this.serviceProductPageIndex = 0;
+        if (this.selectedTabIndex == 1)
+          this.pageIndex = 0;
+        this.serviceProductFilter.page = 0;
         this.fetchServiceProducts();
       }
     });
