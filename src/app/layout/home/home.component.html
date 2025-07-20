@@ -1,108 +1,126 @@
-
 <h4>Top 5 events</h4>
-<div class="row">
-  <div *ngFor="let event of topEvents">
-    <ng-template *ngTemplateOutlet="EventCard; context: {$implicit: event}"></ng-template>
-  </div>
+<div *ngIf="isLoadingTopEvents" class="progress-spinner-container">
+  <mat-progress-spinner mode="indeterminate"/>
 </div>
-<hr/>
-<div class="options-row">
-  <div class="left-part">
-    <h4>Explore events</h4>
-  </div>
-  <div class="options row">
-    <button mat-stroked-button color="primary" (click)="openFilterDialog()">Filter</button>
-    <mat-form-field appearance="fill" class="search-field" color="primary">
-      <mat-label>Search</mat-label>
-      <input matInput (input)="onSearch($event)" placeholder="Enter search term" />
-      <button mat-icon-button matSuffix aria-label="Search">
-        <mat-icon>search</mat-icon>
-      </button>
-    </mat-form-field>
-    <mat-form-field appearance="fill" class="sort-field">
-      <mat-label>Sort by</mat-label>
-      <mat-select [(value)]="selectedSortOption">
-        <mat-option value="date">Most popular</mat-option>
-        <mat-option value="name">Least popular</mat-option>
-        <mat-option value="location">Closest</mat-option>
-        <mat-option value="popularity">Farthest</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-</div>
-<div class="row">
-  <div *ngFor="let event of otherEvents">
-    <ng-template *ngTemplateOutlet="EventCard; context: {$implicit: event}"></ng-template>
-  </div>
-</div>
-<mat-paginator [length]="100"
-              [pageSize]="10"
-              [pageSizeOptions]="[5, 10, 25, 100]"
-              aria-label="Select page">
-</mat-paginator>
-
+<ng-container *ngIf="isBrowser">
+  <drag-scroll [scrollbar-hidden]="true" [drag-scroll-y-disabled]="true" [snap-disabled]="true">
+    <div drag-scroll-item class="drag-scroll-item" *ngFor="let event of topEvents">
+      <ng-template *ngTemplateOutlet="EventCard; context: {$implicit: event}"></ng-template>
+    </div>
+  </drag-scroll>
+</ng-container>
 <hr/>
 
 <h4>Top 5 services or products</h4>
-<div class="row">
-  <div *ngFor="let serviceProduct of topServiceProducts">
-    <ng-template *ngTemplateOutlet="ServiceProductCard; context: {$implicit: serviceProduct}"></ng-template>
-  </div>
+<div *ngIf="isLoadingTopServiceProducts" class="progress-spinner-container">
+  <mat-progress-spinner mode="indeterminate"/>
 </div>
+<ng-container *ngIf="isBrowser">
+  <drag-scroll [scrollbar-hidden]="true" [drag-scroll-y-disabled]="true" [snap-disabled]="true">
+    <div drag-scroll-item class="drag-scroll-item" *ngFor="let serviceProduct of topServiceProducts">
+      <ng-template *ngTemplateOutlet="ServiceProductCard; context: {$implicit: serviceProduct}"></ng-template>
+    </div>
+  </drag-scroll>
+</ng-container>
 <hr/>
-<div class="options-row">
-  <div class="left-part">
-    <h4>Explore services and products</h4>
-  </div>
-  <div class="options row">
-    <button mat-stroked-button color="primary" (click)="openFilterDialog()">Filter</button>
-    <mat-form-field appearance="fill" class="search-field" color="primary">
-      <mat-label>Search</mat-label>
-      <input matInput (input)="onSearch($event)" placeholder="Enter search term" />
-      <button mat-icon-button matSuffix aria-label="Search">
-        <mat-icon>search</mat-icon>
-      </button>
-    </mat-form-field>
-    <mat-form-field appearance="fill" class="sort-field">
-      <mat-label>Sort by</mat-label>
-      <mat-select [(value)]="selectedSortOption">
-        <mat-option value="date">Most popular</mat-option>
-        <mat-option value="name">Least popular</mat-option>
-        <mat-option value="location">Least expensive</mat-option>
-        <mat-option value="popularity">Most expensive</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-</div>
-<div class="row">
-  <div *ngFor="let serviceProduct of otherServiceProducts">
-    <ng-template *ngTemplateOutlet="ServiceProductCard; context: {$implicit: serviceProduct}"></ng-template>
-  </div>
-</div>
-<mat-paginator [length]="100"
-              [pageSize]="10"
-              [pageSizeOptions]="[5, 10, 25, 100]"
-              aria-label="Select page">
+<mat-tab-group (selectedTabChange)="onTabChange($event)">
+  <mat-tab label="Events">
+    <div class="tab-start row">
+      <div class="tab-label">
+        <h4>Explore events</h4>
+      </div>
+      <div class="options row">
+        <button mat-stroked-button color="primary" (click)="openEventFilterDialog()" 
+          [disabled]="!fetchedEventTypes || !fetchedMaxAttendances" class="filter-btn">Filter</button>
+        <mat-form-field appearance="fill" class="search-field" color="primary">
+          <mat-label>Search</mat-label>
+          <input type="search" matInput (change)="onSearch($event)" placeholder="Enter search term" />
+          <button mat-icon-button matSuffix aria-label="Search">
+            <mat-icon>search</mat-icon>
+          </button>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="sort-field">
+          <mat-label>Sort by</mat-label>
+          <mat-select [(value)]="eventSelectedSortOption" (selectionChange)="onSortEvents()">
+            <mat-option value="date-desc">Newest first</mat-option>
+            <mat-option value="date-asc">Oldest first</mat-option>
+            <mat-option value="name-asc">A-Z</mat-option>
+            <mat-option value="name-desc">Z-A</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div *ngIf="isLoadingEvents" class="progress-spinner-container">
+      <mat-progress-spinner mode="indeterminate"/>
+    </div>
+    <div class="row">
+      <div *ngFor="let event of otherEvents">
+        <ng-template *ngTemplateOutlet="EventCard; context: {$implicit: event}"></ng-template>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab label="Services/Products">
+    <div class="tab-start row">
+      <div class="tab-label">
+        <h4>Explore services and products</h4>
+      </div>
+      <div class="options row">
+        <button mat-stroked-button color="primary" (click)="openServiceProductFilterDialog()" [disabled]="!fetchedFilteringValues" class="filter-btn">Filter</button>
+        <mat-form-field appearance="fill" class="search-field" color="primary">
+          <mat-label>Search</mat-label>
+          <input matInput (change)="onSearch($event)" placeholder="Enter search term" />
+          <button mat-icon-button matSuffix aria-label="Search">
+            <mat-icon>search</mat-icon>
+          </button>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="sort-field">
+          <mat-label>Sort by</mat-label>
+          <mat-select [(value)]="serviceProductSelectedSortOption" (selectionChange)="onSortServiceProducts()">
+            <mat-option value="name-asc">A-Z</mat-option>
+            <mat-option value="name-desc">Z-A</mat-option>
+            <mat-option value="price-desc">Most expensive first</mat-option>
+            <mat-option value="price-asc">Cheapest first</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div *ngIf="isLoadingServiceProducts" class="progress-spinner-container">
+      <mat-progress-spinner mode="indeterminate"/>
+    </div>
+    <div class="row">
+      <div *ngFor="let serviceProduct of otherServiceProducts">
+        <ng-template *ngTemplateOutlet="ServiceProductCard; context: {$implicit: serviceProduct}"></ng-template>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+<mat-paginator [length]="totalElements"
+[pageIndex]="pageIndex"
+[pageSize]="pageSize"
+[pageSizeOptions]="[12, 24, 48]"
+[showFirstLastButtons]="true"
+(page)="onPageChange($event)"
+aria-label="Select page">
 </mat-paginator>
 
 
 
 
-<ng-template #EventCard let-event>
+<ng-template #EventCard let-eventSummary>
   <mat-card class="event-card" appearance="outlined">
     <mat-card-header>
       <img mat-card-avatar class="profile-picture" src="images/avatar.png" alt="Profile Picture" />
       <mat-card-title-group>
-        <mat-card-title>Petar Jović</mat-card-title>
-        <mat-card-subtitle>petar.jovic&commat;gmail.com</mat-card-subtitle>
+        <mat-card-title class="event-creator-name" [innerHTML]="eventSummary.creatorName"></mat-card-title>
+        <mat-card-subtitle class="event-creator-email" [innerHTML]="eventSummary.creatorEmail"></mat-card-subtitle>
       </mat-card-title-group>
     </mat-card-header>
     <mat-card-content>
       <br>
-      <p class="name">{{event.name}}</p>
-      <p class="date">7th if February, 2025</p>
+      <p class="name">{{eventSummary.name}}</p>
+      <p class="date">{{eventSummary.date | date: 'MMMM d, yyyy'}}</p>
       <br>
-      <p class="description">{{event.description}}</p>
+      <p class="description">{{eventSummary.description}}</p>
       <br>
     </mat-card-content>
     <mat-card-actions align="start">
@@ -116,14 +134,15 @@
     <mat-card-header>
       <img mat-card-avatar class="profile-picture" src="images/monogram.png" alt="Profile Picture" />
       <mat-card-title-group>
-        <mat-card-title>Catering Peric</mat-card-title>
-        <mat-card-subtitle>marko.peric&commat;cperic.rs</mat-card-subtitle>
+        <mat-card-title [innerHTML]="serviceProduct.creatorName"></mat-card-title>
+        <mat-card-subtitle [innerHTML]="serviceProduct.creatorEmail"></mat-card-subtitle>
+        <img *ngIf="serviceProduct.image" mat-card-lg-image class="card-image" [src]="serviceProduct.image" alt="Service or product image">
       </mat-card-title-group>
     </mat-card-header>
     <mat-card-content>
       <br>
       <p class="name">{{serviceProduct.name}}</p>
-      <p class="price">Price: ${{serviceProduct.price}}</p>
+      <p class="price">Price: €{{serviceProduct.price}}</p>
       <br>
       <p class="description">{{serviceProduct.description}}</p>
       <br>
