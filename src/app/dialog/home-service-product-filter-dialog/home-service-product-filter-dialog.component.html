@@ -30,7 +30,7 @@
     <div fxLayout="column" [hidden]="selectedDType != 'SERVICE'" class="service-options">
         <mat-label class="slider-label">Duration:</mat-label>
         <mat-slider [min]="durationRange[0]" [max]="durationRange[1]"
-        step="0.5" discrete class="hide-ripple" [disabled]="disabledDurationSlider">
+        step="0.5" discrete class="hide-ripple" [disabled]="disabledDurationSlider" [displayWith]="formatDuration">
         <input matSliderStartThumb [(value)]="data.filter.minDuration">
         <input matSliderEndThumb [(value)]="data.filter.maxDuration"> 
         </mat-slider>

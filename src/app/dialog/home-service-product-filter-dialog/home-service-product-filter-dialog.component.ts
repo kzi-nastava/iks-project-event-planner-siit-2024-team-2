@@ -178,6 +178,10 @@ export class HomeServiceProductFilterDialogComponent {
     return "€" + value;
   }
   
+  formatDuration(value: number): string {
+    return value + "h";
+  }
+  
   onCheckboxClick() {
     if (this.checked) {
       this.checked = false;
