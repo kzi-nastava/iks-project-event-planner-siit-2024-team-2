@@ -13,6 +13,7 @@ import { ProductService } from '../../services/product.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Product } from '../../model/product';
+import { take } from 'rxjs';
 
 
 
@@ -36,7 +37,7 @@ export class NewProductComponent {
   ];
   selectedCategoryId: number = this.productCategories[0].id;
   id: number = -1;
-  eventTypes: EventType[] = [{name: 'Wedding', id: 1}, {name: 'Funeral', id: 2}, {name: 'Birthday', id: 3}, {name: 'Conference', id: 4}];
+  eventTypes: EventType[] = [];
   selectedEvents: number[] = [];
   
   constructor(
@@ -46,13 +47,9 @@ export class NewProductComponent {
     private serviceCategoryService: ServiceCategoryService,
     private productService: ProductService,    
     private snackBar: MatSnackBar,
-  ) {
-    // Initialize selectedEvents with default values
-  }
+  ) {}
 
-  // binding to the service data, on which the user clicked
   loadEventTypes(): void {
-    // Fetch event types from the service
     this.eventTypeService.getAll().subscribe(
       (eventTypes) => {
         this.eventTypes = eventTypes;
@@ -77,54 +74,69 @@ export class NewProductComponent {
   }
 
   ngOnInit(): void {
-    this.loadEventTypes();
-    this.loadServiceCategories();
     this.route.queryParams.subscribe(params => {
       const productId = params['id'];
       if (productId) {
-        this.fetchServiceData(productId); 
+        this.fetchProductData(productId);
+        this.id = Number(productId);
       }
-      this.id = productId ? Number(productId) : -1;
+      else {
+        this.loadEventTypes();
+        this.loadServiceCategories();
+        this.id = -1;
+        this.createProductForm.reset();
+      }
     });
   }
 
-    fetchServiceData(productId: number): void {
-      this.productService.getProduct(productId).subscribe(
-        (service: Product) => {
-          this.createProductForm.patchValue({
-            name: service.name,
-            description: service.description,
-            specifies: service.specifies,
-            price: service.price,
-            discount: service.discount,
-            productCategory: service.categoryId,
-            available: service.available,
-            visible: service.visible
-          });
-          this.selectedEvents = service.availableEventTypesIds || [];
-          this.selectedCategoryId = service.categoryId || this.productCategories[0].id;
-          this.snackBar.open('Product data loaded successfully!', 'Close', {
-            duration: 3000,
-            panelClass: ['snackbar-success']
-          });
-        },
-        (error) => {
-          console.error('Error fetching product data:', error);
-          this.snackBar.open('Failed to load product data.', 'Close', {
-            duration: 3000,
-            panelClass: ['snackbar-error']
-          });
-        }
-      );
-      this.loadServiceCategories()
-      this.loadEventTypes();
+  fetchProductData(productId: number): void {
+    this.productService.getProduct(productId).subscribe(
+      (product: any) => {
+        this.createProductForm.patchValue({
+          name: product.name,
+          description: product.description,
+          specifies: product.specifies,
+          price: product.price,
+          discount: product.discount,
+          productCategory: product.categoryId,
+          available: product.available,
+          visible: product.visible
+        });
+        this.selectedEvents = product.eventTypes.map((event: any) => event.id) || []; 
+        this.selectedCategoryId = product.serviceProductCategoryDto.id || -1;
+        this.createProductForm.get('productCategory')?.setValue(this.selectedCategoryId);
+      },
+      (error) => {
+        console.error('Error fetching product data:', error);
+        this.snackBar.open('Failed to load product data.', 'Close', {
+          duration: 3000,
+          panelClass: ['snackbar-error']
+        });
+      }
+    );
+    this.eventTypeService.getAll().subscribe(
+      (eventTypes) => {
+        this.eventTypes = eventTypes;
+      },
+      (error) => {
+        console.error('Error fetching event types:', error);
+      }
+    );
 
-    }
+    this.serviceCategoryService.getAll().subscribe(
+      (categories) => {
+        this.productCategories = categories;
+      },
+      (error) => {
+        console.error('Error fetching categories:', error);
+      }
+    );
+  }
 
   createProductForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
     description: new FormControl('', [Validators.required, Validators.minLength(5)]),
-    specifies: new FormControl('', [Validators.required]),
+    specifies: new FormControl(''),
     price: new FormControl(0, [Validators.required, Validators.min(0)]),
     discount: new FormControl(0, [Validators.min(0)]),
     productCategory: new FormControl(0, [Validators.required]),
@@ -173,7 +185,6 @@ export class NewProductComponent {
         }
       });
     }
-    console.log(product);
     this.snackBar.open('Product saved successfully!', 'Close', {
       duration: 3000,
       panelClass: ['snackbar-success']

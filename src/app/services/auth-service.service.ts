@@ -37,7 +37,10 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    if (typeof window !== 'undefined' && localStorage) {
+      return localStorage.getItem('token');
+    }
+    return null;
   }
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
