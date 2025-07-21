@@ -9,7 +9,36 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
-    width: 300px
+    width: 300px;
+}
+
+.error-text {
+  color: red;
+  font-size: 13px;
+  height: 2px;           /* Reserve space */
+  visibility: hidden;     /* Hide but reserve space */
+  margin-bottom: 30px;    /* Adjust as needed */
+}
+
+.error-text.visible {
+  visibility: visible;
+}
+
+.second-error {
+    position: relative;
+    bottom: 30px;
+}
+
+.error-text span {
+  visibility: hidden;
+  display: block;
+  height: 0;
+  width: 400px;
+}
+
+.error-text span.visible {
+  visibility: visible;
+  height: auto;
 }
 
 .row {
@@ -40,6 +69,7 @@
 .custom-select-wrapper {
     position: relative;
     width: 100%;
+    margin-bottom: 15px;
 }
 
 /* Custom arrow styling */
@@ -55,7 +85,7 @@
 
 /* Container for the form */
 .form-container {
-    margin-top: 30px;
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
     width: 300px; /* Adjust width as needed */
@@ -80,7 +110,6 @@
     outline: none; /* Remove default outline */
     transition: all 0.3s ease;
     box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle inner shadow */
-    margin-bottom: 20px;
 }
 
 /* Placeholder text color */
@@ -147,7 +176,7 @@
     cursor: pointer; /* Pointer cursor on hover */
 }
 
-#attachmentBtn {
+#spajalica {
     height: 58px;
     width: 40px;
     cursor: pointer;

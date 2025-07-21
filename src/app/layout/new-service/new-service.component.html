@@ -1,38 +1,75 @@
+<form [formGroup]="newServiceForm" (ngSubmit)="onSubmit()">
 <div class="row" id="all">
 <div id="left-div">
 
     <!-- Service categories combobox -->
     <div class="custom-combobox">
-        <label for="serviceCategories" class="custom-label">Service category:</label>
+        <label for="serviceCategories" class="custom-label" style="margin-bottom: 23px;">Service category:</label>
         <div class="custom-select-wrapper">
-            <select id="serviceCategories" class="custom-select"[(ngModel)]="service.category.name">
+            <select id="serviceCategories" class="custom-select" formControlName="category">
                 <option *ngFor="let category of serviceCategories" [value]="category">{{ category }}</option>
             </select>
             <span class="custom-arrow">▼</span>
         </div>
+
+        <div class="error-text" [class.visible]="newServiceForm.get('category')?.errors?.['required'] && newServiceForm.get('category')?.touched">
+            Category is required.
+        </div>
     </div>
 
-    <button class="fancy-button" style="margin-top: 100px;">New category request</button>
+    <button class="fancy-button" style="margin-top: 87px;">New category request</button>
 
     <!-- 6 textboxes for: name, desc, spec, price, discount, and reservation deadline-->
     <div class="form-container">
         <label for="name" class="form-label">Name:</label>
-        <input [(ngModel)]=service.name type="text" id="name" class="form-input" placeholder="Enter the name">
+        <input formControlName="name" type="text" id="name" class="form-input" placeholder="Enter the name">
+        <div class="error-text" [class.visible]="newServiceForm.get('name')?.invalid && newServiceForm.get('name')?.touched">
+            Name is required.
+        </div>
 
         <label for="description" class="form-label">Description:</label>
-        <textarea [(ngModel)]=service.description type="text" id="description" class="form-input" placeholder="Enter the description"></textarea>
+        <textarea formControlName="description" type="text" id="description" class="form-input" placeholder="Enter the description"></textarea>
+        <div class="error-text" [class.visible]="newServiceForm.get('description')?.invalid && newServiceForm.get('description')?.touched">
+            Description is required.
+        </div>
 
         <label for="specifies" class="form-label">Specifies:</label>
-        <textarea [(ngModel)]=service.specifies id="specifies" class="form-input" placeholder="Enter the specifies"></textarea>
+        <textarea formControlName="specifies" id="specifies" class="form-input" placeholder="Enter the specifies"></textarea>
+        <div class="error-text" [class.visible]="newServiceForm.get('specifies')?.invalid && newServiceForm.get('specifies')?.touched">
+            Specifies is required.
+        </div>
 
         <label for="price" class="form-label">Price (€):</label>
-        <input [(ngModel)]=service.price type="number" id="price" class="form-input" placeholder="Enter the price">
-
-        <label for="discount" class="form-label">Discount (€):</label>
-        <input [(ngModel)]=service.discount type="number" id="discount" class="form-input" placeholder="Enter the discount">
+        <input formControlName="price" type="number" id="price" class="form-input" placeholder="Enter the price">
         
+        <div class="error-text">
+            <span class="error-text" [class.visible]="newServiceForm.get('price')?.errors?.['required'] && newServiceForm.get('price')?.touched">
+                Price is required.
+            </span>
+            <span class="error-text second-error" [class.visible]="newServiceForm.get('price')?.errors?.['min'] && newServiceForm.get('price')?.touched">
+                The minimum number is 0.
+            </span>
+        </div>
+        
+        <label for="discount" class="form-label">Discount (€):</label>
+        <input formControlName="discount" type="number" id="discount" class="form-input" placeholder="Enter the discount">
+        
+        <div class="error-text" [class.visible]="newServiceForm.get('discount')?.errors?.['min'] && newServiceForm.get('discount')?.touched">
+            The minimum number is 0.
+        </div>
+
         <label for="reservation-deadline" class="form-label">Reservation deadline (days):</label>
-        <input [(ngModel)]=service.reservationDaysDeadline type="number" id="reservation-days-deadline" class="form-input" placeholder="Enter the deadline reservation">
+        <input formControlName="reservationDaysDeadline" type="number" id="reservation-days-deadline" class="form-input" placeholder="Enter the deadline reservation">
+
+        <div class="error-text">
+            <span class="error-text" [class.visible]="newServiceForm.get('reservationDaysDeadline')?.errors?.['required'] && newServiceForm.get('reservationDaysDeadline')?.touched">
+                Reservation deadline is required.
+            </span>
+            <span class="error-text second-error" [class.visible]="newServiceForm.get('reservationDaysDeadline')?.errors?.['min'] && newServiceForm.get('reservationDaysDeadline')?.touched">
+                The minimum number is 0.
+            </span>
+        </div>
+
     </div>
 </div>
 
@@ -41,48 +78,76 @@
     <div class="listbox-container">
         <div class="listbox">
             <label class="listbox-item" *ngFor="let event of eventTypes">
-                <input type="checkbox" [(ngModel)]="selectedEvents[event]" />
+                <input type="checkbox" (change)="onCheckboxChange($event, event)" />
                 <span>{{ event }}</span>
             </label>
         </div>
     </div>
 
+    <button class="fancy-button" style="margin-top: 25px;">Show all images</button>
 
-    <label for="images" names="images" class="form-label" style="margin-top: 35px;">Images:</label>
+    <label for="images" names="images" class="form-label" style="margin-top: 5px;">Images:</label>
     <div class="row">
-        <textarea [(ngModel)]=service.images id="photos" class="form-input" placeholder="Attach the photo(s)"></textarea>
-        <button id="attachmentBtn">📎</button>
+        <textarea formControlName="images" id="images" class="form-input" placeholder="Attach the photo(s)"></textarea>
+        <button id="spajalica">📎</button>
+    </div>
+    <div class="error-text" [class.visible]="newServiceForm.get('images')?.invalid && newServiceForm.get('images')?.touched">
+        Image(s) is/are required.
     </div>
 
-    <div>
-        <input [(ngModel)]=service.visible type="checkbox" name="visible-checkbox" value="visible"> visibility
-        <input [(ngModel)]=service.available type="checkbox" name="available-checkbox" value="available" style="margin-left: 50px;"> availability
-        <input [(ngModel)]=service.automaticReserved type="checkbox" name="automaticReserved" value="automaticReserved"> automatic acceptance
-   
+    <div style="position: relative; bottom: 10px;">
+        <input formControlName="visible" type="checkbox" name="visible-checkbox" value="visible"> visibility
+        <input formControlName="available" type="checkbox" name="available-checkbox" value="available" style="margin-left:50px;"> availability
+        <input formControlName="automaticReserved" type="checkbox" name="automaticReserved" value="automaticReserved"> automatic acceptance
     </div>
 
 
     <!-- 4 other textboxes: duration, min and max min-engagement-duration cancellation deadline -->
-    <div class="form-container" style="margin-top: 8px;">
+    <div formGroupName="durationForm" class="form-container" style="margin-top: 23px;">
         <label for="duration" class="form-label">Duration:</label>
-        <input [(ngModel)]=service.duration type="number" id="duration" class="form-input" placeholder="Enter the duration" style="height: 35px;">
+        <input formControlName="duration" type="number" id="duration" class="form-input" placeholder="Enter the duration" style="height: 35px;">
+
+        <div class="error-text" [class.visible]="newServiceForm.get('durationForm.duration')?.errors?.['min'] && newServiceForm.get('durationForm.duration')?.touched">
+            The minimum value is 0.
+        </div>
 
         <label for="min-engagement-duration" class="form-label">Minimum engagement duration (hours):</label>
-        <input [(ngModel)]=service.minEngagementDuration type="number" id="min-engagement-duration" class="form-input" placeholder="Enter the minimum duration">
+        <input formControlName="minEngagementDuration" type="number" id="min-engagement-duration" class="form-input" placeholder="Enter the minimum duration">
+        
+        <div class="error-text" [class.visible]="newServiceForm.get('durationForm.minEngagementDuration')?.errors?.['min'] && newServiceForm.get('durationForm.minEngagementDuration')?.touched">
+            The minimum value is 0.
+        </div>
 
         <label for="max-engagement-duration" class="form-label">Maximum engagement duration (hours):</label>
-        <input [(ngModel)]=service.maxEngagementDuration type="number" id="max-engagement-duration" class="form-input" placeholder="Enter the maximum duration">
-
-        <label for="cancellation-deadline" class="form-label">Cancellation deadline (days):</label>
-        <input [(ngModel)]=service.cancellationDaysDeadline type="number" id="cancellation-days-deadline" class="form-input" placeholder="Enter the deadline cancellation">
+        <input formControlName="maxEngagementDuration" type="number" id="max-engagement-duration" class="form-input" placeholder="Enter the maximum duration">
+    </div>
+    
+    <div class="error-text">
+        <span class="error-text" [class.visible]="newServiceForm.get('durationForm')?.invalid && (newServiceForm.get('durationForm.duration')?.touched || newServiceForm.get('durationForm.maxEngagementDuration')?.touched)">
+            Duration is required, or both min and max engagement duration.
+        </span>
+        <span class="error-text second-error" [class.visible]="newServiceForm.get('durationForm.maxEngagementDuration')?.errors?.['min'] && newServiceForm.get('durationForm.maxEngagementDuration')?.touched">
+            The minimum number is 0.
+        </span>
     </div>
 
+    <label for="cancellation-deadline" class="form-label">Cancellation deadline (days):</label>
+    <input formControlName="cancellationDaysDeadline" type="number" id="cancellation-days-deadline" class="form-input" placeholder="Enter the deadline cancellation">
     
+    <div class="error-text">
+        <span class="error-text" [class.visible]="newServiceForm.get('cancellationDaysDeadline')?.errors?.['required'] && newServiceForm.get('cancellationDaysDeadline')?.touched">
+            Cancellation deadline is required.
+        </span>
+        <span class="error-text second-error" [class.visible]="newServiceForm.get('cancellationDaysDeadline')?.errors?.['min'] && newServiceForm.get('cancellationDaysDeadline')?.touched">
+            The minimum number is 0.
+        </span>
+    </div>
+
 </div>
 </div>
 
 <div class="row" id="end">
-    <button (click)="backToAllServicesPerhaps()" class="fancy-button">Save</button>
+    <button (click)="backToAllServicesPerhaps()" class="fancy-button" type="submit">Save</button>
     <button (click)="backToAllServicesPerhaps()" class="fancy-button" id="cancel">Cancel</button>
 </div>
-
+</form>
