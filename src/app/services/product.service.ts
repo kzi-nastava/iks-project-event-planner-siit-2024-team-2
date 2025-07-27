@@ -39,10 +39,10 @@ export class ProductService {
   deleteProduct(id: number): Observable<void> {
     return this.httpClient.delete<void>(`${this.apiHost}/${id}`);
   }
-  filter(categories?: number[], eventTypes?: number[], minPrice?: number, maxPrice?: number, available?: boolean): Observable<Product[]> {
+  filter(category?: number, eventTypes?: number[], minPrice?: number, maxPrice?: number, available?: boolean): Observable<Product[]> {
     let params = new HttpParams();
-    if (categories && categories.length > 0) {
-      params = params.set('categories', categories.join(','));
+    if (category) {
+      params = params.set('category', category.toString());
     }
     if (eventTypes && eventTypes.length > 0) {
       params = params.set('eventTypes', eventTypes.join(','));

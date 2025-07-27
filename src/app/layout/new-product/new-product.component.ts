@@ -203,13 +203,4 @@ export class NewProductComponent {
       this.selectedEvents.push(eventTypeId);
     }
   }
-
-
-  // backToAllServicesPerhaps(): void {
-  //   if (this.service.id != -1) {
-  //     this.router.navigate(['/my-products'], {
-  //       queryParams: { id: this.service.id }
-  //     });
-  //   }
-  // }
 }

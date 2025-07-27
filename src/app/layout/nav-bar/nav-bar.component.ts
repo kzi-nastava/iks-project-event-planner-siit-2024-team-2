@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -28,13 +28,14 @@ import { Subscription } from 'rxjs';
 export class NavBarComponent {
   signOut() {
     this.authService.logout();
+     this.router.navigate(['/signin']);
   }
   toggle: boolean = false;
   isLoggedIn: boolean = false;
   private authSub!: Subscription;
 
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.authSub = this.authService.isLoggedIn$.subscribe(status => {

@@ -15,9 +15,6 @@
       <div class="card-content">
         <h3>{{ product.name }}</h3>
         <p>{{ product.description }}</p>
-        <ul>
-          <li *ngFor="let event of product.availableEventTypesIds">{{ event }}</li>
-        </ul>
         <div class="row">
           <p><strong>Price:</strong> {{ product.price }}</p>
           <p><strong>Discount:</strong> {{ product.discount }}</p>
