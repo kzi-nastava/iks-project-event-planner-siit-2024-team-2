@@ -19,15 +19,15 @@
 
     <div class="filter-category">
         <h5>Service categories</h5>
-        <select id="serviceCategories" class="custom-select" [formControl]="selectedCategories" multiple>
-            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+        <select id="serviceCategories" class="custom-select" [formControl]="selectedCategory">
+            <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
         </select>
     </div>
 
     <div class="filter-category">
         <h5>Event types</h5>
         <select id="eventTypes" class="custom-select" [formControl]="selectedEventTypes" multiple>
-            <option *ngFor="let eventType of eventTypes" [value]="eventType">{{ eventType }}</option>
+            <option *ngFor="let eventType of eventTypes" [value]="eventType.id">{{ eventType.name }}</option>
         </select>
     </div>
 
