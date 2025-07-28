@@ -3,7 +3,7 @@
   color: black;
 }
 .sidenav-container {
-  height: 100vh;
+  height: calc(100vh - 64px); /* 64px is toolbar full height */
 }
 
 .content {
@@ -17,6 +17,7 @@ mat-sidenav {
 
 mat-sidenav-content {
   padding: 20px;
+  box-sizing: border-box; 
 }
 
 mat-toolbar {
