@@ -1,52 +1,100 @@
 @use "@angular/material" as mat;
 @include mat.core();
 
-$event-planner-pallete: (
-    50: #7C96FF,
-    100: #7C96FF,
-    200: #7C96FF,
-    300: #7C96FF,
-    400: #7C96FF,
-    500: #7C96FF,
-    600: #7C96FF,
-    700: #7C96FF,
-    800: #7C96FF,
-    900: #7C96FF,
-    contrast: (
-        50: #EEF2FF,
-        100: #EEF2FF,
-        200: #EEF2FF,
-        300: #EEF2FF,
-        400: #EEF2FF,
-        500: #EEF2FF,
-        600: #EEF2FF,
-        700: #EEF2FF,
-        800: #EEF2FF,
-        900: #EEF2FF
-    )
-);
-$event-planner-primary:    mat.m2-define-palette($event-planner-pallete);
-
-$event-planner-theme: mat.m2-define-light-theme((
-    color: (
-        primary: $event-planner-primary,
-        accent: $event-planner-primary,
-        warn: $event-planner-primary,
-    ),
-));
-@include mat.all-component-themes($event-planner-theme);
+$primary: #7C96FF;
+$warn: #FFD52F;
+$primary-container: #EEF2FF;
+$lighter-primary-container: #eff2fa;
+$selection-color: #C2CFFF;
+$secondary-container: #D8E0FF;
+$secondary-container-night: #425283;
+$pickled-bluewood: #2B3352;
+$placeholder-text-color: #49454FB5;
+$cod-gray: #1E1E1E;
+$dark-gray: #4D4D4D;
+$gray: #8A8A8A;
+$light-gray: #B6B6B6;
+$transparent: #FFFFFF00;
 
 :root {
-    --mdc-dialog-container-color: #EEF2FF;
-    --mdc-filled-text-field-container-color: #EEF2FF !important;
-    --mdc-filled-text-field-label-text-color: black !important;
-    --mat-select-enabled-trigger-text-color: black !important;
-    --mdc-icon-button-icon-color: black !important;
-    --mdc-filled-text-field-focus-label-text-color:#{map-get($event-planner-pallete, 500)} !important;
-    --mdc-dialog-supporting-text-color:#{map-get($event-planner-pallete, 500)} !important;
-};
+    --mdc-dialog-container-color: $primary-container;
+    --mdc-filled-text-field-container-color: $primary-container !important;
+    --mdc-filled-text-field-label-text-color: $cod-gray !important;
+    --mat-select-enabled-trigger-text-color: $cod-gray !important;
+    --mdc-icon-button-icon-color: $cod-gray !important;
+    --mdc-filled-text-field-focus-label-text-color: $primary !important;
+    --mdc-dialog-supporting-text-color: $primary !important;
+    --mdc-checkbox-selected-icon-color: $primary !important;
 
-html, body { height: 100%; }
+  @include mat.paginator-overrides((
+    container-text-color: $cod-gray,
+    container-background-color: $primary-container,
+    enabled-icon-color: $primary
+  ));
+  @include mat.button-overrides((
+    label-text-color: $primary
+  ));
+  @include mat.progress-spinner-overrides((
+    active-indicator-color: $primary,
+  ));
+  @include mat.dialog-overrides((
+    container-color: $primary-container,
+    subhead-color: $cod-gray,
+  ));
+  @include mat.slider-overrides((
+    active-track-color: $selection-color,
+    handle-color: $primary,
+    focus-handle-color: $primary,
+    label-container-color: $primary
+  ));
+  @include mat.select-overrides((
+    panel-background-color: $lighter-primary-container,
+    enabled-arrow-color : $primary,
+    focused-arrow-color : $primary,
+  ));
+  @include mat.pseudo-checkbox-overrides((
+    selected-icon-color: $primary,
+  ));
+  @include mat.checkbox-overrides((
+    selected-icon-color: $primary,
+  ));
+  @include mat.tabs-overrides((
+    active-focus-indicator-color: $primary,
+  ));
+  @include mat.datepicker-overrides((
+    // calendar-body-label-text-color: orange,
+    calendar-container-background-color: $lighter-primary-container,
+    calendar-date-today-outline-color: $primary,
+    calendar-date-selected-state-background-color: $primary
+  ));
+}
+.mat-mdc-outlined-button {
+  @include mat.button-overrides((
+    label-text-color: $primary
+));}
+.mat-mdc-raised-button, .mat-mdc-unelevated-button{
+  @include mat.button-overrides((
+    container-color: $primary,
+    label-text-color: white
+));}
+.mat-mdc-text-button {
+  @include mat.button-overrides((
+    label-text-color: $primary
+));}
+
+mat-checkbox { // the intended color override doesn't seem to work so this is a neccessary workaround
+  input[aria-checked="mixed"], .mdc-checkbox--selected {
+    ~ .mdc-checkbox__background {
+      background-color: $primary !important;
+      border-color: $primary !important;
+    }
+  }
+}
+
+html, body { 
+    height: 100%; 
+    // overflow: hidden !important; /* Disable body scroll */
+}
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
 
 /* Select dropdown styling */
@@ -95,7 +143,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
 }
 
 /* Hover effect */
-.fancy-button:hover, #spajalica {
+.fancy-button:hover, #attachmentBtn {
     background-color: #0056b3; /* Darker background on hover */
     box-shadow: 0 6px 12px rgba(0, 123, 255, 0.6); /* Darker shadow on hover */
 }
@@ -107,7 +155,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
 }
 
 /* Active effect (when button is clicked) */
-.fancy-button:active, #spajalica {
+.fancy-button:active, #attachmentBtn {
     background-color: #004085; /* Even darker background when clicked */
     box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* Subtle shadow on click */
 }
@@ -131,4 +179,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
     align-items: flex-start; /* Align items to the top */
     justify-content: center;
     padding-bottom: 20px;
+}
+.hide-ripple .mat-ripple{
+  display: none !important;
 }

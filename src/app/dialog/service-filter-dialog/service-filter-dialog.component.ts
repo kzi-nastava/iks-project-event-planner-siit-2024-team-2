@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import { MatCheckbox } from '@angular/material/checkbox';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogContent, MatDialogRef } from '@angular/material/dialog';
-import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import { MatCheckbox } from '@angular/material/checkbox';
 import { CommonModule } from '@angular/common';
 import { ServiceProductCategoryService } from '../../services/service-product-category.service';
 import { EventTypeService } from '../../services/event-type.service';
+import { ServiceProductCategory } from '../../model/service-product-category';
+import { EventType } from '../../model/event-type';
 
 @Component({
   selector: 'app-service-filter-dialog',
@@ -14,25 +16,50 @@ import { EventTypeService } from '../../services/event-type.service';
   styleUrl: './service-filter-dialog.component.css'
 })
 export class ServiceFilterDialogComponent {
-  categories: any[] = [];
-  eventTypes: any[] = [];
+  categories: ServiceProductCategory[] = [];
+  eventTypes: EventType[] = [];
 
-  constructor(private dialogRef: MatDialogRef<ServiceFilterDialogComponent>,
-    private categoryService: ServiceProductCategoryService, private eventTypesService: EventTypeService) { }
+  // Form controls
+  minPrice = new FormControl();
+  maxPrice = new FormControl();
+  available = new FormControl(false);
+  selectedCategory = new FormControl();
+  selectedEventTypes = new FormControl([]);
+
+  constructor(
+    private dialogRef: MatDialogRef<ServiceFilterDialogComponent>,
+    private categoryService: ServiceProductCategoryService,
+    private eventTypesService: EventTypeService
+  ) {}
+
+  ngOnInit(): void {
+    this.categoryService.getAll().subscribe((data) => {
+      this.categories = data.map(c => c);
+    });
+
+    this.eventTypesService.getAll().subscribe((data) => {
+      this.eventTypes = data.map(e => e);
+    });
+  }
+
   close() {
     this.dialogRef.close();
   }
 
-  ngOnInit(): void {
-    this.categoryService.getAll().subscribe((data) => {
-      this.categories = data.map(c => c.name);
+  filter() {
+    console.log('Filtering with:', {
+      category: this.selectedCategory.value,
+      eventTypes: this.selectedEventTypes.value,
+      minPrice: this.minPrice.value,
+      maxPrice: this.maxPrice.value,
+      available: this.available.value,
     });
-
-    this.eventTypesService.getAll().subscribe((data) => {
-      this.eventTypes = data.map(e => e.name);
-    })
+    this.dialogRef.close({
+      category: Number(this.selectedCategory.value),
+      eventTypes: this.selectedEventTypes.value,
+      minPrice: Number(this.minPrice.value || 0),
+      maxPrice: Number(this.maxPrice.value || 0),
+      available: this.available.value
+    });
   }
-  
-  selectedCategories = new FormControl([]);
-  selectedEventTypes = new FormControl([]);
 }

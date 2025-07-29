@@ -10,10 +10,10 @@
   width: 100%;
 }
 
-ng:deep button {
+button {
   margin: 10px;
-  background-color: #7C96FF important!;
-  color: black important!;;
+  /* background-color: #7C96FF important!; */
+  /* color: black important!;; */
 }
 
 button:disabled {

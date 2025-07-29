@@ -1,0 +1,11 @@
+.form-container{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+    overflow-x: hidden !important;
+}
+.slider-label{
+    margin-bottom: 12px;
+    margin-left: 2px;
+    font-weight: 500;
+}

@@ -99,7 +99,7 @@
 }
 
 /* Hover effect */
-.new:hover, #spajalica {
+.new:hover, #attachmentBtn {
     background-color: #0056b3; /* Darker background on hover */
     box-shadow: 0 6px 12px rgba(0, 123, 255, 0.6); /* Darker shadow on hover */
 }
@@ -111,7 +111,7 @@
 }
 
 /* Active effect (when button is clicked) */
-.new:active, #spajalica {
+.new:active, #attachmentBtn {
     background-color: #004085; /* Even darker background when clicked */
     box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* Subtle shadow on click */
 }
@@ -216,7 +216,7 @@
     cursor: pointer; /* Pointer cursor on hover */
 }
 
-#spajalica {
+#attachmentBtn {
     height: 58px;
     width: 40px;
     cursor: pointer;
