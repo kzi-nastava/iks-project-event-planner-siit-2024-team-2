@@ -64,17 +64,17 @@
     <div id="right-div">
         <label class="custom-label">Available events:</label>
         <div class="listbox-container">
-        <div class="listbox">
-            <label class="listbox-item" *ngFor="let event of eventTypes">
-            <input
-                type="checkbox"
-                [value]="event.id"
-                (change)="onEventCheckboxChange($event, event.id)"
-                [checked]="selectedEvents.includes(event.id)"
-            />
-            <span>{{ event.name }}</span>
-            </label>
-        </div>
+            <div class="listbox">
+                <label class="listbox-item" *ngFor="let event of eventTypes">
+                <input
+                    type="checkbox"
+                    [value]="event.id"
+                    (change)="onEventCheckboxChange($event, event.id)"
+                    [checked]="selectedEvents.includes(event.id)"
+                />
+                <span>{{ event.name }}</span>
+                </label>
+            </div>
         </div>
         <div *ngIf="selectedEvents.length === 0" class="error-message">
         <small>At least one event type must be selected.</small>

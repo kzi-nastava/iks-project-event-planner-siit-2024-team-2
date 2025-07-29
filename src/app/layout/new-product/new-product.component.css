@@ -105,6 +105,8 @@
 
 /* Light pink frame for the container */
 .listbox-container {
+    max-height: 200px; /* Adjust depending on item height */
+    overflow-y: auto;
     border: 2px solid #7C96FF; /* Light pink border */
     border-radius: 8px; /* Rounded corners */
     background-color: #EEF2FF; /* Light pink background */
