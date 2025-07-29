@@ -1,0 +1,31 @@
+<div class="row">
+  <button class="fancy-button" (click)="openFilterDialog()">Filter 🔽</button>
+
+  <div class="searchbar">
+    <input id="search-box" type="text" placeholder="Search" />
+    <button id="search-btn" class="fancy-button">🔍</button>
+  </div>
+
+  <button class="fancy-button">Price list 📋</button>
+</div>
+
+<div class="services-container">
+    <div *ngFor="let product of myProducts" class="card">
+      <img src="images/catering.jpeg" alt="{{ product.name }}" class="card-image" />
+      <div class="card-content">
+        <h3>{{ product.name }}</h3>
+        <p>{{ product.description }}</p>
+        <div class="row">
+          <p><strong>Price:</strong> {{ product.price }}</p>
+          <p><strong>Discount:</strong> {{ product.discount }}</p>
+        </div>
+
+        <div class="row" id="end">
+          <button mat-button class="fancy-button" (click)="navigateToEditService(product.id)">Edit</button>
+          <button id="delete" class="fancy-button" (click)="openDeleteDialog(product.id)">Delete</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
