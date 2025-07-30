@@ -10,6 +10,7 @@ import { ServiceService } from '../../services/service.service';
 import { finalize } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { PagedModel } from '../../shared/model/paged-model';
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
 
 const pageSize = 12;
 const imagesApi = "api/images/";
@@ -17,7 +18,7 @@ const imagesApi = "api/images/";
 @Component({
   selector: 'app-my-services',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, FormsModule],
+  imports: [CommonModule, MatDialogModule, FormsModule, MatProgressSpinner],
   templateUrl: './my-services.component.html',
   styleUrls: ['./my-services.component.css']
 })

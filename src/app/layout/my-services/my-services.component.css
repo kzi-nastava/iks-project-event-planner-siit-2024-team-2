@@ -7,6 +7,15 @@
     justify-items: center;
     margin-bottom: 70px;
   }
+
+.progress-spinner-container {
+  height: 430px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  left: 380px;
+}
   
   /* Styling for each card */
   .card {

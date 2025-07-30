@@ -10,6 +10,9 @@
 </div>
 
 <div class="services-container">
+    <div *ngIf="isLoading" class="progress-spinner-container">
+      <mat-progress-spinner mode="indeterminate"/>
+    </div>
     <div *ngFor="let service of myServices" class="card">
       <img [src]="service.images[0]" alt="{{ service.name }}" class="card-image" />
       <div class="card-content">
