@@ -7,7 +7,12 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ServiceFilterDialogComponent } from '../../dialog/service-filter-dialog/service-filter-dialog.component';
 import { ServiceService } from '../../services/service.service';
+import { finalize } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { PagedModel } from '../../shared/model/paged-model';
 
+const pageSize = 12;
+const imagesApi = "api/images/";
 
 @Component({
   selector: 'app-my-services',
@@ -17,16 +22,39 @@ import { ServiceService } from '../../services/service.service';
   styleUrls: ['./my-services.component.css']
 })
 export class MyServicesComponent implements OnInit {
-  myServices: Service[] = [];
-  filterCategories: string[] = ['Price', 'Category', 'Available events', 'Availability'];
 
+  totalElements: number = pageSize * 8; // this variable is reference, other two are for storing the value between switching
+  serviceTotalElements: number = this.totalElements;
+ 
   constructor (public dialog: MatDialog, private router: Router, private serviceService: ServiceService) {}
 
   ngOnInit(): void {
-    this.serviceService.getAll().subscribe(data => {
-      this.myServices = data.content;
-    });
+    this.fetchServices();
   }
+
+  isLoading = true;
+  myServices : Service[] = [];
+  selectedTabIndex = 0;
+
+  fetchServices(): void {
+      this.isLoading = true;
+      this.myServices = [];
+      this.serviceService.getAll()
+        .pipe(finalize(() => this.isLoading = false))
+        .subscribe({
+            next: (response : PagedModel<Service>) => {
+              this.serviceTotalElements = response.page.totalElements;
+  
+              if (this.selectedTabIndex == 1)
+                this.totalElements = response.page.totalElements;
+              this.myServices = JSON.parse(JSON.stringify(response.content));
+              this.convertImageUrls(this.myServices);
+            },
+            error: (err: any) => {
+              console.error('Failed to load Services:', err);
+            }
+          });
+        }
 
   openFilterDialog(): void {
   const dialogRef = this.dialog.open(ServiceFilterDialogComponent);
@@ -44,4 +72,11 @@ export class MyServicesComponent implements OnInit {
   navigateToEditService(serviceId: number): void {
     this.router.navigate(['/new-service'], { queryParams: { id: serviceId } });
   }
+
+  convertImageUrls(array: Service[]) {
+      array.forEach(element => {
+        if (element.images.length != 0) // on the page my-services, only the first (cover) image will be loaded if there is one
+          element.images[0] = environment.apiHost + imagesApi + element.images[0];
+      });
+    }
 }

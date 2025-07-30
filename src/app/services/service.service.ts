@@ -21,6 +21,10 @@ export class ServiceService {
     return this.httpClient.get<Service>(`${this.apiUrl}/${id}`);
   }
 
+  getMyServices(): Observable<Service[]> {
+    return this.httpClient.get<Service[]>(this.apiUrl);
+  }
+
   getAll(pageProperties?: any) : Observable<PagedModel<Service>> {
     let params = new HttpParams();
     if(pageProperties) {
