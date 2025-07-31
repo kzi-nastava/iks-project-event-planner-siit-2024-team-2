@@ -4,6 +4,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
 import { PagedModel } from '../shared/model/paged-model';
+import { ServiceCardDto } from './dtos/service-card-dto.dto';
 @Injectable({
   providedIn: 'root'
 })
@@ -21,8 +22,8 @@ export class ServiceService {
     return this.httpClient.get<Service>(`${this.apiUrl}/${id}`);
   }
 
-  getMyServices(): Observable<Service[]> {
-    return this.httpClient.get<Service[]>(this.apiUrl);
+  getAllCards(): Observable<ServiceCardDto[]> {
+    return this.httpClient.get<ServiceCardDto[]>(this.apiUrl);
   }
 
   getAll(pageProperties?: any) : Observable<PagedModel<Service>> {

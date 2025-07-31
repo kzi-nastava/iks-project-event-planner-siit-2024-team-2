@@ -11,8 +11,8 @@ import { finalize } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { PagedModel } from '../../shared/model/paged-model';
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { ServiceCardDto } from '../../services/dtos/service-card-dto.dto';
 
-const pageSize = 12;
 const imagesApi = "api/images/";
 
 @Component({
@@ -24,9 +24,6 @@ const imagesApi = "api/images/";
 })
 export class MyServicesComponent implements OnInit {
 
-  totalElements: number = pageSize * 8; // this variable is reference, other two are for storing the value between switching
-  serviceTotalElements: number = this.totalElements;
- 
   constructor (public dialog: MatDialog, private router: Router, private serviceService: ServiceService) {}
 
   ngOnInit(): void {
@@ -34,21 +31,17 @@ export class MyServicesComponent implements OnInit {
   }
 
   isLoading = true;
-  myServices : Service[] = [];
+  myServices : ServiceCardDto[] = [];
   selectedTabIndex = 0;
 
   fetchServices(): void {
       this.isLoading = true;
       this.myServices = [];
-      this.serviceService.getAll()
+      this.serviceService.getAllCards()
         .pipe(finalize(() => this.isLoading = false))
         .subscribe({
-            next: (response : PagedModel<Service>) => {
-              this.serviceTotalElements = response.page.totalElements;
-  
-              if (this.selectedTabIndex == 1)
-                this.totalElements = response.page.totalElements;
-              this.myServices = JSON.parse(JSON.stringify(response.content));
+            next: (response : ServiceCardDto[]) => {
+              this.myServices = JSON.parse(JSON.stringify(response));
               this.convertImageUrls(this.myServices);
             },
             error: (err: any) => {
@@ -74,10 +67,10 @@ export class MyServicesComponent implements OnInit {
     this.router.navigate(['/new-service'], { queryParams: { id: serviceId } });
   }
 
-  convertImageUrls(array: Service[]) {
+  convertImageUrls(array: ServiceCardDto[]) {
       array.forEach(element => {
-        if (element.images.length != 0) // on the page my-services, only the first (cover) image will be loaded if there is one
-          element.images[0] = environment.apiHost + imagesApi + element.images[0];
+        if (element.image != null) // on the page my-services, only the first (cover) image will be loaded if there is one
+          element.image = environment.apiHost + imagesApi + element.image;
       });
     }
 }
