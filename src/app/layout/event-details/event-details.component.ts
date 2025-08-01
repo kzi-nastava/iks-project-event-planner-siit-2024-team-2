@@ -34,18 +34,6 @@ export class EventDetailsComponent implements OnInit {
         this.eventId = Number(eventId);
       }
     });
-
-    this.eventService.getEvent(this.eventId).subscribe({
-      next: (event) => {
-        this.eventData = event;
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = 'Failed to load event.';
-        this.loading = false;
-        console.error(err);
-      }
-    });
   }
 
   goBack(): void {
