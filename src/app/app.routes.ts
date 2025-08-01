@@ -9,8 +9,10 @@ import { MyServicesComponent } from './layout/my-services/my-services.component'
 import { LoginComponent } from './layout/auth/login/login.component';
 import { RegisterComponent } from './layout/auth/register/register.component';
 import { NewEventTypeComponent } from './layout/new-event-type/new-event-type.component';
-import { CreateEventComponent } from './layout/create-event/create-event.component';
+import { NewEventComponent } from './layout/new-event/new-event.component';
 import { MyProductsComponent } from './layout/my-products/my-products.component';
+import { MyEventsComponent } from './layout/my-events/my-events.component';
+import { EventDetailsComponent } from './layout/event-details/event-details.component';
 
 export const routes: Routes = [
     {path: 'home', component: HomeComponent},
@@ -24,7 +26,9 @@ export const routes: Routes = [
     {path: 'my-products', component: MyProductsComponent},
     {path: 'signin', component: LoginComponent},
     {path: 'signup', component: RegisterComponent},
-    {path: 'new-event', component: CreateEventComponent},
+    {path: 'new-event', component: NewEventComponent},
+    {path: 'my-events', component: MyEventsComponent},
+    {path: 'event-details', component: EventDetailsComponent},
     {path: '', redirectTo: 'home', pathMatch: 'full'},
     {path: '**', redirectTo: 'home'}
 ];

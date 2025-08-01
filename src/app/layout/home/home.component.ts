@@ -377,4 +377,7 @@ export class HomeComponent {
         element.image = environment.apiHost + imagesApi + element.image;
     });
   }
+  navigateToEventDetails(eventId?: number): void {
+    this.router.navigate(['/event-details'], { queryParams: { id: eventId } });
+  }
 }

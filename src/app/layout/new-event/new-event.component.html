@@ -25,7 +25,12 @@
     </div>
   
     <div id="right-div">
-      <app-map (coordinatesSelected)="onCoordinatesSelected($event)"></app-map>
+      <app-map 
+        (coordinatesSelected)="onCoordinatesSelected($event)" 
+        [readonly]="false" 
+        [latitude]="createEventForm.value.latitude!" 
+        [longitude]="createEventForm.value.longitude!">
+      </app-map>
       <div class="form-container">
         <label for="date" class="form-label">Date:</label>
         <input type="date" id="date" class="form-input" formControlName="date">

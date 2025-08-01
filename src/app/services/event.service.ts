@@ -11,6 +11,12 @@ import { buildHttpParams } from '../utils/http-utils';
   providedIn: 'root'
 })
 export class EventService {
+  delete(eventId: number) {
+    return this.httpClient.delete(`${this.apiUrl}/${eventId}`);
+  }
+  update(event: Event, id: number) {
+    return this.httpClient.put<Event>(`${this.apiUrl}/${id}`, event);
+  }
   private apiUrl = `${environment.apiHost}api/events`;
 
   constructor(private httpClient: HttpClient) { }
