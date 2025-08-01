@@ -49,7 +49,7 @@ export class EventDetailsComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/my-events'], { relativeTo: this.route });
+    this.router.navigate(['../'], { relativeTo: this.route });
   }
 
   private fetchEventData(eventId: number): void {

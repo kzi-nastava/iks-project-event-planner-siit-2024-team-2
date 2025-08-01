@@ -45,6 +45,14 @@ export class NewEventComponent {
       this.router.navigate(['/login']);
       return;
     }
+    if (this.createEventForm.invalid) {
+      this.createEventForm.markAllAsTouched();
+      this.snackBar.open('Please fill out all required fields correctly.', 'Close', {
+        duration: 3000,
+        panelClass: ['snackbar-error'],
+      });
+      return;
+    }
     const event = {
       name: this.createEventForm.value.name,
       description: this.createEventForm.value.description,

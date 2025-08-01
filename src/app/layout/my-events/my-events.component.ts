@@ -8,6 +8,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { EventFilterParams } from '../../parameters/event-filter-params';
 import { PagedModel } from '../../shared/model/paged-model';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-my-events',
@@ -17,15 +20,27 @@ import { Router } from '@angular/router';
   styleUrls: ['./my-events.component.css'],
 })
 export class MyEventsComponent implements OnInit {
+  
   deleteEvent(eventId: number) {
-    
-    this.eventService.delete(eventId).subscribe({
-      next: () => {
-        this.loadMyEvents();
-      },
-      error: (err) => {
-        console.error('Failed to delete event:', err);
+    this.dialog.open(DeleteDialogComponent).afterClosed().subscribe(result => {
+      if (result) {
+        this.eventService.delete(eventId).subscribe({
+          next: () => {
+            this.loadMyEvents(); 
+            this.snackBar.open('Event deleted successfully', 'Close', {
+              duration: 3000,
+            });
+          },
+          error: (err) => {
+            console.error('Failed to delete event:', err);
+            this.snackBar.open('Failed to delete event', 'Close', {
+              duration: 3000,
+            });
+          }
+        });
       }
+    }, error => {
+      console.error('Error opening delete dialog:', error);
     });
   }
   myEvents: any[] = [];
@@ -36,7 +51,7 @@ export class MyEventsComponent implements OnInit {
   loading = false;
   error = '';
 
-  constructor(private eventService: EventService, private router: Router) {}
+  constructor(private eventService: EventService, private router: Router, public dialog: MatDialog, private snackBar: MatSnackBar) {}
 
   ngOnInit() {
     this.loadMyEvents();

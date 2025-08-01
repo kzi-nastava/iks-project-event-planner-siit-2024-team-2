@@ -260,4 +260,9 @@ input[type=checkbox] {
     font-size: 16px;
     cursor: pointer;
   }
-  
+
+.error-message {
+  color: red;
+  font-size: 0.85em;
+  margin-top: 4px;
+}
