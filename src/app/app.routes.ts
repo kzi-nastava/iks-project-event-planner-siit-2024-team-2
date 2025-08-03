@@ -13,6 +13,7 @@ import { NewEventComponent } from './layout/new-event/new-event.component';
 import { MyProductsComponent } from './layout/my-products/my-products.component';
 import { MyEventsComponent } from './layout/my-events/my-events.component';
 import { EventDetailsComponent } from './layout/event-details/event-details.component';
+import { AgendaComponent } from './layout/agenda/agenda.component';
 
 export const routes: Routes = [
     {path: 'home', component: HomeComponent},
@@ -29,6 +30,7 @@ export const routes: Routes = [
     {path: 'new-event', component: NewEventComponent},
     {path: 'my-events', component: MyEventsComponent},
     {path: 'event-details', component: EventDetailsComponent},
+    {path: 'agenda', component: AgendaComponent},
     {path: '', redirectTo: 'home', pathMatch: 'full'},
     {path: '**', redirectTo: 'home'}
 ];

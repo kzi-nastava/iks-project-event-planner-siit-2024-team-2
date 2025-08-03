@@ -13,6 +13,24 @@ import { buildHttpParams } from '../utils/http-utils';
 export class EventService {
   
   private apiUrl = `${environment.apiHost}api/events`;
+  
+  constructor(private httpClient: HttpClient) { }
+
+  getAgenda(eventId: number) {
+    return this.httpClient.get(`${this.apiUrl}/${eventId}/agenda`);
+  }
+
+  addActivity(eventId: number, activity: any) {
+    return this.httpClient.post(`${this.apiUrl}/${eventId}/agenda/activity`, activity);
+  }
+
+  updateActivity(eventId: number, activityId: number, activity: any) {
+    return this.httpClient.put(`${this.apiUrl}/${eventId}/agenda/activity/${activityId}`, activity);
+  }
+
+  deleteActivity(eventId: number, activityId: number) {
+    return this.httpClient.delete(`${this.apiUrl}/${eventId}/agenda/activity/${activityId}`);
+  }
 
   delete(eventId: number) {
     return this.httpClient.delete(`${this.apiUrl}/${eventId}`);
@@ -21,7 +39,6 @@ export class EventService {
     return this.httpClient.put<Event>(`${this.apiUrl}/${id}`, event);
   }
 
-  constructor(private httpClient: HttpClient) { }
 
   add(event: Event) : Observable<Event> {
     console.log(this.apiUrl)

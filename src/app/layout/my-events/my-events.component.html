@@ -6,7 +6,7 @@
 </div>
 
 <div class="events-container" *ngIf="myEvents.length > 0">
-  <mat-card *ngFor="let event of myEvents" class="event-card">
+  <mat-card *ngFor="let event of myEvents" class="event-card" (click)="navigateToEventDetails(event.id)">
     <mat-card-header>
       <mat-card-title>{{ event.name }}</mat-card-title>
       <mat-card-subtitle>{{ event.date | date:'mediumDate' }}</mat-card-subtitle>
