@@ -30,10 +30,9 @@ import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 })
 export class ActivityFormDialogComponent {
   form: FormGroup;
-
+  isEditMode: boolean = false;
   constructor(
     private dialogRef: MatDialogRef<ActivityFormDialogComponent>,
-    private fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     const activity = this.data ? this.data.activity : null;
@@ -53,7 +52,6 @@ export class ActivityFormDialogComponent {
   submit() {
     if (this.form.valid) {
       const { startTime, endTime, name, description, location } = this.form.value;
-      console.log('Form submitted:', this.form.value);
       this.dialogRef.close({
         name,
         description,

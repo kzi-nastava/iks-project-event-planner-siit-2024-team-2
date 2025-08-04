@@ -57,7 +57,14 @@ export class AgendaComponent {
       }
     }).afterClosed().subscribe(result => {
       if (result) {
-        this.eventService.updateActivity(this.eventId, activity.id, activity).subscribe({
+        if (!this.isTimeValid(result.activityStart, result.activityEnd, activity.id)) {
+          this.snackBar.open('Invalid time range', 'Close', {
+            duration: 3000,
+            panelClass: ['snackbar-error'],
+          });
+          return;
+        }
+        this.eventService.updateActivity(this.eventId, activity.id, result).subscribe({
           next: () => {
             this.snackBar.open('Activity updated successfully', 'Close', {
               duration: 3000,
@@ -72,29 +79,29 @@ export class AgendaComponent {
             });
           }
         });
-      }});
+      }
+    });
   }
 
   deleteActivity(activityId: any) {
     this.dialog.open(DeleteDialogComponent).afterClosed().subscribe(result => {
       if (result) {
-
-    this.eventService.deleteActivity(this.eventId, activityId).subscribe({
-      next: () => {
-        this.snackBar.open('Activity deleted successfully', 'Close', {
-          duration: 3000,
-        });
-        this.fetchAgendaData(this.eventId);
-      },
-      error: (err) => {
-        console.error('Failed to delete activity:', err);
-        this.snackBar.open('Failed to delete activity', 'Close', {
-          duration: 3000,
-          panelClass: ['snackbar-error'],
+        this.eventService.deleteActivity(this.eventId, activityId).subscribe({
+          next: () => {
+            this.snackBar.open('Activity deleted successfully', 'Close', {
+              duration: 3000,
+            });
+            this.fetchAgendaData(this.eventId);
+          },
+          error: (err) => {
+            console.error('Failed to delete activity:', err);
+            this.snackBar.open('Failed to delete activity', 'Close', {
+              duration: 3000,
+              panelClass: ['snackbar-error'],
+            });
+          }
         });
       }
-    });
-          }
     }, error => {
       console.error('Error opening delete dialog:', error);
     });
@@ -104,14 +111,14 @@ export class AgendaComponent {
     const dialogRef = this.dialog.open(ActivityFormDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
-      if (this.isTimeValid(result.activityStart, result.activityEnd)) {
-        this.snackBar.open('Invalid time range', 'Close', {
-          duration: 3000,
-          panelClass: ['snackbar-error'],
-        });
-        return;
-      }
       if (result) {
+        if (!this.isTimeValid(result.activityStart, result.activityEnd)) {
+          this.snackBar.open('Invalid time range', 'Close', {
+            duration: 3000,
+            panelClass: ['snackbar-error'],
+          });
+          return;
+        }
         this.eventService.addActivity(this.eventId, result).subscribe({
           next: () => {
             this.snackBar.open('Activity added successfully', 'Close', { duration: 3000 });
@@ -129,9 +136,10 @@ export class AgendaComponent {
     });
   }
 
-  isTimeValid(start: number, end: number): boolean {
+  isTimeValid(start: number, end: number, id?: number): boolean {
     if (start >= end) return false;
-    if (this.activities.length > 0 && this.activities.some(activity => {
+    if (this.activities.some(activity => {
+      if (id && activity.id === id) return false; 
       return (start < activity.activityEnd && end > activity.activityStart) ||
              (activity.activityStart < end && activity.activityEnd > start) ||
              (start === activity.activityStart && end === activity.activityEnd);
