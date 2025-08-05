@@ -22,13 +22,17 @@ import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.
   styleUrl: './agenda.component.css'
 })
 export class AgendaComponent {
-
+  readonly: boolean = false;
   activities: any[] = [];
   eventId: number = -1;
-  displayedColumns: string[] = ['name', 'start', 'end', 'description', 'location', 'actions'];
+  displayedColumns: string[] = ['name', 'start', 'end', 'description', 'location'];
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       const eventId = params['id'];
+      this.readonly = params['readonly'] === 'true';
+      if (!this.readonly) {
+        this.displayedColumns.push('actions');
+      }
       if (eventId) {
         this.eventId = Number(eventId);
         this.fetchAgendaData(eventId);
