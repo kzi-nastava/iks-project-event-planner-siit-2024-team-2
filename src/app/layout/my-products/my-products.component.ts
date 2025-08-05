@@ -64,7 +64,7 @@ export class MyProductsComponent {
   }
 
   openDeleteDialog(id?: number): void {
-    this.dialog.open(DeleteDialogComponent).afterClosed().subscribe(result => {
+    this.dialog.open(DeleteDialogComponent, {data: {entityName: 'product'}}).afterClosed().subscribe(result => {
       if (result && id) {
         console.log('Delete confirmed for product ID:', id);
         this.productService.deleteProduct(id).subscribe(() => {

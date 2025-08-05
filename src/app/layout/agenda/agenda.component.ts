@@ -88,7 +88,7 @@ export class AgendaComponent {
   }
 
   deleteActivity(activityId: any) {
-    this.dialog.open(DeleteDialogComponent).afterClosed().subscribe(result => {
+    this.dialog.open(DeleteDialogComponent, {data: {entityName: 'activity'}}).afterClosed().subscribe(result => {
       if (result) {
         this.eventService.deleteActivity(this.eventId, activityId).subscribe({
           next: () => {

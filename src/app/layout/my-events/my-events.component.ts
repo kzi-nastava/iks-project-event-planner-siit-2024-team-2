@@ -22,7 +22,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class MyEventsComponent implements OnInit {
   
   deleteEvent(eventId: number) {
-    this.dialog.open(DeleteDialogComponent).afterClosed().subscribe(result => {
+    this.dialog.open(DeleteDialogComponent, {data: {entityName: 'event'}}).afterClosed().subscribe(result => {
       if (result) {
         this.eventService.delete(eventId).subscribe({
           next: () => {
