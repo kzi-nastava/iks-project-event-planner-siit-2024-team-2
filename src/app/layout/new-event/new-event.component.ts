@@ -9,6 +9,8 @@ import { EventType } from '../../model/event-type';
 import { EventTypeService } from '../../services/event-type.service';
 import { EventService } from '../../services/event.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-create-event',
@@ -19,12 +21,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
       MatSelectModule,
       MapComponent,
       ReactiveFormsModule,
+      MatButtonModule,
+      MatTooltipModule 
     ],
   providers: [MapComponent],
   templateUrl: './new-event.component.html',
   styleUrl: './new-event.component.css'
 })
 export class NewEventComponent {
+
   id = -1;
   createEventForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(1)]),
@@ -164,6 +169,10 @@ fetchEventData(eventId: number): void {
   
   onCancel(): void {
     this.router.navigate(['../'], { relativeTo: this.route });
+  }
+
+  openAgenda() {
+    this.router.navigate(['/agenda'], { queryParams: { id: this.id } });
   }
 }
 

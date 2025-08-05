@@ -53,4 +53,8 @@ export class EventDetailsComponent implements OnInit {
       }
     });
   }
+
+  openAgenda() {
+    this.router.navigate(['/agenda'], { queryParams: { id: this.eventId, readonly: true } });
+  }
 }

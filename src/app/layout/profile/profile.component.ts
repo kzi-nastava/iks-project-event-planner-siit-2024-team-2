@@ -152,10 +152,7 @@ export class ProfileComponent {
 deactivateAccount() {
   const dialogRef = this.dialog.open(DeleteDialogComponent, {
     data: {
-      title: 'Deactivate Account',
-      message: 'Are you sure you want to deactivate your account? This action is irreversible.',
-      confirmButtonText: 'Deactivate',
-      cancelButtonText: 'Cancel',
+      entityName: 'account'
     }
   });
 
