@@ -10,6 +10,7 @@ import { EventTypeService } from '../../services/event-type.service';
 import { EventService } from '../../services/event.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-create-event',
@@ -20,7 +21,8 @@ import { MatButton, MatButtonModule } from '@angular/material/button';
       MatSelectModule,
       MapComponent,
       ReactiveFormsModule,
-      MatButtonModule
+      MatButtonModule,
+      MatTooltipModule 
     ],
   providers: [MapComponent],
   templateUrl: './new-event.component.html',

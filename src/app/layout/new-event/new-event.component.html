@@ -38,7 +38,15 @@
         <input type="checkbox" id="is-open" class="form-checkbox" formControlName="open">
 
         <label for="agenda" class="form-label" style="margin-top: 30px;">See detailed agenda:</label>
-        <button mat-button type="button" (click)="openAgenda()" style="background-color: #f5f5f5;">
+        <button
+          mat-button
+          type="button"
+          (click)="openAgenda()"
+          style="background-color: #f5f5f5;"
+          [disabled]="id === -1"
+          matTooltip="Finish creating the event to access the agenda"
+          [matTooltipDisabled]="id !== -1"
+        >
           Agenda
         </button>
       </div>
