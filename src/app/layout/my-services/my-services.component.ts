@@ -36,7 +36,7 @@ export class MyServicesComponent implements OnInit {
       this.myServices = [];
       this.serviceService.getAllCards()
         .pipe(finalize(() => this.isLoading = false))
-        .subscribe({
+        .subscribe({ 
           next: (response : ServiceCardDto[]) => {
             this.myServices = JSON.parse(JSON.stringify(response));
             this.convertImageUrls(this.myServices);

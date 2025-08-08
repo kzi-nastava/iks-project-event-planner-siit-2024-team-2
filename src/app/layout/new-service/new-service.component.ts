@@ -12,6 +12,7 @@ import { ServiceProductCategoryService } from '../../services/service-product-ca
 import { EventTypeService } from '../../services/event-type.service';
 import { forkJoin } from 'rxjs';
 import { ToastService } from '../../services/toast-service';
+import { ImageService } from '../../services/image.service';
 
 
 @Component({
@@ -63,7 +64,7 @@ export class NewServiceComponent {
 
   constructor(private route: ActivatedRoute, private router: Router, private serviceService: ServiceService,
     private SPCategoryService: ServiceProductCategoryService, private eventTypeService: EventTypeService,
-    private toastService: ToastService) {}
+    private toastService: ToastService, private imageService: ImageService) {}
 
 
   ngOnInit(): void {
@@ -166,6 +167,14 @@ export class NewServiceComponent {
       return;
     }
     else {
+      this.selectedImages.forEach(image => {
+        this.imageService.uploadImage(image).subscribe({
+      next: response => {},
+      error: err => {
+        console.error('Failed to upload image', err);
+      }
+    });
+      });
       const service = this.recieveDataFromForm();
       this.toastService.show('Updating...', 2000);
       if (this.update) {  // UPDATING
@@ -241,14 +250,17 @@ export class NewServiceComponent {
   removeImage(index: number): void {
     this.imageEncodedNames.splice(index, 1);
     this.images.splice(index, 1);
+    this.selectedImages.splice(index, 1);
   }
 
   removeImagePreview(index: number): void {
     this.imagePreviews.splice(index, 1);
     this.images.splice(index, 1);
+    this.selectedImages.splice(index, 1);
   }
 
   imagePreviews: string[] = [];
+  selectedImages: File[] = [];
 
   onImageSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -260,6 +272,7 @@ export class NewServiceComponent {
       reader.onload = () => {
         this.imagePreviews.push(reader.result as string);
         this.images.push(file.name);
+        this.selectedImages.push(file);
       };
       reader.readAsDataURL(file); // creates base64 string
     });
