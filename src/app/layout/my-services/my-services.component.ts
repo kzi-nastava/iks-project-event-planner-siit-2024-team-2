@@ -56,8 +56,17 @@ export class MyServicesComponent implements OnInit {
     });
   }
 
-  openDialog(): void {
-    this.dialog.open(DeleteDialogComponent);
+  openDialog(serviceId: number): void {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: { id: serviceId }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+    if (result === true) {
+      // Instantly remove from the UI list
+      this.myServices = this.myServices.filter(s => s.id !== serviceId);
+    }
+  });
+
   }
 
   navigateToEditService(serviceId: number): void {

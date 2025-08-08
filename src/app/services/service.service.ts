@@ -23,6 +23,10 @@ export class ServiceService {
     return this.httpClient.put<Service>(`${this.apiUrl}/${id}`, service);
   }
 
+  delete(id: number): Observable<boolean> {
+    return this.httpClient.delete<boolean>(`${this.apiUrl}/${id}`);
+  }
+
   getService(id: number): Observable<Service> {
     return this.httpClient.get<Service>(`${this.apiUrl}/${id}`);
   }
