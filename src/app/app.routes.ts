@@ -4,11 +4,16 @@ import { ChatComponent } from './layout/chat/chat.component';
 import { ProfileComponent } from './layout/profile/profile.component';
 import { NotificationsComponent } from './layout/notifications/notifications.component';
 import { NewServiceComponent } from './layout/new-service/new-service.component';
+import { NewProductComponent } from './layout/new-product/new-product.component';
 import { MyServicesComponent } from './layout/my-services/my-services.component';
 import { LoginComponent } from './layout/auth/login/login.component';
 import { RegisterComponent } from './layout/auth/register/register.component';
 import { NewEventTypeComponent } from './layout/new-event-type/new-event-type.component';
-import { CreateEventComponent } from './layout/create-event/create-event.component';
+import { NewEventComponent } from './layout/new-event/new-event.component';
+import { MyProductsComponent } from './layout/my-products/my-products.component';
+import { MyEventsComponent } from './layout/my-events/my-events.component';
+import { EventDetailsComponent } from './layout/event-details/event-details.component';
+import { AgendaComponent } from './layout/agenda/agenda.component';
 
 export const routes: Routes = [
     {path: 'home', component: HomeComponent},
@@ -16,11 +21,16 @@ export const routes: Routes = [
     {path: 'profile', component: ProfileComponent},
     {path: 'notifications', component: NotificationsComponent},
     {path: 'new-service', component: NewServiceComponent},
+    {path: 'new-product', component: NewProductComponent}, 
     {path: 'new-event-type', component: NewEventTypeComponent},
     {path: 'my-services', component: MyServicesComponent},
+    {path: 'my-products', component: MyProductsComponent},
     {path: 'signin', component: LoginComponent},
     {path: 'signup', component: RegisterComponent},
-    {path: 'new-event', component: CreateEventComponent},
+    {path: 'new-event', component: NewEventComponent},
+    {path: 'my-events', component: MyEventsComponent},
+    {path: 'event-details', component: EventDetailsComponent},
+    {path: 'agenda', component: AgendaComponent},
     {path: '', redirectTo: 'home', pathMatch: 'full'},
     {path: '**', redirectTo: 'home'}
 ];

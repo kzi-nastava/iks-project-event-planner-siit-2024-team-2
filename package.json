@@ -29,6 +29,7 @@
     "leaflet": "^1.9.4",
     "ng": "^0.0.0",
     "ngx-drag-scroll": "^19.0.0-rc.0",
+    "ngx-mat-timepicker": "^18.0.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"

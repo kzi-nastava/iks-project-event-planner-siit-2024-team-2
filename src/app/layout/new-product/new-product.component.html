@@ -1,0 +1,106 @@
+<div class="row" id="all" [formGroup]="createProductForm">
+    <div id="left-div">
+
+        <!-- Service categories combobox -->
+        <div class="custom-combobox">
+            <label for="serviceCategories" class="custom-label">Product category:</label>
+            <div class="custom-select-wrapper">
+            <select id="serviceCategories" class="custom-select" formControlName="productCategory">
+                <option *ngFor="let category of productCategories" [value]="category.id">{{ category.name }}</option>
+            </select>
+            </div>
+            <div *ngIf="createProductForm.get('productCategory')?.touched && createProductForm.get('productCategory')?.invalid" class="error-message">
+                <small *ngIf="createProductForm.get('productCategory')?.errors?.['required']">Product category is required.</small>
+            </div>
+
+        </div>
+
+        <button class="fancy-button" style="margin-top: 100px;">New category request</button>
+
+        <!-- 5 textboxes for: name, desc, spec, price and discount -->
+        <div class="form-container">
+
+            <label for="name" class="form-label">Name:</label>
+            <input formControlName="name" type="text" id="name" class="form-input" placeholder="Enter the name">
+            <div *ngIf="createProductForm.get('name')?.touched && createProductForm.get('name')?.invalid" class="error-message">
+            <small *ngIf="createProductForm.get('name')?.errors?.['required']">Name is required.</small>
+            <small *ngIf="createProductForm.get('name')?.errors?.['minlength']">Minimum 3 characters required.</small>
+            </div>
+
+
+            <label for="description" class="form-label">Description:</label>
+            <textarea formControlName="description" id="description" class="form-input" placeholder="Enter the description"></textarea>
+            <div *ngIf="createProductForm.get('description')?.touched && createProductForm.get('description')?.invalid" class="error-message">
+            <small *ngIf="createProductForm.get('description')?.errors?.['required']">Description is required.</small>
+            <small *ngIf="createProductForm.get('description')?.errors?.['minlength']">Minimum 5 characters required.</small>
+            </div>
+
+
+            <label for="specifies" class="form-label">Specifies:</label>
+            <textarea formControlName="specifies" id="specifies" class="form-input" placeholder="Enter the specifies"></textarea>
+            <div *ngIf="createProductForm.get('specifies')?.touched && createProductForm.get('specifies')?.invalid" class="error-message">
+            <small *ngIf="createProductForm.get('specifies')?.errors?.['required']">Specifies is required.</small>
+            </div>
+
+
+            <label for="price" class="form-label">Price (€):</label>
+            <input formControlName="price" type="number" id="price" class="form-input" placeholder="Enter the price">
+            <div *ngIf="createProductForm.get('price')?.touched && createProductForm.get('price')?.invalid" class="error-message">
+            <small *ngIf="createProductForm.get('price')?.errors?.['required']">Price is required.</small>
+            <small *ngIf="createProductForm.get('price')?.errors?.['min']">Price cannot be negative.</small>
+            </div>
+
+
+            <label for="discount" class="form-label">Discount (€):</label>
+            <input formControlName="discount" type="number" id="discount" class="form-input" placeholder="Enter the discount">
+            <div *ngIf="createProductForm.get('discount')?.touched && createProductForm.get('discount')?.invalid" class="error-message">
+            <small *ngIf="createProductForm.get('discount')?.errors?.['min']">Discount cannot be negative.</small>
+            </div>
+
+        
+        </div>
+    </div>
+
+    <div id="right-div">
+        <label class="custom-label">Available events:</label>
+        <div class="listbox-container">
+            <div class="listbox">
+                <label class="listbox-item" *ngFor="let event of eventTypes">
+                <input
+                    type="checkbox"
+                    [value]="event.id"
+                    (change)="onEventCheckboxChange($event, event.id)"
+                    [checked]="selectedEvents.includes(event.id)"
+                />
+                <span>{{ event.name }}</span>
+                </label>
+            </div>
+        </div>
+        <div *ngIf="selectedEvents.length === 0" class="error-message">
+        <small>At least one event type must be selected.</small>
+        </div>
+
+
+
+        <label for="photos" class="form-label" style="margin-top: 35px;">Photos:</label>
+        <div class="row">
+            <!-- formControlName="photos" -->
+            <textarea  id="photos" class="form-input" placeholder="Attach the photo(s)"></textarea>
+            <button id="spajalica">📎</button>
+        </div>
+
+        <div>
+            <input formControlName="visible" type="checkbox" name="visible-checkbox" value="visible"> visible
+            <input formControlName="available" type="checkbox" name="available-checkbox" value="available" style="margin-left: 50px;"> available
+    
+        </div>
+
+        
+    </div>
+</div>
+
+<div class="row" id="end">
+    <button (click)="createProduct()" class="fancy-button">Save</button>
+    <button (click)="onCancel()" class="fancy-button" id="cancel">Cancel</button>
+</div>
+

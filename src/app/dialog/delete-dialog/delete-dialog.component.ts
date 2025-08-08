@@ -13,8 +13,11 @@ import { ToastService } from '../../services/toast-service';
   styleUrl: './delete-dialog.component.css'
 })
 export class DeleteDialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { id: number }, private dialogRef: MatDialogRef<DeleteDialogComponent>,
-    private serviceService: ServiceService, private toastService: ToastService) { }
+  entityName: string = '';
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<DeleteDialogComponent>,
+    private serviceService: ServiceService, private toastService: ToastService) {
+      this.entityName = data.entityName || 'item';
+     }
 
   close() {
     this.dialogRef.close();

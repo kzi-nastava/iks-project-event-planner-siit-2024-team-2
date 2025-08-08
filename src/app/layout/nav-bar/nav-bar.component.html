@@ -4,7 +4,8 @@
   </button>
   <span class="toolbar-title" [routerLink]="['home']">Event Planner</span>
   <div class="toolbar-actions">
-    <a mat-flat-button [routerLink]="['signin']" class="custom-signin-button">Sign in</a>
+    <a mat-button *ngIf="!isLoggedIn" [routerLink]="['signin']" class="custom-signin-button">Sign in</a>
+    <button mat-button *ngIf="isLoggedIn" (click)="signOut()" class="custom-signin-button">Sign out</button>
       <mat-icon [routerLink]="['profile']">account_circle</mat-icon>
   </div>
 </mat-toolbar>
@@ -25,9 +26,17 @@
         <mat-icon>add</mat-icon>
         New service
       </mat-list-item>
+      <mat-list-item [routerLink]="['new-product']">
+        <mat-icon>add</mat-icon>
+        New product
+      </mat-list-item>
       <mat-list-item [routerLink]="['my-services']">
         <mat-icon>handshake</mat-icon>
         My services
+      </mat-list-item>
+      <mat-list-item [routerLink]="['my-products']">
+        <mat-icon>handshake</mat-icon>
+        My products
       </mat-list-item>
       <mat-list-item [routerLink]="['notifications']">
         <mat-icon>notifications</mat-icon>
@@ -44,6 +53,10 @@
       <mat-list-item [routerLink]="['new-event']">
         <mat-icon>add</mat-icon>
         New event
+      </mat-list-item>
+            <mat-list-item [routerLink]="['my-events']">
+        <mat-icon>handshake</mat-icon>
+        My events
       </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
