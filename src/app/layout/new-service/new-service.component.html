@@ -6,47 +6,47 @@
     <div class="custom-combobox">
         <label for="serviceCategories" class="custom-label" style="margin-bottom: 23px;">Service category:</label>
         <div class="custom-select-wrapper">
-            <select id="serviceCategories" class="custom-select" formControlName="category">
+            <select formControlName="category" id="serviceCategories" class="custom-select" (click) = "getCategoryId()">
                 <option *ngFor="let category of serviceCategories" [value]="category">{{ category }}</option>
             </select>
             <span class="custom-arrow">▼</span>
         </div>
 
-        <div class="error-text" [class.visible]="newServiceForm.get('category')?.errors?.['required'] && newServiceForm.get('category')?.touched">
+        <div class="error-text" [class.visible]="newServiceForm.get('category')?.errors?.['required'] && (newServiceForm.get('category')?.touched || formSubmitted)">
             Category is required.
         </div>
     </div>
 
-    <button class="fancy-button" style="margin-top: 87px;">New category request</button>
+    <button type="button" class="fancy-button" style="margin-top: 87px;">New category request</button>
 
     <!-- 6 textboxes for: name, desc, spec, price, discount, and reservation deadline-->
-    <div class="form-container">
+    <div class="form-container" style="margin-top: 34px;">
         <label for="name" class="form-label">Name:</label>
         <input formControlName="name" type="text" id="name" class="form-input" placeholder="Enter the name">
-        <div class="error-text" [class.visible]="newServiceForm.get('name')?.invalid && newServiceForm.get('name')?.touched">
+        <div class="error-text" [class.visible]="newServiceForm.get('name')?.invalid && (newServiceForm.get('name')?.touched || formSubmitted)">
             Name is required.
         </div>
 
         <label for="description" class="form-label">Description:</label>
         <textarea formControlName="description" type="text" id="description" class="form-input" placeholder="Enter the description"></textarea>
-        <div class="error-text" [class.visible]="newServiceForm.get('description')?.invalid && newServiceForm.get('description')?.touched">
+        <div class="error-text" [class.visible]="newServiceForm.get('description')?.invalid && (newServiceForm.get('description')?.touched || formSubmitted)">
             Description is required.
         </div>
 
         <label for="specifies" class="form-label">Specifies:</label>
         <textarea formControlName="specifies" id="specifies" class="form-input" placeholder="Enter the specifies"></textarea>
-        <div class="error-text" [class.visible]="newServiceForm.get('specifies')?.invalid && newServiceForm.get('specifies')?.touched">
-            Specifies is required.
+        <div class="error-text" [class.visible]="newServiceForm.get('specifies')?.invalid && (newServiceForm.get('specifies')?.touched || formSubmitted)">
+            Specifies are required.
         </div>
 
         <label for="price" class="form-label">Price (€):</label>
         <input formControlName="price" type="number" id="price" class="form-input" placeholder="Enter the price">
         
         <div class="error-text">
-            <span class="error-text" [class.visible]="newServiceForm.get('price')?.errors?.['required'] && newServiceForm.get('price')?.touched">
+            <span class="error-text" [class.visible]="newServiceForm.get('price')?.errors?.['required'] && (newServiceForm.get('price')?.touched || formSubmitted)">
                 Price is required.
             </span>
-            <span class="error-text second-error" [class.visible]="newServiceForm.get('price')?.errors?.['min'] && newServiceForm.get('price')?.touched">
+            <span class="error-text second-error" [class.visible]="newServiceForm.get('price')?.errors?.['min'] && (newServiceForm.get('price')?.touched || formSubmitted)">
                 The minimum number is 0.
             </span>
         </div>
@@ -54,22 +54,9 @@
         <label for="discount" class="form-label">Discount (€):</label>
         <input formControlName="discount" type="number" id="discount" class="form-input" placeholder="Enter the discount">
         
-        <div class="error-text" [class.visible]="newServiceForm.get('discount')?.errors?.['min'] && newServiceForm.get('discount')?.touched">
+        <div class="error-text" [class.visible]="newServiceForm.get('discount')?.errors?.['min'] && (newServiceForm.get('discount')?.touched || formSubmitted)">
             The minimum number is 0.
         </div>
-
-        <label for="reservation-deadline" class="form-label">Reservation deadline (days):</label>
-        <input formControlName="reservationDaysDeadline" type="number" id="reservation-days-deadline" class="form-input" placeholder="Enter the deadline reservation">
-
-        <div class="error-text">
-            <span class="error-text" [class.visible]="newServiceForm.get('reservationDaysDeadline')?.errors?.['required'] && newServiceForm.get('reservationDaysDeadline')?.touched">
-                Reservation deadline is required.
-            </span>
-            <span class="error-text second-error" [class.visible]="newServiceForm.get('reservationDaysDeadline')?.errors?.['min'] && newServiceForm.get('reservationDaysDeadline')?.touched">
-                The minimum number is 0.
-            </span>
-        </div>
-
     </div>
 </div>
 
@@ -77,25 +64,15 @@
     <label class="custom-label">Available events:</label>
     <div class="listbox-container">
         <div class="listbox">
-            <label class="listbox-item" *ngFor="let event of eventTypes">
-                <input type="checkbox" (change)="onCheckboxChange($event, event)" />
+            <label class="listbox-item" *ngFor="let event of eventTypes; let i = index">
+                <input type="checkbox" [checked]=areEventTypesChecked[i] (change)="onCheckboxChange($event, i)" />
                 <span>{{ event }}</span>
             </label>
         </div>
     </div>
 
-    <button class="fancy-button" style="margin-top: 25px;">Show all images</button>
-
-    <label for="images" names="images" class="form-label" style="margin-top: 5px;">Images:</label>
-    <div class="row">
-        <textarea formControlName="images" id="images" class="form-input" placeholder="Attach the photo(s)"></textarea>
-        <button id="spajalica">📎</button>
-    </div>
-    <div class="error-text" [class.visible]="newServiceForm.get('images')?.invalid && newServiceForm.get('images')?.touched">
-        Image(s) is/are required.
-    </div>
-
-    <div style="position: relative; bottom: 10px;">
+    <!-- 3 checkboxes: visible, available and automatic -->
+    <div>
         <input formControlName="visible" type="checkbox" name="visible-checkbox" value="visible"> visibility
         <input formControlName="available" type="checkbox" name="available-checkbox" value="available" style="margin-left:50px;"> availability
         <input formControlName="automaticReserved" type="checkbox" name="automaticReserved" value="automaticReserved"> automatic acceptance
@@ -103,30 +80,42 @@
 
 
     <!-- 4 other textboxes: duration, min and max min-engagement-duration cancellation deadline -->
-    <div formGroupName="durationForm" class="form-container" style="margin-top: 23px;">
+    <div formGroupName="durationForm" class="form-container">
         <label for="duration" class="form-label">Duration:</label>
-        <input formControlName="duration" type="number" id="duration" class="form-input" placeholder="Enter the duration" style="height: 35px;">
+        <input formControlName="duration" type="number" id="duration" class="form-input" placeholder="Enter the duration">
 
-        <div class="error-text" [class.visible]="newServiceForm.get('durationForm.duration')?.errors?.['min'] && newServiceForm.get('durationForm.duration')?.touched">
+        <div class="error-text" [class.visible]="newServiceForm.get('durationForm.duration')?.errors?.['min'] && (newServiceForm.get('durationForm.duration')?.touched || formSubmitted)">
             The minimum value is 0.
         </div>
 
         <label for="min-engagement-duration" class="form-label">Minimum engagement duration (hours):</label>
-        <input formControlName="minEngagementDuration" type="number" id="min-engagement-duration" class="form-input" placeholder="Enter the minimum duration">
+        <input formControlName="minEngagementDuration" type="number" id="min-engagement-duration" class="form-input" placeholder="Enter the minimum duration" style="height: 36px;">
         
-        <div class="error-text" [class.visible]="newServiceForm.get('durationForm.minEngagementDuration')?.errors?.['min'] && newServiceForm.get('durationForm.minEngagementDuration')?.touched">
+        <div class="error-text" [class.visible]="newServiceForm.get('durationForm.minEngagementDuration')?.errors?.['min'] && (newServiceForm.get('durationForm.minEngagementDuration')?.touched || formSubmitted)">
             The minimum value is 0.
         </div>
 
         <label for="max-engagement-duration" class="form-label">Maximum engagement duration (hours):</label>
-        <input formControlName="maxEngagementDuration" type="number" id="max-engagement-duration" class="form-input" placeholder="Enter the maximum duration">
+        <input formControlName="maxEngagementDuration" type="number" id="max-engagement-duration" class="form-input" placeholder="Enter the maximum duration" style="height: 36px;">
     </div>
     
     <div class="error-text">
-        <span class="error-text" [class.visible]="newServiceForm.get('durationForm')?.invalid && (newServiceForm.get('durationForm.duration')?.touched || newServiceForm.get('durationForm.maxEngagementDuration')?.touched)">
+        <span class="error-text" [class.visible]="newServiceForm.get('durationForm')?.invalid && (newServiceForm.get('durationForm.duration')?.touched || newServiceForm.get('durationForm.maxEngagementDuration')?.touched || formSubmitted)">
             Duration is required, or both min and max engagement duration.
         </span>
-        <span class="error-text second-error" [class.visible]="newServiceForm.get('durationForm.maxEngagementDuration')?.errors?.['min'] && newServiceForm.get('durationForm.maxEngagementDuration')?.touched">
+        <span class="error-text second-error" [class.visible]="newServiceForm.get('durationForm.maxEngagementDuration')?.errors?.['min'] && (newServiceForm.get('durationForm.maxEngagementDuration')?.touched || formSubmitted)">
+            The minimum number is 0.
+        </span>
+    </div>
+
+    <label for="reservation-deadline" class="form-label">Reservation deadline (days):</label>
+    <input formControlName="reservationDaysDeadline" type="number" id="reservation-days-deadline" class="form-input" placeholder="Enter the deadline reservation">
+
+    <div class="error-text">
+        <span class="error-text" [class.visible]="newServiceForm.get('reservationDaysDeadline')?.errors?.['required'] && (newServiceForm.get('reservationDaysDeadline')?.touched || formSubmitted)">
+            Reservation deadline is required.
+        </span>
+        <span class="error-text second-error" [class.visible]="newServiceForm.get('reservationDaysDeadline')?.errors?.['min'] && (newServiceForm.get('reservationDaysDeadline')?.touched || formSubmitted)">
             The minimum number is 0.
         </span>
     </div>
@@ -135,19 +124,55 @@
     <input formControlName="cancellationDaysDeadline" type="number" id="cancellation-days-deadline" class="form-input" placeholder="Enter the deadline cancellation">
     
     <div class="error-text">
-        <span class="error-text" [class.visible]="newServiceForm.get('cancellationDaysDeadline')?.errors?.['required'] && newServiceForm.get('cancellationDaysDeadline')?.touched">
+        <span class="error-text" [class.visible]="newServiceForm.get('cancellationDaysDeadline')?.errors?.['required'] && (newServiceForm.get('cancellationDaysDeadline')?.touched || formSubmitted)">
             Cancellation deadline is required.
         </span>
-        <span class="error-text second-error" [class.visible]="newServiceForm.get('cancellationDaysDeadline')?.errors?.['min'] && newServiceForm.get('cancellationDaysDeadline')?.touched">
+        <span class="error-text second-error" [class.visible]="newServiceForm.get('cancellationDaysDeadline')?.errors?.['min'] && (newServiceForm.get('cancellationDaysDeadline')?.touched || formSubmitted)">
             The minimum number is 0.
         </span>
+    </div>
+
+
+    <input #fileInput type="file" accept="image/*" style="display: none" (change)="onImageSelected($event)">
+    <button type="button" class="fancy-button" (click)="fileInput.click()" style="position: relative; right: 190px;">Attach the image 📎</button>
+
+    <div class="error-text" [class.visible]="images.length == 0 && imageEncodedNames.length == 0 && formSubmitted"
+    style="position: relative; right: 150px;">
+        Images are required (one at least).
     </div>
 
 </div>
 </div>
 
+<div class="image-preview-list" style="display: flex; gap: 10px; overflow-x: auto; margin-bottom: 50px; justify-content: center;">
+    <div *ngFor="let imagePath of imageEncodedNames; let i = index" multiple style="position: relative;">
+    <img [src]="getImageUrl(imagePath)" alt="image" style="height: 200px; border-radius: 5px;" />
+
+    <!-- Trash bin button -->
+    <button (click)="removeImage(i)" type="button"
+            style="position: absolute; top: 0; right: 0; cursor: pointer;">
+      🗑️
+    </button>
+  </div>
+    <div *ngFor="let imagePath of imagePreviews; let j = index" (change)="onImageSelected($event)" multiple style="position: relative;">
+        <img [src]="imagePath" alt="Image preview" style="height: 150px; border-radius: 5px;" />
+
+        <!-- Trash bin button -->
+        <button (click)="removeImagePreview(j)" type="button"
+            style="position: absolute; top: 0; right: 0; cursor: pointer;">
+        🗑️
+        </button>
+    </div>
+</div>
+
+
 <div class="row" id="end">
-    <button (click)="backToAllServicesPerhaps()" class="fancy-button" type="submit">Save</button>
-    <button (click)="backToAllServicesPerhaps()" class="fancy-button" id="cancel">Cancel</button>
+    <span>
+        <button class="fancy-button" type="submit">Save</button>
+        <div class="error-text" [class.visible]="(newServiceForm.invalid || (images.length == 0 && imageEncodedNames.length == 0)) && formSubmitted" style="margin-top: 10px;">
+            Some fields aren't valid.
+        </div>
+    </span>
+    <button type="button" (click)="onCancel()" class="fancy-button" id="cancel">Cancel</button>
 </div>
 </form>

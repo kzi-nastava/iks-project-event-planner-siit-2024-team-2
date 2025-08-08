@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Service } from '../../model/service';
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component';
@@ -9,7 +8,6 @@ import { ServiceFilterDialogComponent } from '../../dialog/service-filter-dialog
 import { ServiceService } from '../../services/service.service';
 import { finalize } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { PagedModel } from '../../shared/model/paged-model';
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { ServiceCardDto } from '../../services/dtos/service-card-dto.dto';
 
@@ -32,7 +30,6 @@ export class MyServicesComponent implements OnInit {
 
   isLoading = true;
   myServices : ServiceCardDto[] = [];
-  selectedTabIndex = 0;
 
   fetchServices(): void {
       this.isLoading = true;
@@ -40,15 +37,15 @@ export class MyServicesComponent implements OnInit {
       this.serviceService.getAllCards()
         .pipe(finalize(() => this.isLoading = false))
         .subscribe({
-            next: (response : ServiceCardDto[]) => {
-              this.myServices = JSON.parse(JSON.stringify(response));
-              this.convertImageUrls(this.myServices);
-            },
-            error: (err: any) => {
-              console.error('Failed to load Services:', err);
-            }
-          });
-        }
+          next: (response : ServiceCardDto[]) => {
+            this.myServices = JSON.parse(JSON.stringify(response));
+            this.convertImageUrls(this.myServices);
+          },
+          error: (err: any) => {
+            console.error('Failed to load Services:', err);
+          }
+        });
+    }
 
   openFilterDialog(): void {
   const dialogRef = this.dialog.open(ServiceFilterDialogComponent);

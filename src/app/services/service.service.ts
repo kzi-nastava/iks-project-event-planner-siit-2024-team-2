@@ -5,6 +5,7 @@ import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
 import { PagedModel } from '../shared/model/paged-model';
 import { ServiceCardDto } from './dtos/service-card-dto.dto';
+import { CreateServiceDto } from './dtos/service-product/create-service.dto';
 @Injectable({
   providedIn: 'root'
 })
@@ -14,8 +15,12 @@ export class ServiceService {
 
   constructor(private httpClient: HttpClient) { }
 
-  add(service: Service) : Observable<Service> {
+  add(service: CreateServiceDto): Observable<Service> {
     return this.httpClient.post<Service>(this.apiUrl, service);
+  }
+
+  update(id: number, service: CreateServiceDto): Observable<Service> {
+    return this.httpClient.put<Service>(`${this.apiUrl}/${id}`, service);
   }
 
   getService(id: number): Observable<Service> {

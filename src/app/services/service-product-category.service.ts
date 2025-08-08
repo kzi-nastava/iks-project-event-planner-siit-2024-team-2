@@ -19,4 +19,8 @@ export class ServiceProductCategoryService {
   getAll(): Observable<ServiceProductCategory[]> {
     return this.httpClient.get<ServiceProductCategory[]>(this.apiUrl);
   }
+
+  getByName(name: string): Observable<ServiceProductCategory> {
+    return this.httpClient.get<ServiceProductCategory>(`${this.apiUrl}/name/${name}`);
+  }
 }
