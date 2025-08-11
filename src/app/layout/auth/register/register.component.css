@@ -24,3 +24,7 @@ button:disabled {
 mat-form-field {
   margin-bottom: 15px;
 }
+
+button {
+  margin: 10px;
+}

@@ -22,6 +22,7 @@ export class AuthService {
           localStorage.setItem('token', response.jwt); 
           this.isLoggedInSubject.next(true);
           localStorage.setItem('userId', response.id.toString());
+          localStorage.setItem('role', response.role.toString());
         }
       })
     );
@@ -43,6 +44,8 @@ export class AuthService {
   logout() {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('role');
       this.isLoggedInSubject.next(false);
     }
   }
@@ -56,5 +59,13 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return this.isLoggedInSubject.value;
+  }
+
+  getUserRole(): 'EVENT_ORGANIZER' | 'SERVICE_PRODUCT_PROVIDER' | 'ADMIN' | null {
+    if (typeof window !== 'undefined') {
+      const role = localStorage.getItem('role');
+      return role as 'EVENT_ORGANIZER' | 'SERVICE_PRODUCT_PROVIDER' | 'ADMIN' | null;
+    }
+    return null;
   }
 }
