@@ -1,0 +1,20 @@
+.events-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.event-card {
+  width: 300px;
+}
+mat-paginator {
+  margin-top: 1rem;
+}
+mat-card {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+mat-card:hover {
+  transform: scale(1.05);
+}

@@ -1,6 +1,17 @@
-import { Component, AfterViewInit, OnInit, PLATFORM_ID, Inject, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  OnInit,
+  PLATFORM_ID,
+  Inject,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges,
+  Input
+} from '@angular/core';
 import { MapService } from './map.service';
-import { isPlatformBrowser } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import 'leaflet/dist/leaflet.css';
 
@@ -9,14 +20,17 @@ import 'leaflet/dist/leaflet.css';
   standalone: true,
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css'],
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
 })
-export class MapComponent implements AfterViewInit, OnInit {
+export class MapComponent implements AfterViewInit, OnInit, OnChanges {
   private map: any;
   L: any;
   private currentMarker: any;
-  searchQuery: string = ''; // For binding to the input field
+  searchQuery: string = '';
 
+  @Input() latitude: number = 0;
+  @Input() longitude: number = 0;
+  @Input() readonly: boolean = false;
   @Output() coordinatesSelected = new EventEmitter<{ lat: number; lng: number }>();
 
   constructor(
@@ -24,12 +38,19 @@ export class MapComponent implements AfterViewInit, OnInit {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
+  ngOnChanges(changes: SimpleChanges) {
+    if ((changes['latitude'] || changes['longitude']) && this.map) {
+      this.setMarker(this.latitude, this.longitude);
+    }
+  }
+
   async ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       const L = await import('leaflet');
       this.L = L;
+
       this.map = this.L.map('map', {
-        center: [45.2396, 19.8227],
+        center: [this.latitude || 45.2396, this.longitude || 19.8227],
         zoom: 13,
       });
 
@@ -38,18 +59,34 @@ export class MapComponent implements AfterViewInit, OnInit {
         {
           maxZoom: 18,
           minZoom: 3,
-          attribution:
-            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+          attribution: '&copy; OpenStreetMap contributors',
         }
       );
       tiles.addTo(this.map);
-      this.registerOnClick();
+
+      if (!this.readonly) {
+        this.registerOnClick();
+      }
+
+      this.setMarker(this.latitude, this.longitude);
+    }
+  }
+
+  ngAfterViewInit(): void {}
+
+  setMarker(lat: number, lng: number): void {
+    if (!lat || !lng || !this.L || !this.map) return;
+
+    if (this.currentMarker) {
+      this.map.removeLayer(this.currentMarker);
     }
 
-    // let DefaultIcon = this.L.icon({
-    //   iconUrl: 'https://unpkg.com/leaflet@1.6.0/dist/images/marker-icon.png',
-    // });
-    // this.L.Marker.prototype.options.icon = DefaultIcon;
+    this.currentMarker = this.L.marker([lat, lng])
+      .addTo(this.map)
+      .bindPopup('Selected Location')
+      .openPopup();
+
+    this.map.setView([lat, lng], 13);
   }
 
   onSearch(event: Event): void {
@@ -63,46 +100,32 @@ export class MapComponent implements AfterViewInit, OnInit {
     this.mapService.search(text).subscribe({
       next: (result) => {
         if (result.length === 0) {
-          console.error('No location found for the search query.');
+          console.error('No location found.');
           return;
         }
-  
+
         const lat = result[0].lat;
         const lon = result[0].lon;
-        if (this.currentMarker) {
-          this.map.removeLayer(this.currentMarker);
-        }
+
+        this.setMarker(lat, lon);
         this.coordinatesSelected.emit({ lat, lng: lon });
-        this.currentMarker = this.L.marker([lat, lon])
-          .addTo(this.map)
-          .bindPopup(`Location: ${text}`)
-          .openPopup();
-  
-        this.map.setView([lat, lon], 13);
       },
       error: (err) => {
-        console.error('An error occurred during the search:', err);
+        console.error('Search error:', err);
       },
     });
   }
-  
 
   registerOnClick(): void {
     this.map.on('click', (e: any) => {
+      if (this.readonly) return;
+
       const coord = e.latlng;
       const lat = coord.lat;
       const lng = coord.lng;
 
-      if (this.currentMarker) {
-        this.map.removeLayer(this.currentMarker);
-      }
-
-      this.currentMarker = new this.L.Marker([lat, lng]).addTo(this.map);
-
+      this.setMarker(lat, lng);
       this.coordinatesSelected.emit({ lat, lng });
-
     });
   }
-
-  ngAfterViewInit(): void {}
 }
