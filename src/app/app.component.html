@@ -1,2 +1,7 @@
-<app-nav-bar></app-nav-bar>
-<router-outlet />
+<ng-container *ngIf="isLoggedIn; else guestLayout">
+    <app-nav-bar></app-nav-bar> 
+</ng-container>
+
+<ng-template #guestLayout>
+    <router-outlet></router-outlet>
+</ng-template>

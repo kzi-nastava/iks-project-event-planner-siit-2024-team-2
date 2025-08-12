@@ -105,3 +105,14 @@ a {
   color: black;
 }
 
+.hidden {
+  display: none !important;
+}
+
+mat-list-item[color="primary"] {
+  color: white;
+}
+
+mat-list-item[color="primary"]:hover {
+  background-color: #303f9f;
+}

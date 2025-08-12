@@ -23,7 +23,6 @@ export class AuthService {
           this.isLoggedInSubject.next(true);
           localStorage.setItem('userId', response.id.toString());
           localStorage.setItem('role', response.role.toString());
-          console.log(localStorage)
         }
       })
     );
