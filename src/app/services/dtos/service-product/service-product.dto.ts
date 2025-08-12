@@ -1,13 +1,13 @@
 
 export interface ServiceProductDto {
-    name: string | null;
-    description: string | null;
-    categoryId: number | null;
-    available: boolean | null;
-    visible: boolean | null;
-    price: number | null;
-    discount: number | null;
-    images: string[] | null;
-    availableEventTypeIds: number[] | null;
-    serviceProductProviderId: number | null;
+    name: string | null | undefined;
+    description: string | null | undefined;
+    categoryId: number | null | undefined;
+    available: boolean | null | undefined;
+    visible: boolean | null | undefined;
+    price: number | null | undefined;
+    discount: number | null | undefined;
+    images: string[] | null | undefined;
+    availableEventTypeIds: number[] | null | undefined;
+    serviceProductProviderId: number | null | undefined;
 }
