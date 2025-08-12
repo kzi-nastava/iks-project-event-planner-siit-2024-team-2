@@ -135,6 +135,7 @@ export class RegisterComponent {
           next: (response) => {
             if (response) {
               console.log('Registration successful');
+              this.router.navigate(['/signin']);
             } else {
               console.error('Registration failed');
             }
