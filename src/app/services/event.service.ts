@@ -66,4 +66,8 @@ export class EventService {
   getMaxAttendancesRange(): Observable<number[]> {
     return this.httpClient.get<number[]>(this.apiUrl + "/max-attendances-range");
   }
+
+  dowloadPdf(eventId: number): Observable<Blob> {
+    return this.httpClient.get(`${this.apiUrl}/${eventId}/pdf`, { responseType: 'blob' });
+  }
 }

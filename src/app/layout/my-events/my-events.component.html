@@ -21,6 +21,9 @@
     <mat-card-actions>
       <button mat-button color="primary" (click)="navigateToEventDetails(event.id)">View Details</button>
       <button mat-button color="warn" (click)="deleteEvent(event.id)">Delete event</button>
+      <button mat-raised-button color="primary" (click)="downloadPdf(event.id)">
+        <mat-icon>download</mat-icon>
+      </button>
     </mat-card-actions>
   </mat-card>
 </div>

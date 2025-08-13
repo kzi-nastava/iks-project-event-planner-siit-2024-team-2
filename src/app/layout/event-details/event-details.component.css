@@ -8,3 +8,6 @@ mat-card {
   text-align: center;
   margin-top: 2rem;
 }
+button {
+  margin-left: 20px;
+}

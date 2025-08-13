@@ -11,11 +11,12 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-my-events',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatPaginatorModule],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatPaginatorModule, MatIconModule],
   templateUrl: './my-events.component.html',
   styleUrls: ['./my-events.component.css'],
 })
@@ -84,5 +85,23 @@ export class MyEventsComponent implements OnInit {
   }
   navigateToEventDetails(eventId?: number): void {
     this.router.navigate(['/new-event'], { queryParams: { id: eventId } });
+  }
+
+  downloadPdf(eventId: number): void {
+    this.eventService.dowloadPdf(eventId).subscribe({
+      next: (response) => {
+        const blob = new Blob([response], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `event-${eventId}.pdf`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        this.error = 'Failed to download PDF.';
+        console.error(err);
+      }
+    });
   }
 }
