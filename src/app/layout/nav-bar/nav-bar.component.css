@@ -83,6 +83,9 @@ mat-nav-list {
 mat-icon {
   margin-right: 10px;
   color: #7C96FF;
+  background-color: transparent;
+}
+.mdc-icon-button {
   background-color: #EEF2FF;
 }
 mat-list-item p {
