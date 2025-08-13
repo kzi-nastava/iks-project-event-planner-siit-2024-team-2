@@ -37,6 +37,11 @@ export class NavBarComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
+  hasRole(roles: string[]): boolean {
+    const userRole = this.authService.getUserRole();
+    return userRole ? roles.includes(userRole) : false;
+  }
+
   ngOnInit(): void {
     this.authSub = this.authService.isLoggedIn$.subscribe(status => {
       this.isLoggedIn = status;

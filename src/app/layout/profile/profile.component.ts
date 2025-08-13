@@ -40,7 +40,6 @@ export class ProfileComponent {
     } else {
       this.profileService.getUserData(Number(userId)).subscribe({
         next: (data) => {
-          console.log('User data loaded:', data);
           this.userRole = data.userRole;
           this.userInfo = {
             firstName: data.firstName,
@@ -57,7 +56,6 @@ export class ProfileComponent {
           if (data.userRole === 'SERVICE_PRODUCT_PROVIDER') {
             this.profileService.getCompanyData(Number(userId)).subscribe({
               next: (companyData) => {
-                console.log('Company data loaded:', companyData);
                 this.companyInfo = {
                   companyName: companyData.companyName,
                   companyDescription: companyData.companyDescription,
@@ -103,7 +101,6 @@ export class ProfileComponent {
 
   updateCompanyInfo() {
     if (this.userRole !== 'SERVICE_PRODUCT_PROVIDER') return;
-    console.log('Updating company info:', this.companyInfo);
         if (localStorage.getItem('userId') === null) {
       console.error('User ID not found in local storage.');
       return;
