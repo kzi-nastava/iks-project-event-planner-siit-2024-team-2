@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { ServiceProductCategory } from '../model/service-product-category';
 import { Observable } from 'rxjs';
+import { ServiceProductCategoryDto } from './dtos/service-product/service-product-category.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class ServiceProductCategoryService {
 
   constructor(private httpClient: HttpClient) { }
 
-  add(category: ServiceProductCategory) : Observable<ServiceProductCategory> {
+  add(category: ServiceProductCategoryDto) : Observable<ServiceProductCategory> {
     return this.httpClient.post<ServiceProductCategory>(this.apiUrl, category);
   }
 
