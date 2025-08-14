@@ -1,0 +1,30 @@
+<p>invitations-dialog works!</p>
+<mat-form-field class="invitation-chip-list">
+    <mat-label>Invitations</mat-label>
+    <mat-chip-grid #chipGrid aria-label="Enter invitations">
+    @for (invitation of invitations(); track invitation) {
+        <mat-chip-row
+        (removed)="remove(invitation)"
+        [editable]="invitation.editable"
+        (edited)="edit(invitation, $event)"
+        [aria-description]="'press enter to edit ' + invitation.email"
+        >
+        <button matChipEdit [attr.aria-label]="'edit ' + invitation.email">
+            <mat-icon>edit</mat-icon>
+        </button>      
+        {{invitation.email}}
+        <button matChipRemove [attr.aria-label]="'remove ' + invitation.email">
+            <mat-icon>cancel</mat-icon>
+        </button>
+        </mat-chip-row>
+    }
+    <input
+        placeholder="New email..."
+        type="email"
+        [matChipInputFor]="chipGrid"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="addOnBlur"
+        (matChipInputTokenEnd)="add($event)"
+    />
+    </mat-chip-grid>
+</mat-form-field>

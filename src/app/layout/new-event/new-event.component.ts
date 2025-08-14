@@ -1,16 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormGroup, FormsModule, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { MapComponent } from '../../shared/map/map.component';
-import { EventType } from '../../model/event-type';
+import { EventType } from '../../model/event/event-type';
 import { EventTypeService } from '../../services/event-type.service';
 import { EventService } from '../../services/event.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialog } from '@angular/material/dialog';
+import { InvitationsDialogComponent } from '../../dialog/invitations-dialog/invitations-dialog.component';
+import { Event } from '../../model/event/event';
 
 @Component({
   selector: 'app-create-event',
@@ -39,10 +42,15 @@ export class NewEventComponent {
     longitude: new FormControl(0, [Validators.required]),
     eventType: new FormControl(0, [Validators.required]),
     maxAttendances: new FormControl(0, [Validators.required]),
-    open: new FormControl()
+    open: new FormControl(),
+    invitationEmails: new FormControl()
   });
+  invitations: string[] = [];
 
   eventTypes: EventType[] = [];
+  readonly dialog = inject(MatDialog);
+
+  isOpen = () => this.createEventForm?.value?.open;
 
   createEvent(): void {
     if (!localStorage.getItem('userId')) {
@@ -67,7 +75,8 @@ export class NewEventComponent {
       eventTypeId: this.createEventForm.value.eventType,
       eventOrganizer: Number(localStorage.getItem('userId')),
       maxAttendances: this.createEventForm.value.maxAttendances,
-      open: this.createEventForm.value.open
+      open: this.createEventForm.value.open,
+      invitationEmails: this.createEventForm.value.invitationEmails
     };
     if (this.id !== -1) { // Indicates an update
       this.eventService.update(event, this.id).subscribe({
@@ -110,43 +119,45 @@ export class NewEventComponent {
     this.loadEventTypes();
   }
 
-fetchEventData(eventId: number): void {
-  this.eventTypeService.getAll().subscribe(
-    (eventTypes) => {
-      this.eventTypes = eventTypes;
+  fetchEventData(eventId: number): void {
+    this.eventTypeService.getAll().subscribe(
+      (eventTypes) => {
+        this.eventTypes = eventTypes;
 
-      this.eventService.getEvent(eventId).subscribe(
-        (event: any) => {
-          console.log('Fetched event:', event);
-          const formattedDate = new Date(event.date).toLocaleDateString('en-CA');
-          this.createEventForm.patchValue({
-            name: event.name,
-            description: event.description,
-            date: formattedDate,
-            latitude: event.latitude,
-            longitude: event.longitude,
-            eventType: event.type.id,
-            maxAttendances: event.maxAttendances,
-            open: event.open
-          });
-          this.selectedType =
-            this.eventTypes.find((type) => type.id === event.type.id) ||
-            this.eventTypes[0];
-        },
-        (error) => {
-          console.error('Error fetching event:', error);
-          this.snackBar.open('Failed to load event.', 'Close', {
-            duration: 3000,
-            panelClass: ['snackbar-error'],
-          });
-        }
-      );
-    },
-    (error) => {
-      console.error('Error fetching event types:', error);
-    }
-  );
-}
+        this.eventService.getEvent(eventId).subscribe(
+          (event: any) => {
+            console.log('Fetched event:', event);
+            const formattedDate = new Date(event.date).toLocaleDateString('en-CA');
+            this.createEventForm.patchValue({
+              name: event.name,
+              description: event.description,
+              date: formattedDate,
+              latitude: event.latitude,
+              longitude: event.longitude,
+              eventType: event.type.id,
+              maxAttendances: event.maxAttendances,
+              open: event.open,
+              invitationEmails: event.invitationEmails
+            });
+            console.log(event);
+            this.selectedType =
+              this.eventTypes.find((type) => type.id === event.type.id) ||
+              this.eventTypes[0];
+          },
+          (error) => {
+            console.error('Error fetching event:', error);
+            this.snackBar.open('Failed to load event.', 'Close', {
+              duration: 3000,
+              panelClass: ['snackbar-error'],
+            });
+          }
+        );
+      },
+      (error) => {
+        console.error('Error fetching event types:', error);
+      }
+    );
+  }
 
 
   loadEventTypes(): void {
@@ -173,6 +184,23 @@ fetchEventData(eventId: number): void {
 
   openAgenda() {
     this.router.navigate(['/agenda'], { queryParams: { id: this.id } });
+  }
+
+  // Invitations
+  openInvitationsDialog() {
+    const dialogRef = this.dialog.open(InvitationsDialogComponent, {
+      data: this.createEventForm.value.invitationEmails,
+      width: '500px',
+      height: '500px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.createEventForm.patchValue({
+          invitationEmails: result,
+        });
+      }
+    });
   }
 }
 
