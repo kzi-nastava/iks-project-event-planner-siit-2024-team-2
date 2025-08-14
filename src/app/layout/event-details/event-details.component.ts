@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '../../services/event.service';
-import { Event } from '../../model/event';
+import { Event } from '../../model/event/event';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MapComponent } from '../../shared/map/map.component';

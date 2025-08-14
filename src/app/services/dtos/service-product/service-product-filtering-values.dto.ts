@@ -1,4 +1,4 @@
-import { EventType } from "../../../model/event-type";
+import { EventType } from "../../../model/event/event-type";
 import { ServiceProductCategory } from "../../../model/service-product/service-product-category";
 
 export interface ServiceProductFilteringValues {

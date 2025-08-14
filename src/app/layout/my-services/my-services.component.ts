@@ -9,7 +9,7 @@ import { ServiceService } from '../../services/service.service';
 import { finalize } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
-import { ServiceCardDto } from '../../services/dtos/service-card-dto.dto';
+import { ServiceCardDto } from '../../services/dtos/service-product/service-card-dto.dto';
 
 const imagesApi = "api/images/";
 

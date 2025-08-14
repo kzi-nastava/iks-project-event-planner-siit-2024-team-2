@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { EventType } from '../model/event-type';
+import { EventType } from '../model/event/event-type';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { PagedModel } from '../shared/model/paged-model';
-import { CreateEventType } from '../model/create-event-type';
+import { CreateEventType } from './dtos/event/create-event-type';
 
 @Injectable({
   providedIn: 'root'

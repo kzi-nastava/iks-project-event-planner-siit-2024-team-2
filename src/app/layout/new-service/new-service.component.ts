@@ -82,7 +82,7 @@ export class NewServiceComponent {
           this.eventTypeIds = allEventTypes.map(type => type.id)
         })
         this.SPCategoryService.getAll().subscribe(allCategories => {
-          this.serviceCategories = allCategories.map(c => c.name);
+          this.serviceCategories = allCategories.map(c => c.name || '');
         });
         this.initializeCheckboxValues([]);
         this.images = [];
