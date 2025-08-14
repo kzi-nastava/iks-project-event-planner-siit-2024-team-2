@@ -14,6 +14,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { InvitationsDialogComponent } from '../../dialog/invitations-dialog/invitations-dialog.component';
 import { Event } from '../../model/event/event';
+import { Invitation } from '../../dialog/invitations-dialog/invitations-dialog.component';
 
 @Component({
   selector: 'app-create-event',
@@ -25,7 +26,7 @@ import { Event } from '../../model/event/event';
       MapComponent,
       ReactiveFormsModule,
       MatButtonModule,
-      MatTooltipModule 
+      MatTooltipModule
     ],
   providers: [MapComponent],
   templateUrl: './new-event.component.html',
@@ -42,10 +43,9 @@ export class NewEventComponent {
     longitude: new FormControl(0, [Validators.required]),
     eventType: new FormControl(0, [Validators.required]),
     maxAttendances: new FormControl(0, [Validators.required]),
-    open: new FormControl(),
-    invitationEmails: new FormControl()
+    open: new FormControl()
   });
-  invitations: string[] = [];
+  invitations: Invitation[] = [];
 
   eventTypes: EventType[] = [];
   readonly dialog = inject(MatDialog);
@@ -76,7 +76,7 @@ export class NewEventComponent {
       eventOrganizer: Number(localStorage.getItem('userId')),
       maxAttendances: this.createEventForm.value.maxAttendances,
       open: this.createEventForm.value.open,
-      invitationEmails: this.createEventForm.value.invitationEmails
+      invitationEmails: this.invitations.map(invitation => invitation.email)
     };
     if (this.id !== -1) { // Indicates an update
       this.eventService.update(event, this.id).subscribe({
@@ -136,10 +136,9 @@ export class NewEventComponent {
               longitude: event.longitude,
               eventType: event.type.id,
               maxAttendances: event.maxAttendances,
-              open: event.open,
-              invitationEmails: event.invitationEmails
+              open: event.open
             });
-            console.log(event);
+            this.invitations = event.invitationEmails?.map((email: string) => ({ email: email, editable: false })) || [];
             this.selectedType =
               this.eventTypes.find((type) => type.id === event.type.id) ||
               this.eventTypes[0];
@@ -189,16 +188,14 @@ export class NewEventComponent {
   // Invitations
   openInvitationsDialog() {
     const dialogRef = this.dialog.open(InvitationsDialogComponent, {
-      data: this.createEventForm.value.invitationEmails,
+      data: [...this.invitations],
       width: '500px',
-      height: '500px',
+      // height: '500px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.createEventForm.patchValue({
-          invitationEmails: result,
-        });
+        this.invitations = result;
       }
     });
   }

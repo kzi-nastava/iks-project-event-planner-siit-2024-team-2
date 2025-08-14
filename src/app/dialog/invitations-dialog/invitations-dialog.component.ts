@@ -1,14 +1,16 @@
 import { Component, inject } from '@angular/core';
 import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogActions, MatDialogContent, MatDialogTitle, MatDialogClose } from '@angular/material/dialog';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { signal } from '@angular/core';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { DialogRef } from '@angular/cdk/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
-interface Invitation {
+export interface Invitation {
   email: string;
   readonly editable: boolean;
 }
@@ -16,13 +18,13 @@ interface Invitation {
 @Component({
   selector: 'app-invitations-dialog',
   standalone: true,
-  imports: [ MatFormFieldModule, MatChipsModule, MatIconModule ],
+  imports: [MatFormFieldModule, MatChipsModule, MatIconModule, MatDialogActions, MatDialogContent, MatDialogTitle, MatDialogClose, MatButtonModule],
   templateUrl: './invitations-dialog.component.html',
   styleUrl: './invitations-dialog.component.css'
 })
 export class InvitationsDialogComponent {
   readonly dialog = inject(MatDialogRef<InvitationsDialogComponent>);
-  readonly data = inject<string[]>(MAT_DIALOG_DATA);
+  readonly data = inject<Invitation[]>(MAT_DIALOG_DATA);
 
   // Invitations
   readonly addOnBlur = true;
@@ -31,9 +33,7 @@ export class InvitationsDialogComponent {
   readonly announcer = inject(LiveAnnouncer);
 
   ngOnInit(): void {
-    this.invitations.update(invitations => {
-      return this.data.map(email => ({ email: email, editable: false }));
-    });
+    this.invitations.update(() => this.data);
   }
 
   // Invitations chip list
@@ -79,5 +79,9 @@ export class InvitationsDialogComponent {
       }
       return invitations;
     });
+  }
+
+  apply() {
+    this.dialog.close(this.invitations());
   }
 }
