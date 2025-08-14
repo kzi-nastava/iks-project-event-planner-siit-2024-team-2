@@ -21,7 +21,15 @@ export class ServiceProductCategoryService {
     return this.httpClient.get<ServiceProductCategory[]>(this.apiUrl);
   }
 
+  getById(id: number): Observable<ServiceProductCategory> {
+    return this.httpClient.get<ServiceProductCategory>(`${this.apiUrl}/${id}`);
+  }
+
   getByName(name: string): Observable<ServiceProductCategory> {
     return this.httpClient.get<ServiceProductCategory>(`${this.apiUrl}/name/${name}`);
+  }
+
+  update(id: number, category:ServiceProductCategoryDto): Observable<ServiceProductCategory> {
+    return this.httpClient.put<ServiceProductCategory>(`${this.apiUrl}/${id}`, category);
   }
 }
