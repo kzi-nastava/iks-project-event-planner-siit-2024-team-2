@@ -17,6 +17,7 @@ import { EventDetailsComponent } from './layout/event-details/event-details.comp
 import { AgendaComponent } from './layout/agenda/agenda.component';
 import { RoleGuard } from './role.guard';
 import { NewCategoryComponent } from './layout/new-category/new-category.component';
+import { AllCategoriesComponent } from './layout/all-categories/all-categories.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -29,6 +30,7 @@ export const routes: Routes = [
     {path: 'calendar',component: MyEventsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['EVENT_ORGANIZER', 'SERVICE_PRODUCT_PROVIDER', 'ADMIN'] }},
     {path: 'notifications', component: NotificationsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['EVENT_ORGANIZER', 'SERVICE_PRODUCT_PROVIDER', 'ADMIN'] }},
     {path: 'new-event-type', component: NewEventTypeComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN'] }},
+    {path: 'all-categories', component: AllCategoriesComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN'] }},
     {path: 'new-category', component: NewCategoryComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN'] }},
     {path: 'new-service', component: NewServiceComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['SERVICE_PRODUCT_PROVIDER'] }},
     {path: 'new-product', component: NewProductComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['SERVICE_PRODUCT_PROVIDER'] }}, 

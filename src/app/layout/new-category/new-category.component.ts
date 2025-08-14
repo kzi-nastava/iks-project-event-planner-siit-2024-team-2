@@ -30,16 +30,30 @@ constructor(
     private route: ActivatedRoute,
     private router: Router,
     private spCategoryService: ServiceProductCategoryService,
-    private snackBar: MatSnackBar,
-  ) {
+    private snackBar: MatSnackBar) {}
 
-  }
+
   inputForm = new FormGroup({
-    name: new FormControl('', [Validators.required, Validators.minLength(1)]),
-    description: new FormControl('', [Validators.required, Validators.minLength(1)]),
+    name: new FormControl('', [Validators.required]),
+    description: new FormControl('', [Validators.required]),
   });
-  
-  ngOnInit() {}
+
+  catId = -1;
+
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.catId = params['id'];
+      if (this.catId !== undefined) {
+        this.spCategoryService.getById(this.catId).subscribe(cat => {
+          this.inputForm.patchValue({
+            name: cat.name,
+            description: cat.description
+          })
+        });
+      }
+      else this.inputForm.reset();
+    })
+  }
 
   onSubmit() {
     if (this.inputForm.valid) {
@@ -49,30 +63,62 @@ constructor(
         name: this.inputForm.value.name,
         description: this.inputForm.value.description, 
       };
-  
-      this.spCategoryService.add(category).subscribe({
-        next: (category: any) => {
-          console.log('Category created:', category);
-  
-          this.snackBar.open('Category created successfully!', 'Close', {
-            duration: 3000,
-            panelClass: ['snack-success']
-          });
-  
-          this.router.navigate(['../'], { relativeTo: this.route });
-        },
-        error: (err) => {
-          console.error('Error creating category:', err);
-          this.snackBar.open('Failed to create category. Please try again.', 'Close', {
-            duration: 3000,
-            panelClass: ['snack-error']
-          });
-        }
-      });
+
+      if (this.catId == undefined)
+        this.createCategory(category);
+      else
+        this.updateCategory(category);
     }
+  }
+
+  createCategory(category: ServiceProductCategoryDto) {
+    this.spCategoryService.add(category).subscribe({
+      next: (category: any) => {
+        console.log('Category created:', category);
+
+        this.snackBar.open('Category created successfully!', 'Close', {
+          duration: 3000,
+          panelClass: ['snack-success']
+        });
+
+        this.router.navigate(['../'], { relativeTo: this.route });
+      },
+      error: (err) => {
+        console.error('Error creating category:', err);
+        this.snackBar.open('Failed to create category. Please try again.', 'Close', {
+          duration: 3000,
+          panelClass: ['snack-error']
+        });
+      }
+    });
+  }
+
+  updateCategory(category: ServiceProductCategoryDto) {
+    this.spCategoryService.update(this.catId, category).subscribe({
+      next: (category: any) => {
+        console.log('Category updated:', category);
+
+        this.snackBar.open('Category updated successfully!', 'Close', {
+          duration: 3000,
+          panelClass: ['snack-success']
+        });
+
+        this.router.navigate(['/all-categories']); 
+      },
+      error: (err) => {
+        console.error('Error updating category:', err);
+        this.snackBar.open('Failed to update category. Please try again.', 'Close', {
+          duration: 3000,
+          panelClass: ['snack-error']
+        });
+      }
+    });
   }
   
   onCancel(): void {
-    this.router.navigate(['../'], { relativeTo: this.route });
+    if (this.catId != undefined)
+      this.router.navigate(['/all-categories']); 
+    else
+      this.router.navigate(['../'], { relativeTo: this.route });
   }
 }
