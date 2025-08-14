@@ -30,19 +30,19 @@
         <mat-icon>calendar_today</mat-icon>
         Calendar
       </mat-list-item>
-      <mat-list-item *ngIf="hasRole(['SERVICE_PRODUCT_PROVIDER', 'ADMIN'])" [routerLink]="['new-service']">
+      <mat-list-item *ngIf="hasRole(['SERVICE_PRODUCT_PROVIDER'])" [routerLink]="['new-service']">
         <mat-icon>add</mat-icon>
         New service
       </mat-list-item>
-      <mat-list-item *ngIf="hasRole(['SERVICE_PRODUCT_PROVIDER', 'ADMIN'])" [routerLink]="['new-product']">
+      <mat-list-item *ngIf="hasRole(['SERVICE_PRODUCT_PROVIDER'])" [routerLink]="['new-product']">
         <mat-icon>add</mat-icon>
         New product
       </mat-list-item>
-      <mat-list-item *ngIf="hasRole(['SERVICE_PRODUCT_PROVIDER', 'ADMIN'])" [routerLink]="['my-services']">
+      <mat-list-item *ngIf="hasRole(['SERVICE_PRODUCT_PROVIDER'])" [routerLink]="['my-services']">
         <mat-icon>handshake</mat-icon>
         My services
       </mat-list-item>
-      <mat-list-item *ngIf="hasRole(['SERVICE_PRODUCT_PROVIDER', 'ADMIN'])" [routerLink]="['my-products']">
+      <mat-list-item *ngIf="hasRole(['SERVICE_PRODUCT_PROVIDER'])" [routerLink]="['my-products']">
         <mat-icon>handshake</mat-icon>
         My products
       </mat-list-item>
@@ -50,11 +50,15 @@
         <mat-icon>add</mat-icon>
         New Event Type
       </mat-list-item>
-      <mat-list-item *ngIf="hasRole(['EVENT_ORGANIZER', 'ADMIN'])" [routerLink]="['new-event']">
+      <mat-list-item *ngIf="hasRole(['ADMIN'])" [routerLink]="['new-category']">
+        <mat-icon>add</mat-icon>
+        New Category
+      </mat-list-item>
+      <mat-list-item *ngIf="hasRole(['EVENT_ORGANIZER'])" [routerLink]="['new-event']">
         <mat-icon>add</mat-icon>
         New event
       </mat-list-item>
-            <mat-list-item *ngIf="hasRole(['EVENT_ORGANIZER', 'ADMIN'])" [routerLink]="['my-events']">
+            <mat-list-item *ngIf="hasRole(['EVENT_ORGANIZER'])" [routerLink]="['my-events']">
         <mat-icon>handshake</mat-icon>
         My events
       </mat-list-item>
