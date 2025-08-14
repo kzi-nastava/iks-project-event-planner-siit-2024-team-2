@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DeleteDialogComponent } from './delete-dialog.component';
+import { SharedTestingModule } from '../../../testing/shared-testing.module';
+import { MatDialogRef } from '@angular/material/dialog';
 
 describe('DeleteDialogComponent', () => {
   let component: DeleteDialogComponent;
@@ -8,7 +10,8 @@ describe('DeleteDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DeleteDialogComponent]
+      imports: [DeleteDialogComponent, SharedTestingModule],
+      providers: [DeleteDialogComponent]
     })
     .compileComponents();
 

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HomeServiceProductFilterDialogComponent } from './home-service-product-filter-dialog.component';
+import { SharedTestingModule } from '../../../testing/shared-testing.module';
 
 describe('HomeServiceProductFilterDialogComponent', () => {
   let component: HomeServiceProductFilterDialogComponent;
@@ -8,7 +9,7 @@ describe('HomeServiceProductFilterDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HomeServiceProductFilterDialogComponent]
+      imports: [HomeServiceProductFilterDialogComponent, SharedTestingModule]
     })
     .compileComponents();
 

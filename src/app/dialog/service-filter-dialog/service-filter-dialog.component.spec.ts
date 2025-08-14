@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ServiceFilterDialogComponent } from './service-filter-dialog.component';
+import { SharedTestingModule } from '../../../testing/shared-testing.module';
 
 describe('ServiceFilterDialogComponent', () => {
   let component: ServiceFilterDialogComponent;
@@ -8,7 +9,7 @@ describe('ServiceFilterDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ServiceFilterDialogComponent]
+      imports: [ServiceFilterDialogComponent, SharedTestingModule]
     })
     .compileComponents();
 

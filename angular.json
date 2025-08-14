@@ -24,6 +24,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                  "glob": "**/*",
+                  "input": "node_modules/leaflet/dist/images/",
+                  "output": "./media/"
               }
             ],
             "styles": [
@@ -89,15 +94,22 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                  "glob": "**/*",
+                  "input": "node_modules/leaflet/dist/images/",
+                  "output": "./media/"
               }
             ],
             "styles": [
-              "src/styles.css",
-              "@angular/material/prebuilt-themes/azure-blue.css"
+              "src/styles.scss",
+              "@angular/material/prebuilt-themes/azure-blue.css",
+              "node_modules/leaflet/dist/leaflet.css"
             ],
             "scripts": []
           }
-        },
+        }        
+        ,
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {

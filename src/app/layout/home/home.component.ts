@@ -47,7 +47,7 @@ const imagesApi = "api/images/";
     MatDialogModule, MatSelect, MatOption, MatPaginatorModule, MatProgressSpinnerModule, DragScrollComponent, DragScrollItemDirective,
   ],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+  styleUrl: './home.component.css'
 })
 export class HomeComponent {
   topEvents: EventSummaryDto[] = [];
