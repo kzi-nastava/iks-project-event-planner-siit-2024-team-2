@@ -17,13 +17,18 @@
             </mat-chip-row>
         }
         <input
+            matInput
             placeholder="New email..."
-            type="email"
+            [formControl]="emailFormControl"
             [matChipInputFor]="chipGrid"
             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
             [matChipInputAddOnBlur]="addOnBlur"
             (matChipInputTokenEnd)="add($event)"
+            type="email"
         />
+        <mat-error *ngIf="emailFormControl.invalid && emailFormControl.touched">
+        Not a valid email address.
+        </mat-error>
         </mat-chip-grid>
     </mat-form-field>
 </mat-dialog-content>

@@ -66,6 +66,7 @@ export class NewEventComponent {
       });
       return;
     }
+    let open = this.createEventForm.value.open;
     const event = {
       name: this.createEventForm.value.name,
       description: this.createEventForm.value.description,
@@ -75,8 +76,8 @@ export class NewEventComponent {
       eventTypeId: this.createEventForm.value.eventType,
       eventOrganizer: Number(localStorage.getItem('userId')),
       maxAttendances: this.createEventForm.value.maxAttendances,
-      open: this.createEventForm.value.open,
-      invitationEmails: this.invitations.map(invitation => invitation.email)
+      open: open,
+      invitationEmails: open ? this.invitations.map(invitation => invitation.email) : null
     };
     if (this.id !== -1) { // Indicates an update
       this.eventService.update(event, this.id).subscribe({
