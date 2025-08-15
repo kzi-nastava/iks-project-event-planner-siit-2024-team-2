@@ -74,10 +74,10 @@ export class NewEventComponent {
       latitude: this.createEventForm.value.latitude,
       date: this.createEventForm.value.date,
       eventTypeId: this.createEventForm.value.eventType,
-      eventOrganizer: Number(localStorage.getItem('userId')),
+      eventOrganizerId: Number(localStorage.getItem('userId')),
       maxAttendances: this.createEventForm.value.maxAttendances,
       open: open,
-      invitationEmails: open ? this.invitations.map(invitation => invitation.email) : null
+      invitationEmails: open ? null : this.invitations.map(invitation => invitation.email)
     };
     if (this.id !== -1) { // Indicates an update
       this.eventService.update(event, this.id).subscribe({

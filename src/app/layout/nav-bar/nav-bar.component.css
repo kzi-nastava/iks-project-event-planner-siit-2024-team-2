@@ -46,12 +46,12 @@ mat-toolbar {
   gap: 10px;
 }
 
-::ng-deep .custom-signin-button {
+.custom-signin-button {
   background-color: #7C96FF !important;
   color: white !important;
 }
 
-::ng-deep .custom-signin-button:hover {
+.custom-signin-button:hover {
   background-color: #5B78CC !important;
   color: white !important;
 }
@@ -61,21 +61,19 @@ mat-nav-list {
   margin-top: 60px;
 }
 
-::ng-deep mat-list-item {
+mat-list-item {
   display: flex;
   align-items: center;
   color: #7C96FF !important;
-}
-::ng-deep mat-list-item {
-  color: #7C96FF !important;
+  background-color: #EEF2FF;
 }
 
-::ng-deep mat-list-item:hover {
+mat-list-item:hover {
   background-color: #EEF2FF !important;
   color: #5B78CC !important;
 }
 
-::ng-deep mat-list-item .mat-line {
+mat-list-item .mat-line {
   color: inherit !important;
 }
 

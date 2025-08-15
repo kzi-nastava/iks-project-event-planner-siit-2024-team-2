@@ -13,6 +13,7 @@ import { EventTypeService } from '../../services/event-type.service';
 import { forkJoin } from 'rxjs';
 import { ToastService } from '../../services/toast-service';
 import { ImageService } from '../../services/image.service';
+import { B } from '@angular/cdk/keycodes';
 
 
 @Component({
@@ -167,41 +168,43 @@ export class NewServiceComponent {
       return;
     }
     else {
-      this.selectedImages.forEach(image => {
-        this.imageService.uploadImage(image).subscribe({
-      next: response => {},
-      error: err => {
-        console.error('Failed to upload image', err);
-      }
-    });
-      });
-      const service = this.recieveDataFromForm();
-      this.toastService.show('Updating...', 2000);
-      if (this.update) {  // UPDATING
-        this.serviceService.update(this.serviceId, service).subscribe({
-          next: (service: any) => {
-            this.toastService.show('Service ' + service.name + ' updated successfully!', 2000);
-            this.router.navigate(['/my-services']);
+      let observables = this.selectedImages.map((image:File) => this.imageService.uploadImage(image));
+      forkJoin(observables)
+        .subscribe({
+          next: (response: string[]) => {
+            const service = this.recieveDataFromForm();
+            service.images = response.map(path => atob(path));
+            this.toastService.show('Updating...', 2000);
+            if (this.update) {  // UPDATING
+              this.serviceService.update(this.serviceId, service).subscribe({
+                next: (service: any) => {
+                  this.toastService.show('Service ' + service.name + ' updated successfully!', 2000);
+                  this.router.navigate(['/my-services']);
+                },
+                error: (err: any) => {
+                  console.error('Failed to update service:', err);
+                  this.toastService.show('Failed to update!', 2000);
+                }
+              });
+            }
+            else {  // CREATING
+              this.toastService.show('Creating...', 2000);
+              this.serviceService.add(service).subscribe({
+                next: (service: any) => {
+                  this.toastService.show('Service ' + service.name + ' created successfully!', 2000);
+                  this.router.navigate(['/my-services']);
+                },
+                error: (err: any) => {
+                  console.error('Failed to create service:', err);
+                  this.toastService.show('Failed to create!', 2000);
+                }
+              });
+            }
           },
-          error: (err: any) => {
-            console.error('Failed to update service:', err);
-            this.toastService.show('Failed to update!', 2000);
+          error: err => {
+            console.error('Failed to upload images', err);
           }
         });
-      }
-      else {  // CREATING
-          this.toastService.show('Creating...', 2000);
-          this.serviceService.add(service).subscribe({
-            next: (service: any) => {
-              this.toastService.show('Service ' + service.name + ' created successfully!', 2000);
-              this.router.navigate(['/my-services']);
-            },
-            error: (err: any) => {
-              console.error('Failed to create service:', err);
-              this.toastService.show('Failed to create!', 2000);
-            }
-          });
-      }
     }
   }
 
