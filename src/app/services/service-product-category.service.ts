@@ -32,4 +32,8 @@ export class ServiceProductCategoryService {
   update(id: number, category:ServiceProductCategoryDto): Observable<ServiceProductCategory> {
     return this.httpClient.put<ServiceProductCategory>(`${this.apiUrl}/${id}`, category);
   }
+
+  delete(id: number): Observable<boolean> {
+    return this.httpClient.delete<boolean>(`${this.apiUrl}/${id}`);
+  }
 }
