@@ -29,7 +29,7 @@
         <button mat-icon-button class="btn-edit" matTooltip="Edit" (click)="onEdit(row)">
           <mat-icon>edit</mat-icon>
         </button>
-        <button mat-icon-button class="btn-delete" matTooltip="Delete" (click)="onDelete(row)">
+        <button mat-icon-button class="btn-delete" matTooltip="Delete" [disabled]="disabledCategories.includes(row.name)" (click)="onDelete(row)">
           <mat-icon>delete</mat-icon>
         </button>
       </td>

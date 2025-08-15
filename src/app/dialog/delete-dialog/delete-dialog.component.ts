@@ -3,6 +3,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ServiceService } from '../../services/service.service';
 import { ToastService } from '../../services/toast-service';
+import { ServiceProductCategoryService } from '../../services/service-product-category.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -15,7 +17,8 @@ import { ToastService } from '../../services/toast-service';
 export class DeleteDialogComponent {
   entityName: string = '';
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<DeleteDialogComponent>,
-    private serviceService: ServiceService, private toastService: ToastService) {
+    private serviceService: ServiceService, private spCategoryService: ServiceProductCategoryService,
+    private toastService: ToastService, private router: Router) {
       this.entityName = data.entityName || 'item';
      }
 
@@ -23,8 +26,18 @@ export class DeleteDialogComponent {
     this.dialogRef.close();
   }
 
+  service: any; 
+
   onConfirm(): void {
-    this.serviceService.delete(this.data.id).subscribe({
+    // define different service depending on current url (page)
+    const currentUrl = this.router.url;
+    if (currentUrl == '/my-services')
+      this.service = this.serviceService;
+    else if (currentUrl == '/all-categories') {
+      this.service = this.spCategoryService;
+    }
+
+    this.service.delete(this.data.id).subscribe({
       next: () => {
         this.toastService.show('Deleted successfully!', 2000);
         this.dialogRef.close(true); // signal success to parent
