@@ -41,7 +41,7 @@ export class SocketService {
 
   // send via REST API
   sendMessageUsingRest(message: Message) {
-    return this.http.post<Message>(environment.apiHost + 'sendMessageRest', message).pipe(
+    return this.http.post<Message>(environment.apiHost + 'send-message-rest', message).pipe(
       map((data: Message) => data)
     );
   }
