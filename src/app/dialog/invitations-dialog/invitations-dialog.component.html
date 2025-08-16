@@ -9,6 +9,7 @@
             [editable]="invitation.editable"
             (edited)="edit(invitation, $event)"
             [aria-description]="'press enter to edit ' + invitation.email"
+            (color)="isInvalidChip(invitation) ? 'warn' : ''"
             >   
             {{invitation.email}}
             <button matChipRemove [attr.aria-label]="'remove ' + invitation.email">
@@ -27,7 +28,7 @@
             type="email"
         />
         <mat-error *ngIf="emailFormControl.invalid && emailFormControl.touched">
-        Not a valid email address.
+            Not a valid email address.
         </mat-error>
         </mat-chip-grid>
     </mat-form-field>

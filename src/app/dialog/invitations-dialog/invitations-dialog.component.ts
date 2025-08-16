@@ -9,7 +9,7 @@ import { signal } from '@angular/core';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { DialogRef } from '@angular/cdk/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { EmailValidator, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIf } from '@angular/common';
 
 
@@ -36,6 +36,8 @@ export class InvitationsDialogComponent {
   readonly invitations = signal<Invitation[]>([]);
   readonly announcer = inject(LiveAnnouncer);
   readonly emailFormControl = new FormControl('', [Validators.email]);
+  readonly editFormControl = new FormControl('', [Validators.email]);
+  editError = false;
 
   ngOnInit(): void {
     this.invitations.update(() => this.data);
@@ -78,6 +80,15 @@ export class InvitationsDialogComponent {
       return;
     }
 
+    // Check if the email is valid
+    this.editFormControl.setValue(value);
+    if (this.editFormControl.invalid) {
+      this.announcer.announce('Not a valid email address.');
+      return;
+    }
+    else
+      this.editFormControl.reset();
+
     // Edit existing invitation
     this.invitations.update(invitations => {
       const index = invitations.indexOf(invitation);
@@ -87,6 +98,12 @@ export class InvitationsDialogComponent {
       }
       return invitations;
     });
+  }
+
+  isInvalidChip(invitation: Invitation): boolean {
+    return this.editFormControl.value == invitation.email 
+            && this.editFormControl.invalid 
+            && this.editFormControl.touched
   }
 
   apply() {
