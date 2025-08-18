@@ -25,7 +25,11 @@ import { ImageService } from '../../services/image.service';
 export class NewServiceComponent {
 
   newServiceForm = new FormGroup({
-      category: new FormControl('', [Validators.required]),
+      categoryForm: new FormGroup({
+        category: new FormControl(''),
+        newCategoryName: new FormControl(''),
+        newCategoryDescription: new FormControl(''),
+      }, {validators: this.oneCategoryRequiredValidator}),
       name: new FormControl('', [Validators.required]),
       description: new FormControl('', [Validators.required]),
       specifies: new FormControl('', [Validators.required]),
@@ -50,6 +54,14 @@ export class NewServiceComponent {
     const maxEngagement = group.get('maxEngagementDuration')?.value;
 
     return (duration > 0 || (minEngagement > 0 && maxEngagement > 0)) ? null : { oneDurationRequiredValidator: true };
+  }
+
+  oneCategoryRequiredValidator(group: AbstractControl): ValidationErrors | null {
+    const category = group.get('category')?.value;
+    const newCategoryName = group.get('newCategoryName')?.value;
+    const newCategoryDescription = group.get('newCategoryDescription')?.value;
+
+    return (category || (newCategoryName && newCategoryDescription)) ? null : { oneCategoryRequiredValidator: true };
   }
   
   serviceCategories : string[] = [];
@@ -108,7 +120,9 @@ export class NewServiceComponent {
         this.initializeCheckboxValues(editingService.availableEventTypes.map(type => type.name));
 
         this.newServiceForm.patchValue({
-          category: editingService.category.name,
+          categoryForm: {
+            category: editingService.category,
+          },
           name: editingService.name,
           description: editingService.description,
           specifies: editingService.specifies,
@@ -169,11 +183,11 @@ export class NewServiceComponent {
     else {
       this.selectedImages.forEach(image => {
         this.imageService.uploadImage(image).subscribe({
-      next: response => {},
-      error: err => {
-        console.error('Failed to upload image', err);
-      }
-    });
+          next: response => {},
+          error: err => {
+            console.error('Failed to upload image', err);
+          }
+        });
       });
       const service = this.recieveDataFromForm();
       this.toastService.show('Updating...', 2000);
@@ -189,18 +203,26 @@ export class NewServiceComponent {
           }
         });
       }
+      else if (!this.newServiceForm.get('categoryForm')?.get('category')?.value) {  // WAITING FOR ADMIN APPROVAL
+        // send a notification to admin {id, category name, desription}
+        const message = {service: service, 
+                        categoryName: this.newServiceForm.get('categoryForm')?.get('newCategoryName')?.value,
+                        categoryDescription: this.newServiceForm.get('categoryForm')?.get('newCategoryDescription')?.value};
+        this.toastService.show('Waiting for creation approval', 2000);
+        this.router.navigate(['/my-services']);
+      }
       else {  // CREATING
-          this.toastService.show('Creating...', 2000);
-          this.serviceService.add(service).subscribe({
-            next: (service: any) => {
-              this.toastService.show('Service ' + service.name + ' created successfully!', 2000);
-              this.router.navigate(['/my-services']);
-            },
-            error: (err: any) => {
-              console.error('Failed to create service:', err);
-              this.toastService.show('Failed to create!', 2000);
-            }
-          });
+        this.toastService.show('Creating...', 2000);
+        this.serviceService.add(service).subscribe({
+          next: (service: any) => {
+            this.toastService.show('Service ' + service.name + ' created successfully!', 2000);
+            this.router.navigate(['/my-services']);
+          },
+          error: (err: any) => {
+            console.error('Failed to create service:', err);
+            this.toastService.show('Failed to create!', 2000);
+          }
+        });
       }
     }
   }

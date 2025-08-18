@@ -3,24 +3,32 @@
 <div id="left-div">
 
     <!-- Service categories combobox -->
-    <div class="custom-combobox">
-        <label for="serviceCategories" class="custom-label" style="margin-bottom: 23px;">Service category:</label>
-        <div class="custom-select-wrapper">
-            <select formControlName="category" id="serviceCategories" class="custom-select" (click) = "getCategoryId()">
-                <option *ngFor="let category of serviceCategories" [value]="category">{{ category }}</option>
-            </select>
-            <span class="custom-arrow">▼</span>
+    <div formGroupName="categoryForm" class="form-container" style="margin-top: 15px; margin-bottom: 15px;">
+
+        <div class="custom-combobox">
+            <label for="serviceCategories" class="custom-label">Service category:</label>
+            <div class="custom-select-wrapper">
+                <select formControlName="category" id="serviceCategories" class="custom-select" (click) = "getCategoryId()">
+                    <option *ngFor="let category of serviceCategories" [value]="category">{{ category }}</option>
+                </select>
+                <span class="custom-arrow">▼</span>
+            </div>
         </div>
 
-        <div class="error-text" [class.visible]="newServiceForm.get('category')?.errors?.['required'] && (newServiceForm.get('category')?.touched || formSubmitted)">
-            Category is required.
-        </div>
+        <label for="new-category" class="form-label">New category request (optional):</label>
+        <input formControlName="newCategoryName" type="text" id="new-category-name" class="form-input" placeholder="Enter new category name">
+
+        <textarea formControlName="newCategoryDescription" type="text" id="new-category-description" class="form-input" placeholder="Enter new category description"></textarea>
+        
+        <span class="error-text" [class.visible]="newServiceForm.get('categoryForm')?.invalid && (newServiceForm.get('categoryForm.category')?.touched || newServiceForm.get('categoryForm.newCategoryDescription')?.touched || formSubmitted)">
+            Category is required, or both new category name and descriptoin.
+        </span>
+
     </div>
 
-    <button type="button" class="fancy-button" style="margin-top: 87px;">New category request</button>
-
+    
     <!-- 6 textboxes for: name, desc, spec, price, discount, and reservation deadline-->
-    <div class="form-container" style="margin-top: 34px;">
+    <div class="form-container">
         <label for="name" class="form-label">Name:</label>
         <input formControlName="name" type="text" id="name" class="form-input" placeholder="Enter the name">
         <div class="error-text" [class.visible]="newServiceForm.get('name')?.invalid && (newServiceForm.get('name')?.touched || formSubmitted)">
@@ -72,7 +80,7 @@
     </div>
 
     <!-- 3 checkboxes: visible, available and automatic -->
-    <div>
+    <div style="margin-top: 15px; margin-bottom: 23px;">
         <input formControlName="visible" type="checkbox" name="visible-checkbox" value="visible"> visibility
         <input formControlName="available" type="checkbox" name="available-checkbox" value="available" style="margin-left:50px;"> availability
         <input formControlName="automaticReserved" type="checkbox" name="automaticReserved" value="automaticReserved"> automatic acceptance
