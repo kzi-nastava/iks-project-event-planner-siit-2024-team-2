@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 @Component({
@@ -19,8 +20,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 export class NotificationsComponent {
   constructor(private spCategoryService: ServiceProductCategoryService,
               private serviceService: ServiceService,
-              private snackBar: MatSnackBar
-  ) {}
+              private snackBar: MatSnackBar,
+              private router: Router,
+              private route: ActivatedRoute) {}
 
   message = '{"service":{"categoryId":-1,"images":["39d99e61-5323-4eb7-a58c-7126f887df81.jpeg"],"name":"m","description":"m","specifies":"m","price":4,"discount":0,"availableEventTypeIds":[4],"serviceProductProviderId":10,"duration":5,"minEngagementDuration":0,"maxEngagementDuration":0,"visible":true,"available":null,"automaticReserved":true,"reservationDaysDeadline":5,"cancellationDaysDeadline":5},"categoryName":"food","categoryDescription":"food"}';
   isCategoryRequest = this.message.includes('"categoryId":-1');
@@ -28,20 +30,31 @@ export class NotificationsComponent {
   service: any;
   selectedCategory = '';
   categories: string[] = [];
+  categoryName: string = '';
+  categoryDescription: string = '';
+  isAccepted = false;
 
   ngOnInit(): void {
     
     if (this.isCategoryRequest) {
       const messageObj = JSON.parse(this.message);
       this.service = messageObj.service;
-      let categoryName = messageObj.categoryName;
-      let categoryDescription = messageObj.categoryDescription;
-      this.category.name = categoryName;
-      this.category.description = categoryDescription;
-      this.message = 'New category request:  name: ' + categoryName + ', description: ' + categoryDescription;
+      this.categoryName = messageObj.categoryName;
+      this.categoryDescription = messageObj.categoryDescription;
+      this.category.name = this.categoryName;
+      this.category.description = this.categoryDescription;
+      this.message = 'New category request:  name: ' + this.categoryName + ', description: ' + this.categoryDescription;
 
       this.spCategoryService.getAll().subscribe(allCategories => {
         this.categories = allCategories.map(c => c.name);
+      });
+
+      this.route.queryParams.subscribe(params => {
+        if (params['callAccept'] === 'true') {
+          this.categoryName = params['name'];
+          this.categoryDescription = params['description'];
+          this.onAccept();
+        }
       });
     }
   }
@@ -69,6 +82,7 @@ export class NotificationsComponent {
         }
       });
     }
+    this.isAccepted = true;
   }
 
   private createService() {
@@ -81,5 +95,15 @@ export class NotificationsComponent {
         this.snackBar.open('Failed to create category. Please try again.', 'Close', { duration: 3000, panelClass: ['snack-error'] });
       }
     });
+  }
+
+  onEdit() {
+    this.router.navigate(['/new-category'], { 
+      queryParams: { 
+        id: 5,  // flag for edit of request category, not existing one
+        name: this.categoryName, 
+        description: this.categoryDescription 
+      }
+    }); 
   }
 }

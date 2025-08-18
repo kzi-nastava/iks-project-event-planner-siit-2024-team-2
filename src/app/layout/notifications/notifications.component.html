@@ -2,11 +2,11 @@
     <label>{{ message }}</label>
 
     <div *ngIf="isCategoryRequest" class="row">
-        <button>Edit</button>
+        <button (click)="onEdit()" [disabled]="isAccepted">Edit</button>
         <label>Choose existing one:</label>
         <select [(ngModel)]="selectedCategory">
             <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
         </select>
-        <button (click)="onAccept()">Accept</button>
+        <button (click)="onAccept()" [disabled]="isAccepted">Accept</button>
     </div>
 </div>
