@@ -11,7 +11,7 @@ import { ServiceService } from '../../services/service.service';
 import { ServiceProductCategoryService } from '../../services/service-product-category.service';
 import { EventTypeService } from '../../services/event-type.service';
 import { forkJoin } from 'rxjs';
-import { ToastService } from '../../services/toast-service';
+import { ToastService } from '../../services/utils/toast-service';
 import { ImageService } from '../../services/image.service';
 
 
