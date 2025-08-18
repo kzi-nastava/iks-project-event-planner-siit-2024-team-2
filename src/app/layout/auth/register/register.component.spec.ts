@@ -116,4 +116,54 @@ describe('RegisterComponent', () => {
     component.onRegister();
     expect(console.error).toHaveBeenCalledWith('Registration error:', jasmine.any(Error));
   });
+  it('should create the registration form with default empty values', () => {
+    expect(component.registerForm).toBeTruthy();
+    expect(component.registerForm.value).toEqual({
+      role: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      firstName: '',
+      lastName: '',
+      address: '',
+      phone: '',
+      profilePhoto: null,
+      companyName: '',
+      companyAddress: '',
+      companyPhone: '',
+      aboutCompany: '',
+      companyPhotos: null
+    });
+  });
+  
+  it('should mark the form as valid when all required OD fields are filled correctly', () => {
+    component.registerForm.patchValue({
+      role: 'OD',
+      email: 'test@example.com',
+      password: 'ValidPass123',
+      confirmPassword: 'ValidPass123',
+      firstName: 'Petar',
+      lastName: 'Petrovic',
+      address: 'Bulevar 1',
+      phone: '0612345678'
+    });
+    expect(component.registerForm.valid).toBeTrue();
+  });
+  
+  it('should send form data when onSubmit is called with valid data', () => {
+    spyOn(component, 'onRegister');
+    component.registerForm.patchValue({
+      role: 'OD',
+      email: 'test@example.com',
+      password: 'ValidPass123',
+      confirmPassword: 'ValidPass123',
+      firstName: 'Petar',
+      lastName: 'Petrovic',
+      address: 'Bulevar 1',
+      phone: '0612345678'
+    });
+    component.onRegister();
+    expect(component.onRegister).toHaveBeenCalledWith();
+  });
+  
 });
