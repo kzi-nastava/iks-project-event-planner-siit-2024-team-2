@@ -43,7 +43,15 @@ constructor(
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.catId = params['id'];
-      if (this.catId !== undefined) {
+
+      if (this.catId == 5) {  // editing catefory request from a notification
+        this.inputForm.patchValue({
+          name: params['name'],
+          description: params['description']
+        })
+      }
+
+      else if (this.catId !== undefined) {  // editing an existing category (from all-categories)
         this.spCategoryService.getById(this.catId).subscribe(cat => {
           this.inputForm.patchValue({
             name: cat.name,
@@ -51,7 +59,8 @@ constructor(
           })
         });
       }
-      else this.inputForm.reset();
+
+      else this.inputForm.reset();  // creating new category (from nav-bar)
     })
   }
 
@@ -64,7 +73,14 @@ constructor(
         description: this.inputForm.value.description, 
       };
 
-      if (this.catId == undefined)
+      if (this.catId == 5) {  // send changed data back to notifications
+        this.router.navigate(['/notifications'], { queryParams: { 
+          callAccept: true,
+          name: category.name, 
+          description: category.description 
+        } });
+      }
+      else if (this.catId == undefined)
         this.createCategory(category);
       else
         this.updateCategory(category);
@@ -116,8 +132,8 @@ constructor(
   }
   
   onCancel(): void {
-    if (this.catId != undefined)
-      this.router.navigate(['/all-categories']); 
+    if (this.catId == 5)
+      this.router.navigate(['/notifications']); 
     else
       this.router.navigate(['../'], { relativeTo: this.route });
   }
