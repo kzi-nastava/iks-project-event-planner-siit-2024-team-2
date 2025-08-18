@@ -1,1 +1,12 @@
-<p>notifications works!</p>
+<div class="row">
+    <label>{{ message }}</label>
+
+    <div *ngIf="isCategoryRequest" class="row">
+        <button>Edit</button>
+        <label>Choose existing one:</label>
+        <select [(ngModel)]="selectedCategory">
+            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+        </select>
+        <button (click)="onAccept()">Accept</button>
+    </div>
+</div>
