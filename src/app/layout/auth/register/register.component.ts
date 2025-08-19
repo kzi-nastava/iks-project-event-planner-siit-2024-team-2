@@ -41,6 +41,7 @@ export class RegisterComponent {
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
+      userType: ['', Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       address: ['', Validators.required],
@@ -95,7 +96,6 @@ export class RegisterComponent {
   onRegister(): void {
     if (this.registerForm.valid) {
       if (this.isEventOrganizer) {
-        console.log('Form Submitted', this.registerForm.value);
         this.authService.register(
           this.registerForm.value.email,
           this.registerForm.value.password,
@@ -108,7 +108,7 @@ export class RegisterComponent {
           next: (response) => {
             if (response) {
               console.log('Registration successful');
-              this.router.navigate(['/dashboard']);
+              this.router.navigate(['/signin']);
             } else {
               console.error('Registration failed');
             }
@@ -119,7 +119,6 @@ export class RegisterComponent {
         });
       }
       else {
-        console.log('Form Submitted', this.registerForm.value);
         this.authService.registerCompany(
           this.registerForm.value.email,
           this.registerForm.value.password,

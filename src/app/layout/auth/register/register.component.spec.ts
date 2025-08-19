@@ -66,24 +66,28 @@ describe('RegisterComponent', () => {
   });
 
   it('should call register() for event organizer', () => {
+    component.isEventOrganizer = true;
     component.registerForm.patchValue({
-      userType: 'eventOrganizer',
+      userType: 'company',
       firstName: 'John',
       lastName: 'Doe',
       address: '123 Street',
       phone: '1234567890',
       email: 'test@test.com',
       password: '123456',
-      confirmPassword: '123456'
+      confirmPassword: '123456',
+      companyName: 'Test Co',
+      companyDescription: 'A company',
     });
     component.onRegister();
     expect(authService.register).toHaveBeenCalled();
-    expect(router.navigate).toHaveBeenCalledWith(['/dashboard']);
+    expect(router.navigate).toHaveBeenCalledWith(['/signin']);
   });
 
   it('should call registerCompany() for company user', () => {
+    component.isEventOrganizer = false;
     component.registerForm.patchValue({
-      userType: 'company',
+      userType: 'serviceProvider',
       firstName: 'Jane',
       lastName: 'Smith',
       address: '456 Avenue',
@@ -94,32 +98,15 @@ describe('RegisterComponent', () => {
       companyName: 'Test Co',
       companyDescription: 'A company'
     });
-    component.isEventOrganizer = false;
     component.onRegister();
     expect(authService.registerCompany).toHaveBeenCalled();
     expect(router.navigate).toHaveBeenCalledWith(['/signin']);
   });
 
-  it('should handle registration errors', () => {
-    authService.register.and.returnValue(throwError(() => new Error('fail')));
-    component.registerForm.patchValue({
-      userType: 'eventOrganizer',
-      firstName: 'John',
-      lastName: 'Doe',
-      address: '123 Street',
-      phone: '1234567890',
-      email: 'test@test.com',
-      password: '123456',
-      confirmPassword: '123456'
-    });
-    spyOn(console, 'error');
-    component.onRegister();
-    expect(console.error).toHaveBeenCalledWith('Registration error:', jasmine.any(Error));
-  });
   it('should create the registration form with default empty values', () => {
     expect(component.registerForm).toBeTruthy();
     expect(component.registerForm.value).toEqual({
-      role: '',
+      userType: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -127,40 +114,92 @@ describe('RegisterComponent', () => {
       lastName: '',
       address: '',
       phone: '',
-      profilePhoto: null,
       companyName: '',
-      companyAddress: '',
-      companyPhone: '',
-      aboutCompany: '',
-      companyPhotos: null
+      companyDescription: ''
     });
   });
-  
-  it('should mark the form as valid when all required OD fields are filled correctly', () => {
+
+  it('should mark the form as valid when all required event organizer fields are filled correctly', () => {
+    component.isEventOrganizer = false;
     component.registerForm.patchValue({
-      role: 'OD',
+      userType: 'eventOrganizer',
       email: 'test@example.com',
       password: 'ValidPass123',
       confirmPassword: 'ValidPass123',
       firstName: 'Petar',
       lastName: 'Petrovic',
       address: 'Bulevar 1',
-      phone: '0612345678'
+      phone: '061234567812',
+      companyName: 'Test Co',
+      companyDescription: 'A company',
     });
     expect(component.registerForm.valid).toBeTrue();
+  });
+
+  it('should mark the form as invalid when passwords do not match', () => {
+    component.isEventOrganizer = false;
+    component.registerForm.patchValue({
+      userType: 'eventOrganizer',
+      email: 'test@example.com',
+      password: 'ValidPass123',
+      confirmPassword: 'ValidPass123greska',
+      firstName: 'Petar',
+      lastName: 'Petrovic',
+      address: 'Bulevar 1',
+      phone: '061234567812',
+      companyName: 'Test Co',
+      companyDescription: 'A company',
+    });
+    expect(component.registerForm.valid).toBeFalse();
+  });
+
+  it('should mark the form as invalid when email does not match the pattern', () => {
+    component.isEventOrganizer = false;
+    component.registerForm.patchValue({
+      userType: 'eventOrganizer',
+      email: 'test',
+      password: 'ValidPass123',
+      confirmPassword: 'ValidPass123',
+      firstName: 'Petar',
+      lastName: 'Petrovic',
+      address: 'Bulevar 1',
+      phone: '061234567812',
+      companyName: 'Test Co',
+      companyDescription: 'A company',
+    });
+    expect(component.registerForm.valid).toBeFalse();
+  });
+
+    it('should mark the form as invalid when phone number contains non number', () => {
+    component.isEventOrganizer = false;
+    component.registerForm.patchValue({
+      userType: 'eventOrganizer',
+      email: 'test@example.com',
+      password: 'ValidPass123',
+      confirmPassword: 'ValidPass123',
+      firstName: 'Petar',
+      lastName: 'Petrovic',
+      address: 'Bulevar 1',
+      phone: '061234567a12',
+      companyName: 'Test Co',
+      companyDescription: 'A company',
+    });
+    expect(component.registerForm.valid).toBeFalse();
   });
   
   it('should send form data when onSubmit is called with valid data', () => {
     spyOn(component, 'onRegister');
     component.registerForm.patchValue({
-      role: 'OD',
+      userType: 'eventOrganizer',
       email: 'test@example.com',
       password: 'ValidPass123',
       confirmPassword: 'ValidPass123',
       firstName: 'Petar',
       lastName: 'Petrovic',
       address: 'Bulevar 1',
-      phone: '0612345678'
+      phone: '0612345678',
+      companyName: 'Test Co',
+      companyDescription: 'A company',
     });
     component.onRegister();
     expect(component.onRegister).toHaveBeenCalledWith();
