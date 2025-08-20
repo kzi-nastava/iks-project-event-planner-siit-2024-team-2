@@ -47,15 +47,17 @@ export class NotificationsComponent {
   loadedTime: Date = new Date();
 
   // Injected
-  notificationService = inject(NotificationService);
-  socketService = inject(SocketService);
-  authService = inject(AuthService);
-  toastService = inject(ToastService);
+  readonly notificationService = inject(NotificationService);
+  readonly socketService = inject(SocketService);
+  readonly authService = inject(AuthService);
+  readonly toastService = inject(ToastService);
 
   ngOnInit(): void {
     this.loadedTime = new Date();
-    this.notificationService.resetBadgeCount();
     this.fetchNotifications();
+    setTimeout(() => {
+      this.notificationService.resetBadgeCount();
+    }, 0);
     combineLatest([this.socketService.initialized$, this.authService.isLoggedIn$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([initialized, loggedIn]) => {
@@ -64,7 +66,6 @@ export class NotificationsComponent {
         }
       });
   }
-  
   private subscribeToNotifications() {
     if (this.authService.getUserId()){
       this.socketService.openSocket('notifications', '', this.authService.getUserId());
