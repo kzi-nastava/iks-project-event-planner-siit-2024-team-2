@@ -85,6 +85,12 @@ mat-icon {
   color: #7C96FF;
   background-color: #EEF2FF;
 }
+mat-list-item p {
+  display:inline-block; 
+  margin: 0px; 
+  padding:0px; 
+  background-color: transparent;
+}
 span {
   cursor: pointer;
   flex: 6;

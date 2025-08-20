@@ -15,6 +15,9 @@ import { PageParams } from '../../parameters/page-params';
 export class NotificationService {
   private apiUrl = `${environment.apiHost}api/notifications`;
   private httpClient = inject(HttpClient);
+  private badgeCountSubject = new BehaviorSubject<number>(this.getBadgeCount());
+  public badgeCount$ = this.badgeCountSubject.asObservable();
+  private static badgeCount: number = 0;
 
   constructor() { }
 
@@ -47,5 +50,19 @@ export class NotificationService {
 
   add(notification: NotificationDto) : Observable<Notification> {
     return this.httpClient.post<Notification>(this.apiUrl, notification)
+  }
+
+  increaseBadgeCount() {
+    NotificationService.badgeCount++;
+    this.badgeCountSubject.next(NotificationService.badgeCount);
+  }
+
+  resetBadgeCount() {
+    NotificationService.badgeCount = 0;
+    this.badgeCountSubject.next(NotificationService.badgeCount);
+  }
+
+  getBadgeCount(): number {
+    return NotificationService.badgeCount;
   }
 }

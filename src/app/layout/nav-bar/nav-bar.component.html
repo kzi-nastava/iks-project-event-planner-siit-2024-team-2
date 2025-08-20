@@ -23,8 +23,8 @@
         Chat
       </mat-list-item>
       <mat-list-item [routerLink]="['notifications']">
-        <mat-icon>notifications</mat-icon>
-        Notifications
+        <mat-icon >notifications</mat-icon>
+        <p matBadgeOverlap="false" matBadge="{{badgeCount$ | async}}" [matBadgeHidden]="!(badgeCount$ | async)" matBadgeColor="accent" matBadgePosition="above after">Notifications</p>
       </mat-list-item>
       <mat-list-item [routerLink]="['calendar']">
         <mat-icon>calendar_today</mat-icon>

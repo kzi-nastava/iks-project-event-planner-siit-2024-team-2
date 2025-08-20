@@ -7,7 +7,9 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { AuthService } from '../../services/auth-service.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { NotificationService } from '../../services/communication/notification.service';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @Component({
   selector: 'app-nav-bar',
@@ -21,6 +23,7 @@ import { Subscription } from 'rxjs';
     MatIconModule,
     MatListModule,
     MatButtonModule,
+    MatBadgeModule
 ],
   templateUrl: './nav-bar.component.html',
   styleUrl: './nav-bar.component.css'
@@ -33,9 +36,11 @@ export class NavBarComponent {
   toggle: boolean = false;
   isLoggedIn: boolean = false;
   private authSub!: Subscription;
+  badgeCount$: Observable<number> | undefined;
 
-
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private notificationService: NotificationService) {
+    this.badgeCount$ = this.notificationService.badgeCount$;
+  }
 
   hasRole(roles: string[]): boolean {
     const userRole = this.authService.getUserRole();
