@@ -20,4 +20,8 @@ export class PriceListService {
     update(id: number, price: number, discount: number): Observable<PriceListDto> {
       return this.httpClient.put<PriceListDto>(`${this.apiUrl}/${id}?price=${price}&discount=${discount}`, {});
     }
+
+    downloadPdf(sppId: number): Observable<Blob> {
+      return this.httpClient.get(`${this.apiUrl}/${sppId}/pdf`, { responseType: 'blob' });
+    }
 }

@@ -12,3 +12,8 @@
 h3, .fancy-button {
   margin: 20px 0 0 10px;
 }
+
+.back {
+  background-color: #C2CFFF;
+  color: #2B3352;
+}

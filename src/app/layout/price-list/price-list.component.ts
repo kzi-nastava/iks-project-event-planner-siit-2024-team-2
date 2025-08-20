@@ -22,6 +22,8 @@ export class PriceListComponent implements OnInit {
   priceList: PriceListDto[] = [];
   displayedColumns = ['index', 'name', 'price', 'discount', 'total', 'actions', 'invalid'];
   forms: FormGroup[] = [];
+  sppId = Number(localStorage.getItem('userId'));
+
 
   constructor(private priceListService: PriceListService, private router: Router) {}
 
@@ -30,8 +32,7 @@ export class PriceListComponent implements OnInit {
   }
 
   loadPriceList(): void {
-    const userId = Number(localStorage.getItem('userId'));
-    this.priceListService.getBySppId(userId).subscribe({
+    this.priceListService.getBySppId(this.sppId).subscribe({
       next: (items) => {
         this.priceList = items;
         items.forEach((item) => {
@@ -60,6 +61,23 @@ export class PriceListComponent implements OnInit {
         error: (err) => console.error('Failed to save', err)
       });
     }
+  }
+
+  downloadPdf() {
+    this.priceListService.downloadPdf(this.sppId).subscribe({
+      next: (response) => {
+        const blob = new Blob([response], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `pricelist-${this.sppId}.pdf`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Failed to download PDF:', err);
+      }
+    });
   }
 
   back() {
