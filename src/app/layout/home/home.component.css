@@ -49,6 +49,10 @@ mat-progress-spinner {
   height: 70px !important;
   width: 70px !important;
 }
+.empty-list {
+  text-align: center;
+  margin-bottom: 2rem;
+}
 
 /* Cards */
 .event-card, .service-product-card{
