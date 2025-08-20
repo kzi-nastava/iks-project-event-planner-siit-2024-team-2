@@ -25,6 +25,7 @@
     "@angular/platform-server": "^18.2.0",
     "@angular/router": "^18.2.0",
     "@angular/ssr": "^18.2.11",
+    "date-fns": "^4.1.0",
     "express": "^4.18.2",
     "leaflet": "^1.9.4",
     "ng": "^0.0.0",

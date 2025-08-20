@@ -68,4 +68,11 @@ export class AuthService {
     }
     return null;
   }
+
+  getUserId(): string {
+    if (typeof window !== 'undefined' && localStorage) {
+      return localStorage.getItem('userId') as string;
+    }
+    return '';
+  }
 }
