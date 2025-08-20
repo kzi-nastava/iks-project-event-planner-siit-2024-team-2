@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { Message } from '../../model/message';
+import { Message } from '../../model/communication/message';
 import { BehaviorSubject, map, Subject } from 'rxjs';
 
 import * as Stomp from 'stompjs';
@@ -38,9 +38,7 @@ export class SocketService {
       () => {
         this.isLoaded = true;
         
-        console.log(this.subscriptions);
         this.subscriptions.forEach(dest => {
-          console.log("Subscribing to (initialize)", dest);
           this.stompClient.subscribe(dest, (message: { body: string }) =>
             this.handleMessage(message, dest)
           );
@@ -52,12 +50,11 @@ export class SocketService {
         }
       },
       (error: any) => {
-        console.error('Connection lost. Attempting to reconnect...', error);
         this.isLoaded = false;
         this.isLoadedSubject.next(false);
         setTimeout(() => {
           this.initializeConnection();
-        }, 5000);
+        }, 20000);
       }
     );
   }
@@ -136,13 +133,12 @@ export class SocketService {
   private subscribe(dest: string) {
     if (!this.isLoaded) return;
 
-    const ref = this.stompClient.subscribe(dest, (message: { body: string }) =>
-      this.handleMessage(message, dest)
-    );
-    const oldRef = this.subscriptionRefs[dest];
-    if (oldRef)
-      oldRef.unsubscribe();
-    this.subscriptionRefs[dest] = ref;
+    if (!this.subscriptionRefs[dest]) {
+      const ref = this.stompClient.subscribe(dest, (message: { body: string }) =>
+        this.handleMessage(message, dest)
+      );
+      this.subscriptionRefs[dest] = ref;
+    }
     if (!this.subscriptions.includes(dest)) {
       this.subscriptions.push(dest);
     }
