@@ -1,1 +1,51 @@
-<p>notifications works!</p>
+<div class="notification-container">
+    @for(notification of notifications; track notification.id) {
+        <mat-card class="notification-card" appearance="outlined"
+         *ngIf="!notification.dismissed"
+        [@.disabled]="!notification.dismissing" [@fadeOut]>
+            <mat-card-header>
+                <mat-card-title>{{notification.title}}</mat-card-title>
+                <mat-card-subtitle>{{notification.sentAt ? formatDate(notification.sentAt) : ''}}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <p class="notification-message collapsed" #messageEl>{{notification.message}}</p>
+                <button mat-button color="primary" class="read-button" (click)="readMore(messageEl)" *ngIf="isEllipsisActive(messageEl)">Read more</button>
+                <button mat-button color="primary" class="read-button" (click)="readLess(messageEl)" *ngIf="messageEl?.classList?.contains('expanded')">Read less</button>
+            </mat-card-content>
+            <mat-card-actions align="end">
+                <button mat-flat-button color="primary" (click)="dismiss(notification)">Dismiss</button>
+            </mat-card-actions>
+        </mat-card>
+    } @empty {
+        <div class="empty-list">No notifications found</div>
+    }
+</div>
+<mat-paginator [length]="totalElements"
+[pageIndex]="pageIndex"
+[pageSize]="pageSize"
+[pageSizeOptions]="[10, 20, 50]"
+[showFirstLastButtons]="true"
+(page)="onPageChange($event)"
+aria-label="Select page">
+</mat-paginator>
+
+
+<mat-card id="reload-popup" appearance="raised" *ngIf="reloadPopup" (click)="reloadPopup = false">
+    <mat-card-content>
+        <p>You have dismissed notifications, reload current page?</p>
+    </mat-card-content>
+    <mat-card-actions align="end">
+        <button mat-button color="primary">Hide</button>
+        <button mat-button color="primary" (click)="fetchNotifications()">Reload</button>
+    </mat-card-actions>
+</mat-card>
+
+<mat-card id="new-notifications-popup" appearance="raised" *ngIf="newNotificationsPopup" (click)="newNotificationsPopup = false">
+    <mat-card-content>
+        <p>You have recieved {{newNotificationCount}} new notification{{newNotificationCount > 1 ? 's' : ''}}</p>
+    </mat-card-content>
+    <mat-card-actions align="end">
+        <button mat-button color="primary">Hide</button>
+        <button mat-button color="primary" (click)="goToFirstPage()">Go to first page</button>
+    </mat-card-actions>
+</mat-card>

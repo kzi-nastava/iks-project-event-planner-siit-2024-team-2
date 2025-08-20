@@ -1,6 +1,7 @@
 export interface Message {
     message: string,
-    fromId: string,
+    title: string | null,
+    fromId: string | null,
     toId: string,
     topic: string,
     subtopic: string,
