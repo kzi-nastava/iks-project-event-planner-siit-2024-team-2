@@ -10,8 +10,8 @@
 </div>
 
 <div class="services-container">
-    <div *ngFor="let product of myProducts" class="card">
-      <img src="images/catering.jpeg" alt="{{ product.name }}" class="card-image" />
+    <div *ngFor="let product of productDtos" class="card">
+      <img [src]="product.image" alt="{{ product.name }}" class="card-image" />
       <div class="card-content">
         <h3>{{ product.name }}</h3>
         <p>{{ product.description }}</p>
