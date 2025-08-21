@@ -135,6 +135,6 @@ constructor(
     if (this.catId == 5)
       this.router.navigate(['/notifications']); 
     else
-      this.router.navigate(['../'], { relativeTo: this.route });
+      this.router.navigate(['/all-categories'], { relativeTo: this.route });
   }
 }

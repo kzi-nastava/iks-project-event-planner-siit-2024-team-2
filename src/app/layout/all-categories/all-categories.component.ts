@@ -10,7 +10,7 @@ import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.
 import { ServiceProductService } from '../../services/service-product/service-product.service';
 
 @Component({
-  selector: 'app-all-categories.component',
+  selector: 'app-all-categories',
   standalone: true,
   imports: [MatTableModule, MatIconModule, MatButtonModule],
   templateUrl: './all-categories.component.html',
