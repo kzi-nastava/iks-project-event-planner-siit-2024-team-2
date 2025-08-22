@@ -7,6 +7,6 @@
     <mat-select [(ngModel)]="selectedCategory" color="accent">
         <mat-option *ngFor="let category of categories" [value]="category">{{ category }}</mat-option>
     </mat-select>
-    <button mat-stroked-button color="primary" id="accept" (click)="onAccept()" [disabled]="seen">Accept</button>
+    <button mat-stroked-button color="primary" id="accept" (click)="onAccept()" [disabled]="isAccepted || seen">Accept</button>
 </mat-card-content>
 </div>

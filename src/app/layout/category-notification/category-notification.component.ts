@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatCardContent, MatCard } from "@angular/material/card";
 import { MatButtonModule } from '@angular/material/button';
 import { NotificationService } from '../../services/communication/notification.service';
+import { NotificationDto } from '../../services/dtos/communication/notification.dto';
 
 
 @Component({
@@ -40,6 +41,7 @@ export class CategoryNotificationComponent {
   categoryName: string = '';
   categoryDescription: string = '';
   isAccepted = false;
+  providerMessage = '';
 
   ngOnInit(): void {
     const messageObj = JSON.parse(String(this.message));
@@ -49,6 +51,7 @@ export class CategoryNotificationComponent {
     this.category.name = this.categoryName;
     this.category.description = this.categoryDescription;
     this.message = 'Name: ' + this.categoryName + ',  Description: ' + this.categoryDescription;
+    this.providerMessage = 'Your service ' + this.service.name + ' created successfully. You can find it in "My services".\n';
 
     this.spCategoryService.getAll().subscribe(allCategories => {
       this.categories = allCategories.map(c => c.name);
@@ -58,6 +61,7 @@ export class CategoryNotificationComponent {
       if (params['callAccept'] === 'true') {
         this.category.name = params['name'];
         this.category.description = params['description'];
+        this.providerMessage += 'Your category request for ' + this.categoryName + ' was accepted, but changed.';
         this.onAccept();
       }
     });
@@ -70,10 +74,15 @@ export class CategoryNotificationComponent {
         this.service.categoryId = category.id;
         this.createService();
       });
+      this.providerMessage += 'Your category request for ' + this.categoryName + ' was denied. ' +
+                              'Your service category was changed to ' + this.selectedCategory + '.';
     }
 
     // create new category, assign it to the service category and create service
     else {
+      if (this.category.name == this.categoryName && this.category.description == this.categoryDescription)
+        this.providerMessage += 'Your category request for ' + this.categoryName + ' was accepted.';
+
       this.spCategoryService.add(this.category).subscribe({
         next: (newCategory: ServiceProductCategory) => {
           this.service.categoryId = newCategory.id;
@@ -87,12 +96,34 @@ export class CategoryNotificationComponent {
       });
     }
     this.isAccepted = true;
+    this.MarkSeenNotification();
+    this.sendNotificationToProvider();
+  }
 
+  private sendNotificationToProvider() {
+    const notification: NotificationDto = {
+      title: "Service created",
+      message: this.providerMessage,
+      dismissed: false,
+      seen: false,
+      userId: this.service.serviceProductProviderId
+    };
+    this.notificationService.add(notification).subscribe({
+      next: (not: any) => {
+        console.log('Provider notification created.');
+      },
+      error: (err: any) => {
+        console.error('Failed to create notification:', err);
+      }
+    });
+  }
+
+  private MarkSeenNotification() {
     if (this.notificationId)
       this.notificationService.seen([this.notificationId]).subscribe({
-      next: () => console.log('Seen'),
-      error: err => console.error(err)
-    });
+        next: () => console.log('Seen'),
+        error: err => console.error(err)
+      });
   }
 
   private createService() {
