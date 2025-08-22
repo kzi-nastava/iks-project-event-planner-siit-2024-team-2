@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MyEventsComponent } from './my-events.component';
+import { SharedTestingModule } from '../../../testing/shared-testing.module';
 
 describe('MyEventsComponent', () => {
   let component: MyEventsComponent;
@@ -8,7 +9,7 @@ describe('MyEventsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MyEventsComponent]
+      imports: [MyEventsComponent, SharedTestingModule]
     })
     .compileComponents();
 

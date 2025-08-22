@@ -1,4 +1,5 @@
 export interface Product {
+    images: string[];
     id?: number,
     name?: string,
     description?: string,

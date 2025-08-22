@@ -14,6 +14,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Product } from '../../model/product';
 import { take } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { ImageService } from '../../services/image.service';
 
 
 
@@ -30,6 +32,23 @@ import { take } from 'rxjs';
   styleUrl: './new-product.component.css'
 })
 export class NewProductComponent {
+
+  getImageUrl(path: string): string {
+    return `http://localhost:8080/api/images/${path}`;
+  }
+
+  removeImage(index: number): void {
+    this.imageEncodedNames.splice(index, 1);
+    this.images.splice(index, 1);
+    this.selectedImages.splice(index, 1);
+  }
+
+  removeImagePreview(index: number): void {
+    this.imagePreviews.splice(index, 1);
+    this.images.splice(index, 1);
+    this.selectedImages.splice(index, 1);
+  }
+
   productCategories: ServiceCategory[] = [
     { id: 1, name: "Music" },
     { id: 2, name: "Catering" },
@@ -39,6 +58,8 @@ export class NewProductComponent {
   id: number = -1;
   eventTypes: EventType[] = [];
   selectedEvents: number[] = [];
+  images: string[] = [];
+  imageEncodedNames: string[] = [];
   
   constructor(
     private route: ActivatedRoute, 
@@ -47,6 +68,7 @@ export class NewProductComponent {
     private serviceCategoryService: ServiceCategoryService,
     private productService: ProductService,    
     private snackBar: MatSnackBar,
+    private imageService: ImageService
   ) {}
 
   loadEventTypes(): void {
@@ -90,6 +112,8 @@ export class NewProductComponent {
   }
 
   fetchProductData(productId: number): void {
+    this.images = [];
+    this.imageEncodedNames = [];
     this.productService.getProduct(productId).subscribe(
       (product: any) => {
         this.createProductForm.patchValue({
@@ -105,6 +129,8 @@ export class NewProductComponent {
         this.selectedEvents = product.eventTypes.map((event: any) => event.id) || []; 
         this.selectedCategoryId = product.serviceProductCategoryDto.id || -1;
         this.createProductForm.get('productCategory')?.setValue(this.selectedCategoryId);
+        this.images = product.images;
+        this.imageEncodedNames = product.imageEncodedNames;
       },
       (error) => {
         console.error('Error fetching product data:', error);
@@ -145,6 +171,7 @@ export class NewProductComponent {
   });
 
   createProduct(): void {
+    console.log(this.images)
     if (this.createProductForm.invalid) {
       this.createProductForm.markAllAsTouched();
       console.warn('Form is invalid:', this.createProductForm.errors);
@@ -154,8 +181,19 @@ export class NewProductComponent {
       });
       return; 
     }
+    this.selectedImages.forEach(image => {
+      this.imageService.uploadImage(image).subscribe({
+        next: response => {
+          console.log('Image uploaded successfully:', response);
+        },
+        error: err => {
+          console.error('Failed to upload image', err);
+        }
+      });
+    });
     const product: Product = {
       name: this.createProductForm.value.name ?? '',
+      images: this.images,
       description: this.createProductForm.value.description ?? '',
       specifies: this.createProductForm.value.specifies ?? '',
       price: this.createProductForm.value.price ?? 0,
@@ -202,5 +240,24 @@ export class NewProductComponent {
     } else {
       this.selectedEvents.push(eventTypeId);
     }
+  }
+
+  imagePreviews: string[] = [];
+  selectedImages: File[] = [];
+
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (!input.files) return;
+
+    Array.from(input.files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreviews.push(reader.result as string);
+        this.images.push(file.name);
+        this.selectedImages.push(file);
+      };
+      reader.readAsDataURL(file);
+    });
   }
 }

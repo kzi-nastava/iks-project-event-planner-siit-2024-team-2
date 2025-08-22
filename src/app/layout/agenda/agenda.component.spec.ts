@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AgendaComponent } from './agenda.component';
+import { SharedTestingModule } from '../../../testing/shared-testing.module';
 
 describe('AgendaComponent', () => {
   let component: AgendaComponent;
@@ -8,7 +9,7 @@ describe('AgendaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AgendaComponent]
+      imports: [AgendaComponent, SharedTestingModule]
     })
     .compileComponents();
 
