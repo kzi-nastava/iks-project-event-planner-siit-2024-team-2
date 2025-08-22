@@ -1,5 +1,5 @@
 <div class="notification-container">
-    @for(notification of notifications; track notification.id) {
+    @for(notification of notifications; let i = $index; track notification.id) {
         <mat-card class="notification-card" appearance="outlined"
          *ngIf="!notification.dismissed"
         [@.disabled]="!notification.dismissing" [@fadeOut]>
@@ -7,11 +7,19 @@
                 <mat-card-title>{{notification.title}}</mat-card-title>
                 <mat-card-subtitle>{{notification.sentAt ? formatDate(notification.sentAt) : ''}}</mat-card-subtitle>
             </mat-card-header>
-            <mat-card-content>
-                <p class="notification-message collapsed" #messageEl>{{notification.message}}</p>
-                <button mat-button color="primary" class="read-button" (click)="readMore(messageEl)" *ngIf="isEllipsisActive(messageEl)">Read more</button>
-                <button mat-button color="primary" class="read-button" (click)="readLess(messageEl)" *ngIf="messageEl?.classList?.contains('expanded')">Read less</button>
-            </mat-card-content>
+            <div *ngIf="notification.title !== 'New category request'; else notApproved">
+                <mat-card-content>
+                    <p class="notification-message collapsed" #messageEl>{{notification.message}}</p>
+                    <button mat-button color="primary" class="read-button" (click)="readMore(messageEl)" *ngIf="isEllipsisActive(messageEl)">Read more</button>
+                    <button mat-button color="primary" class="read-button" (click)="readLess(messageEl)" *ngIf="messageEl?.classList?.contains('expanded')">Read less</button>
+                </mat-card-content>
+            </div>
+            <ng-template #notApproved>
+                <app-category-notification [message]="notification.message" 
+                                           [seen]="notification.seen"
+                                           [notificationId]="notification.id">
+                </app-category-notification>
+            </ng-template>
             <mat-card-actions align="end">
                 <button mat-flat-button color="primary" (click)="dismiss(notification)">Dismiss</button>
             </mat-card-actions>
