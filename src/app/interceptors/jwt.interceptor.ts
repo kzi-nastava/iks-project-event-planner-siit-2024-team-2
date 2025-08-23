@@ -3,7 +3,7 @@ import { inject } from '@angular/core';
 import { AuthService } from '../services/auth-service.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { catchError } from 'rxjs/operators';
+import { catchError, filter } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
@@ -11,6 +11,9 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const snackBar = inject(MatSnackBar);
   const token = authService.getToken();
+
+  const exclude = ['/api/invitations/accept'];
+  const isExcluded = exclude.some(url => req.url.includes(url));
 
   if (token) {
     req = req.clone({
@@ -20,8 +23,7 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError(err => {
-      if (err.status === 401) {
-
+      if (err.status === 401 && !isExcluded) {
         authService.logout();
 
         router.navigate(['/signin']);

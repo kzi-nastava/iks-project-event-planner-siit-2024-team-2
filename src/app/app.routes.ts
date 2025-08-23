@@ -16,6 +16,7 @@ import { MyEventsComponent } from './layout/my-events/my-events.component';
 import { EventDetailsComponent } from './layout/event-details/event-details.component';
 import { AgendaComponent } from './layout/agenda/agenda.component';
 import { RoleGuard } from './role.guard';
+import { AcceptInvitationComponent } from './layout/accept-invitation-component/accept-invitation-component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -35,5 +36,6 @@ export const routes: Routes = [
     {path: 'new-event', component: NewEventComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['EVENT_ORGANIZER', 'ADMIN'] }},
     {path: 'my-events', component: MyEventsComponent, canActivate: [AuthGuard, RoleGuard] , data: { roles: ['EVENT_ORGANIZER', 'ADMIN'] }},
     {path: 'agenda', component: AgendaComponent},
+    {path: 'accept-invitation', component: AcceptInvitationComponent, canActivate: []},
     {path: '**', redirectTo: 'home'},
 ];
