@@ -13,7 +13,7 @@ import { EmailValidator, FormControl, ReactiveFormsModule, Validators } from '@a
 import { NgIf } from '@angular/common';
 
 
-export interface Invitation {
+export interface InvitationItem {
   email: string;
   readonly editable: boolean;
 }
@@ -28,12 +28,12 @@ export interface Invitation {
 })
 export class InvitationsDialogComponent {
   readonly dialog = inject(MatDialogRef<InvitationsDialogComponent>);
-  readonly data = inject<Invitation[]>(MAT_DIALOG_DATA);
+  readonly data = inject<InvitationItem[]>(MAT_DIALOG_DATA);
 
   // Invitations
   readonly addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  readonly invitations = signal<Invitation[]>([]);
+  readonly invitations = signal<InvitationItem[]>([]);
   readonly announcer = inject(LiveAnnouncer);
   readonly emailFormControl = new FormControl('', [Validators.email]);
   readonly editFormControl = new FormControl('', [Validators.email]);
@@ -55,7 +55,7 @@ export class InvitationsDialogComponent {
     console.log(this.emailFormControl.invalid);
   }
 
-  remove(invitation: Invitation): void {
+  remove(invitation: InvitationItem): void {
     if (!invitation.editable)
       return;
     this.invitations.update(emails => {
@@ -69,7 +69,7 @@ export class InvitationsDialogComponent {
     });
   }
 
-  edit(invitation: Invitation, event: MatChipEditedEvent) {
+  edit(invitation: InvitationItem, event: MatChipEditedEvent) {
     if (!invitation.editable)
       return;
     const value = event.value.trim();
@@ -100,7 +100,7 @@ export class InvitationsDialogComponent {
     });
   }
 
-  isInvalidChip(invitation: Invitation): boolean {
+  isInvalidChip(invitation: InvitationItem): boolean {
     return this.editFormControl.value == invitation.email 
             && this.editFormControl.invalid 
             && this.editFormControl.touched

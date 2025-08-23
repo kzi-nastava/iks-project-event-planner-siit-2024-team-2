@@ -14,7 +14,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { InvitationsDialogComponent } from '../../dialog/invitations-dialog/invitations-dialog.component';
 import { Event } from '../../model/event/event';
-import { Invitation } from '../../dialog/invitations-dialog/invitations-dialog.component';
+import { InvitationItem } from '../../dialog/invitations-dialog/invitations-dialog.component';
 
 @Component({
   selector: 'app-create-event',
@@ -45,7 +45,7 @@ export class NewEventComponent {
     maxAttendances: new FormControl(0, [Validators.required]),
     open: new FormControl()
   });
-  invitations: Invitation[] = [];
+  invitations: InvitationItem[] = [];
 
   eventTypes: EventType[] = [];
   readonly dialog = inject(MatDialog);
