@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AcceptInvitationComponent } from './accept-invitation-component';
+import { SharedTestingModule } from '../../../testing/shared-testing.module';
 
 describe('AcceptInvitationComponent', () => {
   let component: AcceptInvitationComponent;
@@ -8,7 +9,7 @@ describe('AcceptInvitationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AcceptInvitationComponent]
+      imports: [AcceptInvitationComponent, SharedTestingModule],
     })
     .compileComponents();
 
