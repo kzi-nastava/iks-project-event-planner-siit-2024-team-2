@@ -22,7 +22,8 @@ const imagesApi = "api/images/";
 })
 export class MyServicesComponent implements OnInit {
 
-  constructor (public dialog: MatDialog, private router: Router, private serviceService: ServiceService) {}
+  constructor (public dialog: MatDialog, private router: Router,
+               private serviceService: ServiceService) {}
 
   ngOnInit(): void {
     this.fetchServices();
@@ -74,9 +75,13 @@ export class MyServicesComponent implements OnInit {
   }
 
   convertImageUrls(array: ServiceCardDto[]) {
-      array.forEach(element => {
-        if (element.image != null) // on the page my-services, only the first (cover) image will be loaded if there is one
-          element.image = environment.apiHost + imagesApi + element.image;
-      });
-    }
+    array.forEach(element => {
+      if (element.image != null) // on the page my-services, only the first (cover) image will be loaded if there is one
+        element.image = environment.apiHost + imagesApi + element.image;
+    });
+  }
+
+  showPriceList() {
+    this.router.navigate(['/price-list']);
+  }
 }
