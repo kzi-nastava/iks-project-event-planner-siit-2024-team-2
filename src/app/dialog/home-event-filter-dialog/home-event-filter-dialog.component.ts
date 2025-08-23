@@ -7,7 +7,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { HomeEventFilterDialogParams } from '../../parameters/home-event-filter-dialog-params';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from "@angular/material/divider";
-import { EventType } from '../../model/event-type';
+import { EventType } from '../../model/event/event-type';
 import {MatSliderModule} from '@angular/material/slider';
 import { City } from '../../model/utils/city';
 import {MatDatepickerModule} from '@angular/material/datepicker';

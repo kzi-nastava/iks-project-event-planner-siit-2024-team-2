@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Product } from '../../model/product';
+import { Product } from '../../model/service-product/product';
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component';

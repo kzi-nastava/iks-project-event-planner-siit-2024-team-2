@@ -1,20 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NewCategoryComponent } from './new-category.component';
-import { S } from '@angular/cdk/keycodes';
+import { AcceptInvitationComponent } from './accept-invitation-component';
 import { SharedTestingModule } from '../../../testing/shared-testing.module';
 
-describe('NewCategoryComponent', () => {
-  let component: NewCategoryComponent;
-  let fixture: ComponentFixture<NewCategoryComponent>;
+describe('AcceptInvitationComponent', () => {
+  let component: AcceptInvitationComponent;
+  let fixture: ComponentFixture<AcceptInvitationComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NewCategoryComponent, SharedTestingModule],
+      imports: [AcceptInvitationComponent, SharedTestingModule],
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(NewCategoryComponent);
+    fixture = TestBed.createComponent(AcceptInvitationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

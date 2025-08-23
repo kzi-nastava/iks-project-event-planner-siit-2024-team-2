@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { ServiceProductCategory } from '../model/service-product-category';
+import { ServiceProductCategory } from '../model/service-product/service-product-category';
 import { Observable } from 'rxjs';
 import { ServiceProductCategoryDto } from './dtos/service-product/service-product-category.dto';
 

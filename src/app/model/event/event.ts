@@ -7,5 +7,6 @@ export interface Event {
     longitude: number | null | undefined,
     eventTypeId: number | null | undefined,
     maxAttendances: number | null | undefined,
-    open: boolean
+    open: boolean,
+    invitationEmails: string[] | null
 }

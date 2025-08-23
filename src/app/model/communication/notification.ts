@@ -1,4 +1,4 @@
-import { User } from "../../services/dtos/user";
+import { User } from "../../services/dtos/user/user";
 
 export interface Notification {
     id: number,

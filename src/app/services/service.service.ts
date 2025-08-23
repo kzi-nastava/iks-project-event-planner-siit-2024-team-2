@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Service } from '../model/service';
+import { Service } from '../model/service-product/service';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
 import { PagedModel } from '../shared/model/paged-model';
-import { ServiceCardDto } from './dtos/service-card-dto.dto';
+import { ServiceCardDto } from './dtos/service-product/service-card-dto.dto';
 import { CreateServiceDto } from './dtos/service-product/create-service.dto';
 @Injectable({
   providedIn: 'root'
