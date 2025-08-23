@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-  <button [class.hidden]="!isLoggedIn" mat-icon-button (click)="toggleSidenav()">
+  <button mat-icon-button (click)="toggleSidenav()">
     <mat-icon>menu</mat-icon>
   </button>
   <span class="toolbar-title" [routerLink]="['home']">Event Planner</span>
@@ -11,7 +11,7 @@
 </mat-toolbar>
 
 
-<mat-sidenav-container [class.hidden]="!isLoggedIn" class="sidenav-container secondary">
+<mat-sidenav-container class="sidenav-container secondary">
   <mat-sidenav #sidenav mode="side" class="secondary" [opened]="toggle">
     <mat-nav-list class="secondary">
       <mat-list-item [routerLink]="['home']" color="primary">
@@ -23,8 +23,8 @@
         Chat
       </mat-list-item>
       <mat-list-item [routerLink]="['notifications']">
-        <mat-icon>notifications</mat-icon>
-        Notifications
+        <mat-icon >notifications</mat-icon>
+        <p matBadgeOverlap="false" matBadge="{{badgeCount$ | async}}" [matBadgeHidden]="!(badgeCount$ | async)" matBadgeColor="accent" matBadgePosition="above after">Notifications</p>
       </mat-list-item>
       <mat-list-item [routerLink]="['calendar']">
         <mat-icon>calendar_today</mat-icon>

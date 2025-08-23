@@ -2,9 +2,9 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ServiceService } from '../../services/service.service';
-import { ToastService } from '../../services/toast-service';
 import { ServiceProductCategoryService } from '../../services/service-product-category.service';
 import { Router } from '@angular/router';
+import { ToastService } from '../../services/utils/toast-service';
 
 
 @Component({

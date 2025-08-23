@@ -20,12 +20,13 @@ import { NewCategoryComponent } from './layout/new-category/new-category.compone
 import { AllCategoriesComponent } from './layout/all-categories/all-categories.component';
 import { PriceListComponent } from './layout/price-list/price-list.component';
 
+
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
     {path: 'signin', component: LoginComponent,  canActivate: []},
     {path: 'signup', component: RegisterComponent, canActivate: []},
     {path: 'home', component: HomeComponent, canActivate: []},
-    {path: 'event-details', component: EventDetailsComponent},
+    {path: 'event-details', component: EventDetailsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['EVENT_ORGANIZER', 'SERVICE_PRODUCT_PROVIDER', 'ADMIN'] }},
     {path: 'chat', component: ChatComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['EVENT_ORGANIZER', 'SERVICE_PRODUCT_PROVIDER', 'ADMIN'] }},
     {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['EVENT_ORGANIZER', 'SERVICE_PRODUCT_PROVIDER', 'ADMIN'] }},
     {path: 'calendar',component: MyEventsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['EVENT_ORGANIZER', 'SERVICE_PRODUCT_PROVIDER', 'ADMIN'] }},

@@ -1,109 +1,155 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ServiceProductCategoryService } from '../../services/service-product-category.service';
-import { ServiceService } from '../../services/service.service';
-import { ServiceProductCategory } from '../../model/service-product-category';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-
+import { Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NotificationService } from '../../services/communication/notification.service';
+import { SocketService } from '../../services/communication/socket.service';
+import { PagedModel } from '../../shared/model/paged-model';
+import { Notification } from '../../model/communication/notification';
+import { MatCard, MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { formatDistanceToNow, intlFormatDistance, set } from "date-fns";
+import { combineLatest, combineLatestWith, Subject, take, takeUntil } from 'rxjs';
+import { AuthService } from '../../services/auth-service.service';
+import { NgIf } from '@angular/common';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { ToastService } from '../../services/utils/toast-service';
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { CategoryNotificationComponent } from "../category-notification/category-notification.component";
 
 @Component({
   selector: 'app-notifications',
   standalone: true,
-  imports: [CommonModule, MatFormFieldModule, MatSelectModule, FormsModule, ReactiveFormsModule],
+  imports: [MatCardModule, MatButtonModule, MatExpansionModule, NgIf, MatPaginator, FormsModule, CategoryNotificationComponent],
   templateUrl: './notifications.component.html',
-  styleUrl: './notifications.component.css'
+  styleUrl: './notifications.component.css',
+  animations: [
+    trigger('fadeOut', [
+      transition(':leave', [
+        style({
+          opacity: 1,
+          height: '*',
+        }),
+        animate('300ms ease-out', style({
+          opacity: 0,
+          height: '0px',
+        }))
+      ])
+    ])
+  ]
 })
 export class NotificationsComponent {
-  constructor(private spCategoryService: ServiceProductCategoryService,
-              private serviceService: ServiceService,
-              private snackBar: MatSnackBar,
-              private router: Router,
-              private route: ActivatedRoute) {}
+  private readonly destroy$ = new Subject<void>();
+  notifications: Notification[] = [];
+  totalElements: number = 0;
+  pageIndex: number = 0;
+  pageSize: number = 10;
+  reloadPopup: boolean = false;
+  newNotificationsPopup: boolean = false;
+  newNotificationCount: number = 0;
+  loadedTime: Date = new Date();
 
-  message = '{"service":{"categoryId":-1,"images":["39d99e61-5323-4eb7-a58c-7126f887df81.jpeg"],"name":"m","description":"m","specifies":"m","price":4,"discount":0,"availableEventTypeIds":[4],"serviceProductProviderId":10,"duration":5,"minEngagementDuration":0,"maxEngagementDuration":0,"visible":true,"available":null,"automaticReserved":true,"reservationDaysDeadline":5,"cancellationDaysDeadline":5},"categoryName":"food","categoryDescription":"food"}';
-  isCategoryRequest = this.message.includes('"categoryId":-1');
-  category = {name: '', description: ''};
-  service: any;
-  selectedCategory = '';
-  categories: string[] = [];
-  categoryName: string = '';
-  categoryDescription: string = '';
-  isAccepted = false;
+  // Injected
+  readonly notificationService = inject(NotificationService);
+  readonly socketService = inject(SocketService);
+  readonly authService = inject(AuthService);
+  readonly toastService = inject(ToastService);
 
   ngOnInit(): void {
-    
-    if (this.isCategoryRequest) {
-      const messageObj = JSON.parse(this.message);
-      this.service = messageObj.service;
-      this.categoryName = messageObj.categoryName;
-      this.categoryDescription = messageObj.categoryDescription;
-      this.category.name = this.categoryName;
-      this.category.description = this.categoryDescription;
-      this.message = 'New category request:  name: ' + this.categoryName + ', description: ' + this.categoryDescription;
-
-      this.spCategoryService.getAll().subscribe(allCategories => {
-        this.categories = allCategories.map(c => c.name);
-      });
-
-      this.route.queryParams.subscribe(params => {
-        if (params['callAccept'] === 'true') {
-          this.categoryName = params['name'];
-          this.categoryDescription = params['description'];
-          this.onAccept();
+    this.loadedTime = new Date();
+    this.fetchNotifications();
+    setTimeout(() => {
+      this.notificationService.resetBadgeCount();
+    }, 0);
+    combineLatest([this.socketService.initialized$, this.authService.isLoggedIn$])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(([initialized, loggedIn]) => {
+        if (initialized && loggedIn) {
+          this.subscribeToNotifications();
         }
       });
+  }
+  private subscribeToNotifications() {
+    if (this.authService.getUserId()){
+      this.socketService.openSocket('notifications', '', this.authService.getUserId());
+      this.socketService
+        .getStream('notifications', '', this.authService.getUserId())
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(message => {
+          this.newNotificationsPopup = true;
+          this.newNotificationCount += 1;
+      });
     }
   }
 
-  onAccept() {
-    // chosen the existing category from the combo box
-    if (this.selectedCategory != '') {
-      this.spCategoryService.getByName(this.selectedCategory).subscribe(category => {
-        this.service.categoryId = category.id;
-        this.createService();
-      });
-    }
-
-    // create new category, assign it to the service category and create service
-    else {
-      this.spCategoryService.add(this.category).subscribe({
-        next: (newCategory: ServiceProductCategory) => {
-          this.service.categoryId = newCategory.id;
-          this.createService();
-          this.snackBar.open('Category ' + this.category.name + ' created successfully!', 'Close', {duration: 3000, panelClass: ['snack-success']});
-      },
-        error: (err) => {
-          console.error('Error creating category:', err);
-          this.snackBar.open('Failed to create category. Please try again.', 'Close', {duration: 3000, panelClass: ['snack-error']});
+  fetchNotifications() {
+    this.notificationService.getAllForCurrentUser({ page: this.pageIndex, size: this.pageSize }, this.loadedTime)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response: PagedModel<Notification>) => {
+          this.notifications = JSON.parse(JSON.stringify(response.content));
+          this.totalElements = response.page.totalElements;
+          this.reloadPopup = false;
+        },
+        error: (err: any) => {
+          this.toastService.show('Failed to load notifications');
         }
       });
-    }
-    this.isAccepted = true;
   }
 
-  private createService() {
-    this.serviceService.add(this.service).subscribe({
-      next: () => {
-        this.snackBar.open('Service ' + this.service.name + ' created successfully!', 'Close', { duration: 3000, panelClass: ['snack-success'] });
-      },
-      error: (err: any) => {
-        console.error('Failed to create service:', err);
-        this.snackBar.open('Failed to create category. Please try again.', 'Close', { duration: 3000, panelClass: ['snack-error'] });
-      }
-    });
+  dismiss(notification: Notification) {
+    this.reloadPopup = true;
+    notification.dismissing = true;
+    setTimeout(() => {
+      notification.dismissed = true;
+    }, 0);
+    this.totalElements--;
+    this.notificationService.dismiss([notification.id])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        error: (err: any) => {
+          notification.dismissed = false;
+          this.toastService.show('Failed to dismiss notification');
+        }
+      });
   }
 
-  onEdit() {
-    this.router.navigate(['/new-category'], { 
-      queryParams: { 
-        id: 5,  // flag for edit of request category, not existing one
-        name: this.categoryName, 
-        description: this.categoryDescription 
-      }
-    }); 
+  formatDate(date: Date) {
+    return intlFormatDistance(date, Date.now(), {locale: 'en-US'});
+  }
+
+  isEllipsisActive(element: HTMLElement): boolean {
+    return element.offsetHeight < element.scrollHeight;
+  }
+
+  readMore(element: HTMLElement): void {
+    element.classList.remove('collapsed');
+    element.classList.add('expanded');
+  }
+
+  readLess(element: HTMLElement): void {
+    element.classList.remove('expanded');
+    element.classList.add('collapsed');
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.pageIndex = event.pageIndex;
+    if (this.pageSize != event.pageSize)
+      if (this.totalElements > this.pageIndex * event.pageSize) // enough elements for another page
+        this.pageSize = event.pageSize;
+    this.fetchNotifications();
+  }
+
+  goToFirstPage() {
+    this.newNotificationsPopup = false;
+    this.newNotificationCount = 0;
+    this.pageIndex = 0;
+    this.loadedTime = new Date();
+    this.notificationService.resetBadgeCount();
+    this.fetchNotifications();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

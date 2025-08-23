@@ -13,7 +13,6 @@ import {
 import { MapService } from './map.service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import 'leaflet/dist/leaflet.css';
 
 @Component({
   selector: 'app-map',

@@ -11,8 +11,10 @@ import { ServiceService } from '../../services/service.service';
 import { ServiceProductCategoryService } from '../../services/service-product-category.service';
 import { EventTypeService } from '../../services/event-type.service';
 import { forkJoin } from 'rxjs';
-import { ToastService } from '../../services/toast-service';
+import { ToastService } from '../../services/utils/toast-service';
 import { ImageService } from '../../services/image.service';
+import { NotificationService } from '../../services/communication/notification.service';
+import { NotificationDto } from '../../services/dtos/communication/notification.dto';
 
 
 @Component({
@@ -23,6 +25,11 @@ import { ImageService } from '../../services/image.service';
   styleUrl: './new-service.component.css'
 })
 export class NewServiceComponent {
+
+  constructor(private route: ActivatedRoute, private router: Router, private serviceService: ServiceService,
+    private SPCategoryService: ServiceProductCategoryService, private eventTypeService: EventTypeService,
+    private toastService: ToastService, private imageService: ImageService, private notificationService: NotificationService) {}
+
 
   newServiceForm = new FormGroup({
       categoryForm: new FormGroup({
@@ -73,10 +80,6 @@ export class NewServiceComponent {
   images: string[] = [];
   imageEncodedNames: string[] = [];
   categoryId = -1;
-
-  constructor(private route: ActivatedRoute, private router: Router, private serviceService: ServiceService,
-    private SPCategoryService: ServiceProductCategoryService, private eventTypeService: EventTypeService,
-    private toastService: ToastService, private imageService: ImageService) {}
 
 
   ngOnInit(): void {
@@ -190,8 +193,8 @@ export class NewServiceComponent {
         });
       });
       const service = this.recieveDataFromForm();
-      this.toastService.show('Updating...', 2000);
       if (this.update) {  // UPDATING
+        this.toastService.show('Updating...', 2000);
         this.serviceService.update(this.serviceId, service).subscribe({
           next: (service: any) => {
             this.toastService.show('Service ' + service.name + ' updated successfully!', 2000);
@@ -204,12 +207,27 @@ export class NewServiceComponent {
         });
       }
       else if (!this.newServiceForm.get('categoryForm')?.get('category')?.value) {  // WAITING FOR ADMIN APPROVAL
-        // send a notification to admin {id, category name, desription}
-        const message = {service: service, 
+        const serviceMessage = {service: service, 
                         categoryName: this.newServiceForm.get('categoryForm')?.get('newCategoryName')?.value,
                         categoryDescription: this.newServiceForm.get('categoryForm')?.get('newCategoryDescription')?.value};
-        this.toastService.show('Waiting for creation approval', 2000);
+        
+        const notification: NotificationDto = {
+          title: "New category request",
+          message: JSON.stringify(serviceMessage),
+          dismissed: false,
+          seen: false,
+          userId: 9
+        };
+        this.notificationService.add(notification).subscribe({
+          next: (not: any) => {
+            this.toastService.show('Waiting for creation approval', 2000);
         this.router.navigate(['/my-services']);
+          },
+          error: (err: any) => {
+            console.error('Failed to create notification:', err);
+            this.toastService.show('Failed to create!', 2000);
+          }
+        });
       }
       else {  // CREATING
         this.toastService.show('Creating...', 2000);
