@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { ServiceFilterDialogComponent } from '../../dialog/service-filter-dialog/service-filter-dialog.component';
 import { ProductService } from '../../services/product.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { environment } from '../../../environments/environment';
 
 
 
@@ -19,9 +20,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './my-products.component.css'
 })
 export class MyProductsComponent {
-    myProducts: Product[] = [];
+    myProducts: any[] = [];
     filterCategories: string[] = ['Price', 'Category', 'Available events', 'Availability'];
-    
+    productDtos: ProductCardDto[] = [];
+
     constructor(
       public dialog: MatDialog, 
       private router: Router, 
@@ -29,13 +31,23 @@ export class MyProductsComponent {
       private snackBar: MatSnackBar,
     ) {}
     ngOnInit(): void {
-      this.initServices();
+      this.initProducts();
     }
 
-    initServices(): void {
+    initProducts(): void {
       const pageProps = { page: 0, pageSize: 10 };
       this.productService.getAll(pageProps).subscribe(response => {
         this.myProducts = response;
+        this.productDtos = this.myProducts.map(product => ({
+          id: product.id,
+          name: product.name,
+          description: product.description,
+          price: product.price,
+          discount: product.discount,
+          image: product.images ? product.images[0] : "",
+          imageEncodedName: product.imageEncodedNames ? product.imageEncodedNames[0] : ""
+        }));
+        this.convertImageUrls(this.productDtos);
       }, error => {
         console.error('Error fetching products:', error);
       });
@@ -50,12 +62,9 @@ export class MyProductsComponent {
         const { categories, eventTypes, minPrice, maxPrice, available } = result;
         this.productService.filter(categories, eventTypes, minPrice, maxPrice, available).subscribe(filteredProducts => {
           this.myProducts = filteredProducts;
-          console.log('Filtered products:', this.myProducts);
         }, error => {
           console.error('Error filtering products:', error);
         });
-      } else {
-        console.log('Filter dialog was closed without applying filters.');
       }
     }, error => {
       console.error('Error closing filter dialog:', error);
@@ -66,13 +75,12 @@ export class MyProductsComponent {
   openDeleteDialog(id?: number): void {
     this.dialog.open(DeleteDialogComponent, {data: {entityName: 'product'}}).afterClosed().subscribe(result => {
       if (result && id) {
-        console.log('Delete confirmed for product ID:', id);
         this.productService.deleteProduct(id).subscribe(() => {
           this.snackBar.open('Product deleted successfully.', 'Close', {
             duration: 3000,
             panelClass: ['snackbar-success']
           });
-          this.initServices(); // Refresh the product list after deletion
+          this.initProducts(); // Refresh the product list after deletion
         }, error => {
           console.error('Error deleting product:', error);
           this.snackBar.open('Failed to delete product.', 'Close', {
@@ -92,4 +100,19 @@ export class MyProductsComponent {
   navigateToEditService(productId?: number): void {
     this.router.navigate(['/new-product'], { queryParams: { id: productId } });
   }
+
+  convertImageUrls(array: any[]) {
+    array.forEach(element => {
+      if (element.image != null)
+        element.image = "http://localhost:8080/" + "api/images/" + element.imageEncodedName;
+    });
+  }
+}
+interface ProductCardDto {
+    id?: number;
+    name?: string;
+    description?: string;
+    price?: number;
+    discount?: number;
+    image?: string;
 }

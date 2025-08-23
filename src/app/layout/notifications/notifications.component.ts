@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NotificationService } from '../../services/communication/notification.service';
 import { SocketService } from '../../services/communication/socket.service';
 import { PagedModel } from '../../shared/model/paged-model';
@@ -13,11 +14,12 @@ import { NgIf } from '@angular/common';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { ToastService } from '../../services/utils/toast-service';
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { CategoryNotificationComponent } from "../category-notification/category-notification.component";
 
 @Component({
   selector: 'app-notifications',
   standalone: true,
-  imports: [MatCardModule, MatButtonModule, MatExpansionModule, NgIf, MatPaginator],
+  imports: [MatCardModule, MatButtonModule, MatExpansionModule, NgIf, MatPaginator, FormsModule, CategoryNotificationComponent],
   templateUrl: './notifications.component.html',
   styleUrl: './notifications.component.css',
   animations: [

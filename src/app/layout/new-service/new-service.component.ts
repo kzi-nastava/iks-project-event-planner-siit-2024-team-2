@@ -13,7 +13,8 @@ import { EventTypeService } from '../../services/event-type.service';
 import { forkJoin } from 'rxjs';
 import { ToastService } from '../../services/utils/toast-service';
 import { ImageService } from '../../services/image.service';
-import { B } from '@angular/cdk/keycodes';
+import { NotificationDto } from '../../services/dtos/communication/notification.dto';
+import { NotificationService } from '../../services/communication/notification.service';
 
 
 @Component({
@@ -25,8 +26,17 @@ import { B } from '@angular/cdk/keycodes';
 })
 export class NewServiceComponent {
 
+  constructor(private route: ActivatedRoute, private router: Router, private serviceService: ServiceService,
+    private SPCategoryService: ServiceProductCategoryService, private eventTypeService: EventTypeService,
+    private toastService: ToastService, private imageService: ImageService, private notificationService: NotificationService) {}
+
+
   newServiceForm = new FormGroup({
-      category: new FormControl('', [Validators.required]),
+      categoryForm: new FormGroup({
+        category: new FormControl(''),
+        newCategoryName: new FormControl(''),
+        newCategoryDescription: new FormControl(''),
+      }, {validators: this.oneCategoryRequiredValidator}),
       name: new FormControl('', [Validators.required]),
       description: new FormControl('', [Validators.required]),
       specifies: new FormControl('', [Validators.required]),
@@ -52,6 +62,14 @@ export class NewServiceComponent {
 
     return (duration > 0 || (minEngagement > 0 && maxEngagement > 0)) ? null : { oneDurationRequiredValidator: true };
   }
+
+  oneCategoryRequiredValidator(group: AbstractControl): ValidationErrors | null {
+    const category = group.get('category')?.value;
+    const newCategoryName = group.get('newCategoryName')?.value;
+    const newCategoryDescription = group.get('newCategoryDescription')?.value;
+
+    return (category || (newCategoryName && newCategoryDescription)) ? null : { oneCategoryRequiredValidator: true };
+  }
   
   serviceCategories : string[] = [];
   eventTypes: string[] = [];
@@ -62,10 +80,6 @@ export class NewServiceComponent {
   images: string[] = [];
   imageEncodedNames: string[] = [];
   categoryId = -1;
-
-  constructor(private route: ActivatedRoute, private router: Router, private serviceService: ServiceService,
-    private SPCategoryService: ServiceProductCategoryService, private eventTypeService: EventTypeService,
-    private toastService: ToastService, private imageService: ImageService) {}
 
 
   ngOnInit(): void {
@@ -109,7 +123,9 @@ export class NewServiceComponent {
         this.initializeCheckboxValues(editingService.availableEventTypes.map(type => type.name));
 
         this.newServiceForm.patchValue({
-          category: editingService.category.name,
+          categoryForm: {
+            category: editingService.category,
+          },
           name: editingService.name,
           description: editingService.description,
           specifies: editingService.specifies,
@@ -166,6 +182,30 @@ export class NewServiceComponent {
     if (this.newServiceForm.invalid || (this.images.length == 0 && this.imageEncodedNames.length == 0)) {
       this.formSubmitted = true;
       return;
+    }
+    if (!this.newServiceForm.get('categoryForm')?.get('category')?.value) {  // WAITING FOR ADMIN APPROVAL
+      const service = this.recieveDataFromForm();
+      const serviceMessage = {service: service, 
+                      categoryName: this.newServiceForm.get('categoryForm')?.get('newCategoryName')?.value,
+                      categoryDescription: this.newServiceForm.get('categoryForm')?.get('newCategoryDescription')?.value};
+      
+      const notification: NotificationDto = {
+        title: "New category request",
+        message: JSON.stringify(serviceMessage),
+        dismissed: false,
+        seen: false,
+        userId: 9
+      };
+      this.notificationService.add(notification).subscribe({
+        next: (not: any) => {
+          this.toastService.show('Waiting for creation approval', 2000);
+      this.router.navigate(['/my-services']);
+        },
+        error: (err: any) => {
+          console.error('Failed to create notification:', err);
+          this.toastService.show('Failed to create!', 2000);
+        }
+      });
     }
     else {
       let observables = this.selectedImages.map((image:File) => this.imageService.uploadImage(image));
