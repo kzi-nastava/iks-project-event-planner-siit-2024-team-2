@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ServiceProductCategoryService } from '../../services/service-product-category.service';
 import { ServiceService } from '../../services/service.service';
-import { ServiceProductCategory } from '../../model/service-product-category';
+import { ServiceProductCategory } from '../../model/service-product/service-product-category';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -54,7 +54,7 @@ export class CategoryNotificationComponent {
     this.providerMessage = 'Your service ' + this.service.name + ' created successfully. You can find it in "My services".\n';
 
     this.spCategoryService.getAll().subscribe(allCategories => {
-      this.categories = allCategories.map(c => c.name);
+      this.categories = allCategories.map(c => c.name || '');
     });
 
     this.route.queryParams.subscribe(params => {
