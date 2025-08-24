@@ -21,6 +21,7 @@ import { AllCategoriesComponent } from './layout/all-categories/all-categories.c
 import { PriceListComponent } from './layout/price-list/price-list.component';
 import { BudgetComponent } from './layout/budget/budget.component';
 
+import { MyEventTypesComponent } from './layout/my-event-types/my-event-types.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -43,6 +44,7 @@ export const routes: Routes = [
     {path: 'new-event', component: NewEventComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['EVENT_ORGANIZER'] }},
     {path: 'my-events', component: MyEventsComponent, canActivate: [AuthGuard, RoleGuard] , data: { roles: ['EVENT_ORGANIZER'] }},
     {path: 'budget', component: BudgetComponent, canActivate: [AuthGuard, RoleGuard] , data: { roles: ['EVENT_ORGANIZER'] }},
+    {path: 'my-event-types', component: MyEventTypesComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN'] }},
     {path: 'agenda', component: AgendaComponent},
     {path: '**', redirectTo: 'home'},
 ];

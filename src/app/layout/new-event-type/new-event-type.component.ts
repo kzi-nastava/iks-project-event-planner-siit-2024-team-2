@@ -56,10 +56,11 @@ export class NewEventTypeComponent {
     this.serviceService.getAll().subscribe({
       next: (response: any) => {
         console.log('Services loaded:', response);
-        this.services = (response.items || []).map((service: any) => ({
+        this.services = (response || []).map((service: any) => ({
           id: service.id,
           name: service.name
         }));
+        console.log('Mapped services:', this.services);
       },
       error: (err) => {
         console.error('Error loading services:', err);
@@ -71,28 +72,84 @@ export class NewEventTypeComponent {
       }
     });
   }
+
+  id = -1;
   ngOnInit() {
+      this.route.queryParams.subscribe(params => {
+      const eventTypeId = params['id'];
+      if (eventTypeId) {
+        this.fetchEventTypeData(eventTypeId);
+        this.id = Number(eventTypeId);
+      }
+    });
     this.loadServices();
   }
-  onSubmit() {
-    if (this.inputForm.valid) {
-      console.log('Form Submitted:', this.inputForm.value);
-  
-      const eventType: CreateEventType = {
-        name: this.inputForm.value.name,
-        description: this.inputForm.value.description, 
-        recommendedServiceProducts: this.inputForm.value.recommendedServices,
-      };
-  
+fetchEventTypeData(eventTypeId: number): void {
+  this.eventTypeService.getEventType(eventTypeId).subscribe(
+    (event: any) => {
+      console.log('Fetched event:', event);
+      
+      const recommendedIds = (event.recommendedServiceProducts || []).map((s: any) => s.id);
+      
+      this.inputForm.patchValue({
+        name: event.name,
+        description: event.description,
+        recommendedServices: recommendedIds
+      });
+    },
+    (error) => {
+      console.error('Error fetching event:', error);
+      this.snackBar.open('Failed to load event.', 'Close', {
+        duration: 3000,
+        panelClass: ['snackbar-error'],
+      });
+    }
+  );
+}
+
+
+onSubmit() {
+  if (this.inputForm.valid) {
+    console.log('Form Submitted:', this.inputForm.value);
+
+    const eventType: CreateEventType = {
+      name: this.inputForm.value.name!,
+      description: this.inputForm.value.description!,
+      recommendedServiceProducts: this.inputForm.value.recommendedServices || []
+    };
+
+    if (this.id !== -1) {
+      // Update existing Event Type
+      this.eventTypeService.update(this.id, eventType).subscribe({
+        next: (updatedEventType: any) => {
+          console.log('Event Type updated:', updatedEventType);
+
+          this.snackBar.open('Event Type updated successfully!', 'Close', {
+            duration: 3000,
+            panelClass: ['snack-success']
+          });
+
+          this.router.navigate(['../'], { relativeTo: this.route });
+        },
+        error: (err) => {
+          console.error('Error updating event type:', err);
+          this.snackBar.open('Failed to update Event Type. Please try again.', 'Close', {
+            duration: 3000,
+            panelClass: ['snack-error']
+          });
+        }
+      });
+    } else {
+      // Create new Event Type
       this.eventTypeService.add(eventType).subscribe({
-        next: (eventType: any) => {
-          console.log('Event Type created:', eventType);
-  
+        next: (createdEventType: any) => {
+          console.log('Event Type created:', createdEventType);
+
           this.snackBar.open('Event Type created successfully!', 'Close', {
             duration: 3000,
             panelClass: ['snack-success']
           });
-  
+
           this.router.navigate(['../'], { relativeTo: this.route });
         },
         error: (err) => {
@@ -105,6 +162,8 @@ export class NewEventTypeComponent {
       });
     }
   }
+}
+
   
 
   onCancel(): void {
