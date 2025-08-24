@@ -4,12 +4,18 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { PagedModel } from '../shared/model/paged-model';
+import { EventFilterParams } from '../parameters/event-filter-params';
+import { buildHttpParams } from '../utils/http-utils';
+import { EventTypeDto } from './dtos/event/event-type.dto';
 import { CreateEventType } from './dtos/event/create-event-type';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventTypeService {
+  update(id: number, eventType: CreateEventType) {
+    return this.httpClient.put<EventType>(`${this.apiUrl}/${id}`, eventType);
+  }
 
     private apiUrl = `${environment.apiHost}api/event-types`;
 
@@ -22,8 +28,16 @@ export class EventTypeService {
     getEventType(id: number): Observable<EventType> {
       return this.httpClient.get<EventType>(`${this.apiUrl}/` + id)
     }
-  
-    getAll() : Observable<EventType[]> {
-      return this.httpClient.get<EventType[]>(environment.apiHost + `api/event-types`);
-    }
+
+  getAll(filters?: EventFilterParams): Observable<EventType[]> {
+    return this.httpClient.get<EventType[]>(this.apiUrl);
+  }
+  getAllPaginated(filters?: EventFilterParams): Observable<PagedModel<EventTypeDto>> {
+    const params = buildHttpParams(filters)
+    return this.httpClient.get<PagedModel<EventTypeDto>>(this.apiUrl+ "/paginated", { params });
+  }
+
+  delete(eventTypeId: number): Observable<void> {
+    return this.httpClient.delete<void>(`${this.apiUrl}/${eventTypeId}`);
+  }
 }
