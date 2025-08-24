@@ -28,7 +28,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from '../../../environments/environment';
 import { HomeEventFilterDialogComponent } from '../../dialog/home-event-filter-dialog/home-event-filter-dialog.component';
 import { HomeServiceProductFilterDialogComponent } from '../../dialog/home-service-product-filter-dialog/home-service-product-filter-dialog.component';
-import { EventType } from '../../model/event-type';
+import { EventType } from '../../model/event/event-type';
 import { EventTypeService } from '../../services/event-type.service';
 import { ServiceProductFilteringValues } from '../../services/dtos/service-product/service-product-filtering-values.dto';
 import { HomeEventFilterDialogParams } from '../../parameters/home-event-filter-dialog-params';
@@ -47,7 +47,7 @@ const imagesApi = "api/images/";
     MatDialogModule, MatSelect, MatOption, MatPaginatorModule, MatProgressSpinnerModule, DragScrollComponent, DragScrollItemDirective,
   ],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+  styleUrl: './home.component.css'
 })
 export class HomeComponent {
   topEvents: EventSummaryDto[] = [];

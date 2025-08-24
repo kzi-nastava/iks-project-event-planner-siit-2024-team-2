@@ -17,13 +17,18 @@ import { EventDetailsComponent } from './layout/event-details/event-details.comp
 import { AgendaComponent } from './layout/agenda/agenda.component';
 import { RoleGuard } from './role.guard';
 import { MyEventTypesComponent } from './layout/my-event-types/my-event-types.component';
+import { NewCategoryComponent } from './layout/new-category/new-category.component';
+import { AllCategoriesComponent } from './layout/all-categories/all-categories.component';
+import { PriceListComponent } from './layout/price-list/price-list.component';
+
+import { AcceptInvitationComponent } from './layout/accept-invitation-component/accept-invitation-component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
     {path: 'signin', component: LoginComponent,  canActivate: []},
     {path: 'signup', component: RegisterComponent, canActivate: []},
     {path: 'home', component: HomeComponent, canActivate: []},
-    {path: 'event-details', component: EventDetailsComponent},
+    {path: 'event-details', component: EventDetailsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['EVENT_ORGANIZER', 'SERVICE_PRODUCT_PROVIDER', 'ADMIN'] }},
     {path: 'chat', component: ChatComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['EVENT_ORGANIZER', 'SERVICE_PRODUCT_PROVIDER', 'ADMIN'] }},
     {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['EVENT_ORGANIZER', 'SERVICE_PRODUCT_PROVIDER', 'ADMIN'] }},
     {path: 'calendar',component: MyEventsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['EVENT_ORGANIZER', 'SERVICE_PRODUCT_PROVIDER', 'ADMIN'] }},
@@ -36,6 +41,10 @@ export const routes: Routes = [
     {path: 'my-products', component: MyProductsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['SERVICE_PRODUCT_PROVIDER', 'ADMIN'] }},
     {path: 'new-event', component: NewEventComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['EVENT_ORGANIZER', 'ADMIN'] }},
     {path: 'my-events', component: MyEventsComponent, canActivate: [AuthGuard, RoleGuard] , data: { roles: ['EVENT_ORGANIZER', 'ADMIN'] }},
+    {path: 'all-categories', component: AllCategoriesComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN'] }},
+    {path: 'new-category', component: NewCategoryComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN'] }},
+    {path: 'price-list', component: PriceListComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['SERVICE_PRODUCT_PROVIDER'] }},
     {path: 'agenda', component: AgendaComponent},
+    {path: 'accept-invitation', component: AcceptInvitationComponent, canActivate: []},
     {path: '**', redirectTo: 'home'},
 ];

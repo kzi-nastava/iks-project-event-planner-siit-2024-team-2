@@ -1,0 +1,19 @@
+.btn-save {
+  background: linear-gradient(135deg, #dfe1ea, #9dacd6, #EEF2FF);
+}
+
+.small-input {
+  width: 60px;       /* smaller input */
+  margin-right: 4px; /* tiny gap */
+  padding: 2px 4px;  /* compact look */
+  font-size: 13px;   /* smaller font */
+}
+
+h3, .fancy-button {
+  margin: 20px 0 0 10px;
+}
+
+.back {
+  background-color: #C2CFFF;
+  color: #2B3352;
+}

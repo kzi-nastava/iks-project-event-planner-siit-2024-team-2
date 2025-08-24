@@ -1,0 +1,24 @@
+mat-card-content {
+    margin: 0.5rem 0;
+}
+
+label {
+    margin: 15px;
+}
+
+:host {
+  margin-top: 30px;     
+  padding-top: 10px;
+}
+
+mat-select {
+    width: 150px;
+    background-color: #D8E0FF;
+    border-radius: 20px;
+    height: 20px;
+    padding: 10px;
+}
+
+#accept {
+    margin-left: 15px;
+}

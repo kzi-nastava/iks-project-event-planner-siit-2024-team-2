@@ -1,0 +1,39 @@
+<h2 mat-dialog-title>Dialog with elements</h2>
+<mat-dialog-content>
+    <mat-form-field class="invitation-chip-list">
+        <mat-label>Invitations</mat-label>
+        <mat-chip-grid #chipGrid aria-label="Enter invitations">
+        @for (invitation of invitations(); track invitation) {
+            <mat-chip-row
+            (removed)="remove(invitation)"
+            [editable]="invitation.editable"
+            (edited)="edit(invitation, $event)"
+            [aria-description]="'press enter to edit ' + invitation.email"
+            (color)="isInvalidChip(invitation) ? 'warn' : ''"
+            >   
+            {{invitation.email}}
+            <button matChipRemove [attr.aria-label]="'remove ' + invitation.email">
+                <mat-icon>cancel</mat-icon>
+            </button>
+            </mat-chip-row>
+        }
+        <input
+            matInput
+            placeholder="New email..."
+            [formControl]="emailFormControl"
+            [matChipInputFor]="chipGrid"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="addOnBlur"
+            (matChipInputTokenEnd)="add($event)"
+            type="email"
+        />
+        <mat-error *ngIf="emailFormControl.invalid && emailFormControl.touched">
+            Not a valid email address.
+        </mat-error>
+        </mat-chip-grid>
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-dialog-close mat-button>Cancel</button>
+  <button type="submit" (click)="apply()" mat-dialog-close mat-button>Apply</button>
+</mat-dialog-actions>

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NotificationsComponent } from './notifications.component';
+import { SharedTestingModule } from '../../../testing/shared-testing.module';
 
 describe('NotificationsComponent', () => {
   let component: NotificationsComponent;
@@ -8,7 +9,7 @@ describe('NotificationsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NotificationsComponent]
+      imports: [NotificationsComponent, SharedTestingModule]
     })
     .compileComponents();
 

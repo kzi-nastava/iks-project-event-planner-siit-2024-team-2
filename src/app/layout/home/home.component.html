@@ -4,9 +4,13 @@
 </div>
 <ng-container *ngIf="isBrowser">
   <drag-scroll [scrollbar-hidden]="true" [drag-scroll-y-disabled]="true" [snap-disabled]="true">
-    <div drag-scroll-item class="drag-scroll-item" *ngFor="let event of topEvents">
-      <ng-template *ngTemplateOutlet="EventCard; context: {$implicit: event}"></ng-template>
-    </div>
+      @for(event of topEvents; track event.id) {
+        <div drag-scroll-item class="drag-scroll-item">
+          <ng-template *ngTemplateOutlet="EventCard; context: {$implicit: event}"></ng-template>
+        </div>
+      } @empty {
+        <div *ngIf="!isLoadingTopEvents" class="empty-list">No events found</div>
+      }
   </drag-scroll>
 </ng-container>
 <hr/>
@@ -17,9 +21,13 @@
 </div>
 <ng-container *ngIf="isBrowser">
   <drag-scroll [scrollbar-hidden]="true" [drag-scroll-y-disabled]="true" [snap-disabled]="true">
-    <div drag-scroll-item class="drag-scroll-item" *ngFor="let serviceProduct of topServiceProducts">
-      <ng-template *ngTemplateOutlet="ServiceProductCard; context: {$implicit: serviceProduct}"></ng-template>
-    </div>
+      @for(serviceProduct of topServiceProducts; track serviceProduct.id) {
+        <div drag-scroll-item class="drag-scroll-item">
+          <ng-template *ngTemplateOutlet="ServiceProductCard; context: {$implicit: serviceProduct}"></ng-template>
+        </div>
+      } @empty {
+        <div *ngIf="!isLoadingTopServiceProducts" class="empty-list">No service products found</div>
+      }
   </drag-scroll>
 </ng-container>
 <hr/>
@@ -54,9 +62,11 @@
       <mat-progress-spinner mode="indeterminate"/>
     </div>
     <div class="row">
-      <div *ngFor="let event of otherEvents">
+      @for(event of otherEvents; track event.id) {
         <ng-template *ngTemplateOutlet="EventCard; context: {$implicit: event}"></ng-template>
-      </div>
+      } @empty {
+        <div *ngIf="!isLoadingEvents" class="empty-list">No events found</div>
+      }
     </div>
   </mat-tab>
   <mat-tab label="Services/Products">
@@ -88,9 +98,11 @@
       <mat-progress-spinner mode="indeterminate"/>
     </div>
     <div class="row">
-      <div *ngFor="let serviceProduct of otherServiceProducts">
+      @for (serviceProduct of otherServiceProducts; track serviceProduct.id) {
         <ng-template *ngTemplateOutlet="ServiceProductCard; context: {$implicit: serviceProduct}"></ng-template>
-      </div>
+      } @empty {
+        <div *ngIf="!isLoadingServiceProducts" class="empty-list">No service products found</div>
+      }
     </div>
   </mat-tab>
 </mat-tab-group>

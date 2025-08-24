@@ -1,4 +1,4 @@
-import { EventType } from "../model/event-type";
+import { EventType } from "../model/event/event-type";
 import { City } from "../model/utils/city";
 import { EventFilterParams } from "./event-filter-params";
 

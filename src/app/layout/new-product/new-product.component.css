@@ -14,8 +14,8 @@
 
 .row {
     display: flex;
-    gap: 20px; /* Space between combobox and listbox */
-    align-items: flex-start; /* Align items to the top */
+    gap: 20px;
+    align-items: flex-start;
     justify-content: center;
     padding-bottom: 20px;
 }
@@ -177,4 +177,33 @@ input[type=checkbox] {
   color: red;
   font-size: 20px;
   margin-top: 4px;
+}
+
+.error-text {
+  color: red;
+  font-size: 13px;
+  height: 2px;
+  visibility: hidden;
+  margin-bottom: 30px;
+}
+
+.error-text.visible {
+  visibility: visible;
+}
+
+.second-error {
+    position: relative;
+    bottom: 30px;
+}
+
+.error-text span {
+  visibility: hidden;
+  display: block;
+  height: 0;
+  width: 400px;
+}
+
+.error-text span.visible {
+  visibility: visible;
+  height: auto;
 }

@@ -1,5 +1,5 @@
-import { User } from "../../services/dtos/user";
-import { EventType } from "../event-type";
+import { User } from "../../services/dtos/user/user";
+import { EventType } from "../event/event-type";
 import { ServiceProductCategory } from "./service-product-category";
 
 export interface ServiceProduct {
