@@ -50,6 +50,10 @@
         <mat-icon>add</mat-icon>
         New Event Type
       </mat-list-item>
+      <mat-list-item *ngIf="hasRole(['ADMIN'])" [routerLink]="['my-event-types']">
+        <mat-icon>handshake</mat-icon>
+        My Event Types
+      </mat-list-item>
       <mat-list-item *ngIf="hasRole(['EVENT_ORGANIZER', 'ADMIN'])" [routerLink]="['new-event']">
         <mat-icon>add</mat-icon>
         New event
