@@ -53,6 +53,11 @@ export class EventService {
     return this.httpClient.get<PagedModel<Event>>(this.apiUrl, { params });
   }
 
+  getAllMine(filters?: EventFilterParams): Observable<PagedModel<Event>> {
+    const params = buildHttpParams(filters)
+    return this.httpClient.get<PagedModel<Event>>(this.apiUrl + "/mine", { params });
+  }
+
   getAllSummaries(filters?: EventFilterParams): Observable<PagedModel<EventSummaryDto>> {
     const params = buildHttpParams(filters)
     return this.httpClient.get<PagedModel<EventSummaryDto>>(this.apiUrl + "/summaries", { params });
