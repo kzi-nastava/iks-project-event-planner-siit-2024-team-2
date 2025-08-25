@@ -19,6 +19,7 @@ import { RoleGuard } from './role.guard';
 import { NewCategoryComponent } from './layout/new-category/new-category.component';
 import { AllCategoriesComponent } from './layout/all-categories/all-categories.component';
 import { PriceListComponent } from './layout/price-list/price-list.component';
+import { BudgetComponent } from './layout/budget/budget.component';
 
 
 export const routes: Routes = [
@@ -41,6 +42,7 @@ export const routes: Routes = [
     {path: 'price-list', component: PriceListComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['SERVICE_PRODUCT_PROVIDER'] }},
     {path: 'new-event', component: NewEventComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['EVENT_ORGANIZER'] }},
     {path: 'my-events', component: MyEventsComponent, canActivate: [AuthGuard, RoleGuard] , data: { roles: ['EVENT_ORGANIZER'] }},
+    {path: 'budget', component: BudgetComponent, canActivate: [AuthGuard, RoleGuard] , data: { roles: ['EVENT_ORGANIZER'] }},
     {path: 'agenda', component: AgendaComponent},
     {path: '**', redirectTo: 'home'},
 ];

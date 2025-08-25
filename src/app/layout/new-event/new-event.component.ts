@@ -67,7 +67,8 @@ export class NewEventComponent {
       eventTypeId: this.createEventForm.value.eventType,
       eventOrganizer: Number(localStorage.getItem('userId')),
       maxAttendances: this.createEventForm.value.maxAttendances,
-      open: this.createEventForm.value.open
+      open: this.createEventForm.value.open,
+      budgets: []
     };
     if (this.id !== -1) { // Indicates an update
       this.eventService.update(event, this.id).subscribe({

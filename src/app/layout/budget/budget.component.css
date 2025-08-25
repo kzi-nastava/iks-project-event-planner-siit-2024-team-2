@@ -1,0 +1,16 @@
+h3 {
+    margin: 15px;
+}
+
+.small-input {
+  width: 60px;       
+  margin-right: 4px;
+  padding: 2px 4px; 
+  font-size: 13px;  
+}
+
+.purchase-list {
+  max-height: 120px;   
+  overflow-y: auto;     
+  padding-right: 4px;
+}
