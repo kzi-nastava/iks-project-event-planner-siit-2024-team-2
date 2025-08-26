@@ -11,6 +11,8 @@ import { Observable, Subscription } from 'rxjs';
 import { NotificationService } from '../../services/communication/notification.service';
 import { MatBadgeModule } from '@angular/material/badge';
 import { LoadingService } from '../../services/utils/loading.service';
+import { UserRole } from '../../services/dtos/user/user-role';
+import { stat } from 'fs';
 
 @Component({
   selector: 'app-nav-bar',
@@ -30,16 +32,14 @@ import { LoadingService } from '../../services/utils/loading.service';
   styleUrl: './nav-bar.component.css'
 })
 export class NavBarComponent {
-  signOut() {
-    this.authService.logout();
-     this.router.navigate(['/signin']);
-  }
   toggle: boolean = false;
   isLoggedIn: boolean = false;
   isLoading: boolean = false;
   private authSub!: Subscription;
   private loadingSub!: Subscription;
   badgeCount$: Observable<number> | undefined;
+  authButtonText: 'Sign in' | 'Sign out' = 'Sign in';
+  canUpgrade: boolean = false;
 
   // Injected
   readonly authService = inject(AuthService);
@@ -53,15 +53,37 @@ export class NavBarComponent {
     this.badgeCount$ = this.notificationService.badgeCount$;
   }
 
-  hasRole(roles: string[]): boolean {
+  hasRole(roles: UserRole[]): boolean {
     const userRole = this.authService.getUserRole();
     return userRole ? roles.includes(userRole) : false;
+  }
+
+  clickAuthButton(): void {
+    switch (this.authButtonText) {
+      case 'Sign in':
+        this.router.navigate(['signin']);
+        break;
+      case 'Sign out':
+        this.signOut();
+        break;
+    }
+  }
+  
+  signOut() {
+    this.authService.logout();
+    this.router.navigate(['/signin']);
+  }
+
+  upgrade() {
+    this.router.navigate(['/signup']);
   }
 
   ngOnInit(): void {
     console.log('ngOnInit');
     this.authSub = this.authService.isLoggedIn$.subscribe(status => {
       this.isLoggedIn = status;
+      this.authButtonText = this.isLoggedIn ? 'Sign out' : 'Sign in';
+      this.canUpgrade = this.isLoggedIn && this.authService.getUserRole() === 'AUTHENTICATED';
     });
     this.loadingSub = this.loadingService.loading$.subscribe(status => {
       this.isLoading = status;

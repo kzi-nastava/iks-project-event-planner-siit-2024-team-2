@@ -37,6 +37,7 @@ export class AuthService {
       this.isLoggedInSubject.next(true);
       localStorage.setItem('userId', response.id.toString());
       localStorage.setItem('role', response.role.toString());
+      localStorage.setItem('email', response.email.toString());
     }
   }
 
@@ -59,6 +60,7 @@ export class AuthService {
       localStorage.removeItem('token');
       localStorage.removeItem('userId');
       localStorage.removeItem('role');
+      localStorage.removeItem('email');
       this.isLoggedInSubject.next(false);
     }
   }
@@ -85,6 +87,13 @@ export class AuthService {
   getUserId(): string {
     if (typeof window !== 'undefined' && localStorage) {
       return localStorage.getItem('userId') as string;
+    }
+    return '';
+  }
+
+  getUserEmail(): string {
+    if (typeof window !== 'undefined' && localStorage) {
+      return localStorage.getItem('email') as string;
     }
     return '';
   }
