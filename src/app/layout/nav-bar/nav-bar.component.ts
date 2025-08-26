@@ -61,7 +61,7 @@ export class NavBarComponent {
   clickAuthButton(): void {
     switch (this.authButtonText) {
       case 'Sign in':
-        this.router.navigate(['signin']);
+        this.router.navigate(['/signin']);
         break;
       case 'Sign out':
         this.signOut();
