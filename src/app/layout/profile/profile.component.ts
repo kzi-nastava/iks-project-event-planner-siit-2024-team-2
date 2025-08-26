@@ -5,6 +5,7 @@ import { ProfileService } from '../../services/profile.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component'; 
+import { UserRole } from '../../services/dtos/user/user-role';
 
 @Component({
   selector: 'app-profile',
@@ -14,7 +15,7 @@ import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent {
-  userRole: 'EVENT_ORGANIZER' | 'SERVICE_PRODUCT_PROVIDER' | 'ADMIN' = 'EVENT_ORGANIZER' 
+  userRole: UserRole = 'EVENT_ORGANIZER' 
 
   userInfo = { firstName: '', lastName: '', email: '', profilePicture: '', address: '', phoneNumber: '' };
   companyInfo = { companyName: '', companyDescription: '' };

@@ -22,17 +22,20 @@ import { AllCategoriesComponent } from './layout/all-categories/all-categories.c
 import { PriceListComponent } from './layout/price-list/price-list.component';
 
 import { AcceptInvitationComponent } from './layout/accept-invitation-component/accept-invitation-component';
+import { UserRole } from './services/dtos/user/user-role';
+
+const ALL_AUTHENTICATED: UserRole[] = ['AUTHENTICATED', 'EVENT_ORGANIZER', 'SERVICE_PRODUCT_PROVIDER', 'ADMIN'];
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
     {path: 'signin', component: LoginComponent,  canActivate: []},
     {path: 'signup', component: RegisterComponent, canActivate: []},
     {path: 'home', component: HomeComponent, canActivate: []},
-    {path: 'event-details', component: EventDetailsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['EVENT_ORGANIZER', 'SERVICE_PRODUCT_PROVIDER', 'ADMIN'] }},
-    {path: 'chat', component: ChatComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['EVENT_ORGANIZER', 'SERVICE_PRODUCT_PROVIDER', 'ADMIN'] }},
-    {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['EVENT_ORGANIZER', 'SERVICE_PRODUCT_PROVIDER', 'ADMIN'] }},
-    {path: 'calendar',component: MyEventsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['EVENT_ORGANIZER', 'SERVICE_PRODUCT_PROVIDER', 'ADMIN'] }},
-    {path: 'notifications', component: NotificationsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['EVENT_ORGANIZER', 'SERVICE_PRODUCT_PROVIDER', 'ADMIN'] }},
+    {path: 'event-details', component: EventDetailsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
+    {path: 'chat', component: ChatComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
+    {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
+    {path: 'calendar',component: MyEventsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
+    {path: 'notifications', component: NotificationsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
     {path: 'new-event-type', component: NewEventTypeComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN'] }},
     {path: 'my-event-types', component: MyEventTypesComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN'] }},
     {path: 'new-service', component: NewServiceComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['SERVICE_PRODUCT_PROVIDER', 'ADMIN'] }},
