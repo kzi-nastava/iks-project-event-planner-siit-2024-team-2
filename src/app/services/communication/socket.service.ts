@@ -56,7 +56,7 @@ export class SocketService {
   }
 
   initialize() {
-    if (!this.stompClient.active)
+    if (!this.stompClient.active && !this.isInitialized)
       this.stompClient.activate();
   }
 

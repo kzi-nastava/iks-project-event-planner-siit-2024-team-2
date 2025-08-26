@@ -42,7 +42,7 @@ export class AppComponent {
         }
       });
     this.socketService.initialized$.pipe(
-      combineLatestWith(this.authService.isLoggedIn$)
+      combineLatestWith(this.authService.isLoggedIn$), takeUntil(this.destroy$),
     )
     .subscribe(([initialized, loggedIn]) => {
       if (initialized && loggedIn) {
