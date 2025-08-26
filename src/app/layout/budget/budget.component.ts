@@ -14,6 +14,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { BudgetService } from '../../services/budget.service';
 import { CreateBudgetDto } from '../../services/dtos/event/create-budget.dto';
 import { Budget } from '../../model/budget';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
@@ -29,12 +32,13 @@ export class BudgetComponent {
 
   constructor(private router: Router, private route: ActivatedRoute,
               private eventService: EventService, private spCategoryService: ServiceProductCategoryService,
-              private budgetService: BudgetService) {}
+              private budgetService: BudgetService, public dialog: MatDialog) {}
 
   eventId: number = -1;
   budgets: any[] = [];
   displayedColumns = ['index', 'name', 'category', 'currentSpent', 'plannedSpending', 'bookings', 'purchases', 'actions', 'invalid'];
   categories: string[] = [];
+  hasSomethingReserved: boolean[] = []; // if deletion is acceptable for each budget item
 
   spendingForm = new FormGroup({});
 
@@ -49,8 +53,10 @@ export class BudgetComponent {
       this.eventId = params['id'];
       this.eventService.getEvent(this.eventId).subscribe(event => {
         this.budgets = event.budgets;
-        this.budgets.forEach((budget) => {
-          this.spendingForm.addControl(budget.name, new FormControl(budget.plannedSpending));
+        this.budgets.forEach((budget, i) => {
+          this.spendingForm.addControl(budget.name, new FormControl(budget.plannedSpending,
+                                      [Validators.required, Validators.min(budget.currentSpent)]));
+          this.hasSomethingReserved[i] = budget.bookings.length > 0 || budget.purchases.length > 0;
         })
       });
     })
@@ -64,34 +70,41 @@ export class BudgetComponent {
     this.router.navigate(['/my-events'])
   }
 
-  onEdit(item: any, i: number) {
-
+  onEdit(item: Budget) {
+    let usersForm = this.spendingForm.get(item.name);
+    if (usersForm?.valid) {
+      this.budgetService.setNewAmount(item.id, usersForm.value).subscribe();
+    }
   }
 
-  onDelete(item: any) {
-
+  onDelete(id: number) {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+          data: { id: id }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.budgets = this.budgets.filter(b => b.id !== id);
+      }
+    });
   }
 
   onSubmit() {
     if (this.newBudgetForm.valid) {
       this.spCategoryService.getByName(String(this.newBudgetForm.get('category')?.value)).subscribe(catId => {
         const budget: CreateBudgetDto = {
-          name: String(this.newBudgetForm.get('name')?.value),
+          name: String(this.newBudgetForm.get('name')?.value?.trim()),
           plannedSpending: Number(this.newBudgetForm.get('plannedSpending')?.value),
           serviceProductCategoryId: Number(catId.id)
         };
 
-        console.log(budget)
-
         this.budgetService.add(budget).subscribe({
           next: (created: Budget) => {
-            this.budgets.push(created);
-            this.eventService.addBudgetToEvent(this.eventId, created).subscribe(() => {});
-
-          },
-            error: (err) => {
-              console.error('Error creating category:', err);
-            }
+            this.budgets = [...this.budgets, created];
+            this.spendingForm.addControl(budget.name, new FormControl(budget.plannedSpending,
+                                        [Validators.required, Validators.min(0)]));
+            this.eventService.addBudgetToEvent(this.eventId, created).subscribe();
+            this.newBudgetForm.reset({name: ' ', plannedSpending: 0, category: ' '});
+          }
         })
       })
     }

@@ -5,6 +5,7 @@ import { ServiceService } from '../../services/service.service';
 import { ServiceProductCategoryService } from '../../services/service-product-category.service';
 import { Router } from '@angular/router';
 import { ToastService } from '../../services/utils/toast-service';
+import { BudgetService } from '../../services/budget.service';
 
 
 @Component({
@@ -18,7 +19,7 @@ export class DeleteDialogComponent {
   entityName: string = '';
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<DeleteDialogComponent>,
     private serviceService: ServiceService, private spCategoryService: ServiceProductCategoryService,
-    private toastService: ToastService, private router: Router) {
+    private toastService: ToastService, private router: Router, private budgetService: BudgetService) {
       this.entityName = data.entityName || 'item';
      }
 
@@ -35,6 +36,9 @@ export class DeleteDialogComponent {
       this.service = this.serviceService;
     else if (currentUrl == '/all-categories') {
       this.service = this.spCategoryService;
+    }
+    else if (currentUrl.startsWith('/budget')) {
+      this.service = this.budgetService;
     }
 
     this.service.delete(this.data.id).subscribe({

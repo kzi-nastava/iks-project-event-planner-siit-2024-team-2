@@ -19,3 +19,12 @@ h3 {
     margin-bottom: 20px;
     margin: 0 auto;
 }
+
+.btn-edit {
+  background: linear-gradient(135deg, #dfe1ea, #9dacd6, #EEF2FF);
+  margin-right: 5px;
+}
+
+.btn-delete {
+  background: linear-gradient(135deg, #ffb3b3, #ff7a7a, #ffecec);
+}

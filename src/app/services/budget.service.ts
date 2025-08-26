@@ -19,7 +19,7 @@ export class BudgetService {
   }
 
   setNewAmount(id: number, newAmount: number) {
-    return this.httpClient.post(`${this.apiUrl}/${id}?newAmount=${newAmount}`, {});
+    return this.httpClient.put(`${this.apiUrl}/${id}`, newAmount);
   }
 
   delete(id: number): Observable<boolean> {
