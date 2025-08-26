@@ -58,7 +58,6 @@ export class LoginComponent {
       next: (response) => {
         this.route.queryParams.subscribe(params => {
           if (params['returnUrl']) {
-            console.log('Redirecting to:', params['returnUrl']);
             this.router.navigateByUrl(params['returnUrl']);
           } else {
             this.router.navigate(['/dashboard']);

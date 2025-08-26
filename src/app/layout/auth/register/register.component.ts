@@ -10,6 +10,7 @@ import { Router, RouterModule } from '@angular/router';
 import {MatRadioModule} from '@angular/material/radio';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth-service.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -31,7 +32,10 @@ import { AuthService } from '../../../services/auth-service.service';
 })
 export class RegisterComponent {
   registerForm!: FormGroup;
-  isEventOrganizer = true;
+  isEventOrganizer = false;
+  upgrading = false;
+
+  destroy$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder, 
@@ -41,7 +45,7 @@ export class RegisterComponent {
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
-      userType: ['', Validators.required],
+      userType: ['serviceProvider', Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       address: ['', Validators.required],
@@ -62,6 +66,14 @@ export class RegisterComponent {
     });
 
     this.toggleFormFields();
+
+    this.authService.isLoggedIn$.pipe(takeUntil(this.destroy$)).subscribe(status => {
+      this.upgrading = status && this.authService.getUserRole() === 'AUTHENTICATED'
+      if (this.upgrading) {
+        this.registerForm.get('email')?.setValue(this.authService.getUserEmail());
+        this.registerForm.get('email')?.updateValueAndValidity();
+      }
+    });
   }
 
   passwordMatchValidator(group: FormGroup): { mismatch: boolean } | null {

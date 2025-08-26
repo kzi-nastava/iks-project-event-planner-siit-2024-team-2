@@ -4,9 +4,9 @@
   </button>
   <span class="toolbar-title" [routerLink]="['home']">Event Planner</span>
   <div class="toolbar-actions" *ngIf="!isLoading">
-    <a mat-button *ngIf="!isLoggedIn" [routerLink]="['signin']" class="custom-signin-button">Sign in</a>
-    <button mat-button *ngIf="isLoggedIn" (click)="signOut()" class="custom-signin-button">Sign out</button>
-      <mat-icon [routerLink]="['profile']">account_circle</mat-icon>
+    <button mat-button (click)="clickAuthButton()" class="custom-signin-button">{{authButtonText}}</button>
+    <button mat-button *ngIf="canUpgrade" (click)="upgrade()" class="custom-signin-button">Upgrade</button>
+    <mat-icon [routerLink]="['profile']">account_circle</mat-icon>
   </div>
 </mat-toolbar>
 

@@ -192,14 +192,14 @@ export class NewServiceComponent {
       const notification: NotificationDto = {
         title: "New category request",
         message: JSON.stringify(serviceMessage),
-        dismissed: false,
         seen: false,
-        userId: 9
+        dismissed: false,
+        userId: undefined
       };
-      this.notificationService.add(notification).subscribe({
+      this.notificationService.sendCategoryRequest(notification).subscribe({
         next: (not: any) => {
           this.toastService.show('Waiting for creation approval', 2000);
-      this.router.navigate(['/my-services']);
+          this.router.navigate(['/my-services']);
         },
         error: (err: any) => {
           console.error('Failed to create notification:', err);

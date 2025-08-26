@@ -35,6 +35,11 @@ export class SocketService {
 
     this.stompClient.onConnect = () => {
       this.isLoaded = true;
+
+      Object.keys(this.subscriptionRefs).forEach(dest => {
+        this.subscriptionRefs[dest].unsubscribe();
+        delete this.subscriptionRefs[dest];
+      });
       this.subscriptions.forEach(dest => {
         const ref = this.stompClient.subscribe(dest, (message: IMessage) =>
           this.handleMessage(message, dest)
@@ -52,6 +57,7 @@ export class SocketService {
     this.stompClient.onDisconnect = () => {
       this.isLoaded = false;
       this.isLoadedSubject.next(false);
+      this.isInitialized = false;
     };
   }
 

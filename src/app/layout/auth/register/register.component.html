@@ -33,7 +33,7 @@
 
       <mat-form-field class="full-width">
         <mat-label>Email</mat-label>
-        <input matInput formControlName="email" type="email" placeholder="Enter your email">
+        <input matInput formControlName="email" type="email" placeholder="Enter your email" [readonly]="upgrading">
         <mat-error *ngIf="registerForm.get('email')?.hasError('required')">Email is required</mat-error>
         <mat-error *ngIf="registerForm.get('email')?.hasError('email')">Enter a valid email</mat-error>
       </mat-form-field>
@@ -81,7 +81,7 @@
 
       <mat-form-field class="full-width">
         <mat-label>Email</mat-label>
-        <input matInput formControlName="email" type="email" placeholder="Enter your company email">
+        <input matInput formControlName="email" type="email" placeholder="Enter your company email" [readonly]="upgrading">
         <mat-error *ngIf="registerForm.get('email')?.hasError('required')">Email is required</mat-error>
         <mat-error *ngIf="registerForm.get('email')?.hasError('email')">Enter a valid email</mat-error>
       </mat-form-field>
@@ -116,6 +116,6 @@
     </div>
 
     <button mat-raised-button color="primary" type="submit" [disabled]="registerForm.invalid">Register</button>
-    <a> <button mat-raised-button color="primary" [routerLink]="['/signin']"> Signin </button> </a>
+    <a *ngIf="!upgrading"> <button mat-raised-button color="primary" [routerLink]="['/signin']"> Signin </button> </a>
   </form>
 </mat-card>

@@ -1,3 +1,5 @@
+import { UserRole } from "./user-role";
+
 export interface User {
     firstName: string;
     lastName: string;
@@ -15,5 +17,5 @@ export interface User {
     serviceCategories: any[];
     eventTypes: any[];
     selectedEventTypes: any[];
-    userRole: 'EVENT_ORGANIZER' | 'SERVICE_PRODUCT_PROVIDER' | 'ADMIN';
+    userRole: UserRole;
 }

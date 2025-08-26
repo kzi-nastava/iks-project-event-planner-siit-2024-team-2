@@ -12,8 +12,8 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const snackBar = inject(MatSnackBar);
   const token = authService.getToken();
 
-  const exclude = ['/api/invitations/accept'];
-  const isExcluded = exclude.some(url => req.url.includes(url));
+  const exclude = ['/api/invitations/?/accept', '/api/auth/quick-login'];
+  const isExcluded = exclude.some(url => url.split('?').every(part => req.url.includes(part)));
 
   if (token) {
     req = req.clone({
