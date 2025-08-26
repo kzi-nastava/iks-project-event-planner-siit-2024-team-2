@@ -14,3 +14,8 @@ h3 {
   overflow-y: auto;     
   padding-right: 4px;
 }
+
+.container {
+    margin-bottom: 20px;
+    margin: 0 auto;
+}
