@@ -6,5 +6,6 @@ export interface Invitation {
     email: string,
     token: string,
     accepted: boolean,
-    quickRegistration: boolean
+    quickRegistration: boolean,
+    justRegistered: boolean
 }
