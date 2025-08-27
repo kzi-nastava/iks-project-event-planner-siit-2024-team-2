@@ -68,7 +68,7 @@
     </div>
 
     <!-- Change Password Section -->
-    <div class="profile-section">
+    <div class="profile-section" *ngIf="userRole !== 'AUTHENTICATED'">
       <h2>Change Password</h2>
       <form (ngSubmit)="changePassword()">
         <div class="form-group">

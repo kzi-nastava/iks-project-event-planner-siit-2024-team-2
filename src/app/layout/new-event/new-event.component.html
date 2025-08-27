@@ -35,7 +35,11 @@
 
   
         <label for="is-open" class="form-label">Is the event open to everyone?</label>
-        <input type="checkbox" id="is-open" class="form-checkbox" formControlName="open">
+        <div class="flex-space-between">
+          <input type="checkbox" id="is-open" class="form-checkbox" formControlName="open">
+          <button mat-button type="button" (click)="openInvitationsDialog()" [disabled]="isOpen()" id="invitations-button"
+            matTooltip="Event is open to everyone" [matTooltipDisabled]="!isOpen()">Invitations</button>
+        </div>
 
         <label for="agenda" class="form-label" style="margin-top: 30px;">See detailed agenda:</label>
         <button

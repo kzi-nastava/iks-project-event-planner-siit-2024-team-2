@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth-service.service'; // Adjust path as needed
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -37,6 +37,7 @@ export class LoginComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
     private snackBar: MatSnackBar,
   ) {
     this.loginForm = this.fb.group({
@@ -55,8 +56,14 @@ export class LoginComponent {
 
     this.authService.login(email, password).subscribe({
       next: (response) => {
-        this.router.navigate(['/dashboard']);
-          this.snackBar.open('Login successful.', 'Close', {
+        this.route.queryParams.subscribe(params => {
+          if (params['returnUrl']) {
+            this.router.navigateByUrl(params['returnUrl']);
+          } else {
+            this.router.navigate(['/dashboard']);
+          }
+        });
+        this.snackBar.open('Login successful.', 'Close', {
           duration: 4000,
         });
       },

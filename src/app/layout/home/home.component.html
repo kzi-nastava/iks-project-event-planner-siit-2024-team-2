@@ -33,76 +33,80 @@
 <hr/>
 <mat-tab-group (selectedTabChange)="onTabChange($event)">
   <mat-tab label="Events">
-    <div class="tab-start row">
-      <div class="tab-label">
-        <h4>Explore events</h4>
+    <div>
+      <div class="tab-start row">
+        <div class="tab-label">
+          <h4>Explore events</h4>
+        </div>
+        <div class="options row">
+          <button mat-stroked-button color="primary" (click)="openEventFilterDialog()" 
+            [disabled]="!fetchedEventTypes || !fetchedMaxAttendances" class="filter-btn">Filter</button>
+          <mat-form-field appearance="fill" class="search-field" color="primary">
+            <mat-label>Search</mat-label>
+            <input type="search" matInput (change)="onSearch($event)" placeholder="Enter search term" />
+            <button mat-icon-button matSuffix aria-label="Search">
+              <mat-icon>search</mat-icon>
+            </button>
+          </mat-form-field>
+          <mat-form-field appearance="fill" class="sort-field">
+            <mat-label>Sort by</mat-label>
+            <mat-select [(value)]="eventSelectedSortOption" (selectionChange)="onSortEvents()">
+              <mat-option value="date-desc">Newest first</mat-option>
+              <mat-option value="date-asc">Oldest first</mat-option>
+              <mat-option value="name-asc">A-Z</mat-option>
+              <mat-option value="name-desc">Z-A</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
-      <div class="options row">
-        <button mat-stroked-button color="primary" (click)="openEventFilterDialog()" 
-          [disabled]="!fetchedEventTypes || !fetchedMaxAttendances" class="filter-btn">Filter</button>
-        <mat-form-field appearance="fill" class="search-field" color="primary">
-          <mat-label>Search</mat-label>
-          <input type="search" matInput (change)="onSearch($event)" placeholder="Enter search term" />
-          <button mat-icon-button matSuffix aria-label="Search">
-            <mat-icon>search</mat-icon>
-          </button>
-        </mat-form-field>
-        <mat-form-field appearance="fill" class="sort-field">
-          <mat-label>Sort by</mat-label>
-          <mat-select [(value)]="eventSelectedSortOption" (selectionChange)="onSortEvents()">
-            <mat-option value="date-desc">Newest first</mat-option>
-            <mat-option value="date-asc">Oldest first</mat-option>
-            <mat-option value="name-asc">A-Z</mat-option>
-            <mat-option value="name-desc">Z-A</mat-option>
-          </mat-select>
-        </mat-form-field>
+      <div *ngIf="isLoadingEvents" class="progress-spinner-container">
+        <mat-progress-spinner mode="indeterminate"/>
       </div>
-    </div>
-    <div *ngIf="isLoadingEvents" class="progress-spinner-container">
-      <mat-progress-spinner mode="indeterminate"/>
-    </div>
-    <div class="row">
-      @for(event of otherEvents; track event.id) {
-        <ng-template *ngTemplateOutlet="EventCard; context: {$implicit: event}"></ng-template>
-      } @empty {
-        <div *ngIf="!isLoadingEvents" class="empty-list">No events found</div>
-      }
+      <div class="row">
+        @for(event of otherEvents; track event.id) {
+          <ng-template *ngTemplateOutlet="EventCard; context: {$implicit: event}"></ng-template>
+        } @empty {
+          <div *ngIf="!isLoadingEvents" class="empty-list">No events found</div>
+        }
+      </div>
     </div>
   </mat-tab>
   <mat-tab label="Services/Products">
-    <div class="tab-start row">
-      <div class="tab-label">
-        <h4>Explore services and products</h4>
+    <div>
+      <div class="tab-start row">
+        <div class="tab-label">
+          <h4>Explore services and products</h4>
+        </div>
+        <div class="options row">
+          <button mat-stroked-button color="primary" (click)="openServiceProductFilterDialog()" [disabled]="!fetchedFilteringValues" class="filter-btn">Filter</button>
+          <mat-form-field appearance="fill" class="search-field" color="primary">
+            <mat-label>Search</mat-label>
+            <input matInput (change)="onSearch($event)" placeholder="Enter search term" />
+            <button mat-icon-button matSuffix aria-label="Search">
+              <mat-icon>search</mat-icon>
+            </button>
+          </mat-form-field>
+          <mat-form-field appearance="fill" class="sort-field">
+            <mat-label>Sort by</mat-label>
+            <mat-select [(value)]="serviceProductSelectedSortOption" (selectionChange)="onSortServiceProducts()">
+              <mat-option value="name-asc">A-Z</mat-option>
+              <mat-option value="name-desc">Z-A</mat-option>
+              <mat-option value="price-desc">Most expensive first</mat-option>
+              <mat-option value="price-asc">Cheapest first</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
-      <div class="options row">
-        <button mat-stroked-button color="primary" (click)="openServiceProductFilterDialog()" [disabled]="!fetchedFilteringValues" class="filter-btn">Filter</button>
-        <mat-form-field appearance="fill" class="search-field" color="primary">
-          <mat-label>Search</mat-label>
-          <input matInput (change)="onSearch($event)" placeholder="Enter search term" />
-          <button mat-icon-button matSuffix aria-label="Search">
-            <mat-icon>search</mat-icon>
-          </button>
-        </mat-form-field>
-        <mat-form-field appearance="fill" class="sort-field">
-          <mat-label>Sort by</mat-label>
-          <mat-select [(value)]="serviceProductSelectedSortOption" (selectionChange)="onSortServiceProducts()">
-            <mat-option value="name-asc">A-Z</mat-option>
-            <mat-option value="name-desc">Z-A</mat-option>
-            <mat-option value="price-desc">Most expensive first</mat-option>
-            <mat-option value="price-asc">Cheapest first</mat-option>
-          </mat-select>
-        </mat-form-field>
+      <div *ngIf="isLoadingServiceProducts" class="progress-spinner-container">
+        <mat-progress-spinner mode="indeterminate"/>
       </div>
-    </div>
-    <div *ngIf="isLoadingServiceProducts" class="progress-spinner-container">
-      <mat-progress-spinner mode="indeterminate"/>
-    </div>
-    <div class="row">
-      @for (serviceProduct of otherServiceProducts; track serviceProduct.id) {
-        <ng-template *ngTemplateOutlet="ServiceProductCard; context: {$implicit: serviceProduct}"></ng-template>
-      } @empty {
-        <div *ngIf="!isLoadingServiceProducts" class="empty-list">No service products found</div>
-      }
+      <div class="row">
+        @for (serviceProduct of otherServiceProducts; track serviceProduct.id) {
+          <ng-template *ngTemplateOutlet="ServiceProductCard; context: {$implicit: serviceProduct}"></ng-template>
+        } @empty {
+          <div *ngIf="!isLoadingServiceProducts" class="empty-list">No service products found</div>
+        }
+      </div>
     </div>
   </mat-tab>
 </mat-tab-group>

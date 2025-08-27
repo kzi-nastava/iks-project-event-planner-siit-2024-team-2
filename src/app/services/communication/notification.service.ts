@@ -52,6 +52,10 @@ export class NotificationService {
     return this.httpClient.post<Notification>(this.apiUrl, notification)
   }
 
+  sendCategoryRequest(notification: NotificationDto) : Observable<void> {
+    return this.httpClient.post<void>(this.apiUrl + '/send-category-request', notification);
+  }
+
   increaseBadgeCount() {
     NotificationService.badgeCount++;
     this.badgeCountSubject.next(NotificationService.badgeCount);

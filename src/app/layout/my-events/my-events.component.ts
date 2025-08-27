@@ -65,7 +65,7 @@ export class MyEventsComponent implements OnInit {
       size: this.pageSize
     };
 
-    this.eventService.getAll(filters).subscribe({
+    this.eventService.getAllMine(filters).subscribe({
       next: (paged: PagedModel<Event>) => {
         this.myEvents = paged.content;
         this.totalEvents = paged.page.totalElements;

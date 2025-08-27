@@ -13,8 +13,8 @@ import { EventTypeService } from '../../services/event-type.service';
 import { forkJoin } from 'rxjs';
 import { ToastService } from '../../services/utils/toast-service';
 import { ImageService } from '../../services/image.service';
-import { NotificationService } from '../../services/communication/notification.service';
 import { NotificationDto } from '../../services/dtos/communication/notification.dto';
+import { NotificationService } from '../../services/communication/notification.service';
 
 
 @Component({
@@ -183,65 +183,68 @@ export class NewServiceComponent {
       this.formSubmitted = true;
       return;
     }
-    else {
-      this.selectedImages.forEach(image => {
-        this.imageService.uploadImage(image).subscribe({
-          next: response => {},
-          error: err => {
-            console.error('Failed to upload image', err);
-          }
-        });
-      });
+    if (!this.newServiceForm.get('categoryForm')?.get('category')?.value) {  // WAITING FOR ADMIN APPROVAL
       const service = this.recieveDataFromForm();
-      if (this.update) {  // UPDATING
-        this.toastService.show('Updating...', 2000);
-        this.serviceService.update(this.serviceId, service).subscribe({
-          next: (service: any) => {
-            this.toastService.show('Service ' + service.name + ' updated successfully!', 2000);
-            this.router.navigate(['/my-services']);
+      const serviceMessage = {service: service, 
+                      categoryName: this.newServiceForm.get('categoryForm')?.get('newCategoryName')?.value,
+                      categoryDescription: this.newServiceForm.get('categoryForm')?.get('newCategoryDescription')?.value};
+      
+      const notification: NotificationDto = {
+        title: "New category request",
+        message: JSON.stringify(serviceMessage),
+        seen: false,
+        dismissed: false,
+        userId: undefined
+      };
+      this.notificationService.sendCategoryRequest(notification).subscribe({
+        next: (not: any) => {
+          this.toastService.show('Waiting for creation approval', 2000);
+          this.router.navigate(['/my-services']);
+        },
+        error: (err: any) => {
+          console.error('Failed to create notification:', err);
+          this.toastService.show('Failed to create!', 2000);
+        }
+      });
+    }
+    else {
+      let observables = this.selectedImages.map((image:File) => this.imageService.uploadImage(image));
+      forkJoin(observables)
+        .subscribe({
+          next: (response: string[]) => {
+            const service = this.recieveDataFromForm();
+            service.images = response.map(path => atob(path));
+            this.toastService.show('Updating...', 2000);
+            if (this.update) {  // UPDATING
+              this.serviceService.update(this.serviceId, service).subscribe({
+                next: (service: any) => {
+                  this.toastService.show('Service ' + service.name + ' updated successfully!', 2000);
+                  this.router.navigate(['/my-services']);
+                },
+                error: (err: any) => {
+                  console.error('Failed to update service:', err);
+                  this.toastService.show('Failed to update!', 2000);
+                }
+              });
+            }
+            else {  // CREATING
+              this.toastService.show('Creating...', 2000);
+              this.serviceService.add(service).subscribe({
+                next: (service: any) => {
+                  this.toastService.show('Service ' + service.name + ' created successfully!', 2000);
+                  this.router.navigate(['/my-services']);
+                },
+                error: (err: any) => {
+                  console.error('Failed to create service:', err);
+                  this.toastService.show('Failed to create!', 2000);
+                }
+              });
+            }
           },
-          error: (err: any) => {
-            console.error('Failed to update service:', err);
-            this.toastService.show('Failed to update!', 2000);
+          error: err => {
+            console.error('Failed to upload images', err);
           }
         });
-      }
-      else if (!this.newServiceForm.get('categoryForm')?.get('category')?.value) {  // WAITING FOR ADMIN APPROVAL
-        const serviceMessage = {service: service, 
-                        categoryName: this.newServiceForm.get('categoryForm')?.get('newCategoryName')?.value,
-                        categoryDescription: this.newServiceForm.get('categoryForm')?.get('newCategoryDescription')?.value};
-        
-        const notification: NotificationDto = {
-          title: "New category request",
-          message: JSON.stringify(serviceMessage),
-          dismissed: false,
-          seen: false,
-          userId: 9
-        };
-        this.notificationService.add(notification).subscribe({
-          next: (not: any) => {
-            this.toastService.show('Waiting for creation approval', 2000);
-        this.router.navigate(['/my-services']);
-          },
-          error: (err: any) => {
-            console.error('Failed to create notification:', err);
-            this.toastService.show('Failed to create!', 2000);
-          }
-        });
-      }
-      else {  // CREATING
-        this.toastService.show('Creating...', 2000);
-        this.serviceService.add(service).subscribe({
-          next: (service: any) => {
-            this.toastService.show('Service ' + service.name + ' created successfully!', 2000);
-            this.router.navigate(['/my-services']);
-          },
-          error: (err: any) => {
-            console.error('Failed to create service:', err);
-            this.toastService.show('Failed to create!', 2000);
-          }
-        });
-      }
     }
   }
 

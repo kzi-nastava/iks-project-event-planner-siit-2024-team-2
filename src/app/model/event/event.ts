@@ -8,5 +8,6 @@ export interface Event {
     eventTypeId: number | null | undefined,
     maxAttendances: number | null | undefined,
     open: boolean,
-    budgets: any[]
+    budgets: any[],
+    invitationEmails: string[] | null
 }

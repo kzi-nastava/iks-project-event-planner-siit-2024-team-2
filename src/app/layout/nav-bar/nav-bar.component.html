@@ -1,17 +1,17 @@
 <mat-toolbar color="primary">
-  <button mat-icon-button (click)="toggleSidenav()">
+  <button [class.hidden]="isLoading" mat-icon-button (click)="toggleSidenav()">
     <mat-icon>menu</mat-icon>
   </button>
   <span class="toolbar-title" [routerLink]="['home']">Event Planner</span>
-  <div class="toolbar-actions">
-    <a mat-button *ngIf="!isLoggedIn" [routerLink]="['signin']" class="custom-signin-button">Sign in</a>
-    <button mat-button *ngIf="isLoggedIn" (click)="signOut()" class="custom-signin-button">Sign out</button>
-      <mat-icon [routerLink]="['profile']">account_circle</mat-icon>
+  <div class="toolbar-actions" *ngIf="!isLoading">
+    <button mat-button (click)="clickAuthButton()" class="custom-signin-button">{{authButtonText}}</button>
+    <button mat-button *ngIf="canUpgrade" (click)="upgrade()" class="custom-signin-button">Upgrade</button>
+    <mat-icon [routerLink]="['profile']">account_circle</mat-icon>
   </div>
 </mat-toolbar>
 
 
-<mat-sidenav-container class="sidenav-container secondary">
+<mat-sidenav-container [class.hidden]="isLoading" class="sidenav-container secondary">
   <mat-sidenav #sidenav mode="side" class="secondary" [opened]="toggle">
     <mat-nav-list class="secondary">
       <mat-list-item [routerLink]="['home']" color="primary">
@@ -50,6 +50,10 @@
         <mat-icon>add</mat-icon>
         New Event Type
       </mat-list-item>
+      <mat-list-item *ngIf="hasRole(['ADMIN'])" [routerLink]="['my-event-types']">
+        <mat-icon>handshake</mat-icon>
+        My Event Types
+      </mat-list-item>
       <mat-list-item *ngIf="hasRole(['ADMIN'])" [routerLink]="['all-categories']">
         <mat-icon>category</mat-icon>
         All Categories
@@ -66,7 +70,7 @@
         <mat-icon>add</mat-icon>
         New event
       </mat-list-item>
-            <mat-list-item *ngIf="hasRole(['EVENT_ORGANIZER'])" [routerLink]="['my-events']">
+      <mat-list-item *ngIf="hasRole(['EVENT_ORGANIZER'])" [routerLink]="['my-events']">
         <mat-icon>handshake</mat-icon>
         My events
       </mat-list-item>

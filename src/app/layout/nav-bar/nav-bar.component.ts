@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterModule } from '@angular/router';
@@ -10,6 +10,9 @@ import { AuthService } from '../../services/auth-service.service';
 import { Observable, Subscription } from 'rxjs';
 import { NotificationService } from '../../services/communication/notification.service';
 import { MatBadgeModule } from '@angular/material/badge';
+import { LoadingService } from '../../services/utils/loading.service';
+import { UserRole } from '../../services/dtos/user/user-role';
+import { stat } from 'fs';
 
 @Component({
   selector: 'app-nav-bar',
@@ -29,32 +32,68 @@ import { MatBadgeModule } from '@angular/material/badge';
   styleUrl: './nav-bar.component.css'
 })
 export class NavBarComponent {
-  signOut() {
-    this.authService.logout();
-     this.router.navigate(['/signin']);
-  }
   toggle: boolean = false;
   isLoggedIn: boolean = false;
+  isLoading: boolean = false;
   private authSub!: Subscription;
+  private loadingSub!: Subscription;
   badgeCount$: Observable<number> | undefined;
+  authButtonText: 'Sign in' | 'Sign out' = 'Sign in';
+  canUpgrade: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router, private notificationService: NotificationService) {
+  // Injected
+  readonly authService = inject(AuthService);
+  readonly router = inject(Router);
+  readonly notificationService = inject(NotificationService);
+  readonly loadingService = inject(LoadingService);
+  isLoading$ = this.loadingService.loading$;
+  readonly cdRef = inject(ChangeDetectorRef);
+
+  constructor() {
     this.badgeCount$ = this.notificationService.badgeCount$;
   }
 
-  hasRole(roles: string[]): boolean {
+  hasRole(roles: UserRole[]): boolean {
     const userRole = this.authService.getUserRole();
     return userRole ? roles.includes(userRole) : false;
   }
 
+  clickAuthButton(): void {
+    switch (this.authButtonText) {
+      case 'Sign in':
+        this.router.navigate(['/signin']);
+        break;
+      case 'Sign out':
+        this.signOut();
+        break;
+    }
+  }
+  
+  signOut() {
+    this.authService.logout();
+    this.router.navigate(['/signin']);
+  }
+
+  upgrade() {
+    this.router.navigate(['/signup']);
+  }
+
   ngOnInit(): void {
+    console.log('ngOnInit');
     this.authSub = this.authService.isLoggedIn$.subscribe(status => {
       this.isLoggedIn = status;
+      this.authButtonText = this.isLoggedIn ? 'Sign out' : 'Sign in';
+      this.canUpgrade = this.isLoggedIn && this.authService.getUserRole() === 'AUTHENTICATED';
+    });
+    this.loadingSub = this.loadingService.loading$.subscribe(status => {
+      this.isLoading = status;
+      this.cdRef.detectChanges();
     });
   }
 
   ngOnDestroy(): void {
     this.authSub?.unsubscribe();
+    this.loadingSub?.unsubscribe();
   }
   toggleSidenav() {
     this.toggle = !this.toggle;

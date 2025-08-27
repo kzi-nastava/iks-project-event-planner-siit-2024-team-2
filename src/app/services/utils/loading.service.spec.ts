@@ -1,14 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SocketService } from './socket.service';
+import { LoadingService } from './loading.service';
 import { SharedTestingModule } from '../../../testing/shared-testing.module';
 
-describe('ServiceService', () => {
-  let service: SocketService;
+describe('LoadingService', () => {
+  let service: LoadingService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({imports: [SharedTestingModule]});
-    service = TestBed.inject(SocketService);
+    TestBed.configureTestingModule({imports: [SharedTestingModule]})
+    service = TestBed.inject(LoadingService);
   });
 
   it('should be created', () => {

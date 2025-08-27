@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Message } from '../../model/communication/message';
 import { BehaviorSubject, map, Subject } from 'rxjs';
 
-import * as Stomp from 'stompjs';
+import { Client, IMessage, StompSubscription } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
 @Injectable({
@@ -12,7 +12,7 @@ import SockJS from 'sockjs-client';
 })
 export class SocketService {
   private serverUrl = environment.apiHost + 'socket';
-  private stompClient: any;
+  private stompClient: Client;
   private isInitialized = false;
   private isLoaded = false;
   private initializedSubject = new BehaviorSubject<boolean>(false);
@@ -24,56 +24,62 @@ export class SocketService {
   private subscriptions: string[] = [];
   private subscriptionRefs: { [dest: string]: any } = {};
 
-  constructor(private http: HttpClient) {}
+  readonly http = inject(HttpClient);
 
-  initialize() {
-    this.initializeConnection();
+  constructor() {
+    this.stompClient = new Client({
+      webSocketFactory: () => new SockJS(this.serverUrl),
+      reconnectDelay: 20000,
+      debug: (msg: string) => console.log(msg),
+    });
+
+    this.stompClient.onConnect = () => {
+      this.isLoaded = true;
+
+      Object.keys(this.subscriptionRefs).forEach(dest => {
+        this.subscriptionRefs[dest].unsubscribe();
+        delete this.subscriptionRefs[dest];
+      });
+      this.subscriptions.forEach(dest => {
+        const ref = this.stompClient.subscribe(dest, (message: IMessage) =>
+          this.handleMessage(message, dest)
+        );
+        this.subscriptionRefs[dest] = ref;
+      });
+
+      this.isLoadedSubject.next(true);
+      if (!this.isInitialized) {
+        this.isInitialized = true;
+        this.initializedSubject.next(true);
+      }
+    };
+
+    this.stompClient.onDisconnect = () => {
+      this.isLoaded = false;
+      this.isLoadedSubject.next(false);
+      this.isInitialized = false;
+    };
   }
 
-  private initializeConnection() {
-    const ws = new SockJS(this.serverUrl);
-    this.stompClient = Stomp.over(ws);
-
-    this.stompClient.connect({}, 
-      () => {
-        this.isLoaded = true;
-        
-        this.subscriptions.forEach(dest => {
-          this.stompClient.subscribe(dest, (message: { body: string }) =>
-            this.handleMessage(message, dest)
-          );
-        });
-        this.isLoadedSubject.next(true);
-        if (!this.isInitialized) {
-          this.isInitialized = true;
-          this.initializedSubject.next(true);
-        }
-      },
-      (error: any) => {
-        this.isLoaded = false;
-        this.isLoadedSubject.next(false);
-        setTimeout(() => {
-          this.initializeConnection();
-        }, 20000);
-      }
-    );
+  initialize() {
+    if (!this.stompClient.active)
+      this.stompClient.activate();
   }
 
   // send via WebSocket
   sendMessageUsingSocket(message: Message) {
     if (!this.isLoaded) return;
-    this.stompClient.send(
-      '/socket-subscriber/send/message',
-      {},
-      JSON.stringify(message)
-    );
+    this.stompClient.publish({
+      destination: '/socket-subscriber/send/message',
+      body: JSON.stringify(message)
+    });
   }
 
   // send via REST API
   sendMessageUsingRest(message: Message) {
-    return this.http.post<Message>(environment.apiHost + 'send-message-rest', message).pipe(
-      map((data: Message) => data)
-    );
+    return this.http
+      .post<Message>(environment.apiHost + 'send-message-rest', message)
+      .pipe(map((data: Message) => data));
   }
 
   // Subscribe to global topic
@@ -96,14 +102,12 @@ export class SocketService {
   }
 
   private unsubscribe(dest: string) {
-    if (this.isLoaded) {
-      const ref = this.subscriptionRefs[dest];
-      if (ref) {
-        ref.unsubscribe();
-        delete this.subscriptionRefs[dest];
-      }
-      this.subscriptions = this.subscriptions.filter(d => d !== dest);
+    const ref = this.subscriptionRefs[dest];
+    if (ref) {
+      ref.unsubscribe();
+      delete this.subscriptionRefs[dest];
     }
+    this.subscriptions = this.subscriptions.filter(d => d !== dest);
   }
 
   private buildDestination(topic: string, subtopic: string, userId: string) {
@@ -119,8 +123,7 @@ export class SocketService {
     return destination;
   }
 
-  private handleMessage(message: { body: string }, dest: string) {
-    console.log("Handling message", message, dest);
+  private handleMessage(message: IMessage, dest: string) {
     if (!message.body) return;
     const messageResult: Message = JSON.parse(message.body);
 
@@ -134,7 +137,7 @@ export class SocketService {
     if (!this.isLoaded) return;
 
     if (!this.subscriptionRefs[dest]) {
-      const ref = this.stompClient.subscribe(dest, (message: { body: string }) =>
+      const ref = this.stompClient.subscribe(dest, (message: IMessage) =>
         this.handleMessage(message, dest)
       );
       this.subscriptionRefs[dest] = ref;
