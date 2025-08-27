@@ -68,7 +68,7 @@ export class BudgetComponent {
       });
       // get categories
       this.spCategoryService.getAll().subscribe(categories => {
-        this.categories = categories.map(c => c.name);
+        this.categories = categories.map(c => String(c.name));
         this.findRecommendedCategories(params['eventTypeId']);
       })
     })

@@ -9,7 +9,7 @@ import {MatButtonToggleChange, MatButtonToggleModule} from '@angular/material/bu
 import { ServiceProductDType } from '../../model/utils/service-product-dtype';
 import { MatButtonModule } from '@angular/material/button';
 import { ServiceProductCategory } from '../../model/service-product/service-product-category';
-import { EventType } from '../../model/event-type';
+import { EventType } from '../../model/event/event-type';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS, MatCheckboxDefaultOptions, MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({

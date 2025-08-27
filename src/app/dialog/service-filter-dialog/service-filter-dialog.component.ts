@@ -5,8 +5,8 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { CommonModule } from '@angular/common';
 import { ServiceProductCategoryService } from '../../services/service-product-category.service';
 import { EventTypeService } from '../../services/event-type.service';
-import { ServiceProductCategory } from '../../model/service-product-category';
-import { EventType } from '../../model/event-type';
+import { ServiceProductCategory } from '../../model/service-product/service-product-category';
+import { EventType } from '../../model/event/event-type';
 
 @Component({
   selector: 'app-service-filter-dialog',

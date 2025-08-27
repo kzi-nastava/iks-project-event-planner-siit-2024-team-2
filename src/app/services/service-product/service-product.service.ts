@@ -8,7 +8,7 @@ import { ServiceProductFilterParams } from '../../parameters/service-product-fil
 import { ServiceProductSummaryDto } from '../dtos/service-product/service-product-summary.dto';
 import { buildHttpParams } from '../../utils/http-utils';
 import { ServiceProductFilteringValues } from '../dtos/service-product/service-product-filtering-values.dto';
-import { EventType } from '../../model/event-type';
+import { EventType } from '../../model/event/event-type';
 
 @Injectable({
   providedIn: 'root'

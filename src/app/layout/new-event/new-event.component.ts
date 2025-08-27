@@ -5,7 +5,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { MapComponent } from '../../shared/map/map.component';
-import { EventType } from '../../model/event-type';
+import { EventType } from '../../model/event/event-type';
 import { EventTypeService } from '../../services/event-type.service';
 import { EventService } from '../../services/event.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
