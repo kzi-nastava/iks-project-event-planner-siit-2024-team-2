@@ -20,9 +20,6 @@ export class SuspendedDialogComponent {
 
   ngOnInit(): void {
     let suspensionEnd = addDays(this.data.suspendedAt, 3);
-    console.log(this.data.suspendedAt);
-    console.log(suspensionEnd);
-    console.log(new Date());
     this.suspendedFor = intlFormatDistance(suspensionEnd, new Date(), {locale: 'en-US'});
   }
 }

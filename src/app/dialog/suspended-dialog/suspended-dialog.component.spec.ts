@@ -1,6 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SuspendedDialogComponent } from './suspended-dialog.component';
+import { SuspendedDialogComponent, SuspendedDialogData } from './suspended-dialog.component';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+const mockData: SuspendedDialogData = {
+    suspendedAt: new Date('2025-08-24T10:00:00Z') // fixed date for predictability
+  };
 
 describe('SuspendedDialogComponent', () => {
   let component: SuspendedDialogComponent;
@@ -8,7 +13,8 @@ describe('SuspendedDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SuspendedDialogComponent]
+      imports: [SuspendedDialogComponent],
+      providers: [{ provide: MAT_DIALOG_DATA, useValue: mockData }]
     })
     .compileComponents();
 
