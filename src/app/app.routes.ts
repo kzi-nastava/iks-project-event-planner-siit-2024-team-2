@@ -21,7 +21,7 @@ import { NewCategoryComponent } from './layout/new-category/new-category.compone
 import { AllCategoriesComponent } from './layout/all-categories/all-categories.component';
 import { PriceListComponent } from './layout/price-list/price-list.component';
 
-import { AcceptInvitationComponent } from './layout/accept-invitation-component/accept-invitation-component';
+import { AcceptInvitationComponent } from './layout/accept-invitation-component/accept-invitation.component';
 import { UserRole } from './services/dtos/user/user-role';
 
 const ALL_AUTHENTICATED: UserRole[] = ['AUTHENTICATED', 'EVENT_ORGANIZER', 'SERVICE_PRODUCT_PROVIDER', 'ADMIN'];

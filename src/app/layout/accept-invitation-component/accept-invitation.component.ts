@@ -14,11 +14,11 @@ import { InvitationErrorType } from '../../services/dtos/event/invitation-error-
 import { InvitationErrorDto } from '../../services/dtos/event/invitation-error.dto';
 
 @Component({
-  selector: 'app-accept-invitation-component',
+  selector: 'app-accept-invitation',
   standalone: true,
   imports: [MatProgressSpinnerModule],
-  templateUrl: './accept-invitation-component.html',
-  styleUrl: './accept-invitation-component.css'
+  templateUrl: './accept-invitation.component.html',
+  styleUrl: './accept-invitation.component.css'
 })
 export class AcceptInvitationComponent {
   readonly route = inject(ActivatedRoute);
@@ -115,7 +115,6 @@ export class AcceptInvitationComponent {
   private quickLogin(token: string, eventId: number | null, justRegistered: boolean, isFull: boolean) {
     this.authService.quickLogin(token).subscribe({
       next: (response: LoginResponse) => {
-        console.log("Quick login response", response);
         if (eventId)
           this.navigateToEvent(eventId);
         else

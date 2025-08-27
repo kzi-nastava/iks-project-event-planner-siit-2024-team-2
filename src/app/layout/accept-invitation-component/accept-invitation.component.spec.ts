@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AcceptInvitationComponent } from './accept-invitation-component';
+import { AcceptInvitationComponent } from './accept-invitation.component';
 import { SharedTestingModule } from '../../../testing/shared-testing.module';
 
 describe('AcceptInvitationComponent', () => {
