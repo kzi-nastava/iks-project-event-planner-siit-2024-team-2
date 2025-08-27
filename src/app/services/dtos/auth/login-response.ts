@@ -5,4 +5,5 @@ export interface LoginResponse {
     id: number;
     email: string; 
     role: UserRole;
+    suspendedAt: Date | null;
 }
