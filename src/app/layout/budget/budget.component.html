@@ -40,6 +40,7 @@
 <!-- Budget table -->
 <div class="table-wrap mat-elevation-z4">
   <h3>Budget plan</h3>
+  <h6>Total (spent/budget): {{ totalSpent }} / {{ totalProvided }}</h6>
   <table mat-table class="w-full" [dataSource]="budgets" matSort>
 
     <ng-container matColumnDef="index">

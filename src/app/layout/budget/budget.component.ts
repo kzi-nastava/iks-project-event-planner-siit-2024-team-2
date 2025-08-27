@@ -42,6 +42,8 @@ export class BudgetComponent {
   uniqueCategories = new Set();
   recommendedNumber: number = 0;
   hasSomethingReserved: boolean[] = []; // if deletion is acceptable for each budget item
+  totalSpent: number = 0;
+  totalProvided: number = 0;
 
   spendingForm = new FormGroup({});
 
@@ -60,6 +62,8 @@ export class BudgetComponent {
           this.spendingForm.addControl(budget.name, new FormControl(budget.plannedSpending,
                                       [Validators.required, Validators.min(budget.currentSpent)]));
           this.hasSomethingReserved[i] = budget.bookings.length > 0 || budget.purchases.length > 0;
+          this.totalSpent += budget.currentSpent;
+          this.totalProvided += budget.plannedSpending;
         })
       });
       // get categories
