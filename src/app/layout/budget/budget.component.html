@@ -23,7 +23,8 @@
     <mat-form-field appearance="fill">
       <mat-label>Recommended Categories</mat-label>
       <mat-select formControlName="category">
-        <mat-option *ngFor="let category of categories" [value]="category">
+        <mat-option *ngFor="let category of uniqueCategories; let i = index" [value]="category"
+        [ngClass]="{ 'highlighted-option': i < recommendedNumber}">
           {{ category }}
         </mat-option>
       </mat-select>

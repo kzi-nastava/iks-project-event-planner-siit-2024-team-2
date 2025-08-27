@@ -14,9 +14,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { BudgetService } from '../../services/budget.service';
 import { CreateBudgetDto } from '../../services/dtos/event/create-budget.dto';
 import { Budget } from '../../model/budget';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ServiceProductService } from '../../services/service-product/service-product.service';
 
 
 @Component({
@@ -32,12 +32,15 @@ export class BudgetComponent {
 
   constructor(private router: Router, private route: ActivatedRoute,
               private eventService: EventService, private spCategoryService: ServiceProductCategoryService,
-              private budgetService: BudgetService, public dialog: MatDialog) {}
+              private budgetService: BudgetService, public dialog: MatDialog,
+              private serviceProductService: ServiceProductService) {}
 
   eventId: number = -1;
   budgets: any[] = [];
   displayedColumns = ['index', 'name', 'category', 'currentSpent', 'plannedSpending', 'bookings', 'purchases', 'actions', 'invalid'];
   categories: string[] = [];
+  uniqueCategories = new Set();
+  recommendedNumber: number = 0;
   hasSomethingReserved: boolean[] = []; // if deletion is acceptable for each budget item
 
   spendingForm = new FormGroup({});
@@ -59,10 +62,22 @@ export class BudgetComponent {
           this.hasSomethingReserved[i] = budget.bookings.length > 0 || budget.purchases.length > 0;
         })
       });
+      // get categories
+      this.spCategoryService.getAll().subscribe(categories => {
+        this.categories = categories.map(c => c.name);
+        this.findRecommendedCategories(params['eventTypeId']);
+      })
     })
+  }
 
-    this.spCategoryService.getAll().subscribe(categories => {
-      this.categories = categories.map(c => c.name);
+  findRecommendedCategories(eventTypeId: number) {
+    this.serviceProductService.getCategoriesByEventType(eventTypeId).subscribe(recommended => {
+      const recommendedSet = new Set<string>(recommended.filter(p => this.categories.includes(p)));
+      this.recommendedNumber = recommendedSet.size;
+      const remainingList = this.categories.filter(c => !recommended.includes(c));
+
+      this.categories = [...recommendedSet, ...remainingList];
+      this.uniqueCategories = new Set<string>(this.categories);
     })
   }
 

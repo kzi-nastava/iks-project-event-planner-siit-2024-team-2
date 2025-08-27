@@ -8,6 +8,7 @@ import { ServiceProductFilterParams } from '../../parameters/service-product-fil
 import { ServiceProductSummaryDto } from '../dtos/service-product/service-product-summary.dto';
 import { buildHttpParams } from '../../utils/http-utils';
 import { ServiceProductFilteringValues } from '../dtos/service-product/service-product-filtering-values.dto';
+import { EventType } from '../../model/event-type';
 
 @Injectable({
   providedIn: 'root'
@@ -36,5 +37,11 @@ export class ServiceProductService {
 
   getFilteringValues(): Observable<ServiceProductFilteringValues> {
     return this.httpClient.get<ServiceProductFilteringValues>(this.apiUrl + "/filtering-values");
+  }
+
+  getCategoriesByEventType(eventTypeId: number): Observable<string[]> {
+    return this.httpClient.get<string[]>(`${this.apiUrl}/sp-categories/by-event-type`, {
+      params: { eventTypeId: eventTypeId.toString() }
+    });
   }
 }
