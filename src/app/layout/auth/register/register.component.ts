@@ -157,4 +157,9 @@ export class RegisterComponent {
       }
     }
   }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

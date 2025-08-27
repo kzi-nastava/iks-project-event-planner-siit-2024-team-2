@@ -6,6 +6,7 @@ import { UserReport } from '../../model/user/user-report';
 import { UserReportDto } from '../dtos/user/user-report.dto';
 import { PageParams } from '../../parameters/page-params';
 import { buildHttpParams } from '../../utils/http-utils';
+import { PagedModel } from '../../shared/model/paged-model';
 
 @Injectable({
   providedIn: 'root'
@@ -30,11 +31,11 @@ export class UserReportService {
     return this.httpClient.delete<boolean>(`${this.apiUrl}/${id}`);
   }
   approve(id: number): Observable<UserReport> {
-    return this.httpClient.post<UserReport>(`${this.apiUrl}/approv`, id);
+    return this.httpClient.post<UserReport>(`${this.apiUrl}/approve`, id);
   }
-  getAllNotApproved(pageParams: PageParams): Observable<UserReport[]> {
+  getAllNotApproved(pageParams: PageParams): Observable<PagedModel<UserReport>> {
     let params: HttpParams = buildHttpParams(pageParams);
-    return this.httpClient.get<UserReport[]>(`${this.apiUrl}/not-approved`, { params: params });
+    return this.httpClient.get<PagedModel<UserReport>>(`${this.apiUrl}/not-approved`, { params: params });
   }
 
 }
