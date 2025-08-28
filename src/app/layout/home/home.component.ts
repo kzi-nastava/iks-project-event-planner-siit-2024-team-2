@@ -380,4 +380,8 @@ export class HomeComponent {
   navigateToEventDetails(eventId?: number): void {
     this.router.navigate(['/event-details'], { queryParams: { id: eventId } });
   }
+
+  navigateToSpDetails(spId?: number): void {
+    this.router.navigate(['/sp-details'], { queryParams: { id: spId } });
+  }
 }
