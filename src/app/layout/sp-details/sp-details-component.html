@@ -1,1 +1,44 @@
-<p>sp-details-component works!</p>
+<div *ngIf="loading">Loading service/product details...</div>
+
+<div *ngIf="error" class="error-message">{{ error }}</div>
+
+<mat-card *ngIf="spData">
+  <mat-card-title>{{ spData.name }}</mat-card-title>
+  <mat-card-subtitle>{{ spData.category?.name }}</mat-card-subtitle>
+
+  <mat-card-content>
+    <p><strong>Description:</strong> {{ spData.description }}</p>
+    <p><strong>Price: </strong> {{ spData.price}}€</p>
+    <p><strong>Discount: </strong> {{ spData.discount}}€</p>
+    <p><strong>Available: </strong> {{ spData.available ? 'yes' : 'no'}}</p>
+    <p><strong>Available event types: </strong></p>
+    <li *ngFor="let type of spData.availableEventTypes">{{ type.name }}</li>
+
+    <!-- service only -->
+    <br>
+    <div *ngIf="isService">
+        <p><strong>Specifics: </strong> {{ spData.specifies }}</p>
+        <div *ngIf="hasDuration; else engagement">
+            <p><strong>Duration: </strong> {{ spData.duration }} h</p>
+        </div>
+        <ng-template #engagement>
+            <p><strong>Engagement interval: </strong>
+                 {{ spData.minEngagementDuration }} - {{ spData.maxEngagementDuration }} h</p>
+        </ng-template>
+        <p><strong>Automatic reservation ability: </strong> {{ spData.automaticReserved ? 'yes' : 'no'}}</p>
+    </div>
+
+    <div class="scroll-container">
+        <mat-card class="card" *ngFor="let image of spData.imageEncodedNames">
+            <img  [src]="getImagePath(image)">
+        </mat-card>
+    </div>
+    
+
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="goToSpp()">See Provider's Data</button>
+    <button mat-stroked-button color="accent" (click)="goBack()">Back</button>
+  </mat-card-actions>
+</mat-card>
