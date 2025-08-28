@@ -36,6 +36,10 @@ import { HomeServiceProductFilterDialogParams } from '../../parameters/home-serv
 import { City } from '../../model/utils/city';
 import { JsonService } from '../../services/utils/json.service';
 import { ServiceProductCategory } from '../../model/service-product/service-product-category';
+import { MatMenuModule } from '@angular/material/menu';
+import { ToastService } from '../../services/utils/toast-service';
+import { ReportDialogComponent } from '../../dialog/report-dialog/report-dialog.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const pageSize = 12;
 const imagesApi = "api/images/";
@@ -45,6 +49,7 @@ const imagesApi = "api/images/";
   imports: [
     MatSidenavModule, MatCardModule, MatButtonModule, CommonModule, MatFormField, MatInputModule, MatIconModule, MatTabsModule,
     MatDialogModule, MatSelect, MatOption, MatPaginatorModule, MatProgressSpinnerModule, DragScrollComponent, DragScrollItemDirective,
+    MatMenuModule, ReactiveFormsModule
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
@@ -92,6 +97,7 @@ export class HomeComponent {
   readonly jsonService = inject(JsonService);
   readonly platformId = inject(PLATFORM_ID);
   readonly snackBar = inject(MatSnackBar);
+  readonly toastService = inject(ToastService);
 
   // Pagination
   totalElements: number = pageSize * 8; // this variable is reference, other two are for storing the value between switching
@@ -379,5 +385,17 @@ export class HomeComponent {
   }
   navigateToEventDetails(eventId?: number): void {
     this.router.navigate(['/event-details'], { queryParams: { id: eventId } });
+  }
+
+  openReportDialog(email: string, name: string) {
+    email = email.replaceAll('<wbr>', '');
+    const dialogRef = this.dialog.open(ReportDialogComponent, {data: {email: email, name: name}});
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result)
+        this.toastService.show('Report sent successfully', 2000);
+      else
+        this.toastService.show('Failed to send report', 2000);
+    });
   }
 }

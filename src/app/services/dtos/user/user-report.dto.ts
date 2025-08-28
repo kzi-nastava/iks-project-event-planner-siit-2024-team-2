@@ -1,4 +1,4 @@
 export interface UserReportDto {
-    reportedId: number;
+    reportedEmail: string;
     reason: string;
 }
