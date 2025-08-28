@@ -1,4 +1,4 @@
-import { ServiceProductCategory } from "./service-product-category";
+import { ServiceProductCategory } from "./service-product/service-product-category";
 
 export interface Budget {
     id: number,
