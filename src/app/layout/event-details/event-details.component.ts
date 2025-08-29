@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '../../services/event.service';
@@ -7,11 +7,15 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MapComponent } from '../../shared/map/map.component';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenu, MatMenuModule, MatMenuTrigger } from "@angular/material/menu";
+import { ReportDialogComponent } from '../../dialog/report-dialog/report-dialog.component';
+import { ToastService } from '../../services/utils/toast-service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-event-details',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MapComponent, MatIconModule,],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MapComponent, MatIconModule, MatMenuModule, MatMenuTrigger],
   templateUrl: './event-details.component.html',
   styleUrl: './event-details.component.css'
 })
@@ -21,11 +25,14 @@ export class EventDetailsComponent implements OnInit {
   loading = true;
   error = '';
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private eventService: EventService
-  ) {}
+  // Injected
+  readonly route = inject(ActivatedRoute);
+  readonly router = inject(Router);
+  readonly eventService = inject(EventService);
+  readonly dialog = inject(MatDialog);
+  readonly toastService = inject(ToastService);
+
+  constructor() {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -74,5 +81,11 @@ export class EventDetailsComponent implements OnInit {
         console.error(err);
       }
     });
+  }
+
+  openReportDialog() {
+    const email = this.eventData?.eventOrganizerDto?.email || '';
+    const name = this.eventData?.eventOrganizerDto?.firstName || '' + ' ' + this.eventData?.eventOrganizerDto?.lastName || '';
+    const dialogRef = this.dialog.open(ReportDialogComponent, {data: {email: email, name: name}});
   }
 }

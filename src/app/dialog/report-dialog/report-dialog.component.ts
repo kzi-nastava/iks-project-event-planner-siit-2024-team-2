@@ -3,10 +3,10 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatDialogContent, MatDialogActions, MatD
 import { UserReportService } from '../../services/user/user-report.service';
 import { UserReportDto } from '../../services/dtos/user/user-report.dto';
 import { MatFormField, MatFormFieldModule, MatLabel } from "@angular/material/form-field";
-import { F, R } from '@angular/cdk/keycodes';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { ToastService } from '../../services/utils/toast-service';
 
 export interface ReportDialogData {
   email: string;
@@ -28,6 +28,7 @@ export class ReportDialogComponent {
   readonly data: ReportDialogData = inject<ReportDialogData>(MAT_DIALOG_DATA);
   readonly userReportService = inject(UserReportService);
   readonly dialogRef = inject(MatDialogRef);
+  readonly toastService = inject(ToastService);
 
   onReport() {
     if (!this.reasonFormControl.value) return;
@@ -35,10 +36,12 @@ export class ReportDialogComponent {
     this.userReportService.add(reportDto).subscribe({
       next: () => {
         this.dialogRef.close(true);
+        this.toastService.show('Report sent successfully', 2000);
       },
       error: (err) => {
         console.error('Failed to report:', err);
         this.dialogRef.close(false);
+        this.toastService.show('Failed to send report', 2000);
       }
     });
   }

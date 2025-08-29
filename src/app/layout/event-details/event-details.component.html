@@ -5,6 +5,9 @@
 <mat-card *ngIf="eventData">
   <mat-card-title>{{ eventData.name }}</mat-card-title>
   <mat-card-subtitle>{{ eventData.date | date:'fullDate' }}</mat-card-subtitle>
+  <button mat-icon-button class="top-right-button" [matMenuTriggerFor]="reportMenu">
+    <mat-icon>report</mat-icon>
+  </button>
 
   <mat-card-content>
     <p><strong>Description:</strong> {{ eventData.description }}</p>
@@ -21,3 +24,11 @@
     </button>
   </mat-card-actions>
 </mat-card>
+
+<mat-menu #reportMenu="matMenu" class="report-menu">
+  <ng-template matMenuContent class="report-menu-content">
+    <button mat-menu-item (click)="openReportDialog()" class="report-menu-item">
+      <span>Report</span>
+    </button>
+  </ng-template>
+</mat-menu>

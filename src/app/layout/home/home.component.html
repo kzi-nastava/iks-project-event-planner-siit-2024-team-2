@@ -171,7 +171,7 @@ aria-label="Select page">
   </mat-card>
 </ng-template>
 
-<mat-menu #reportMenu="matMenu">
+<mat-menu #reportMenu="matMenu" class="report-menu">
   <ng-template matMenuContent let-email="email" let-name="name">
     <button mat-menu-item (click)="openReportDialog(email, name)">
       <mat-icon>report</mat-icon>
