@@ -37,15 +37,17 @@ export class DeleteDialogComponent {
       this.service = this.spCategoryService;
     }
 
-    this.service.delete(this.data.id).subscribe({
-      next: () => {
-        this.toastService.show('Deleted successfully!', 2000);
-        this.dialogRef.close(true); // signal success to parent
-      },
-      error: () => {
-        this.toastService.show('Failed to delete!', 2000);
-      }
-    });
+    if (this.service) {
+      this.service.delete(this.data.id).subscribe({
+        next: () => {
+          this.toastService.show('Deleted successfully!', 2000);
+          this.dialogRef.close(true); // signal success to parent
+        },
+        error: () => {
+          this.toastService.show('Failed to delete!', 2000);
+        }
+      });
+    }
     this.dialogRef.close(true);
   }
 

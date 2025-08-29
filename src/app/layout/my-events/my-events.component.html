@@ -6,13 +6,13 @@
 </div>
 
 <div class="events-container" *ngIf="myEvents.length > 0">
-  <mat-card *ngFor="let event of myEvents" class="event-card" (click)="navigateToEventDetails(event.id)">
-    <mat-card-header>
+  <mat-card *ngFor="let event of myEvents" class="event-card">
+    <mat-card-header (click)="navigateToEventDetails(event.id)">
       <mat-card-title>{{ event.name }}</mat-card-title>
       <mat-card-subtitle>{{ event.date | date:'mediumDate' }}</mat-card-subtitle>
     </mat-card-header>
 
-    <mat-card-content>
+    <mat-card-content (click)="navigateToEventDetails(event.id)">
       <p><strong>Event type:</strong> {{event.type.name}}</p>
       <p><strong>Event visibility:</strong> {{ event.open ? 'Open for everyone' : 'Invite only' }}</p>
 

@@ -62,6 +62,10 @@
         <mat-icon>add</mat-icon>
         New Category
       </mat-list-item>
+      <mat-list-item *ngIf="hasRole(['ADMIN'])" [routerLink]="['user-reports']">
+        <mat-icon>gavel</mat-icon>
+        User Reports
+      </mat-list-item>
       <mat-list-item *ngIf="hasRole(['EVENT_ORGANIZER'])" [routerLink]="['new-event']">
         <mat-icon>add</mat-icon>
         New event

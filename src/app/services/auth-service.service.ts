@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { LoginResponse } from './dtos/auth/login-response';
@@ -15,19 +15,27 @@ export class AuthService {
   private apiUrl = `${environment.apiHost}api/auth`; 
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
+  private suspendedAtSubject = new BehaviorSubject<Date | null>(null);
+  public suspendedAt$ = this.suspendedAtSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, { email, password }).pipe(
-      tap(response => this.handleLoginResponse(response))
+      tap({ 
+        next: response => this.handleLoginResponse(response), 
+        error: err => this.handleLoginError(err) 
+      })
     );
   }
 
   quickLogin(token: string): Observable<LoginResponse> { 
     let body: QuickLoginDto = { invitationToken: token };
     return this.http.post<LoginResponse>(`${this.apiUrl}/quick-login`, body).pipe(
-      tap(response => this.handleLoginResponse(response))
+      tap({ 
+        next: response => this.handleLoginResponse(response), 
+        error: err => this.handleLoginError(err) 
+      })
     );
   }
 
@@ -38,6 +46,15 @@ export class AuthService {
       localStorage.setItem('userId', response.id.toString());
       localStorage.setItem('role', response.role.toString());
       localStorage.setItem('email', response.email.toString());
+    }
+  }
+
+  private handleLoginError(err: HttpErrorResponse) {
+    if (err.status === 403) {
+      let error = err.error as LoginResponse;
+      if (error?.suspendedAt) {
+        this.suspendedAtSubject.next(error.suspendedAt);
+      }
     }
   }
 

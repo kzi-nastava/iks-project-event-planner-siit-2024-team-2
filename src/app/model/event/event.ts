@@ -1,3 +1,5 @@
+import { User } from "../../services/dtos/user/user";
+
 export interface Event {
     id?: any;
     name: string | null | undefined,
@@ -8,5 +10,6 @@ export interface Event {
     eventTypeId: number | null | undefined,
     maxAttendances: number | null | undefined,
     open: boolean,
-    invitationEmails: string[] | null
+    invitationEmails: string[] | null,
+    eventOrganizerDto: User | null
 }

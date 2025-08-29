@@ -12,13 +12,15 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { InvitationErrorType } from '../../services/dtos/event/invitation-error-type';
 import { InvitationErrorDto } from '../../services/dtos/event/invitation-error.dto';
+import { SuspendedDialogComponent, SuspendedDialogData } from '../../dialog/suspended-dialog/suspended-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-accept-invitation-component',
+  selector: 'app-accept-invitation',
   standalone: true,
   imports: [MatProgressSpinnerModule],
-  templateUrl: './accept-invitation-component.html',
-  styleUrl: './accept-invitation-component.css'
+  templateUrl: './accept-invitation.component.html',
+  styleUrl: './accept-invitation.component.css'
 })
 export class AcceptInvitationComponent {
   readonly route = inject(ActivatedRoute);
@@ -28,6 +30,7 @@ export class AcceptInvitationComponent {
   readonly authService = inject(AuthService);
   readonly loadingService = inject(LoadingService);
   readonly platformId = inject(PLATFORM_ID);
+  readonly dialog = inject(MatDialog);
 
   ngAfterViewInit(): void {
     this.loadingService.setLoading(true);
@@ -102,10 +105,14 @@ export class AcceptInvitationComponent {
         this.navigateToHome();
         this.toastService.show('This invitation is for another user', 6000, true);
         break;
-      case InvitationErrorType.NOT_FOUND:
+      case InvitationErrorType.EVENT_NOT_FOUND:
+        this.navigateToHome();
+        this.toastService.show('Event could not be found', 6000, true);
+        break;
+      case InvitationErrorType.INVITATION_NOT_FOUND:
       default:
         this.navigateToHome();
-        this.toastService.show('Failed to accept invitation', 6000, true);
+        this.toastService.show('Invitation could not be found', 6000, true);
         break;
     }
 
@@ -115,7 +122,6 @@ export class AcceptInvitationComponent {
   private quickLogin(token: string, eventId: number | null, justRegistered: boolean, isFull: boolean) {
     this.authService.quickLogin(token).subscribe({
       next: (response: LoginResponse) => {
-        console.log("Quick login response", response);
         if (eventId)
           this.navigateToEvent(eventId);
         else
@@ -129,7 +135,11 @@ export class AcceptInvitationComponent {
       },
       error: (err: HttpErrorResponse) => {
         this.navigateToHome();
-        this.toastService.show('Failed to accept invitation', 6000, true)
+        if (err?.error?.suspendedAt) {
+          let data: SuspendedDialogData = {suspendedAt: new Date(err.error.suspendedAt)};
+          this.dialog.open(SuspendedDialogComponent, {data: data});
+        } else
+          this.toastService.show('Failed to accept invitation', 6000, true)
       }
     });
   }

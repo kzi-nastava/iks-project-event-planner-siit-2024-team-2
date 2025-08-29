@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MyEventTypesComponent } from './my-event-types.component';
+import { AcceptInvitationComponent } from './accept-invitation.component';
 import { SharedTestingModule } from '../../../testing/shared-testing.module';
 
-describe('MyEventTypesComponent', () => {
-  let component: MyEventTypesComponent;
-  let fixture: ComponentFixture<MyEventTypesComponent>;
+describe('AcceptInvitationComponent', () => {
+  let component: AcceptInvitationComponent;
+  let fixture: ComponentFixture<AcceptInvitationComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MyEventTypesComponent, SharedTestingModule]
+      imports: [AcceptInvitationComponent, SharedTestingModule],
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MyEventTypesComponent);
+    fixture = TestBed.createComponent(AcceptInvitationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
