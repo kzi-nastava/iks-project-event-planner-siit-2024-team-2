@@ -1,12 +1,18 @@
-import { Component } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ProfileService } from '../../services/profile.service'; 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component'; 
 import { UserRole } from '../../services/dtos/user/user-role';
-import { ActivatedRoute } from '@angular/router';
+import { ImageService } from '../../services/image.service';
+import { ToastService } from '../../services/utils/toast-service';
+import { UserInfo } from 'node:os';
+import { environment } from '../../../environments/environment';
+import { User } from '../../services/dtos/user/user';
+import { AuthService } from '../../services/auth-service.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -17,8 +23,11 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ProfileComponent {
   userRole: UserRole = 'EVENT_ORGANIZER' 
+  selectedFile: File | null = null;
+  profilePreview: string | ArrayBuffer | null = null;
+  imageName: string = '';
 
-  userInfo = { firstName: '', lastName: '', email: '', profilePicture: '', address: '', phoneNumber: '' };
+  userInfo = { firstName: '', lastName: '', email: '', image: '', address: '', phoneNumber: '' };
   companyInfo = { companyName: '', companyDescription: '' };
   oldPassword = '';
   newPassword = '';
@@ -31,8 +40,7 @@ export class ProfileComponent {
   selectedEventTypes: any[] = [];
   showAllProfileData: boolean = true;
 
-  constructor(private profileService: ProfileService, private snackBar: MatSnackBar, private dialog: MatDialog,
-             private route: ActivatedRoute, private location: Location) { }
+  constructor(private route: ActivatedRoute, private location: Location) { }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -52,6 +60,15 @@ export class ProfileComponent {
     });
   }
 
+  readonly profileService = inject(ProfileService);
+  readonly dialog = inject(MatDialog);
+  readonly snackBar = inject(MatSnackBar);
+  readonly authService = inject(AuthService);
+  readonly router = inject(Router);
+  readonly toastService = inject(ToastService);
+  readonly imageService = inject(ImageService);
+
+
   loadUserData(userId?: number) {
     if (!userId) {
       console.error('User ID not found in local storage.');
@@ -64,10 +81,11 @@ export class ProfileComponent {
             firstName: data.firstName,
             lastName: data.lastName,
             email: data.email,
-            profilePicture: data.profilePicture,
+            image: data.image,
             phoneNumber: data.phoneNumber,
             address: data.address
           };
+          this.userInfo.image = environment.apiHost + "api/images/" + data.imageEncodedName;
           this.favoriteEvents = data.favoriteEvents;
           this.favoriteServices = data.favoriteServices;
           this.upcomingEvents = data.upcomingEvents;
@@ -110,7 +128,7 @@ export class ProfileComponent {
             firstName: data.firstName,
             lastName: data.lastName,
             email: data.email,
-            profilePicture: data.profilePicture,
+            image: data.image,
             phoneNumber: data.phoneNumber,
             address: data.address,
           };
@@ -168,17 +186,20 @@ export class ProfileComponent {
 deactivateAccount() {
   const dialogRef = this.dialog.open(DeleteDialogComponent, {
     data: {
+      id: Number(localStorage.getItem('userId')),
       entityName: 'account'
     }
   });
 
   dialogRef.afterClosed().subscribe((confirmed: boolean) => {
     if (confirmed) {
-      this.profileService.deactivateAccount(Number(localStorage.getItem('userId'))).subscribe({
+      this.profileService.delete(Number(localStorage.getItem('userId'))).subscribe({
         next: () => {
           this.snackBar.open('Account deactivated successfully', 'Close', {
             duration: 4000,
           });
+          this.authService.logout();
+          this.router.navigate(['/home']);
         },
         error: (err) => {
           console.error('Error deactivating account:', err);
@@ -198,5 +219,60 @@ deactivateAccount() {
 
   goBack() {
     this.location.back();
+  }
+  
+  onFileSelected(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.selectedFile = file;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.profilePreview = reader.result as string;
+        this.selectedFile = file;
+        this.imageName = file.name;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  uploadProfilePicture() {
+    if (!this.selectedFile) return;
+    const userId = localStorage.getItem('userId');
+    if (!userId) return; 
+      this.imageService.uploadImage(this.selectedFile).subscribe({
+        next: res => {
+          this.imageName = atob(res);
+          this.profileService.uploadProfilePicture(this.imageName, Number(userId)).subscribe({
+          next: (data) => {
+            this.toastService.show('Profile picture updated successfully', 3000);
+          },
+          error: (err) => {
+            console.error('Error uploading profile picture:', err);
+            this.toastService.show('Failed to upload profile picture: ' + err.message, 3000);
+          }
+        });
+        },
+        error: err => {
+          this.toastService.show('Failed to upload image: ' + err.message, 3000);
+        }
+      });
+  }
+
+  removeProfilePicture() {
+    const userId = localStorage.getItem('userId');
+    if (!userId) return;
+
+    this.profileService.removeProfilePicture(Number(userId)).subscribe({
+      next: () => {
+        this.toastService.show('Profile picture removed', 3000);
+        this.userInfo.image = '';
+        this.profilePreview = null;
+      },
+      error: (err) => {
+        console.error('Error removing profile picture:', err);
+        this.toastService.show('Failed to remove profile picture: ' + err.message, 3000);
+      }
+    });
   }
 }

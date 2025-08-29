@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { LoginResponse } from './dtos/auth/login-response';
@@ -15,19 +15,27 @@ export class AuthService {
   private apiUrl = `${environment.apiHost}api/auth`; 
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
+  private suspendedAtSubject = new BehaviorSubject<Date | null>(null);
+  public suspendedAt$ = this.suspendedAtSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, { email, password }).pipe(
-      tap(response => this.handleLoginResponse(response))
+      tap({ 
+        next: response => this.handleLoginResponse(response), 
+        error: err => this.handleLoginError(err) 
+      })
     );
   }
 
   quickLogin(token: string): Observable<LoginResponse> { 
     let body: QuickLoginDto = { invitationToken: token };
     return this.http.post<LoginResponse>(`${this.apiUrl}/quick-login`, body).pipe(
-      tap(response => this.handleLoginResponse(response))
+      tap({ 
+        next: response => this.handleLoginResponse(response), 
+        error: err => this.handleLoginError(err) 
+      })
     );
   }
 
@@ -41,18 +49,27 @@ export class AuthService {
     }
   }
 
+  private handleLoginError(err: HttpErrorResponse) {
+    if (err.status === 403) {
+      let error = err.error as LoginResponse;
+      if (error?.suspendedAt) {
+        this.suspendedAtSubject.next(error.suspendedAt);
+      }
+    }
+  }
+
   private hasToken(): boolean {
     if (typeof window !== 'undefined') {
       return !!localStorage.getItem('token');
     }
     return false;
   }
-  register(email: string, password: string, firstName: string, lastName: string, address: string, phoneNumber: string, userRole: 2 | 3): Observable<boolean> {
-    return this.http.post<boolean>(`${this.apiUrl}/signup`, { email, password, firstName, lastName, address, phoneNumber, userRole });
+  register(email: string, password: string, firstName: string, lastName: string, address: string, phoneNumber: string, userRole: 2 | 3, image: string): Observable<boolean> {
+    return this.http.post<boolean>(`${this.apiUrl}/signup`, { email, password, firstName, lastName, address, phoneNumber, userRole, image });
   }
 
-  registerCompany(email: string, password: string, firstName: string, lastName: string, companyName: string, companyDescription: string, address: string, phoneNumber: string, userRole: 2 | 3): Observable<boolean> {
-    return this.http.post<boolean>(`${this.apiUrl}/signup/company`, { email, password, firstName, lastName, companyName, companyDescription, address, phoneNumber, userRole });
+  registerCompany(email: string, password: string, firstName: string, lastName: string, companyName: string, companyDescription: string, address: string, phoneNumber: string, userRole: 2 | 3, image: string): Observable<boolean> {
+    return this.http.post<boolean>(`${this.apiUrl}/signup/company`, { email, password, firstName, lastName, companyName, companyDescription, address, phoneNumber, userRole, image });
   }
 
   logout() {

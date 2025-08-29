@@ -28,3 +28,19 @@ mat-form-field {
 button {
   margin: 10px;
 }
+
+.profile-upload {
+  margin: 1rem 0;
+}
+
+.preview {
+  margin-top: 0.5rem;
+}
+
+.preview img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+}

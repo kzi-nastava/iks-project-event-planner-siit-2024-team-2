@@ -15,6 +15,7 @@ $dark-gray: #4D4D4D;
 $gray: #8A8A8A;
 $light-gray: #B6B6B6;
 $transparent: #FFFFFF00;
+$red-container: #fff2f2;
 
 :root {
     --mdc-dialog-container-color: $primary-container;
@@ -67,6 +68,12 @@ $transparent: #FFFFFF00;
     calendar-date-today-outline-color: $primary,
     calendar-date-selected-state-background-color: $primary
   ));
+  @include mat.menu-overrides((
+    container-color: $primary-container,
+  ));
+  @include mat.card-overrides((
+    container-color: $lighter-primary-container,
+  ));
 }
 .mat-mdc-outlined-button {
   @include mat.button-overrides((
@@ -89,6 +96,11 @@ mat-checkbox { // the intended color override doesn't seem to work so this is a 
       border-color: $primary !important;
     }
   }
+}
+.report-menu { // you are not able to select menu coloring, so we will target it directly with the class
+  @include mat.menu-overrides((
+    container-color: $red-container,
+  ));
 }
 
 html, body { 
@@ -171,6 +183,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
 #cancel {
     background-color: #EEF2FF; 
     color: black;
+}
+
+.report-menu .mat-mdc-menu-content {
+  padding: 0px !important; 
 }
 
 .row {

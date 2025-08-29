@@ -28,7 +28,6 @@ export class MyProductsComponent {
       public dialog: MatDialog, 
       private router: Router, 
       private productService: ProductService,
-      private snackBar: MatSnackBar,
     ) {}
     ngOnInit(): void {
       this.initProducts();
@@ -72,42 +71,38 @@ export class MyProductsComponent {
     });
   }
 
-  openDeleteDialog(id?: number): void {
-    this.dialog.open(DeleteDialogComponent, {data: {entityName: 'product'}}).afterClosed().subscribe(result => {
-      if (result && id) {
-        this.productService.deleteProduct(id).subscribe(() => {
-          this.snackBar.open('Product deleted successfully.', 'Close', {
-            duration: 3000,
-            panelClass: ['snackbar-success']
-          });
-          this.initProducts(); // Refresh the product list after deletion
-        }, error => {
-          console.error('Error deleting product:', error);
-          this.snackBar.open('Failed to delete product.', 'Close', {
-            duration: 3000,
-            panelClass: ['snackbar-error']
-          });
-        });
-      } else {
-            this.snackBar.open('Delete cancelled.', 'Close', {
-            duration: 3000,
-            panelClass: ['snackbar-error']
-          });
-      }
+  openDialog(productId?: number): void {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: { id: productId }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+    if (result === true) {
+      this.myProducts = this.myProducts.filter(s => s.id !== productId);
+       this.productDtos = this.myProducts.map(product => ({
+          id: product.id,
+          name: product.name,
+          description: product.description,
+          price: product.price,
+          discount: product.discount,
+          image: product.images ? product.images[0] : "",
+          imageEncodedName: product.imageEncodedNames ? product.imageEncodedNames[0] : ""
+        }));
+        this.convertImageUrls(this.productDtos);
+    }
     });
   }
 
-  navigateToEditService(productId?: number): void {
+  navigateToEditProduct(productId?: number): void {
     this.router.navigate(['/new-product'], { queryParams: { id: productId } });
   }
 
   convertImageUrls(array: any[]) {
     array.forEach(element => {
       if (element.image != null)
-        element.image = "http://localhost:8080/" + "api/images/" + element.imageEncodedName;
-    });
+        element.image = environment.apiHost + "api/images/" + element.imageEncodedName;
+      });
+    }
   }
-}
 interface ProductCardDto {
     id?: number;
     name?: string;

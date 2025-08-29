@@ -15,6 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { InvitationsDialogComponent } from '../../dialog/invitations-dialog/invitations-dialog.component';
 import { Event } from '../../model/event/event';
 import { InvitationItem } from '../../dialog/invitations-dialog/invitations-dialog.component';
+import { ToastService } from '../../services/utils/toast-service';
 
 @Component({
   selector: 'app-create-event',
@@ -49,6 +50,7 @@ export class NewEventComponent {
 
   eventTypes: EventType[] = [];
   readonly dialog = inject(MatDialog);
+  readonly toastService = inject(ToastService);
 
   isOpen = () => this.createEventForm?.value?.open;
 
@@ -77,7 +79,8 @@ export class NewEventComponent {
       eventOrganizerId: Number(localStorage.getItem('userId')),
       maxAttendances: this.createEventForm.value.maxAttendances,
       open: open,
-      invitationEmails: open ? null : this.invitations.map(invitation => invitation.email)
+      invitationEmails: open ? null : this.invitations.map(invitation => invitation.email),
+      eventOrganizerDto: null
     };
     if (this.id !== -1) { // Indicates an update
       this.eventService.update(event, this.id).subscribe({
@@ -86,6 +89,7 @@ export class NewEventComponent {
         },
         error: (err: any) => {
           console.error('Failed to update event:', err);
+          this.toastService.show('Failed to update event', 2000, true);
         }
       });
       return;
@@ -96,6 +100,7 @@ export class NewEventComponent {
       },
       error: (err: any) => {
         console.error('Failed to create event:', err);
+          this.toastService.show('Failed to create event', 2000, true);
       }
     });
   }

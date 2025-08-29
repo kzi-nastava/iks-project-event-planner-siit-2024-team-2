@@ -5,6 +5,8 @@ import { ServiceService } from '../../services/service.service';
 import { ServiceProductCategoryService } from '../../services/service-product-category.service';
 import { Router } from '@angular/router';
 import { ToastService } from '../../services/utils/toast-service';
+import { ProductService } from '../../services/product.service';
+import { ProfileService } from '../../services/profile.service';
 
 
 @Component({
@@ -18,7 +20,7 @@ export class DeleteDialogComponent {
   entityName: string = '';
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<DeleteDialogComponent>,
     private serviceService: ServiceService, private spCategoryService: ServiceProductCategoryService,
-    private toastService: ToastService, private router: Router) {
+    private toastService: ToastService, private router: Router, private productService: ProductService, private profileService: ProfileService) {
       this.entityName = data.entityName || 'item';
      }
 
@@ -36,16 +38,24 @@ export class DeleteDialogComponent {
     else if (currentUrl == '/all-categories') {
       this.service = this.spCategoryService;
     }
+    else if (currentUrl == '/my-products') {
+      this.service = this.productService;
+    }
+    else if (currentUrl == '/profile') {
+      this.service = this.profileService;
+    }
 
-    this.service.delete(this.data.id).subscribe({
-      next: () => {
-        this.toastService.show('Deleted successfully!', 2000);
-        this.dialogRef.close(true); // signal success to parent
-      },
-      error: () => {
-        this.toastService.show('Failed to delete!', 2000);
-      }
-    });
+    if (this.service) {
+      this.service.delete(this.data.id).subscribe({
+        next: () => {
+          this.toastService.show('Deleted successfully!', 2000);
+          this.dialogRef.close(true); // signal success to parent
+        },
+        error: () => {
+          this.toastService.show('Failed to delete!', 2000);
+        }
+      });
+    }
     this.dialogRef.close(true);
   }
 

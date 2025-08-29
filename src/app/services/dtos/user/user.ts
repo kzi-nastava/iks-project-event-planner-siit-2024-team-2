@@ -4,7 +4,8 @@ export interface User {
     firstName: string;
     lastName: string;
     email: string;
-    profilePicture: string;
+    image: string;
+    imageEncodedName: string;
     phoneNumber: string;
     address: string;
     favoriteEvents: any[];
