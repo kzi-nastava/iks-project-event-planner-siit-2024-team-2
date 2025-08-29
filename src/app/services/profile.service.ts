@@ -13,10 +13,8 @@ export class ProfileService {
 
   constructor(private http: HttpClient) {}
 
-  uploadProfilePicture(image: string, userId: number) {
-    const formData = new FormData();
-    formData.append('profilePicture', image);
-    return this.http.post<any>(`${this.usersUrl}/${userId}/upload-picture`, formData);
+  uploadProfilePicture(imageName: string, userId: number) {
+    return this.http.post<any>(`${this.usersUrl}/${userId}/upload-picture`, {imageName: imageName});
   }
 
   removeProfilePicture(userId: number) {
@@ -43,7 +41,7 @@ export class ProfileService {
     return this.http.post(`${this.authUrl}/reset-password/${Number(userId)}`, { oldPassword, newPassword });
   }
 
-  deactivateAccount(userId: number): Observable<any> {
+  delete(userId: number): Observable<any> {
     return this.http.delete(`${this.usersUrl}/${userId}`);
   }
 

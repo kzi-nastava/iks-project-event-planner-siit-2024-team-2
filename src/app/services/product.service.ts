@@ -35,7 +35,7 @@ export class ProductService {
     return this.httpClient.get<Product[]>(`${this.apiHost}/mine`, { params: params});
   }
 
-  deleteProduct(id: number): Observable<void> {
+  delete(id: number): Observable<void> {
     return this.httpClient.delete<void>(`${this.apiHost}/${id}`);
   }
   filter(category?: number, eventTypes?: number[], minPrice?: number, maxPrice?: number, available?: boolean): Observable<Product[]> {

@@ -8,6 +8,9 @@ import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.
 import { UserRole } from '../../services/dtos/user/user-role';
 import { ImageService } from '../../services/image.service';
 import { ToastService } from '../../services/utils/toast-service';
+import { UserInfo } from 'node:os';
+import { environment } from '../../../environments/environment';
+import { User } from '../../services/dtos/user/user';
 
 @Component({
   selector: 'app-profile',
@@ -52,7 +55,6 @@ export class ProfileComponent {
     } else {
       this.profileService.getUserData(Number(userId)).subscribe({
         next: (data) => {
-          console.log(data)
           this.userRole = data.userRole;
           this.userInfo = {
             firstName: data.firstName,
@@ -62,6 +64,7 @@ export class ProfileComponent {
             phoneNumber: data.phoneNumber,
             address: data.address
           };
+          this.userInfo.image = environment.apiHost + "api/images/" + data.imageEncodedName;
           this.favoriteEvents = data.favoriteEvents;
           this.favoriteServices = data.favoriteServices;
           this.upcomingEvents = data.upcomingEvents;
@@ -162,13 +165,14 @@ export class ProfileComponent {
 deactivateAccount() {
   const dialogRef = this.dialog.open(DeleteDialogComponent, {
     data: {
+      id: Number(localStorage.getItem('userId')),
       entityName: 'account'
     }
   });
 
   dialogRef.afterClosed().subscribe((confirmed: boolean) => {
     if (confirmed) {
-      this.profileService.deactivateAccount(Number(localStorage.getItem('userId'))).subscribe({
+      this.profileService.delete(Number(localStorage.getItem('userId'))).subscribe({
         next: () => {
           this.snackBar.open('Account deactivated successfully', 'Close', {
             duration: 4000,
@@ -210,13 +214,11 @@ deactivateAccount() {
     const userId = localStorage.getItem('userId');
     if (!userId) return; 
       this.imageService.uploadImage(this.selectedFile).subscribe({
-        next: _ => {
+        next: res => {
+          this.imageName = atob(res);
           this.profileService.uploadProfilePicture(this.imageName, Number(userId)).subscribe({
           next: (data) => {
             this.toastService.show('Profile picture updated successfully', 3000);
-            this.userInfo.image = data.image;
-            this.profilePreview = null;
-            this.selectedFile = null;
           },
           error: (err) => {
             console.error('Error uploading profile picture:', err);
@@ -228,8 +230,6 @@ deactivateAccount() {
           this.toastService.show('Failed to upload image: ' + err.message, 3000);
         }
       });
-
-
   }
 
   removeProfilePicture() {

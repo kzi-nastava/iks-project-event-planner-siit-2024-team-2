@@ -5,6 +5,7 @@ export interface User {
     lastName: string;
     email: string;
     image: string;
+    imageEncodedName: string;
     phoneNumber: string;
     address: string;
     favoriteEvents: any[];
