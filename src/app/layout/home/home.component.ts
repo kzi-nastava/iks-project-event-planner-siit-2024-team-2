@@ -390,12 +390,5 @@ export class HomeComponent {
   openReportDialog(email: string, name: string) {
     email = email.replaceAll('<wbr>', '');
     const dialogRef = this.dialog.open(ReportDialogComponent, {data: {email: email, name: name}});
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result)
-        this.toastService.show('Report sent successfully', 2000);
-      else
-        this.toastService.show('Failed to send report', 2000);
-    });
   }
 }

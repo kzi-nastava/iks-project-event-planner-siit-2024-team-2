@@ -32,7 +32,7 @@ export const routes: Routes = [
     {path: 'signin', component: LoginComponent,  canActivate: []},
     {path: 'signup', component: RegisterComponent, canActivate: []},
     {path: 'home', component: HomeComponent, canActivate: []},
-    {path: 'event-details', component: EventDetailsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
+    {path: 'event-details', component: EventDetailsComponent, canActivate: []},
     {path: 'chat', component: ChatComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
     {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
     {path: 'calendar',component: MyEventsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},

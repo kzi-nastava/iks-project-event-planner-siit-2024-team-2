@@ -7,6 +7,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { ToastService } from '../../services/utils/toast-service';
+import { AuthService } from '../../services/auth-service.service';
 
 export interface ReportDialogData {
   email: string;
@@ -29,6 +30,9 @@ export class ReportDialogComponent {
   readonly userReportService = inject(UserReportService);
   readonly dialogRef = inject(MatDialogRef);
   readonly toastService = inject(ToastService);
+  readonly authService = inject(AuthService);
+
+  readonly isLoggedIn = this.authService.isLoggedIn();
 
   onReport() {
     if (!this.reasonFormControl.value) return;

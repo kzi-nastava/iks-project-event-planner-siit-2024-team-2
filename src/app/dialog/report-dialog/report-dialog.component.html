@@ -1,13 +1,25 @@
-<div class="report-dialog">
-    <h2 mat-dialog-title>Report {{data.name}}</h2>
-    <mat-dialog-content color="primary">
-        <mat-form-field appearance="fill">
-            <mat-label>Enter reason</mat-label>
-            <textarea matInput [formControl]="reasonFormControl" name="reason" required rows="5" cols="50"></textarea>
-        </mat-form-field>
-    </mat-dialog-content>
-    <mat-dialog-actions>
-        <button  color="primary" mat-flat-button mat-dialog-close>Cancel</button>
-        <button  color="primary" mat-flat-button (click)="onReport()">Report</button>
-    </mat-dialog-actions>
-</div>
+@if (isLoggedIn) {
+    <div class="report-dialog">
+        <h2 mat-dialog-title>Report {{data.name}}</h2>
+        <mat-dialog-content color="primary">
+            <mat-form-field appearance="fill">
+                <mat-label>Enter reason</mat-label>
+                <textarea matInput [formControl]="reasonFormControl" name="reason" required rows="5" cols="50"></textarea>
+            </mat-form-field>
+        </mat-dialog-content>
+        <mat-dialog-actions>
+            <button  color="primary" mat-flat-button mat-dialog-close>Cancel</button>
+            <button  color="primary" mat-flat-button (click)="onReport()">Report</button>
+        </mat-dialog-actions>
+    </div>
+} @else {
+    <div class="report-dialog">
+        <h2 mat-dialog-title>Authentication Required</h2>
+        <mat-dialog-content>
+            <p>To submit a report, you need to be logged in. Please log in to continue.</p>
+        </mat-dialog-content>
+        <mat-dialog-actions>
+            <button  color="primary" mat-flat-button mat-dialog-close>Close</button>
+        </mat-dialog-actions>
+    </div>
+}
