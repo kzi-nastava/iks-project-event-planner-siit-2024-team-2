@@ -16,21 +16,21 @@
         </div>
         <div class="form-group">
           <label>First Name</label>
-          <input type="text" [(ngModel)]="userInfo.firstName" name="firstName" required>
+          <input type="text" [(ngModel)]="userInfo.firstName" name="firstName" required [disabled]="!showAllProfileData">
         </div>
         <div class="form-group">
           <label>Last Name</label>
-          <input type="text" [(ngModel)]="userInfo.lastName" name="lastName" required>
+          <input type="text" [(ngModel)]="userInfo.lastName" name="lastName" required [disabled]="!showAllProfileData">
         </div>
         <div class="form-group">
           <label>Phone</label>
-          <input type="tel" [(ngModel)]="userInfo.phoneNumber" name="phone">
+          <input type="tel" [(ngModel)]="userInfo.phoneNumber" name="phone" [disabled]="!showAllProfileData">
         </div>
         <div class="form-group">
           <label>Address</label>
-          <input type="text" [(ngModel)]="userInfo.address" name="address">
+          <input type="text" [(ngModel)]="userInfo.address" name="address" [disabled]="!showAllProfileData">
         </div>
-        <button type="submit">Update Personal Info</button>
+        <button type="submit" *ngIf="showAllProfileData">Update Personal Info</button>
       </form>
     </div>
 
@@ -44,11 +44,13 @@
         </div>
         <div class="form-group">
           <label>Description</label>
-          <textarea [(ngModel)]="companyInfo.companyDescription" name="description"></textarea>
+          <textarea [(ngModel)]="companyInfo.companyDescription" name="description" [disabled]="!showAllProfileData"></textarea>
         </div>
-        <button type="submit">Update Company Info</button>
+        <button type="submit" *ngIf="showAllProfileData">Update Company Info</button>
+        <button type="button" *ngIf="!showAllProfileData" (click)="goBack()">Back</button>
       </form>
 
+      <div *ngIf="showAllProfileData">
       <h3>Service Categories</h3>
       <ul>
         <li *ngFor="let category of serviceCategories">{{ category }}</li>
@@ -65,9 +67,11 @@
           {{ type }}
         </label>
       </div>
+      </div>
     </div>
 
     <!-- Change Password Section -->
+    <div *ngIf="showAllProfileData">
     <div class="profile-section" *ngIf="userRole !== 'AUTHENTICATED'">
       <h2>Change Password</h2>
       <form (ngSubmit)="changePassword()">
@@ -132,6 +136,7 @@
         Deactivate Account
       </button>
       <p>Note: Deactivating your profile cannot be undone.</p>
+    </div>
     </div>
   </div>
 </div>

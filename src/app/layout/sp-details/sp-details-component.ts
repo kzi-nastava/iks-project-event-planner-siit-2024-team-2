@@ -44,10 +44,6 @@ export class SpDetailsComponent  implements OnInit {
     });
   }
 
-  goBack(): void {
-    this.router.navigate(['../'], { relativeTo: this.route });
-  }
-
   private fetchSpData(spId: number): void {
     this.serviceProductService.get(spId).subscribe({
       next: (sp: any) => {
@@ -74,5 +70,11 @@ export class SpDetailsComponent  implements OnInit {
     return environment.apiHost + 'api/images/' + image;
   }
 
-  goToSpp() {}
+  goToSpp(sppId: number) {
+    this.router.navigate(['/profile'], { queryParams: { id: sppId }} );
+  }
+
+  goBack(): void {
+    this.router.navigate(['../'], { relativeTo: this.route });
+  }
 }

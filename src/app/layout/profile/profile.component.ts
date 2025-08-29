@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProfileService } from '../../services/profile.service'; 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component'; 
 import { UserRole } from '../../services/dtos/user/user-role';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -28,13 +29,30 @@ export class ProfileComponent {
   serviceCategories: any[] = [];
   eventTypes: any[] = [];
   selectedEventTypes: any[] = [];
+  showAllProfileData: boolean = true;
 
-  constructor(private profileService: ProfileService, private snackBar: MatSnackBar, private dialog: MatDialog,) {
-    this.loadUserData();
+  constructor(private profileService: ProfileService, private snackBar: MatSnackBar, private dialog: MatDialog,
+             private route: ActivatedRoute, private location: Location) { }
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      var userId;
+      if (params['id']) {
+        userId = params['id'];
+        this.showAllProfileData = false;
+      }
+      else {
+        userId = localStorage.getItem('userId');
+        this.showAllProfileData = true;
+      }
+
+      if (userId) {
+        this.loadUserData(userId);
+      }
+    });
   }
 
-  loadUserData() {
-    const userId = localStorage.getItem('userId');
+  loadUserData(userId?: number) {
     if (!userId) {
       console.error('User ID not found in local storage.');
       return;
@@ -176,5 +194,9 @@ deactivateAccount() {
 
   updateEventTypes() {
     this.profileService.updateEventTypes(this.selectedEventTypes);
+  }
+
+  goBack() {
+    this.location.back();
   }
 }
