@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ReportDialogComponent } from './report-dialog.component';
+import { SharedTestingModule } from '../../../testing/shared-testing.module';
 
 describe('ReportDialogComponent', () => {
   let component: ReportDialogComponent;
@@ -8,7 +9,7 @@ describe('ReportDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReportDialogComponent]
+      imports: [ReportDialogComponent, SharedTestingModule]
     })
     .compileComponents();
 

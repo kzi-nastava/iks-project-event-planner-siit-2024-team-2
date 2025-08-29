@@ -7,7 +7,7 @@ describe('UserReportService', () => {
   let service: UserReportService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({imports: [SharedTestingModule]});
+    TestBed.configureTestingModule({imports: [SharedTestingModule, SharedTestingModule]});
     service = TestBed.inject(UserReportService);
   });
 
