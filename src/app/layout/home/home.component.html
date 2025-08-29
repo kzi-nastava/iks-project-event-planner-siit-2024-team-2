@@ -177,5 +177,11 @@ aria-label="Select page">
       <mat-icon>report</mat-icon>
       <span>Report</span>
     </button>
+    @if(isAdmin) {
+      <button mat-menu-item (click)="suspendUser(email)">
+        <mat-icon>person_off</mat-icon>
+        <span>Suspend</span>
+      </button>
+    }
   </ng-template>
 </mat-menu>

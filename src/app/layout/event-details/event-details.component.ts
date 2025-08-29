@@ -11,6 +11,8 @@ import { MatMenu, MatMenuModule, MatMenuTrigger } from "@angular/material/menu";
 import { ReportDialogComponent } from '../../dialog/report-dialog/report-dialog.component';
 import { ToastService } from '../../services/utils/toast-service';
 import { MatDialog } from '@angular/material/dialog';
+import { UserService } from '../../services/user/user.service';
+import { AuthService } from '../../services/auth-service.service';
 
 @Component({
   selector: 'app-event-details',
@@ -31,6 +33,10 @@ export class EventDetailsComponent implements OnInit {
   readonly eventService = inject(EventService);
   readonly dialog = inject(MatDialog);
   readonly toastService = inject(ToastService);
+  readonly userService = inject(UserService);
+  readonly authService = inject(AuthService);
+
+  readonly isAdmin = this.authService.getUserRole() === 'ADMIN';
 
   constructor() {}
 
@@ -87,5 +93,18 @@ export class EventDetailsComponent implements OnInit {
     const email = this.eventData?.eventOrganizerDto?.email || '';
     const name = this.eventData?.eventOrganizerDto?.firstName || '' + ' ' + this.eventData?.eventOrganizerDto?.lastName || '';
     const dialogRef = this.dialog.open(ReportDialogComponent, {data: {email: email, name: name}});
+  }
+  
+  suspendUser() {
+    const email = this.eventData?.eventOrganizerDto?.email || '';
+    this.userService.suspendUser(email).subscribe({
+      next: () => {
+        this.toastService.show('User suspended successfully', 2000);
+      },
+      error: (err) => {
+        console.error('Failed to suspend user:', err);
+        this.toastService.show('Failed to suspend user', 2000);
+      }
+    });
   }
 }

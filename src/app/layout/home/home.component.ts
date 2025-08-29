@@ -40,6 +40,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { ToastService } from '../../services/utils/toast-service';
 import { ReportDialogComponent } from '../../dialog/report-dialog/report-dialog.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth-service.service';
+import { UserService } from '../../services/user/user.service';
 
 const pageSize = 12;
 const imagesApi = "api/images/";
@@ -84,7 +86,6 @@ export class HomeComponent {
   selectedCities: City[] = [];
   selectedCategories: ServiceProductCategory[] = [];
   selectedAvailableTypes: EventType[] = [];
-  
 
 
   // Injected
@@ -98,6 +99,8 @@ export class HomeComponent {
   readonly platformId = inject(PLATFORM_ID);
   readonly snackBar = inject(MatSnackBar);
   readonly toastService = inject(ToastService);
+  readonly authService = inject(AuthService);
+  readonly userService = inject(UserService);
 
   // Pagination
   totalElements: number = pageSize * 8; // this variable is reference, other two are for storing the value between switching
@@ -112,6 +115,7 @@ export class HomeComponent {
   constructor() {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
+  readonly isAdmin = this.authService.getUserRole() === 'ADMIN';
 
   ngOnInit(): void {
     this.fetchTop5();
@@ -390,5 +394,18 @@ export class HomeComponent {
   openReportDialog(email: string, name: string) {
     email = email.replaceAll('<wbr>', '');
     const dialogRef = this.dialog.open(ReportDialogComponent, {data: {email: email, name: name}});
+  }
+
+  suspendUser(email: string) {
+    email = email.replaceAll('<wbr>', '');
+    this.userService.suspendUser(email).subscribe({
+      next: () => {
+        this.toastService.show('User suspended successfully', 2000);
+      },
+      error: (err) => {
+        console.error('Failed to suspend user:', err);
+        this.toastService.show('Failed to suspend user', 2000);
+      }
+    });
   }
 }
