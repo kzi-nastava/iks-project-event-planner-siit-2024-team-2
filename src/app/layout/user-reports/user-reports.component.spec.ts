@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MyEventTypesComponent } from './my-event-types.component';
+import { UserReportsComponent } from './user-reports.component';
 import { SharedTestingModule } from '../../../testing/shared-testing.module';
 
-describe('MyEventTypesComponent', () => {
-  let component: MyEventTypesComponent;
-  let fixture: ComponentFixture<MyEventTypesComponent>;
+describe('UserReportsComponent', () => {
+  let component: UserReportsComponent;
+  let fixture: ComponentFixture<UserReportsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MyEventTypesComponent, SharedTestingModule]
+      imports: [UserReportsComponent, SharedTestingModule]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MyEventTypesComponent);
+    fixture = TestBed.createComponent(UserReportsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

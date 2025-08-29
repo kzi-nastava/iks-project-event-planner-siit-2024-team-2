@@ -108,6 +108,7 @@ export class NotificationsComponent {
       .subscribe({
         error: (err: any) => {
           notification.dismissed = false;
+          notification.dismissing = false;
           this.toastService.show('Failed to dismiss notification');
         }
       });

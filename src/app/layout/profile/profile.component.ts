@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProfileService } from '../../services/profile.service'; 
@@ -11,6 +11,8 @@ import { ToastService } from '../../services/utils/toast-service';
 import { UserInfo } from 'node:os';
 import { environment } from '../../../environments/environment';
 import { User } from '../../services/dtos/user/user';
+import { AuthService } from '../../services/auth-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -37,13 +39,16 @@ export class ProfileComponent {
   eventTypes: any[] = [];
   selectedEventTypes: any[] = [];
 
-  constructor(
-    private profileService: ProfileService, 
-    private snackBar: MatSnackBar, 
-    private dialog: MatDialog, 
-    private imageService: ImageService,
-    private toastService: ToastService,
-  ) {
+  // Injected
+  readonly profileService = inject(ProfileService);
+  readonly dialog = inject(MatDialog);
+  readonly snackBar = inject(MatSnackBar);
+  readonly authService = inject(AuthService);
+  readonly router = inject(Router);
+  readonly toastService = inject(ToastService);
+  readonly imageService = inject(ImageService);
+
+  constructor() {
     this.loadUserData();
   }
 
@@ -177,6 +182,8 @@ deactivateAccount() {
           this.snackBar.open('Account deactivated successfully', 'Close', {
             duration: 4000,
           });
+          this.authService.logout();
+          this.router.navigate(['/home']);
         },
         error: (err) => {
           console.error('Error deactivating account:', err);

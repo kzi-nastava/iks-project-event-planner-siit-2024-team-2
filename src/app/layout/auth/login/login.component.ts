@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth-service.service'; // Adjust path as needed
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,6 +12,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { SuspendedDialogComponent, SuspendedDialogData } from '../../../dialog/suspended-dialog/suspended-dialog.component';
+import { LoginResponse } from '../../../services/dtos/auth/login-response';
 
 @Component({
   selector: 'app-login',
@@ -33,13 +36,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class LoginComponent {
   loginForm: FormGroup;
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private snackBar: MatSnackBar,
-  ) {
+  // Injected
+  readonly fb = inject(FormBuilder);
+  readonly authService = inject(AuthService);
+  readonly router = inject(Router);
+  readonly route = inject(ActivatedRoute);
+  readonly snackBar = inject(MatSnackBar);
+  readonly dialog = inject(MatDialog);
+
+  constructor() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
@@ -69,11 +74,15 @@ export class LoginComponent {
       },
       error: (err) => {
         console.error('Login failed:', err);
-    
-        this.snackBar.open('Login failed. Please check your credentials.', 'Close', {
-          duration: 4000,
-          panelClass: ['snackbar-error']
-        });
+        if (err?.error?.suspendedAt) {
+          let data: SuspendedDialogData = {suspendedAt: new Date(err.error.suspendedAt)};
+          this.dialog.open(SuspendedDialogComponent, {data: data});
+        } else {
+          this.snackBar.open('Login failed. Please check your credentials.', 'Close', {
+            duration: 4000,
+            panelClass: ['snackbar-error']
+          });
+        }
       }
     });
     
