@@ -55,8 +55,10 @@ export class SpDetailsComponent  implements OnInit {
             if (this.spData.duration > 0) this.hasDuration = true; 
           })
         }
-        else 
+        else {
           this.spData = sp;
+          this.isService = false;
+        }
       },
       error: (err: any) => {
         this.error = 'Failed to load service/product details.';
@@ -76,5 +78,13 @@ export class SpDetailsComponent  implements OnInit {
 
   goBack(): void {
     this.router.navigate(['../'], { relativeTo: this.route });
+  }
+
+  buy() {
+
+  }
+
+  reserve() {
+
   }
 }
