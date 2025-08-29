@@ -64,12 +64,12 @@ export class AuthService {
     }
     return false;
   }
-  register(email: string, password: string, firstName: string, lastName: string, address: string, phoneNumber: string, userRole: 2 | 3): Observable<boolean> {
-    return this.http.post<boolean>(`${this.apiUrl}/signup`, { email, password, firstName, lastName, address, phoneNumber, userRole });
+  register(email: string, password: string, firstName: string, lastName: string, address: string, phoneNumber: string, userRole: 2 | 3, image: string): Observable<boolean> {
+    return this.http.post<boolean>(`${this.apiUrl}/signup`, { email, password, firstName, lastName, address, phoneNumber, userRole, image });
   }
 
-  registerCompany(email: string, password: string, firstName: string, lastName: string, companyName: string, companyDescription: string, address: string, phoneNumber: string, userRole: 2 | 3): Observable<boolean> {
-    return this.http.post<boolean>(`${this.apiUrl}/signup/company`, { email, password, firstName, lastName, companyName, companyDescription, address, phoneNumber, userRole });
+  registerCompany(email: string, password: string, firstName: string, lastName: string, companyName: string, companyDescription: string, address: string, phoneNumber: string, userRole: 2 | 3, image: string): Observable<boolean> {
+    return this.http.post<boolean>(`${this.apiUrl}/signup/company`, { email, password, firstName, lastName, companyName, companyDescription, address, phoneNumber, userRole, image });
   }
 
   logout() {

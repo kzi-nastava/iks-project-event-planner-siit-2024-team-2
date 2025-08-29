@@ -13,9 +13,10 @@ import { ProductService } from '../../services/product.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Product } from '../../model/service-product/product';
-import { take } from 'rxjs';
+import { forkJoin, take } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ImageService } from '../../services/image.service';
+import { ToastService } from '../../services/utils/toast-service';
 
 
 
@@ -34,7 +35,7 @@ import { ImageService } from '../../services/image.service';
 export class NewProductComponent {
 
   getImageUrl(path: string): string {
-    return `http://localhost:8080/api/images/${path}`;
+    return `${environment.apiHost}api/images/${path}`;
   }
 
   removeImage(index: number): void {
@@ -68,7 +69,8 @@ export class NewProductComponent {
     private serviceCategoryService: ServiceCategoryService,
     private productService: ProductService,    
     private snackBar: MatSnackBar,
-    private imageService: ImageService
+    private imageService: ImageService,
+    private toastService: ToastService,
   ) {}
 
   loadEventTypes(): void {
@@ -181,52 +183,55 @@ export class NewProductComponent {
       });
       return; 
     }
-    this.selectedImages.forEach(image => {
-      this.imageService.uploadImage(image).subscribe({
-        next: response => {
-          console.log('Image uploaded successfully:', response);
-        },
-        error: err => {
-          console.error('Failed to upload image', err);
-        }
-      });
-    });
-    const product: Product = {
-      name: this.createProductForm.value.name ?? '',
-      images: this.images,
-      description: this.createProductForm.value.description ?? '',
-      specifies: this.createProductForm.value.specifies ?? '',
-      price: this.createProductForm.value.price ?? 0,
-      discount: this.createProductForm.value.discount ?? 0,
-      availableEventTypesIds: this.selectedEvents,
-      categoryId: Number(this.createProductForm.value.productCategory), 
-      available: this.createProductForm.value.available ?? false,
-      visible: this.createProductForm.value.visible ?? false,
-      serviceProductProviderId: Number(localStorage.getItem('userId')),
-    };
-    if (this.id !== -1) { // Indicates an update
-      this.productService.update(product, this.id).subscribe({
-        next: (event: any) => {
-          this.router.navigate(['../'], { relativeTo: this.route });
-        },
-        error: (err: any) => {
-          console.error('Failed to update product:', err);
-        }
-      });
-    } else {
-      this.productService.add(product).subscribe({
-        next: (event: any) => {
-          this.router.navigate(['../'], { relativeTo: this.route });
-        },
-        error: (err: any) => {
-          console.error('Failed to create product:', err);
-        }
-      });
-    }
-    this.snackBar.open('Product saved successfully!', 'Close', {
+    let observables = this.selectedImages.map((image:File) => this.imageService.uploadImage(image));
+    forkJoin(observables).subscribe({
+      next: (responses: any) => {
+        const product = <Product>{
+          name: this.createProductForm.value.name ?? '',
+          images: this.images,
+          description: this.createProductForm.value.description ?? '',
+          specifies: this.createProductForm.value.specifies ?? '',
+          price: this.createProductForm.value.price ?? 0,
+          discount: this.createProductForm.value.discount ?? 0,
+          availableEventTypesIds: this.selectedEvents,
+          categoryId: Number(this.createProductForm.value.productCategory), 
+          available: this.createProductForm.value.available ?? false,
+          visible: this.createProductForm.value.visible ?? false,
+          serviceProductProviderId: Number(localStorage.getItem('userId')),
+        };
+        product.images = responses.map((path: any) => atob(path));
+      if (this.id !== -1) { // Indicates an update
+        this.productService.update(product, this.id).subscribe({
+          next: (event: any) => {
+            this.toastService.show('Product updated successfully!', 2000);
+            this.router.navigate(['../'], { relativeTo: this.route });
+          },
+          error: (err: any) => {
+            this.toastService.show('Failed to update product:', 2000);
+            console.error('Failed to update product:', err);
+          }
+        });
+      } else {
+        this.productService.add(product).subscribe({
+          next: (event: any) => {
+            this.toastService.show('Product created successfully!', 2000);
+            this.router.navigate(['../'], { relativeTo: this.route });
+          },
+          error: (err: any) => {
+            this.toastService.show('Failed to create product:', 2000);
+            console.error('Failed to create product:', err);
+          }
+        });
+      }
+      this.snackBar.open('Product saved successfully!', 'Close', {
       duration: 3000,
       panelClass: ['snackbar-success']
     });
+    }, 
+
+    });
+
+
     this.router.navigate(['../'], { relativeTo: this.route });
   }
 
