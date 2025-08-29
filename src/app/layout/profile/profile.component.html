@@ -1,9 +1,20 @@
 <div class="profile-container">
   <div class="profile-header">
-    <!-- <img [src]="userInfo.profilePicture" alt="Profile Picture" class="profile-picture"> -->
+    <img 
+      [src]="profilePreview || userInfo.image || 'assets/default-profile.jpg'" 
+      alt="Profile Picture" 
+      class="profile-picture">
+
+    <div class="profile-picture-actions">
+      <input type="file" accept="image/*" (change)="onFileSelected($event)">
+      <button *ngIf="selectedFile" (click)="uploadProfilePicture()">Save New Picture</button>
+      <button *ngIf="userInfo.image" (click)="removeProfilePicture()">Remove Picture</button>
+    </div>
+
     <h1>{{ userInfo.firstName }} {{ userInfo.lastName }}</h1>
     <p>{{ userInfo.email }}</p>
   </div>
+
 
   <div class="profile-sections">
     <!-- Personal Information Section -->

@@ -1,5 +1,17 @@
 <mat-card class="register-card">
   <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+    <div class="profile-upload">
+  <input type="file" accept="image/*" (change)="onFileSelected($event)" hidden #fileInput>
+
+  <button mat-raised-button color="accent" type="button" (click)="fileInput.click()">
+    Upload Profile Picture
+  </button>
+
+  <div class="preview" *ngIf="imagePreview">
+    <img [src]="imagePreview" alt="Profile Preview">
+  </div>
+  
+</div>
     <mat-radio-group formControlName="userType" class="full-width" (change)="onUserTypeChange()">
       <mat-radio-button value="eventOrganizer">Event Organizer</mat-radio-button>
       <mat-radio-button value="serviceProvider">Product/Service Provider</mat-radio-button>

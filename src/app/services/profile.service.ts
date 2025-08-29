@@ -13,6 +13,16 @@ export class ProfileService {
 
   constructor(private http: HttpClient) {}
 
+  uploadProfilePicture(image: string, userId: number) {
+    const formData = new FormData();
+    formData.append('profilePicture', image);
+    return this.http.post<any>(`${this.usersUrl}/${userId}/upload-picture`, formData);
+  }
+
+  removeProfilePicture(userId: number) {
+    return this.http.delete(`${this.usersUrl}/${userId}/remove-picture`);
+  }
+
   getUserData(userId: number): Observable<User> {
     return this.http.get<User>(`${this.usersUrl}/${userId}`);
   }

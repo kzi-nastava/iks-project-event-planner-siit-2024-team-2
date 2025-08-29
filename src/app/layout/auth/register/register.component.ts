@@ -11,6 +11,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth-service.service';
 import { Subject, takeUntil } from 'rxjs';
+import { ImageService } from '../../../services/image.service';
 
 @Component({
   selector: 'app-register',
@@ -41,6 +42,7 @@ export class RegisterComponent {
     private fb: FormBuilder, 
     private authService: AuthService, 
     private router: Router,
+    private imageService: ImageService
   ) {}
 
   ngOnInit(): void {
@@ -60,7 +62,8 @@ export class RegisterComponent {
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required],
       companyName: [''],
-      companyDescription: ['']
+      companyDescription: [''],
+      profilePicture: [null],
     }, {
       validators: this.passwordMatchValidator
     });
@@ -74,6 +77,24 @@ export class RegisterComponent {
         this.registerForm.get('email')?.updateValueAndValidity();
       }
     });
+  }
+
+  imagePreview: string = "";
+  selectedImage?: File;
+  imageName: string = "";
+  
+  onFileSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result as string;
+        this.selectedImage = file;
+        this.imageName = file.name;
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   passwordMatchValidator(group: FormGroup): { mismatch: boolean } | null {
@@ -107,6 +128,16 @@ export class RegisterComponent {
 
   onRegister(): void {
     if (this.registerForm.valid) {
+      if (this.selectedImage) {
+        this.imageService.uploadImage(this.selectedImage).subscribe({
+          next: response => {
+            console.log('Image uploaded successfully:', response);
+          },
+          error: err => {
+            console.error('Failed to upload image', err);
+          }
+      });
+    }
       if (this.isEventOrganizer) {
         this.authService.register(
           this.registerForm.value.email,
@@ -116,6 +147,7 @@ export class RegisterComponent {
           this.registerForm.value.address,
           this.registerForm.value.phone,
           this.isEventOrganizer ? 2 : 3,
+          this.imageName
         ).subscribe({
           next: (response) => {
             if (response) {
@@ -141,6 +173,7 @@ export class RegisterComponent {
           this.registerForm.value.address,
           this.registerForm.value.phone,
           this.isEventOrganizer ? 2 : 3,
+          this.imageName
         ).subscribe({
           next: (response) => {
             if (response) {
