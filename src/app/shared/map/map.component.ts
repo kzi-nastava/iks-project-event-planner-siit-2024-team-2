@@ -25,16 +25,16 @@ export class MapComponent implements AfterViewInit, OnInit, OnChanges {
   private map: any;
   L: any;
   private currentMarker: any;
-  searchQuery: string = '';
+  searchQuery = '';
 
-  @Input() latitude: number = 0;
-  @Input() longitude: number = 0;
-  @Input() readonly: boolean = false;
+  @Input() latitude = 0;
+  @Input() longitude = 0;
+  @Input() readonly = false;
   @Output() coordinatesSelected = new EventEmitter<{ lat: number; lng: number }>();
 
   constructor(
     private mapService: MapService,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: object
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {

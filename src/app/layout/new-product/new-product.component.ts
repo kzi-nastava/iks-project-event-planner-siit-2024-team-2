@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
@@ -32,7 +32,7 @@ import { ToastService } from '../../services/utils/toast-service';
   templateUrl: './new-product.component.html',
   styleUrl: './new-product.component.css'
 })
-export class NewProductComponent {
+export class NewProductComponent implements OnInit {
 
   getImageUrl(path: string): string {
     return `${environment.apiHost}api/images/${path}`;
@@ -56,7 +56,7 @@ export class NewProductComponent {
     { id: 3, name: "Waiter product" }
   ];
   selectedCategoryId: number = this.productCategories[0].id;
-  id: number = -1;
+  id = -1;
   eventTypes: EventType[] = [];
   selectedEvents: number[] = [];
   images: string[] = [];
@@ -183,10 +183,10 @@ export class NewProductComponent {
       });
       return; 
     }
-    let observables = this.selectedImages.map((image:File) => this.imageService.uploadImage(image));
+    const observables = this.selectedImages.map((image:File) => this.imageService.uploadImage(image));
     forkJoin(observables).subscribe({
       next: (responses: any) => {
-        const product = <Product>{
+        const product = {
           name: this.createProductForm.value.name ?? '',
           images: this.images,
           description: this.createProductForm.value.description ?? '',
@@ -198,7 +198,7 @@ export class NewProductComponent {
           available: this.createProductForm.value.available ?? false,
           visible: this.createProductForm.value.visible ?? false,
           serviceProductProviderId: Number(localStorage.getItem('userId')),
-        };
+        } as Product;
         product.images = responses.map((path: any) => atob(path));
       if (this.id !== -1) { // Indicates an update
         this.productService.update(product, this.id).subscribe({

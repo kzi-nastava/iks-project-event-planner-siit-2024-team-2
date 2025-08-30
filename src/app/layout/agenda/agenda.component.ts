@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { EventService } from '../../services/event.service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
@@ -22,7 +22,7 @@ import { Activity } from '../../model/event/activity';
   templateUrl: './agenda.component.html',
   styleUrl: './agenda.component.css'
 })
-export class AgendaComponent {
+export class AgendaComponent implements OnInit {
   readonly = false;
   activities: any[] = [];
   eventId = -1;

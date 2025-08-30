@@ -17,7 +17,7 @@ import { ProfileService } from '../../services/profile.service';
   styleUrl: './delete-dialog.component.css'
 })
 export class DeleteDialogComponent {
-  entityName: string = '';
+  entityName = '';
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<DeleteDialogComponent>,
     private serviceService: ServiceService, private spCategoryService: ServiceProductCategoryService,
     private toastService: ToastService, private router: Router, private productService: ProductService, private profileService: ProfileService) {
