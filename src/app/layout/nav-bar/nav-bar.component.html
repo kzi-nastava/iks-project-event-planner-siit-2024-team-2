@@ -6,7 +6,7 @@
   <div class="toolbar-actions" *ngIf="!isLoading">
     <button mat-button (click)="clickAuthButton()" class="custom-signin-button">{{authButtonText}}</button>
     <button mat-button *ngIf="canUpgrade" (click)="upgrade()" class="custom-signin-button">Upgrade</button>
-    <mat-icon [routerLink]="['profile']">account_circle</mat-icon>
+    <mat-icon *ngIf="isLoggedIn" [routerLink]="['profile']">account_circle</mat-icon>
   </div>
 </mat-toolbar>
 
