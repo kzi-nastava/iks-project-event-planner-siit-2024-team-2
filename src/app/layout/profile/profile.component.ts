@@ -1,5 +1,5 @@
+import { CommonModule, Location } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProfileService } from '../../services/profile.service'; 
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -12,7 +12,7 @@ import { UserInfo } from 'node:os';
 import { environment } from '../../../environments/environment';
 import { User } from '../../services/dtos/user/user';
 import { AuthService } from '../../services/auth-service.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -38,8 +38,28 @@ export class ProfileComponent {
   serviceCategories: any[] = [];
   eventTypes: any[] = [];
   selectedEventTypes: any[] = [];
+  showAllProfileData: boolean = true;
 
-  // Injected
+  constructor(private route: ActivatedRoute, private location: Location) { }
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      var userId;
+      if (params['id']) {
+        userId = params['id'];
+        this.showAllProfileData = false;
+      }
+      else {
+        userId = localStorage.getItem('userId');
+        this.showAllProfileData = true;
+      }
+
+      if (userId) {
+        this.loadUserData(userId);
+      }
+    });
+  }
+
   readonly profileService = inject(ProfileService);
   readonly dialog = inject(MatDialog);
   readonly snackBar = inject(MatSnackBar);
@@ -48,12 +68,8 @@ export class ProfileComponent {
   readonly toastService = inject(ToastService);
   readonly imageService = inject(ImageService);
 
-  constructor() {
-    this.loadUserData();
-  }
 
-  loadUserData() {
-    const userId = localStorage.getItem('userId');
+  loadUserData(userId?: number) {
     if (!userId) {
       console.error('User ID not found in local storage.');
       return;
@@ -201,6 +217,10 @@ deactivateAccount() {
     this.profileService.updateEventTypes(this.selectedEventTypes);
   }
 
+  goBack() {
+    this.location.back();
+  }
+  
   onFileSelected(event: Event) {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {

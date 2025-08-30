@@ -391,6 +391,10 @@ export class HomeComponent {
     this.router.navigate(['/event-details'], { queryParams: { id: eventId } });
   }
 
+  navigateToSpDetails(spId?: number): void {
+    this.router.navigate(['/sp-details'], { queryParams: { id: spId } });
+  }
+  
   openReportDialog(email: string, name: string) {
     email = email.replaceAll('<wbr>', '');
     const dialogRef = this.dialog.open(ReportDialogComponent, {data: {email: email, name: name}});
