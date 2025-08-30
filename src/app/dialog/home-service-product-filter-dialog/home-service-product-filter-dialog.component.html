@@ -16,8 +16,8 @@
     <mat-label class="slider-label">Price (€):</mat-label>
     <mat-slider [min]="priceRange[0]" [max]="priceRange[1]"
       step="1" discrete class="hide-ripple" [disabled]="disabledPriceSlider" [displayWith]="formatPrice">
-      <input matSliderStartThumb [(value)]="data.filter.minPrice">
-      <input matSliderEndThumb [(value)]="data.filter.maxPrice"> 
+      <input title="Min Price" matSliderStartThumb [(value)]="data.filter.minPrice">
+      <input title="Max Price" matSliderEndThumb [(value)]="data.filter.maxPrice">
     </mat-slider>
     <mat-form-field>
       <mat-label>Available Event Types:</mat-label>
@@ -27,12 +27,12 @@
         }
       </mat-select>
     </mat-form-field>
-    <div fxLayout="column" [hidden]="selectedDType != 'SERVICE'" class="service-options">
+    <div fxLayout="column" [hidden]="selectedDType !== 'SERVICE'" class="service-options">
         <mat-label class="slider-label">Duration:</mat-label>
         <mat-slider [min]="durationRange[0]" [max]="durationRange[1]"
         step="0.5" discrete class="hide-ripple" [disabled]="disabledDurationSlider" [displayWith]="formatDuration">
-        <input matSliderStartThumb [(value)]="data.filter.minDuration">
-        <input matSliderEndThumb [(value)]="data.filter.maxDuration"> 
+        <input title="Min Duration" matSliderStartThumb [(value)]="data.filter.minDuration">
+        <input title="Max Duration" matSliderEndThumb [(value)]="data.filter.maxDuration">
         </mat-slider>
         <mat-checkbox labelPosition="after" (click)="onCheckboxClick()"
             [checked]="checked" [indeterminate]="indeterminate">Automatic Reservation: </mat-checkbox>

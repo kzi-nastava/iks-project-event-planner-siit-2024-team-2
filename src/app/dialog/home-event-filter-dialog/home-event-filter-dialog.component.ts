@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { Component, inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -22,7 +22,7 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './home-event-filter-dialog.component.html',
   styleUrl: './home-event-filter-dialog.component.css'
 })
-export class HomeEventFilterDialogComponent {
+export class HomeEventFilterDialogComponent implements OnInit {
   readonly dialog = inject(MatDialogRef<HomeEventFilterDialogComponent>);
   readonly data = inject<HomeEventFilterDialogParams>(MAT_DIALOG_DATA);
 
@@ -30,7 +30,7 @@ export class HomeEventFilterDialogComponent {
   allEventTypes: EventType[] = [];
   
   fullMaxAttendancesRange: number[] = [0, 1];
-  disabledAttendancesSlider: boolean = true;
+  disabledAttendancesSlider = true;
 
   maxDistance = new FormControl<number>(50);
 
@@ -41,9 +41,6 @@ export class HomeEventFilterDialogComponent {
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
   });
-
-  constructor() {
-  }
 
   ngOnInit(): void {
     // Setting possible values

@@ -1,5 +1,4 @@
 export interface Product {
-    images: string[];
     id?: number,
     name?: string,
     description?: string,
@@ -11,4 +10,6 @@ export interface Product {
     visible: boolean,
     available: boolean,
     serviceProductProviderId?: number,
+    images: string[];
+    imageEncodedNames: string[];
 }

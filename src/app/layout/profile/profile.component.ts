@@ -1,5 +1,5 @@
 import { CommonModule, Location } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ProfileService } from '../../services/profile.service'; 
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -8,11 +8,13 @@ import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.
 import { UserRole } from '../../services/dtos/user/user-role';
 import { ImageService } from '../../services/image.service';
 import { ToastService } from '../../services/utils/toast-service';
-import { UserInfo } from 'node:os';
 import { environment } from '../../../environments/environment';
-import { User } from '../../services/dtos/user/user';
 import { AuthService } from '../../services/auth-service.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ServiceProduct } from '../../model/service-product/service-product';
+import { ServiceProductCategory } from '../../model/service-product/service-product-category';
+import { EventType } from '../../model/event/event-type';
+import { Event as EP_Event } from '../../model/event/event';
 
 @Component({
   selector: 'app-profile',
@@ -21,30 +23,32 @@ import { Router, ActivatedRoute } from '@angular/router';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit {
   userRole: UserRole = 'EVENT_ORGANIZER' 
   selectedFile: File | null = null;
   profilePreview: string | ArrayBuffer | null = null;
-  imageName: string = '';
+  imageName = '';
 
   userInfo = { firstName: '', lastName: '', email: '', image: '', address: '', phoneNumber: '' };
   companyInfo = { companyName: '', companyDescription: '' };
   oldPassword = '';
   newPassword = '';
   confirmPassword = '';
-  favoriteEvents: any[] = [];
-  favoriteServices: any[] = [];
-  upcomingEvents: any[] = [];
-  serviceCategories: any[] = [];
-  eventTypes: any[] = [];
-  selectedEventTypes: any[] = [];
-  showAllProfileData: boolean = true;
+  favoriteEvents: EP_Event[] = [];
+  favoriteServices: ServiceProduct[] = [];
+  upcomingEvents: EP_Event[] = [];
+  serviceCategories: ServiceProductCategory[] = [];
+  eventTypes: EventType[] = [];
+  selectedEventTypes: EventType[] = [];
+  showAllProfileData = true;
 
-  constructor(private route: ActivatedRoute, private location: Location) { }
+  // Injected
+  readonly route = inject(ActivatedRoute);
+  readonly location = inject(Location);
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      var userId;
+      let userId;
       if (params['id']) {
         userId = params['id'];
         this.showAllProfileData = false;
@@ -214,7 +218,8 @@ deactivateAccount() {
 }
 
   updateEventTypes() {
-    this.profileService.updateEventTypes(this.selectedEventTypes);
+    // TODO: endpoint doesn't exist
+    // this.profileService.updateEventTypes(this.selectedEventTypes);
   }
 
   goBack() {
@@ -244,7 +249,7 @@ deactivateAccount() {
         next: res => {
           this.imageName = atob(res);
           this.profileService.uploadProfilePicture(this.imageName, Number(userId)).subscribe({
-          next: (data) => {
+          next: () => {
             this.toastService.show('Profile picture updated successfully', 3000);
           },
           error: (err) => {

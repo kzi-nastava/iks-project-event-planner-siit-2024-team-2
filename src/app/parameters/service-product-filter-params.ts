@@ -19,4 +19,5 @@ export interface ServiceProductFilterParams {
   minDuration?:number;
   maxDuration?:number;
   automaticReserved?:boolean;
+  [key: string]: unknown;
 }

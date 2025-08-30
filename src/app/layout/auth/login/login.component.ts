@@ -14,7 +14,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { SuspendedDialogComponent, SuspendedDialogData } from '../../../dialog/suspended-dialog/suspended-dialog.component';
-import { LoginResponse } from '../../../services/dtos/auth/login-response';
 
 @Component({
   selector: 'app-login',
@@ -60,7 +59,7 @@ export class LoginComponent {
     const { email, password } = this.loginForm.value;
 
     this.authService.login(email, password).subscribe({
-      next: (response) => {
+      next: () => {
         this.route.queryParams.subscribe(params => {
           if (params['returnUrl']) {
             this.router.navigateByUrl(params['returnUrl']);
@@ -75,7 +74,7 @@ export class LoginComponent {
       error: (err) => {
         console.error('Login failed:', err);
         if (err?.error?.suspendedAt) {
-          let data: SuspendedDialogData = {suspendedAt: new Date(err.error.suspendedAt)};
+          const data: SuspendedDialogData = {suspendedAt: new Date(err.error.suspendedAt)};
           this.dialog.open(SuspendedDialogComponent, {data: data});
         } else {
           this.snackBar.open('Login failed. Please check your credentials.', 'Close', {

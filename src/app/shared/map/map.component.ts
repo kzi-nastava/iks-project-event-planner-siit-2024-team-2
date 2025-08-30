@@ -1,15 +1,4 @@
-import {
-  Component,
-  AfterViewInit,
-  OnInit,
-  PLATFORM_ID,
-  Inject,
-  Output,
-  EventEmitter,
-  OnChanges,
-  SimpleChanges,
-  Input
-} from '@angular/core';
+import { Component, AfterViewInit, OnInit, PLATFORM_ID, Output, EventEmitter, OnChanges, SimpleChanges, Input, inject } from '@angular/core';
 import { MapService } from './map.service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -22,20 +11,18 @@ import { FormsModule } from '@angular/forms';
   imports: [FormsModule, CommonModule],
 })
 export class MapComponent implements AfterViewInit, OnInit, OnChanges {
+  private mapService = inject(MapService);
+  private platformId = inject(PLATFORM_ID);
+
   private map: any;
   L: any;
   private currentMarker: any;
-  searchQuery: string = '';
+  searchQuery = '';
 
-  @Input() latitude: number = 0;
-  @Input() longitude: number = 0;
-  @Input() readonly: boolean = false;
+  @Input() latitude = 0;
+  @Input() longitude = 0;
+  @Input() readonly = false;
   @Output() coordinatesSelected = new EventEmitter<{ lat: number; lng: number }>();
-
-  constructor(
-    private mapService: MapService,
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if ((changes['latitude'] || changes['longitude']) && this.map) {

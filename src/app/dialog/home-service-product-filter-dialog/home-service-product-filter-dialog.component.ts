@@ -1,4 +1,4 @@
-import { Component, inject, model } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { HomeServiceProductFilterDialogParams } from '../../parameters/home-service-product-filter-dialog-params';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -22,7 +22,7 @@ import { MAT_CHECKBOX_DEFAULT_OPTIONS, MatCheckboxDefaultOptions, MatCheckboxMod
   templateUrl: './home-service-product-filter-dialog.component.html',
   styleUrl: './home-service-product-filter-dialog.component.css'
 })
-export class HomeServiceProductFilterDialogComponent {
+export class HomeServiceProductFilterDialogComponent implements OnInit {
   readonly dialog = inject(MatDialogRef<HomeServiceProductFilterDialogComponent>);
   readonly data = inject<HomeServiceProductFilterDialogParams>(MAT_DIALOG_DATA);
 
@@ -33,19 +33,16 @@ export class HomeServiceProductFilterDialogComponent {
   allCategories: ServiceProductCategory[] = [];
 
   priceRange: number[] = [0, 1];
-  disabledPriceSlider: boolean = true;
+  disabledPriceSlider = true;
 
   eventTypes = new FormControl<EventType[]>([]);
   allEventTypes: EventType[] = [];
   
   durationRange: number[] = [0, 1];
-  disabledDurationSlider: boolean = true;
+  disabledDurationSlider = true;
 
   checked = false;
   indeterminate = true;
-
-  constructor() {
-  }
 
   ngOnInit(): void {
     // Setting possible values

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component';
 import { ServiceProductService } from '../../services/service-product/service-product.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-all-categories',
@@ -16,12 +17,12 @@ import { ServiceProductService } from '../../services/service-product/service-pr
   templateUrl: './all-categories.component.html',
   styleUrl: './all-categories.component.css'
 })
-export class AllCategoriesComponent {
+export class AllCategoriesComponent implements OnInit {
+  private spCategoryService = inject(ServiceProductCategoryService);
+  private spService = inject(ServiceProductService);
+  private router = inject(Router);
+  dialog = inject(MatDialog);
 
-  constructor(private spCategoryService: ServiceProductCategoryService,
-              private spService: ServiceProductService,
-              private router: Router,
-              public dialog: MatDialog) {}
 
   disabledCategories: string[] = [];
   
@@ -45,7 +46,7 @@ export class AllCategoriesComponent {
       next: (response: ServiceProductCategory[]) => {
         this.allCategories = response;
       },
-      error: (err: any) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Failed to load categories:', err);
       }
     });

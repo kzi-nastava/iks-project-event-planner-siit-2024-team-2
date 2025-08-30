@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component';
@@ -10,6 +10,7 @@ import { finalize } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { ServiceCardDto } from '../../services/dtos/service-product/service-card-dto.dto';
+import { HttpErrorResponse } from '@angular/common/http';
 
 const imagesApi = "api/images/";
 
@@ -21,9 +22,10 @@ const imagesApi = "api/images/";
   styleUrls: ['./my-services.component.css']
 })
 export class MyServicesComponent implements OnInit {
-
-  constructor (public dialog: MatDialog, private router: Router,
-               private serviceService: ServiceService) {}
+  // Injected
+  readonly serviceService = inject(ServiceService);
+  readonly dialog = inject(MatDialog);
+  readonly router = inject(Router);
 
   ngOnInit(): void {
     this.fetchServices();
@@ -42,7 +44,7 @@ export class MyServicesComponent implements OnInit {
             this.myServices = JSON.parse(JSON.stringify(response));
             this.convertImageUrls(this.myServices);
           },
-          error: (err: any) => {
+          error: (err: HttpErrorResponse) => {
             console.error('Failed to load Services:', err);
           }
         });
@@ -51,9 +53,9 @@ export class MyServicesComponent implements OnInit {
   openFilterDialog(): void {
   const dialogRef = this.dialog.open(ServiceFilterDialogComponent);
 
-  dialogRef.afterClosed().subscribe(result => {
+  dialogRef.afterClosed().subscribe(() => {
     console.log('The dialog was closed');
-    // Here you can handle the selected filters if needed
+    // TODO: filter the services
     });
   }
 

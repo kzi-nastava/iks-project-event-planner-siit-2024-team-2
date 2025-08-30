@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import { Message } from '../../model/communication/message';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -17,9 +16,7 @@ export class NotificationService {
   private httpClient = inject(HttpClient);
   private badgeCountSubject = new BehaviorSubject<number>(this.getBadgeCount());
   public badgeCount$ = this.badgeCountSubject.asObservable();
-  private static badgeCount: number = 0;
-
-  constructor() { }
+  private static badgeCount = 0;
 
   getAll(pageParams: PageParams): Observable<PagedModel<Notification>> {
     return this.httpClient.get<PagedModel<Notification>>(this.apiUrl, { params: buildHttpParams(pageParams) });

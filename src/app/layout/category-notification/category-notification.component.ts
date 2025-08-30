@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ServiceProductCategoryService } from '../../services/service-product-category.service';
 import { ServiceService } from '../../services/service.service';
@@ -7,10 +7,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatCardContent, MatCard } from "@angular/material/card";
+import { MatCardContent } from "@angular/material/card";
 import { MatButtonModule } from '@angular/material/button';
 import { NotificationService } from '../../services/communication/notification.service';
 import { NotificationDto } from '../../services/dtos/communication/notification.dto';
+import { Service } from '../../model/service-product/service';
+import { CreateServiceDto } from '../../services/dtos/service-product/create-service.dto';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -20,14 +23,14 @@ import { NotificationDto } from '../../services/dtos/communication/notification.
   templateUrl: './category-notification.component.html',
   styleUrl: './category-notification.component.css'
 })
-export class CategoryNotificationComponent {
-
-  constructor(private spCategoryService: ServiceProductCategoryService,
-              private serviceService: ServiceService,
-              private snackBar: MatSnackBar,
-              private router: Router,
-              private route: ActivatedRoute,
-              private notificationService: NotificationService) {}
+export class CategoryNotificationComponent implements OnInit {
+  // Injected
+  readonly spCategoryService = inject(ServiceProductCategoryService);
+  readonly serviceService = inject(ServiceService);
+  readonly snackBar = inject(MatSnackBar);
+  readonly router = inject(Router);
+  readonly route = inject(ActivatedRoute);
+  readonly notificationService = inject(NotificationService);
 
   @Input() message!: string | null;
   @Input() seen!: boolean | null;
@@ -35,11 +38,11 @@ export class CategoryNotificationComponent {
 
 
   category = {name: '', description: ''};
-  service: any;
+  service: Service | null = null;
   selectedCategory = '';
   categories: string[] = [];
-  categoryName: string = '';
-  categoryDescription: string = '';
+  categoryName = '';
+  categoryDescription = '';
   isAccepted = false;
   providerMessage = '';
 
@@ -51,7 +54,7 @@ export class CategoryNotificationComponent {
     this.category.name = this.categoryName;
     this.category.description = this.categoryDescription;
     this.message = 'Name: ' + this.categoryName + ',  Description: ' + this.categoryDescription;
-    this.providerMessage = 'Your service ' + this.service.name + ' created successfully. You can find it in "My services".\n';
+    this.providerMessage = 'Your service ' + this.service?.name + ' created successfully. You can find it in "My services".\n';
 
     this.spCategoryService.getAll().subscribe(allCategories => {
       this.categories = allCategories.map(c => c.name || '');
@@ -71,7 +74,7 @@ export class CategoryNotificationComponent {
     // chosen the existing category from the combo box
     if (this.selectedCategory != '') {
       this.spCategoryService.getByName(this.selectedCategory).subscribe(category => {
-        this.service.categoryId = category.id;
+        this.service!.category = category;
         this.createService();
       });
       this.providerMessage += 'Your category request for ' + this.categoryName + ' was denied. ' +
@@ -85,7 +88,7 @@ export class CategoryNotificationComponent {
 
       this.spCategoryService.add(this.category).subscribe({
         next: (newCategory: ServiceProductCategory) => {
-          this.service.categoryId = newCategory.id;
+          this.service!.category = newCategory.id;
           this.createService();
           this.snackBar.open('Category ' + this.category.name + ' created successfully!', 'Close', {duration: 3000, panelClass: ['snack-success']});
       },
@@ -106,13 +109,13 @@ export class CategoryNotificationComponent {
       message: this.providerMessage,
       dismissed: false,
       seen: false,
-      userId: this.service.serviceProductProviderId
+      userId: this.service?.serviceProductProvider.id
     };
     this.notificationService.add(notification).subscribe({
-      next: (not: any) => {
+      next: () => {
         console.log('Provider notification created.');
       },
-      error: (err: any) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Failed to create notification:', err);
       }
     });
@@ -127,11 +130,30 @@ export class CategoryNotificationComponent {
   }
 
   private createService() {
-    this.serviceService.add(this.service).subscribe({
+    const dto: CreateServiceDto = {
+      name: this.service?.name,
+      description: this.service?.description,
+      specifies: this.service?.specifies,
+      price: this.service?.price,
+      discount: this.service?.discount,
+      categoryId: this.service?.category.id,
+      availableEventTypeIds: this.service?.availableEventTypes.map(type => type.id),
+      duration: this.service?.duration,
+      minEngagementDuration: this.service?.minEngagementDuration,
+      maxEngagementDuration: this.service?.maxEngagementDuration,
+      reservationDaysDeadline: this.service?.reservationDaysDeadline,
+      cancellationDaysDeadline: this.service?.cancellationDaysDeadline,
+      automaticReserved: this.service?.automaticReserved,
+      images: this.service?.images,
+      available: this.service?.available,
+      visible: this.service?.visible,
+      serviceProductProviderId: this.service?.serviceProductProvider.id
+    }
+    this.serviceService.add(dto).subscribe({
       next: () => {
-        this.snackBar.open('Service ' + this.service.name + ' created successfully!', 'Close', { duration: 3000, panelClass: ['snack-success'] });
+        this.snackBar.open('Service ' + this.service?.name + ' created successfully!', 'Close', { duration: 3000, panelClass: ['snack-success'] });
       },
-      error: (err: any) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Failed to create service:', err);
         this.snackBar.open('Failed to create category. Please try again.', 'Close', { duration: 3000, panelClass: ['snack-error'] });
       }

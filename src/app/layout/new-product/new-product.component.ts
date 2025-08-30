@@ -1,8 +1,7 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormArray, FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
+import { Component, OnInit, inject } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
-import { Service } from '../../model/service-product/service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { EventTypeService } from '../../services/event-type.service';
@@ -13,7 +12,7 @@ import { ProductService } from '../../services/product.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Product } from '../../model/service-product/product';
-import { forkJoin, take } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ImageService } from '../../services/image.service';
 import { ToastService } from '../../services/utils/toast-service';
@@ -32,7 +31,16 @@ import { ToastService } from '../../services/utils/toast-service';
   templateUrl: './new-product.component.html',
   styleUrl: './new-product.component.css'
 })
-export class NewProductComponent {
+export class NewProductComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private eventTypeService = inject(EventTypeService);
+  private serviceCategoryService = inject(ServiceCategoryService);
+  private productService = inject(ProductService);
+  private snackBar = inject(MatSnackBar);
+  private imageService = inject(ImageService);
+  private toastService = inject(ToastService);
+
 
   getImageUrl(path: string): string {
     return `${environment.apiHost}api/images/${path}`;
@@ -56,22 +64,11 @@ export class NewProductComponent {
     { id: 3, name: "Waiter product" }
   ];
   selectedCategoryId: number = this.productCategories[0].id;
-  id: number = -1;
+  id = -1;
   eventTypes: EventType[] = [];
   selectedEvents: number[] = [];
   images: string[] = [];
   imageEncodedNames: string[] = [];
-  
-  constructor(
-    private route: ActivatedRoute, 
-    private router: Router, 
-    private eventTypeService: EventTypeService, 
-    private serviceCategoryService: ServiceCategoryService,
-    private productService: ProductService,    
-    private snackBar: MatSnackBar,
-    private imageService: ImageService,
-    private toastService: ToastService,
-  ) {}
 
   loadEventTypes(): void {
     this.eventTypeService.getAll().subscribe(
@@ -183,10 +180,10 @@ export class NewProductComponent {
       });
       return; 
     }
-    let observables = this.selectedImages.map((image:File) => this.imageService.uploadImage(image));
+    const observables = this.selectedImages.map((image:File) => this.imageService.uploadImage(image));
     forkJoin(observables).subscribe({
       next: (responses: any) => {
-        const product = <Product>{
+        const product = {
           name: this.createProductForm.value.name ?? '',
           images: this.images,
           description: this.createProductForm.value.description ?? '',
@@ -198,11 +195,11 @@ export class NewProductComponent {
           available: this.createProductForm.value.available ?? false,
           visible: this.createProductForm.value.visible ?? false,
           serviceProductProviderId: Number(localStorage.getItem('userId')),
-        };
+        } as Product;
         product.images = responses.map((path: any) => atob(path));
       if (this.id !== -1) { // Indicates an update
         this.productService.update(product, this.id).subscribe({
-          next: (event: any) => {
+          next: () => {
             this.toastService.show('Product updated successfully!', 2000);
             this.router.navigate(['../'], { relativeTo: this.route });
           },
@@ -213,7 +210,7 @@ export class NewProductComponent {
         });
       } else {
         this.productService.add(product).subscribe({
-          next: (event: any) => {
+          next: () => {
             this.toastService.show('Product created successfully!', 2000);
             this.router.navigate(['../'], { relativeTo: this.route });
           },
