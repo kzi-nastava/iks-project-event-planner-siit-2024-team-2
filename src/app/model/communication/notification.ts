@@ -1,4 +1,4 @@
-import { User } from "../../services/dtos/user/user";
+import { UserDto } from "../../services/dtos/user/user";
 
 export interface Notification {
     id: number,
@@ -8,5 +8,5 @@ export interface Notification {
     seen: boolean | null,
     dismissed: boolean | null,
     dismissing: boolean | null,
-    userDto: User | null
+    userDto: UserDto | null
 }

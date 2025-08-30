@@ -1,4 +1,4 @@
-import { User } from "../../services/dtos/user/user";
+import { UserDto } from "../../services/dtos/user/user";
 import { Activity } from "./activity";
 import { EventType } from "./event-type";
 
@@ -8,7 +8,7 @@ export interface Event {
     description: string | null,
     date: string,
     type: EventType,
-    eventOrganizerDto: User | null,
+    eventOrganizerDto: UserDto | null,
     isOpen: boolean,
     maxAttendances: number | null,
     longitude: number | null,

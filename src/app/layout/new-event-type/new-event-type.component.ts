@@ -18,6 +18,10 @@ import { EventType } from '../../model/event/event-type';
 import { ServiceProduct } from '../../model/service-product/service-product';
 import { HttpErrorResponse } from '@angular/common/http';
 
+export interface IdName {
+  id: number;
+  name: string;
+}
 
 @Component({
   selector: 'app-material-input',
@@ -43,7 +47,7 @@ export class NewEventTypeComponent implements OnInit {
   readonly router = inject(Router);
   readonly route = inject(ActivatedRoute);
 
-  services = [
+  services: IdName[] = [
     { id: 1, name: 'Catering' },
     { id: 2, name: 'Photography' },
     { id: 3, name: 'Music' },
@@ -60,7 +64,7 @@ export class NewEventTypeComponent implements OnInit {
         console.log('Services loaded:', response);
         this.services = (response || []).content.map((service: Service) => ({
           id: service.id,
-          name: service.name
+          name: service.name || ''
         }));
         console.log('Mapped services:', this.services);
       },

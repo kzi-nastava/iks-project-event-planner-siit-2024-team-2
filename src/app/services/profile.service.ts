@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { User } from './dtos/user/user';
+import { UserDto } from './dtos/user/user';
 
 @Injectable({
   providedIn: 'root'
@@ -20,20 +20,20 @@ export class ProfileService {
     return this.http.delete(`${this.usersUrl}/${userId}/remove-picture`);
   }
 
-  getUserData(userId: number): Observable<User> {
-    return this.http.get<User>(`${this.usersUrl}/${userId}`);
+  getUserData(userId: number): Observable<UserDto> {
+    return this.http.get<UserDto>(`${this.usersUrl}/${userId}`);
   }
 
-  updatePersonalInfo(userInfo: any, userId: string): Observable<User> {
-    return this.http.put<User>(`${this.usersUrl}/${userId}`, userInfo);
+  updatePersonalInfo(userInfo: any, userId: string): Observable<UserDto> {
+    return this.http.put<UserDto>(`${this.usersUrl}/${userId}`, userInfo);
   }
 
-  getCompanyData(userId: number): Observable<User> {
-    return this.http.get<User>(`${this.usersUrl}/company/${userId}`);
+  getCompanyData(userId: number): Observable<UserDto> {
+    return this.http.get<UserDto>(`${this.usersUrl}/company/${userId}`);
   }
   
-  updateCompanyInfo(companyInfo: any, userId: string): Observable<User> {
-    return this.http.put<User>(`${this.usersUrl}/company/${userId}`, companyInfo);
+  updateCompanyInfo(companyInfo: any, userId: string): Observable<UserDto> {
+    return this.http.put<UserDto>(`${this.usersUrl}/company/${userId}`, companyInfo);
   }
 
   changePassword(oldPassword: string, newPassword: string, userId: string): Observable<any> {

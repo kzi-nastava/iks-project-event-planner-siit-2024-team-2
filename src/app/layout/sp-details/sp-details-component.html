@@ -41,7 +41,7 @@
   </mat-card-content>
 
   <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="goToSpp(spData.serviceProductProvider.id)">See Provider's Data</button>
+    <button mat-raised-button color="primary" (click)="goToSpp(spData.serviceProductProvider?.id || -1)">See Provider's Data</button>
     <button mat-stroked-button color="accent" (click)="goBack()">Back</button>
     <button *ngIf="!isService" [disabled]="!spData.available" mat-raised-button color="primary" (click)="buy()">Buy</button>
     <button *ngIf="isService" [disabled]="!spData.available" mat-raised-button color="primary" (click)="reserve()">Reserve</button>

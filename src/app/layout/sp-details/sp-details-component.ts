@@ -65,11 +65,11 @@ export class SpDetailsComponent  implements OnInit {
           this.serviceService.getService(spId).subscribe(serviceData => {
             this.spData = serviceData;
             this.isService = true;
-            if (this.spData.duration > 0) this.hasDuration = true; 
+            if ((this.spData.duration || 0) > 0) this.hasDuration = true; 
           })
         }
         else {
-          this.spData = sp;
+          this.spData = sp as Service;
           this.isService = false;
         }
       },
@@ -104,7 +104,7 @@ export class SpDetailsComponent  implements OnInit {
   openReportDialog() {
     const email = this.spData?.serviceProductProvider?.email || '';
     const name = this.spData?.serviceProductProvider?.firstName || '' + ' ' + this.spData?.serviceProductProvider?.lastName || '';
-    const dialogRef = this.dialog.open(ReportDialogComponent, {data: {email: email, name: name}});
+    this.dialog.open(ReportDialogComponent, {data: {email: email, name: name}});
   }
   
   suspendUser() {

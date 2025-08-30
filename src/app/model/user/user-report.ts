@@ -1,9 +1,9 @@
-import { User } from "../../services/dtos/user/user";
+import { UserDto } from "../../services/dtos/user/user";
 
 export interface UserReport {
     id: number | null,
-    reporter: User | null,
-    reported: User | null,
+    reporter: UserDto | null,
+    reported: UserDto | null,
     approvedAt: Date | null,
     reason: string | null,
     createdAt: Date | null,

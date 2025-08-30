@@ -4,7 +4,7 @@ import { ServiceProduct } from "../../../model/service-product/service-product";
 import { ServiceProductCategory } from "../../../model/service-product/service-product-category";
 import { UserRole } from "./user-role";
 
-export interface User {
+export interface UserDto {
     firstName: string;
     lastName: string;
     email: string;
