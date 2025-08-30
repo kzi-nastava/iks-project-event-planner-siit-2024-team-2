@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { ServiceCategory } from '../model/service-product/service-category';
@@ -8,10 +8,8 @@ import { ServiceCategory } from '../model/service-product/service-category';
   providedIn: 'root'
 })
 export class ServiceCategoryService {
-
     apiHost = `${environment.apiHost}api/sp-categories`;
-
-    constructor(private httpClient: HttpClient) { }
+    httpClient = inject(HttpClient);
   
     add(serviceCategory: ServiceCategory) : Observable<ServiceCategory> {
       return this.httpClient.post<ServiceCategory>(this.apiHost, serviceCategory)

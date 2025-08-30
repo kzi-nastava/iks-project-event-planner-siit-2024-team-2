@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { EventService } from '../../services/event.service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivityFormDialogComponent } from '../../dialog/activity-form-dialog/activity-form-dialog.component';
 import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component';
+import { Activity } from '../../model/event/activity';
 
 @Component({
   selector: 'app-agenda',
@@ -21,10 +22,16 @@ import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.
   templateUrl: './agenda.component.html',
   styleUrl: './agenda.component.css'
 })
-export class AgendaComponent {
-  readonly: boolean = false;
+export class AgendaComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private eventService = inject(EventService);
+  private snackBar = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
+
+  readonly = false;
   activities: any[] = [];
-  eventId: number = -1;
+  eventId = -1;
   displayedColumns: string[] = ['name', 'start', 'end', 'description', 'location'];
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -54,21 +61,21 @@ export class AgendaComponent {
     });
   }
 
-  editActivity(activity: any) {
+  editActivity(activity: Activity) {
     this.dialog.open(ActivityFormDialogComponent, {
       data: {
         activity
       }
     }).afterClosed().subscribe(result => {
       if (result) {
-        if (!this.isTimeValid(result.activityStart, result.activityEnd, activity.id)) {
+        if (!this.isTimeValid(result.activityStart, result.activityEnd, activity.id || -1)) {
           this.snackBar.open('Invalid time range', 'Close', {
             duration: 3000,
             panelClass: ['snackbar-error'],
           });
           return;
         }
-        this.eventService.updateActivity(this.eventId, activity.id, result).subscribe({
+        this.eventService.updateActivity(this.eventId, activity.id || -1, result).subscribe({
           next: () => {
             this.snackBar.open('Activity updated successfully', 'Close', {
               duration: 3000,
@@ -151,14 +158,6 @@ export class AgendaComponent {
     
     return true;
   }
-
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private eventService: EventService,
-    private snackBar: MatSnackBar,
-    private dialog: MatDialog
-    ) {}
   
   formatMillisToTime(millis: number): string {
     const hours = Math.floor(millis / (1000 * 60 * 60));

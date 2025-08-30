@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { User } from './dtos/user/user';
 
@@ -10,8 +10,7 @@ import { User } from './dtos/user/user';
 export class ProfileService {
   private usersUrl = `${environment.apiHost}api/users`; 
   private authUrl = `${environment.apiHost}api/auth`; 
-
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   uploadProfilePicture(imageName: string, userId: number) {
     return this.http.post<any>(`${this.usersUrl}/${userId}/upload-picture`, {imageName: imageName});

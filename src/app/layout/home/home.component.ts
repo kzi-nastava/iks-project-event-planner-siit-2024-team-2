@@ -17,7 +17,7 @@ import { EventFilterParams } from '../../parameters/event-filter-params';
 import { SortDirection } from '../../shared/model/sort-direction';
 import { DragScrollComponent, DragScrollItemDirective } from 'ngx-drag-scroll';
 import { isPlatformBrowser } from '@angular/common';
-import { PLATFORM_ID } from '@angular/core';
+import { PLATFORM_ID, OnInit } from '@angular/core';
 import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
 import { ServiceProductSummaryDto } from '../../services/dtos/service-product/service-product-summary.dto';
 import { ServiceProductFilterParams } from '../../parameters/service-product-filter-params';
@@ -42,6 +42,7 @@ import { ReportDialogComponent } from '../../dialog/report-dialog/report-dialog.
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth-service.service';
 import { UserService } from '../../services/user/user.service';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ImgFallbackDirective } from '../../utils/image-fallback';
 
 const pageSize = 12;
@@ -57,19 +58,19 @@ const imagesApi = "api/images/";
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   topEvents: EventSummaryDto[] = [];
   otherEvents: EventSummaryDto[] = [];
   topServiceProducts: ServiceProductSummaryDto[] = [];
   otherServiceProducts: ServiceProductSummaryDto[] = [];
-  searchTerm: string = '';
-  eventSelectedSortOption: string = 'date-desc';
-  serviceProductSelectedSortOption: string = 'name-asc';
+  searchTerm = '';
+  eventSelectedSortOption = 'date-desc';
+  serviceProductSelectedSortOption = 'name-asc';
   isBrowser: boolean;
-  isLoadingTopEvents: boolean = true;
-  isLoadingTopServiceProducts: boolean = true;
-  isLoadingEvents: boolean = true;
-  isLoadingServiceProducts: boolean = true;
+  isLoadingTopEvents = true;
+  isLoadingTopServiceProducts = true;
+  isLoadingEvents = true;
+  isLoadingServiceProducts = true;
   selectedTabIndex = 0;
   showedLoadError = false;
 
@@ -80,9 +81,9 @@ export class HomeComponent {
   selectedEventTypes: EventType[] = [];
   fullMaxAttendancesRange: number[] = [];
   filteringValues?: ServiceProductFilteringValues;
-  fetchedEventTypes: boolean = false;
-  fetchedMaxAttendances: boolean = false;
-  fetchedFilteringValues: boolean = false;
+  fetchedEventTypes = false;
+  fetchedMaxAttendances = false;
+  fetchedFilteringValues = false;
   cities: City[] = [];
   selectedCities: City[] = [];
   selectedCategories: ServiceProductCategory[] = [];
@@ -107,9 +108,9 @@ export class HomeComponent {
   totalElements: number = pageSize * 8; // this variable is reference, other two are for storing the value between switching
   eventTotalElements: number = this.totalElements; 
   serviceProductTotalElements: number = this.totalElements;
-  pageIndex: number = 0; // same as for totalElements
-  eventPageIndex: number = 0;
-  serviceProductPageIndex: number = 0;
+  pageIndex = 0; // same as for totalElements
+  eventPageIndex = 0;
+  serviceProductPageIndex = 0;
   pageSize: number = pageSize; // same as for totalElements
   eventPageSize: number = pageSize;
   serviceProductPageSize: number = pageSize;
@@ -139,7 +140,7 @@ export class HomeComponent {
         this.addEmailBreaks(this.topEvents);
         this.convertProfilePictureUrls(this.topEvents);
       },
-      error: (err: any) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Failed to load top events:', err);
         this.showLoadError();
       }
@@ -153,7 +154,7 @@ export class HomeComponent {
         this.convertImageUrls(this.topServiceProducts);
         this.convertProfilePictureUrls(this.topServiceProducts);
       },
-      error: (err: any) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Failed to load top serviceproducts:', err);
         this.showLoadError();
       }
@@ -182,7 +183,7 @@ export class HomeComponent {
             this.addEmailBreaks(this.otherEvents);
             this.convertProfilePictureUrls(this.otherEvents);
           },
-          error: (err: any) => {
+          error: (err: HttpErrorResponse) => {
             console.error('Failed to load events:', err);
             this.showLoadError();
           }
@@ -204,7 +205,7 @@ export class HomeComponent {
             this.convertImageUrls(this.otherServiceProducts);
             this.convertProfilePictureUrls(this.otherServiceProducts);
           },
-          error: (err: any) => {
+          error: (err: HttpErrorResponse) => {
             console.error('Failed to load serviceproducts:', err);
             this.showLoadError();
           }
@@ -217,7 +218,7 @@ export class HomeComponent {
             this.allEventTypes = response.map(obj => ({ ...obj }));
             this.fetchedEventTypes = true;
           },
-          error: (err: any) => {
+          error: (err: HttpErrorResponse) => {
             console.error('Failed to load event types:', err);
             this.showLoadError();
           }
@@ -228,7 +229,7 @@ export class HomeComponent {
             this.fullMaxAttendancesRange = response.map(num => num);
             this.fetchedMaxAttendances = true;
           },
-          error: (err: any) => {
+          error: (err: HttpErrorResponse) => {
             console.error('Failed to load max attendances range:', err);
             this.showLoadError();
           }
@@ -239,7 +240,7 @@ export class HomeComponent {
             this.filteringValues = JSON.parse(JSON.stringify(response));
             this.fetchedFilteringValues = true;
           },
-          error: (err: any) => {
+          error: (err: HttpErrorResponse) => {
             console.error('Failed to load service product filtering values:', err);
             this.showLoadError();
           }
@@ -251,7 +252,7 @@ export class HomeComponent {
           next: (response : City[]) => {
             this.cities = response.map(obj => ({ ...obj })).sort((a, b) => a.city.localeCompare(b.city));
           },
-          error: (err: any) => {
+          error: (err: HttpErrorResponse) => {
             console.error('Failed to load cities:', err);
             this.showLoadError();
           }
@@ -259,13 +260,13 @@ export class HomeComponent {
   }
 
   onSortEvents(): void {
-    let sortTokens = this.eventSelectedSortOption.split('-');
+    const sortTokens = this.eventSelectedSortOption.split('-');
     this.eventFilter.sortDirection = sortTokens[1] == "asc" ? SortDirection.ASC : SortDirection.DESC;
     this.eventFilter.sortBy = sortTokens[0];
     this.fetchEvents();
   }
   onSortServiceProducts(): void {
-    let sortTokens = this.serviceProductSelectedSortOption.split('-');
+    const sortTokens = this.serviceProductSelectedSortOption.split('-');
     this.serviceProductFilter.sortDirection = sortTokens[1] == "asc" ? SortDirection.ASC : SortDirection.DESC;
     this.serviceProductFilter.sortBy = sortTokens[0];
     this.fetchServiceProducts();
@@ -321,7 +322,7 @@ export class HomeComponent {
   }
   
   openEventFilterDialog(): void {
-    let data: HomeEventFilterDialogParams = { // we will clone all data in case filter dialog tries to change them
+    const data: HomeEventFilterDialogParams = { // we will clone all data in case filter dialog tries to change them
       filter: {...this.eventFilter},
       allEventTypes: [...this.allEventTypes],
       selectedEventTypes: [...this.selectedEventTypes],
@@ -348,7 +349,7 @@ export class HomeComponent {
   openServiceProductFilterDialog(): void {
     if (this.filteringValues == undefined)
       return;
-    let data: HomeServiceProductFilterDialogParams = { // we will clone all data in case filter dialog tries to change them
+    const data: HomeServiceProductFilterDialogParams = { // we will clone all data in case filter dialog tries to change them
       filter: {...this.serviceProductFilter},
       filteringValues: {...this.filteringValues},
       selectedCategories: [...this.selectedCategories],
@@ -402,9 +403,13 @@ export class HomeComponent {
     this.router.navigate(['/event-details'], { queryParams: { id: eventId } });
   }
 
+  navigateToSpDetails(spId?: number): void {
+    this.router.navigate(['/sp-details'], { queryParams: { id: spId } });
+  }
+  
   openReportDialog(email: string, name: string) {
     email = email.replaceAll('<wbr>', '');
-    const dialogRef = this.dialog.open(ReportDialogComponent, {data: {email: email, name: name}});
+    this.dialog.open(ReportDialogComponent, {data: {email: email, name: name}});
   }
 
   suspendUser(email: string) {
@@ -413,7 +418,7 @@ export class HomeComponent {
       next: () => {
         this.toastService.show('User suspended successfully', 2000);
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Failed to suspend user:', err);
         this.toastService.show('Failed to suspend user', 2000);
       }

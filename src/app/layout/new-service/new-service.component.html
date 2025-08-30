@@ -144,7 +144,7 @@
     <input #fileInput type="file" accept="image/*" style="display: none" (change)="onImageSelected($event)">
     <button type="button" class="fancy-button" (click)="fileInput.click()" style="position: relative; right: 190px;">Attach the image 📎</button>
 
-    <div class="error-text" [class.visible]="images.length == 0 && imageEncodedNames.length == 0 && formSubmitted"
+    <div class="error-text" [class.visible]="images.length === 0 && imageEncodedNames.length === 0 && formSubmitted"
     style="position: relative; right: 150px;">
         Images are required (one at least).
     </div>
@@ -177,7 +177,7 @@
 <div class="row" id="end">
     <span>
         <button class="fancy-button" type="submit">Save</button>
-        <div class="error-text" [class.visible]="(newServiceForm.invalid || (images.length == 0 && imageEncodedNames.length == 0)) && formSubmitted" style="margin-top: 10px;">
+        <div class="error-text" [class.visible]="(newServiceForm.invalid || (images.length === 0 && imageEncodedNames.length === 0)) && formSubmitted" style="margin-top: 10px;">
             Some fields aren't valid.
         </div>
     </span>

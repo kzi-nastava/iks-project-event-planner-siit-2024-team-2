@@ -4,12 +4,11 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatDialogActions, MatDialogContent, MatD
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { ENTER, COMMA, N } from '@angular/cdk/keycodes';
-import { signal } from '@angular/core';
+import { ENTER, COMMA } from '@angular/cdk/keycodes';
+import { signal, OnInit } from '@angular/core';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { DialogRef } from '@angular/cdk/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { EmailValidator, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIf } from '@angular/common';
 
 
@@ -26,7 +25,7 @@ export interface InvitationItem {
   templateUrl: './invitations-dialog.component.html',
   styleUrl: './invitations-dialog.component.css'
 })
-export class InvitationsDialogComponent {
+export class InvitationsDialogComponent implements OnInit {
   readonly dialog = inject(MatDialogRef<InvitationsDialogComponent>);
   readonly data = inject<InvitationItem[]>(MAT_DIALOG_DATA);
 

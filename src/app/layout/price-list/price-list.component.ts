@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { PriceListDto } from '../../services/dtos/service-product/price-list.dto';
@@ -24,8 +24,9 @@ export class PriceListComponent implements OnInit {
   forms: FormGroup[] = [];
   sppId = Number(localStorage.getItem('userId'));
 
-
-  constructor(private priceListService: PriceListService, private router: Router) {}
+  // Injected
+  readonly router = inject(Router);
+  readonly priceListService = inject(PriceListService);
 
   ngOnInit(): void {
     this.loadPriceList();

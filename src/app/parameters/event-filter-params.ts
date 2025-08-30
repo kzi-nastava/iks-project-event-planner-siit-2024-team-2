@@ -16,4 +16,5 @@ export interface EventFilterParams {
   maxDistance?: number;
   startDate?: number;
   endDate?: number;
+  [key: string]: unknown;
 }

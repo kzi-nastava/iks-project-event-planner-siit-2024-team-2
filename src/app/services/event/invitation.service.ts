@@ -11,8 +11,6 @@ export class InvitationService {
   readonly apiUrl = `${environment.apiHost}api/invitations`;
   readonly httpClient = inject(HttpClient);
   
-  constructor() { }
-
   getAll() {
     return this.httpClient.get<Invitation[]>(this.apiUrl);
   }

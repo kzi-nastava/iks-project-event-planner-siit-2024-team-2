@@ -36,7 +36,7 @@ export class ReportDialogComponent {
 
   onReport() {
     if (!this.reasonFormControl.value) return;
-    let reportDto: UserReportDto = {reportedEmail: this.data.email, reason: this.reasonFormControl.value};
+    const reportDto: UserReportDto = {reportedEmail: this.data.email, reason: this.reasonFormControl.value};
     this.userReportService.add(reportDto).subscribe({
       next: () => {
         this.dialogRef.close(true);

@@ -53,8 +53,8 @@
     color: #333; /* Dark text color */
     outline: none; /* Remove default outline */
     transition: all 0.3s ease;
-    appearance: none; /* Remove default arrow */
     -webkit-appearance: none; /* Safari-specific */
+    appearance: none; /* Remove default arrow */
     width: 100%;
     box-sizing: border-box;
 }

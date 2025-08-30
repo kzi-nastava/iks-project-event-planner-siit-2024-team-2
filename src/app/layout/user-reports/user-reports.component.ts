@@ -1,5 +1,5 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent, MatCardActions } from "@angular/material/card";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { Subject, takeUntil } from 'rxjs';
@@ -32,12 +32,12 @@ import { MatButtonModule } from '@angular/material/button';
       ])
     ]
 })
-export class UserReportsComponent {
+export class UserReportsComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
   userReports: UserReport[] = [];
-  totalElements: number = 0;
-  pageIndex: number = 0;
-  pageSize: number = 10;
+  totalElements = 0;
+  pageIndex = 0;
+  pageSize = 10;
 
   // Injected
   readonly userReportService = inject(UserReportService);
@@ -55,7 +55,7 @@ export class UserReportsComponent {
           this.userReports = JSON.parse(JSON.stringify(response.content));
           this.totalElements = response.page.totalElements;
         },
-        error: (err: any) => {
+        error: () => {
           this.toastService.show('Failed to suspend user');
         }
       });
@@ -70,7 +70,7 @@ export class UserReportsComponent {
     this.userReportService.delete(userReport.id || 0)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        error: (err: any) => {
+        error: () => {
           userReport.hidden = false;
           userReport.hiding = false;
           this.toastService.show('Failed to deny user report');
@@ -87,7 +87,7 @@ export class UserReportsComponent {
     this.userReportService.approve(userReport.id || 0)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        error: (err: any) => {
+        error: () => {
           userReport.hidden = false;
           userReport.hiding = false;
           this.toastService.show('Failed to approve user report');
@@ -100,14 +100,14 @@ export class UserReportsComponent {
   }
 
   getReporter(userReport: UserReport) {
-    let reporterName = userReport?.reporter?.firstName 
+    const reporterName = userReport?.reporter?.firstName 
       ? userReport?.reporter?.firstName + ' ' + userReport?.reporter?.lastName
       : undefined;
     return reporterName ? `${reporterName} (${userReport?.reporter?.email})` : userReport?.reporter?.email;
   }
 
   getReported(userReport: UserReport) {
-    let reportedName = userReport?.reported?.firstName 
+    const reportedName = userReport?.reported?.firstName 
       ? userReport?.reported?.firstName + ' ' + userReport?.reported?.lastName
       : undefined;
     return reportedName ? `${reportedName} (${userReport?.reported?.email})` : userReport?.reported?.email;

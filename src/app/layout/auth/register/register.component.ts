@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -32,20 +32,19 @@ import { ToastService } from '../../../services/utils/toast-service';
     CommonModule
   ]
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit, OnDestroy {
   registerForm!: FormGroup;
   isEventOrganizer = false;
   upgrading = false;
 
   destroy$ = new Subject<void>();
 
-  constructor(
-    private fb: FormBuilder, 
-    private authService: AuthService, 
-    private router: Router,
-    private imageService: ImageService,
-    private toastService: ToastService
-  ) {}
+  // Injected
+  readonly fb = inject(FormBuilder);
+  readonly authService = inject(AuthService);
+  readonly router = inject(Router);
+  readonly imageService = inject(ImageService);
+  readonly toastService = inject(ToastService);
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
@@ -81,9 +80,9 @@ export class RegisterComponent {
     });
   }
 
-  imagePreview: string = "";
+  imagePreview = "";
   selectedImage?: File;
-  imageName: string = "";
+  imageName = "";
   
   onFileSelected(event: Event): void {
     const file = (event.target as HTMLInputElement).files?.[0];

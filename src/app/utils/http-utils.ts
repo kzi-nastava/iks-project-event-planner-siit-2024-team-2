@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 
-export function buildHttpParams(filters: Record<string, any> | null | undefined): HttpParams {
+export function buildHttpParams(filters: Record<string, unknown> | null | undefined): HttpParams {
   let params = new HttpParams();
 
   if (!filters) return params;

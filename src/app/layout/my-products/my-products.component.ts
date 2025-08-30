@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Product } from '../../model/service-product/product';
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -7,9 +7,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ServiceFilterDialogComponent } from '../../dialog/service-filter-dialog/service-filter-dialog.component';
 import { ProductService } from '../../services/product.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from '../../../environments/environment';
-
 
 
 @Component({
@@ -19,22 +17,22 @@ import { environment } from '../../../environments/environment';
   templateUrl: './my-products.component.html',
   styleUrl: './my-products.component.css'
 })
-export class MyProductsComponent {
-    myProducts: any[] = [];
+export class MyProductsComponent implements OnInit {
+    myProducts: Product[] = [];
     filterCategories: string[] = ['Price', 'Category', 'Available events', 'Availability'];
     productDtos: ProductCardDto[] = [];
 
-    constructor(
-      public dialog: MatDialog, 
-      private router: Router, 
-      private productService: ProductService,
-    ) {}
+    // Injected
+    readonly dialog = inject(MatDialog);
+    readonly productService = inject(ProductService);
+    readonly router = inject(Router);
+
     ngOnInit(): void {
       this.initProducts();
     }
 
     initProducts(): void {
-      const pageProps = { page: 0, pageSize: 10 };
+      const pageProps = { page: 0, size: 10 };
       this.productService.getAll(pageProps).subscribe(response => {
         this.myProducts = response;
         this.productDtos = this.myProducts.map(product => ({
@@ -96,7 +94,7 @@ export class MyProductsComponent {
     this.router.navigate(['/new-product'], { queryParams: { id: productId } });
   }
 
-  convertImageUrls(array: any[]) {
+  convertImageUrls(array: ProductCardDto[]) {
     array.forEach(element => {
       if (element.image != null)
         element.image = environment.apiHost + "api/images/" + element.imageEncodedName;
@@ -110,4 +108,5 @@ interface ProductCardDto {
     price?: number;
     discount?: number;
     image?: string;
+    imageEncodedName?: string;
 }

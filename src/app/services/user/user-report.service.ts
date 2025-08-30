@@ -34,7 +34,7 @@ export class UserReportService {
     return this.httpClient.post<UserReport>(`${this.apiUrl}/approve`, id);
   }
   getAllNotApproved(pageParams: PageParams): Observable<PagedModel<UserReport>> {
-    let params: HttpParams = buildHttpParams(pageParams);
+    const params: HttpParams = buildHttpParams(pageParams);
     return this.httpClient.get<PagedModel<UserReport>>(`${this.apiUrl}/not-approved`, { params: params });
   }
 
