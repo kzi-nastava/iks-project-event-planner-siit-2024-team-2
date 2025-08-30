@@ -94,11 +94,11 @@ export class SpDetailsComponent  implements OnInit {
   }
 
   buy() {
-    
+    console.log('Buy');
   }
 
   reserve() {
-
+    console.log('Reserve');
   }
 
   openReportDialog() {
