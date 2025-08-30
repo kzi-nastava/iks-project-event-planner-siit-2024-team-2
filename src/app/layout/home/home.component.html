@@ -140,9 +140,24 @@ aria-label="Select page">
       <p class="description">{{eventSummary.description}}</p>
       <br>
     </mat-card-content>
-    <mat-card-actions align="start">
-      <button mat-flat-button color="primary" (click)="navigateToEventDetails(eventSummary.id)">More info</button>
-    </mat-card-actions>
+<mat-card-actions align="start">
+  <button mat-flat-button color="primary" (click)="navigateToEventDetails(eventSummary.id)">
+    More info
+  </button>
+
+  <!-- Like / Unlike button -->
+  <button mat-icon-button color="warn"
+          *ngIf="isEventFavorite(eventSummary.id); else notFav"
+          (click)="removeFromFavorites(eventSummary.id)">
+    <mat-icon>favorite</mat-icon>
+  </button>
+
+  <ng-template #notFav>
+    <button mat-icon-button (click)="addToFavorites(eventSummary.id)">
+      <mat-icon>favorite_border</mat-icon>
+    </button>
+  </ng-template>
+</mat-card-actions>
   </mat-card>
 </ng-template>
 

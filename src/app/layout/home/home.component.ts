@@ -123,6 +123,7 @@ export class HomeComponent {
     this.fetchServiceProducts();
     this.fetchFilteringValue();
     this.loadCities();
+    this.loadFavorites();
   }
 
   fetchTop5(): void {
@@ -408,4 +409,48 @@ export class HomeComponent {
       }
     });
   }
+
+  favoriteEventIds: Set<number> = new Set<number>();
+
+  loadFavorites(): void {
+    this.userService.getFavoriteEvents(Number(localStorage.getItem('userId'))).subscribe({
+      next: (favorites: EventSummaryDto[]) => {
+        this.favoriteEventIds = new Set(favorites.map(f => f.id!));
+      },
+      error: (err) => console.error('Failed to load favorites:', err)
+    });
+  }
+
+  isEventFavorite(eventId?: number): boolean {
+    return eventId != null && this.favoriteEventIds.has(eventId);
+  }
+
+  addToFavorites(eventId?: number): void {
+    if (!eventId) return;
+    this.userService.addFavoriteEvent(Number(localStorage.getItem('userId')), eventId).subscribe({
+      next: () => {
+        this.favoriteEventIds.add(eventId);
+        this.toastService.show('Added to favorites ❤️', 1500);
+      },
+      error: (err) => {
+        console.error('Failed to add favorite:', err);
+        this.toastService.show('Could not add favorite', 1500);
+      }
+    });
+  }
+
+  removeFromFavorites(eventId?: number): void {
+    if (!eventId) return;
+    this.userService.removeFavoriteEvent(Number(localStorage.getItem('userId')), eventId).subscribe({
+      next: () => {
+        this.favoriteEventIds.delete(eventId);
+        this.toastService.show('Removed from favorites 💔', 1500);
+      },
+      error: (err) => {
+        console.error('Failed to remove favorite:', err);
+        this.toastService.show('Could not remove favorite', 1500);
+      }
+    });
+  }
+
 }
