@@ -199,7 +199,7 @@ export class NewProductComponent implements OnInit {
         product.images = responses.map((path: any) => atob(path));
       if (this.id !== -1) { // Indicates an update
         this.productService.update(product, this.id).subscribe({
-          next: (event: any) => {
+          next: () => {
             this.toastService.show('Product updated successfully!', 2000);
             this.router.navigate(['../'], { relativeTo: this.route });
           },
@@ -210,7 +210,7 @@ export class NewProductComponent implements OnInit {
         });
       } else {
         this.productService.add(product).subscribe({
-          next: (event: any) => {
+          next: () => {
             this.toastService.show('Product created successfully!', 2000);
             this.router.navigate(['../'], { relativeTo: this.route });
           },
