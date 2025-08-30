@@ -5,6 +5,9 @@
 <mat-card *ngIf="spData">
   <mat-card-title>{{ spData.name }}</mat-card-title>
   <mat-card-subtitle>{{ spData.category?.name }}</mat-card-subtitle>
+  <button mat-icon-button class="top-right-button" [matMenuTriggerFor]="reportMenu">
+    <mat-icon>report</mat-icon>
+  </button>
 
   <mat-card-content>
     <p><strong>Description:</strong> {{ spData.description }}</p>
@@ -45,3 +48,20 @@
 
   </mat-card-actions>
 </mat-card>
+
+<mat-menu #reportMenu="matMenu" class="report-menu">
+  <ng-template matMenuContent class="report-menu-content">
+    <button mat-menu-item (click)="openReportDialog()" class="report-menu-item">
+      @if (isAdmin) {
+        <mat-icon>report</mat-icon>
+      }
+      <span>Report</span>
+    </button>
+    @if(isAdmin) {
+      <button mat-menu-item (click)="suspendUser()">
+        <mat-icon>person_off</mat-icon>
+        <span>Suspend</span>
+      </button>
+    }
+  </ng-template>
+</mat-menu>
