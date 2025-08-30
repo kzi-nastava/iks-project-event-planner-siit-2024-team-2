@@ -30,7 +30,8 @@ import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 })
 export class ActivityFormDialogComponent {
   form: FormGroup;
-  isEditMode: boolean = false;
+  isEditMode = false;
+
   constructor(
     private dialogRef: MatDialogRef<ActivityFormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any

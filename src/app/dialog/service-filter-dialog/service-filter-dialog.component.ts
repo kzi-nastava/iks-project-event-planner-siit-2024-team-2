@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 import { MatCheckbox } from '@angular/material/checkbox';
@@ -15,7 +15,7 @@ import { EventType } from '../../model/event/event-type';
   templateUrl: './service-filter-dialog.component.html',
   styleUrl: './service-filter-dialog.component.css'
 })
-export class ServiceFilterDialogComponent {
+export class ServiceFilterDialogComponent implements OnInit {
   categories: ServiceProductCategory[] = [];
   eventTypes: EventType[] = [];
 
@@ -26,11 +26,10 @@ export class ServiceFilterDialogComponent {
   selectedCategory = new FormControl();
   selectedEventTypes = new FormControl([]);
 
-  constructor(
-    private dialogRef: MatDialogRef<ServiceFilterDialogComponent>,
-    private categoryService: ServiceProductCategoryService,
-    private eventTypesService: EventTypeService
-  ) {}
+  // Injected
+  readonly dialogRef = inject(MatDialogRef);
+  readonly categoryService = inject(ServiceProductCategoryService);
+  readonly eventTypesService = inject(EventTypeService);
 
   ngOnInit(): void {
     this.categoryService.getAll().subscribe((data) => {
