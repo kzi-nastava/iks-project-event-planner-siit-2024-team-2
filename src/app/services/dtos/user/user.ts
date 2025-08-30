@@ -1,3 +1,7 @@
+import { Event } from "../../../model/event/event";
+import { EventType } from "../../../model/event/event-type";
+import { ServiceProduct } from "../../../model/service-product/service-product";
+import { ServiceProductCategory } from "../../../model/service-product/service-product-category";
 import { UserRole } from "./user-role";
 
 export interface User {
@@ -8,15 +12,15 @@ export interface User {
     imageEncodedName: string;
     phoneNumber: string;
     address: string;
-    favoriteEvents: any[];
-    favoriteServices: any[];
-    upcomingEvents: any[];
+    favoriteEvents: Event[];
+    favoriteServices: ServiceProduct[];
+    upcomingEvents: Event[];
     // Additional properties for SERVICE_PRODUCT_PROVIDER
     companyName: string;
     companyDescription: string;
 
-    serviceCategories: any[];
-    eventTypes: any[];
-    selectedEventTypes: any[];
+    serviceCategories: ServiceProductCategory[];
+    eventTypes: EventType[];
+    selectedEventTypes: EventType[];
     userRole: UserRole;
 }
