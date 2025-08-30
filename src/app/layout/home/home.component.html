@@ -125,7 +125,8 @@ aria-label="Select page">
 <ng-template #EventCard let-eventSummary>
   <mat-card class="event-card" appearance="outlined">
     <mat-card-header>
-      <img mat-card-avatar class="profile-picture" src="images/avatar.png" alt="Profile Picture" 
+      <img mat-card-avatar class="profile-picture" alt="Profile Picture" 
+      [src]="eventSummary.creatorProfilePicture || 'images/avatar.svg'" [imgFallback]="'images/avatar.svg'"
       [matMenuTriggerFor]="reportMenu" [matMenuTriggerData]="{email: eventSummary.creatorEmail, name: eventSummary.creatorName}"/>
       <mat-card-title-group>
         <mat-card-title class="event-creator-name" [innerHTML]="eventSummary.creatorName"></mat-card-title>
@@ -149,12 +150,13 @@ aria-label="Select page">
 <ng-template #ServiceProductCard let-serviceProduct>
   <mat-card class="service-product-card" appearance="outlined">
     <mat-card-header>
-      <img mat-card-avatar class="profile-picture" src="images/monogram.png" alt="Profile Picture" 
+      <img mat-card-avatar class="profile-picture" alt="Profile Picture" 
+      [src]="serviceProduct.creatorProfilePicture || 'images/avatar.svg'" imgFallback="images/avatar.svg"
       [matMenuTriggerFor]="reportMenu" [matMenuTriggerData]="{email: serviceProduct.creatorEmail, name: serviceProduct.creatorName}"/>
       <mat-card-title-group>
         <mat-card-title [innerHTML]="serviceProduct.creatorName"></mat-card-title>
         <mat-card-subtitle [innerHTML]="serviceProduct.creatorEmail"></mat-card-subtitle>
-        <img *ngIf="serviceProduct.image" mat-card-lg-image class="card-image" [src]="serviceProduct.image" alt="Service or product image">
+        <img *ngIf="serviceProduct.image" mat-card-lg-image class="card-image" [src]="serviceProduct.image" alt="Service or product image" imgFallback>
       </mat-card-title-group>
     </mat-card-header>
     <mat-card-content>

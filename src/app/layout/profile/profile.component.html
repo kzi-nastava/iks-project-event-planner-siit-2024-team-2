@@ -1,7 +1,8 @@
 <div class="profile-container">
   <div class="profile-header">
     <img 
-      [src]="profilePreview || userInfo.image || 'assets/default-profile.jpg'" 
+      [src]="profilePreview || userInfo.image || 'images/avatar.svg'"
+      [imgFallback]="'images/avatar.svg'"
       alt="Profile Picture" 
       class="profile-picture">
 

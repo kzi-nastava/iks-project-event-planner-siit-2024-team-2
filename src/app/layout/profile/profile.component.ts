@@ -8,16 +8,16 @@ import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.
 import { UserRole } from '../../services/dtos/user/user-role';
 import { ImageService } from '../../services/image.service';
 import { ToastService } from '../../services/utils/toast-service';
-import { UserInfo } from 'node:os';
 import { environment } from '../../../environments/environment';
 import { User } from '../../services/dtos/user/user';
 import { AuthService } from '../../services/auth-service.service';
 import { Router } from '@angular/router';
+import { ImgFallbackDirective } from '../../utils/image-fallback';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ImgFallbackDirective],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
