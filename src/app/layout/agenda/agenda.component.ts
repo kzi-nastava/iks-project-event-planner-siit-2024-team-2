@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { EventService } from '../../services/event.service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
@@ -23,6 +23,12 @@ import { Activity } from '../../model/event/activity';
   styleUrl: './agenda.component.css'
 })
 export class AgendaComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private eventService = inject(EventService);
+  private snackBar = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
+
   readonly = false;
   activities: any[] = [];
   eventId = -1;
@@ -152,14 +158,6 @@ export class AgendaComponent implements OnInit {
     
     return true;
   }
-
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private eventService: EventService,
-    private snackBar: MatSnackBar,
-    private dialog: MatDialog
-    ) {}
   
   formatMillisToTime(millis: number): string {
     const hours = Math.floor(millis / (1000 * 60 * 60));

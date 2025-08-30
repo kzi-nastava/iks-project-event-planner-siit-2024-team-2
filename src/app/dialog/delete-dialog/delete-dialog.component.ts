@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ServiceService } from '../../services/service.service';
@@ -17,10 +17,19 @@ import { ProfileService } from '../../services/profile.service';
   styleUrl: './delete-dialog.component.css'
 })
 export class DeleteDialogComponent {
+  data = inject(MAT_DIALOG_DATA);
+  private dialogRef = inject<MatDialogRef<DeleteDialogComponent>>(MatDialogRef);
+  private serviceService = inject(ServiceService);
+  private spCategoryService = inject(ServiceProductCategoryService);
+  private toastService = inject(ToastService);
+  private router = inject(Router);
+  private productService = inject(ProductService);
+  private profileService = inject(ProfileService);
+
   entityName = '';
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<DeleteDialogComponent>,
-    private serviceService: ServiceService, private spCategoryService: ServiceProductCategoryService,
-    private toastService: ToastService, private router: Router, private productService: ProductService, private profileService: ProfileService) {
+  constructor() {
+      const data = this.data;
+
       this.entityName = data.entityName || 'item';
      }
 

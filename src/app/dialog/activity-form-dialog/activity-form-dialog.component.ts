@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -29,13 +29,13 @@ import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
   styleUrls: ['./activity-form-dialog.component.css']
 })
 export class ActivityFormDialogComponent {
+  private dialogRef = inject<MatDialogRef<ActivityFormDialogComponent>>(MatDialogRef);
+  data = inject(MAT_DIALOG_DATA);
+
   form: FormGroup;
   isEditMode = false;
 
-  constructor(
-    private dialogRef: MatDialogRef<ActivityFormDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
+  constructor() {
     const activity = this.data ? this.data.activity : null;
     this.form = new FormGroup({
       name: new FormControl(activity?.name || '', Validators.required),

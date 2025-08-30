@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, inject } from '@angular/core';
 import { FormArray, FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
@@ -33,6 +33,15 @@ import { ToastService } from '../../services/utils/toast-service';
   styleUrl: './new-product.component.css'
 })
 export class NewProductComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private eventTypeService = inject(EventTypeService);
+  private serviceCategoryService = inject(ServiceCategoryService);
+  private productService = inject(ProductService);
+  private snackBar = inject(MatSnackBar);
+  private imageService = inject(ImageService);
+  private toastService = inject(ToastService);
+
 
   getImageUrl(path: string): string {
     return `${environment.apiHost}api/images/${path}`;
@@ -61,17 +70,6 @@ export class NewProductComponent implements OnInit {
   selectedEvents: number[] = [];
   images: string[] = [];
   imageEncodedNames: string[] = [];
-  
-  constructor(
-    private route: ActivatedRoute, 
-    private router: Router, 
-    private eventTypeService: EventTypeService, 
-    private serviceCategoryService: ServiceCategoryService,
-    private productService: ProductService,    
-    private snackBar: MatSnackBar,
-    private imageService: ImageService,
-    private toastService: ToastService,
-  ) {}
 
   loadEventTypes(): void {
     this.eventTypeService.getAll().subscribe(

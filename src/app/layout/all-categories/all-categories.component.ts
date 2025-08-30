@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,11 +17,11 @@ import { ServiceProductService } from '../../services/service-product/service-pr
   styleUrl: './all-categories.component.css'
 })
 export class AllCategoriesComponent implements OnInit {
+  private spCategoryService = inject(ServiceProductCategoryService);
+  private spService = inject(ServiceProductService);
+  private router = inject(Router);
+  dialog = inject(MatDialog);
 
-  constructor(private spCategoryService: ServiceProductCategoryService,
-              private spService: ServiceProductService,
-              private router: Router,
-              public dialog: MatDialog) {}
 
   disabledCategories: string[] = [];
   
