@@ -30,7 +30,7 @@ export class AgendaComponent implements OnInit {
   private dialog = inject(MatDialog);
 
   readonly = false;
-  activities: any[] = [];
+  activities: Activity[] = [];
   eventId = -1;
   displayedColumns: string[] = ['name', 'start', 'end', 'description', 'location'];
   ngOnInit() {
@@ -46,9 +46,9 @@ export class AgendaComponent implements OnInit {
       }
     });
   }
-  fetchAgendaData(eventId: any) {
+  fetchAgendaData(eventId: number) {
     this.eventService.getAgenda(eventId).subscribe({
-      next: (agenda: any) => {
+      next: (agenda: Activity[]) => {
         this.activities = agenda;
       },
       error: (err) => {
@@ -94,7 +94,7 @@ export class AgendaComponent implements OnInit {
     });
   }
 
-  deleteActivity(activityId: any) {
+  deleteActivity(activityId: number) {
     this.dialog.open(DeleteDialogComponent, {data: {entityName: 'activity'}}).afterClosed().subscribe(result => {
       if (result) {
         this.eventService.deleteActivity(this.eventId, activityId).subscribe({
@@ -151,6 +151,7 @@ export class AgendaComponent implements OnInit {
     if (start >= end) return false;
     if (this.activities.some(activity => {
       if (id && activity.id === id) return false; 
+      if (!activity.activityStart || !activity.activityEnd) return false;
       return (start < activity.activityEnd && end > activity.activityStart) ||
              (activity.activityStart < end && activity.activityEnd > start) ||
              (start === activity.activityStart && end === activity.activityEnd);

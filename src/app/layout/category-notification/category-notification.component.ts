@@ -11,7 +11,6 @@ import { MatCardContent } from "@angular/material/card";
 import { MatButtonModule } from '@angular/material/button';
 import { NotificationService } from '../../services/communication/notification.service';
 import { NotificationDto } from '../../services/dtos/communication/notification.dto';
-import { Service } from '../../model/service-product/service';
 import { CreateServiceDto } from '../../services/dtos/service-product/create-service.dto';
 import { HttpErrorResponse } from '@angular/common/http';
 

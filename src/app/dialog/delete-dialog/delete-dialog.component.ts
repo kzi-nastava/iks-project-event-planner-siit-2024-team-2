@@ -7,8 +7,11 @@ import { Router } from '@angular/router';
 import { ToastService } from '../../services/utils/toast-service';
 import { ProductService } from '../../services/product.service';
 import { ProfileService } from '../../services/profile.service';
+import { Observable } from "rxjs";
 
-
+export interface DeletableService {
+    delete(id: number): Observable<void | boolean>;
+}
 @Component({
   selector: 'app-dialog',
   standalone: true,
@@ -37,28 +40,23 @@ export class DeleteDialogComponent {
     this.dialogRef.close();
   }
 
-  service: any; 
-
   onConfirm(): void {
     // define different service depending on current url (page)
-    const currentUrl = this.router.url;
-    if (currentUrl == '/my-services')
-      this.service = this.serviceService;
-    else if (currentUrl == '/all-categories') {
-      this.service = this.spCategoryService;
-    }
-    else if (currentUrl == '/my-products') {
-      this.service = this.productService;
-    }
-    else if (currentUrl == '/profile') {
-      this.service = this.profileService;
+
+    const serviceMap: Record<string, DeletableService> = {
+      '/my-services': this.serviceService,
+      '/all-categories': this.spCategoryService,
+      '/my-products': this.productService,
+      '/profile': this.profileService
     }
 
-    if (this.service) {
-      this.service.delete(this.data.id).subscribe({
+    const service = serviceMap[this.router.url];
+
+    if (service) {
+      service.delete(this.data.id).subscribe({
         next: () => {
           this.toastService.show('Deleted successfully!', 2000);
-          this.dialogRef.close(true); // signal success to parent
+          this.dialogRef.close(true);
         },
         error: () => {
           this.toastService.show('Failed to delete!', 2000);

@@ -2,7 +2,10 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { UserDto } from './dtos/user/user';
+import { UserDto } from './dtos/user/user.dto';
+import { User } from '../model/user/user';
+import { UserInfoDto } from './dtos/user/user-info.dto';
+import { CompanyInfoDto } from './dtos/user/company-info.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -12,19 +15,19 @@ export class ProfileService {
   private authUrl = `${environment.apiHost}api/auth`; 
   private http = inject(HttpClient);
 
-  uploadProfilePicture(imageName: string, userId: number) {
-    return this.http.post<any>(`${this.usersUrl}/${userId}/upload-picture`, {imageName: imageName});
+  uploadProfilePicture(imageName: string, userId: number) : Observable<User> {
+    return this.http.post<User>(`${this.usersUrl}/${userId}/upload-picture`, {imageName: imageName});
   }
 
-  removeProfilePicture(userId: number) {
-    return this.http.delete(`${this.usersUrl}/${userId}/remove-picture`);
+  removeProfilePicture(userId: number) : Observable<User> {
+    return this.http.delete<User>(`${this.usersUrl}/${userId}/remove-picture`);
   }
 
   getUserData(userId: number): Observable<UserDto> {
     return this.http.get<UserDto>(`${this.usersUrl}/${userId}`);
   }
 
-  updatePersonalInfo(userInfo: any, userId: string): Observable<UserDto> {
+  updatePersonalInfo(userInfo: UserInfoDto, userId: string): Observable<UserDto> {
     return this.http.put<UserDto>(`${this.usersUrl}/${userId}`, userInfo);
   }
 
@@ -32,19 +35,19 @@ export class ProfileService {
     return this.http.get<UserDto>(`${this.usersUrl}/company/${userId}`);
   }
   
-  updateCompanyInfo(companyInfo: any, userId: string): Observable<UserDto> {
+  updateCompanyInfo(companyInfo: CompanyInfoDto, userId: string): Observable<UserDto> {
     return this.http.put<UserDto>(`${this.usersUrl}/company/${userId}`, companyInfo);
   }
 
-  changePassword(oldPassword: string, newPassword: string, userId: string): Observable<any> {
-    return this.http.post(`${this.authUrl}/reset-password/${Number(userId)}`, { oldPassword, newPassword });
+  changePassword(oldPassword: string, newPassword: string, userId: string): Observable<void> {
+    return this.http.post<void>(`${this.authUrl}/reset-password/${Number(userId)}`, { oldPassword, newPassword });
   }
 
-  delete(userId: number): Observable<any> {
-    return this.http.delete(`${this.usersUrl}/${userId}`);
+  delete(userId: number): Observable<void> {
+    return this.http.delete<void>(`${this.usersUrl}/${userId}`);
   }
 
-  updateEventTypes(selectedEventTypes: string[]): Observable<any> {
-    return this.http.put(`${this.usersUrl}/event-types`, { eventTypes: selectedEventTypes });
+  updateEventTypes(selectedEventTypes: string[]): Observable<void> {
+    return this.http.put<void>(`${this.usersUrl}/event-types`, { eventTypes: selectedEventTypes });
   }
 }
