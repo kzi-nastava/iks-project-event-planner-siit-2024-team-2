@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component';
 import { ServiceProductService } from '../../services/service-product/service-product.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-all-categories',
@@ -45,7 +46,7 @@ export class AllCategoriesComponent implements OnInit {
       next: (response: ServiceProductCategory[]) => {
         this.allCategories = response;
       },
-      error: (err: any) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Failed to load categories:', err);
       }
     });

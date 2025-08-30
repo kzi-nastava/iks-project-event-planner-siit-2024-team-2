@@ -15,7 +15,6 @@ import { ToastService } from '../../services/utils/toast-service';
 import { ImageService } from '../../services/image.service';
 import { NotificationDto } from '../../services/dtos/communication/notification.dto';
 import { NotificationService } from '../../services/communication/notification.service';
-import { EventType } from '../../model/event/event-type';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Service } from '../../model/service-product/service';
 
