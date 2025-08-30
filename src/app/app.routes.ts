@@ -23,6 +23,7 @@ import { PriceListComponent } from './layout/price-list/price-list.component';
 
 import { AcceptInvitationComponent } from './layout/accept-invitation/accept-invitation.component';
 import { UserRole } from './services/dtos/user/user-role';
+import { SpDetailsComponent } from './layout/sp-details/sp-details-component';
 import { UserReportsComponent } from './layout/user-reports/user-reports.component';
 
 const ALL_AUTHENTICATED: UserRole[] = ['AUTHENTICATED', 'EVENT_ORGANIZER', 'SERVICE_PRODUCT_PROVIDER', 'ADMIN'];
@@ -32,6 +33,7 @@ export const routes: Routes = [
     {path: 'signin', component: LoginComponent,  canActivate: []},
     {path: 'signup', component: RegisterComponent, canActivate: []},
     {path: 'home', component: HomeComponent, canActivate: []},
+    {path: 'sp-details', component: SpDetailsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
     {path: 'event-details', component: EventDetailsComponent, canActivate: []},
     {path: 'chat', component: ChatComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
     {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},

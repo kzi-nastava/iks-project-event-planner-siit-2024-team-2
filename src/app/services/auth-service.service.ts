@@ -1,9 +1,8 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { LoginResponse } from './dtos/auth/login-response';
-import { Q } from '@angular/cdk/keycodes';
 import { QuickLoginDto } from './dtos/auth/quick-login.dto';
 import { UserRole } from './dtos/user/user-role';
 
@@ -18,7 +17,7 @@ export class AuthService {
   private suspendedAtSubject = new BehaviorSubject<Date | null>(null);
   public suspendedAt$ = this.suspendedAtSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  readonly http = inject(HttpClient);
 
   login(email: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, { email, password }).pipe(
@@ -30,7 +29,7 @@ export class AuthService {
   }
 
   quickLogin(token: string): Observable<LoginResponse> { 
-    let body: QuickLoginDto = { invitationToken: token };
+    const body: QuickLoginDto = { invitationToken: token };
     return this.http.post<LoginResponse>(`${this.apiUrl}/quick-login`, body).pipe(
       tap({ 
         next: response => this.handleLoginResponse(response), 
@@ -51,7 +50,7 @@ export class AuthService {
 
   private handleLoginError(err: HttpErrorResponse) {
     if (err.status === 403) {
-      let error = err.error as LoginResponse;
+      const error = err.error as LoginResponse;
       if (error?.suspendedAt) {
         this.suspendedAtSubject.next(error.suspendedAt);
       }

@@ -1,30 +1,30 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Event } from '../model/event/event';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
 import { PagedModel } from '../shared/model/paged-model';
 import { EventFilterParams } from '../parameters/event-filter-params';
 import { EventSummaryDto } from './dtos/event/event-summary.dto';
 import { buildHttpParams } from '../utils/http-utils';
+import { EventDto } from './dtos/event/event.dto';
+import { ActivityDto } from './dtos/event/activity.dto';
 @Injectable({
   providedIn: 'root'
 })
 export class EventService {
-  
   private apiUrl = `${environment.apiHost}api/events`;
-  
-  constructor(private httpClient: HttpClient) { }
+  httpClient = inject(HttpClient);
 
   getAgenda(eventId: number) {
     return this.httpClient.get(`${this.apiUrl}/${eventId}/agenda`);
   }
 
-  addActivity(eventId: number, activity: any) {
+  addActivity(eventId: number, activity: ActivityDto) {
     return this.httpClient.post(`${this.apiUrl}/${eventId}/agenda/activity`, activity);
   }
 
-  updateActivity(eventId: number, activityId: number, activity: any) {
+  updateActivity(eventId: number, activityId: number, activity: ActivityDto) {
     return this.httpClient.put(`${this.apiUrl}/${eventId}/agenda/activity/${activityId}`, activity);
   }
 
@@ -35,12 +35,12 @@ export class EventService {
   delete(eventId: number) {
     return this.httpClient.delete(`${this.apiUrl}/${eventId}`);
   }
-  update(event: Event, id: number) {
+  update(event: EventDto, id: number) {
     return this.httpClient.put<Event>(`${this.apiUrl}/${id}`, event);
   }
 
 
-  add(event: Event) : Observable<Event> {
+  add(event: EventDto) : Observable<Event> {
     return this.httpClient.post<Event>(this.apiUrl, event)
   }
 

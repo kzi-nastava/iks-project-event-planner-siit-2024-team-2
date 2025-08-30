@@ -1,7 +1,7 @@
-import { Component, inject } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NavBarComponent } from "./layout/nav-bar/nav-bar.component";
-import { combineLatestWith, Subject, Subscription, takeUntil } from 'rxjs';
+import { combineLatestWith, Subject, takeUntil } from 'rxjs';
 import { AuthService } from './services/auth-service.service';
 import { CommonModule } from '@angular/common';
 import { SocketService } from './services/communication/socket.service';
@@ -10,11 +10,11 @@ import { NotificationService } from './services/communication/notification.servi
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavBarComponent ,CommonModule],
+  imports: [NavBarComponent, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy, OnInit {
   authService = inject(AuthService);
   router = inject(Router);
   socketService = inject(SocketService);
@@ -22,10 +22,8 @@ export class AppComponent {
 
   private destroy$ = new Subject<void>();
 
-  constructor() {}
-
   title = 'event-planner';
-  isLoggedIn: boolean = false;
+  isLoggedIn = false;
   ngOnInit(): void {
     this.socketService.initialize();
     this.authService.isLoggedIn$
@@ -57,7 +55,7 @@ export class AppComponent {
       this.socketService
         .getStream('notifications', '', this.authService.getUserId())
         .pipe(takeUntil(this.destroy$))
-        .subscribe(message => {
+        .subscribe(() => {
           this.notificationService.increaseBadgeCount();
       });
     }

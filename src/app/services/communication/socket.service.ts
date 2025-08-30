@@ -20,9 +20,9 @@ export class SocketService {
   private isLoadedSubject = new BehaviorSubject<boolean>(false);
   public isLoaded$ = this.isLoadedSubject.asObservable();
 
-  private streams: { [dest: string]: Subject<Message> } = {};
+  private streams: Record<string, Subject<Message>> = {};
   private subscriptions: string[] = [];
-  private subscriptionRefs: { [dest: string]: any } = {};
+  private subscriptionRefs: Record<string, StompSubscription> = {};
 
   readonly http = inject(HttpClient);
 
@@ -93,11 +93,11 @@ export class SocketService {
   }
 
   // Subribe with topic/subtopic/userId
-  openSocket(topic: string = '', subtopic: string = '', userId: string = '') {
+  openSocket(topic = '', subtopic = '', userId = '') {
     this.subscribe(this.buildDestination(topic, subtopic, userId));
   }
 
-  closeSocket(topic: string = '', subtopic: string = '', userId: string = '') {
+  closeSocket(topic = '', subtopic = '', userId = '') {
     this.unsubscribe(this.buildDestination(topic, subtopic, userId));
   }
 
@@ -111,7 +111,7 @@ export class SocketService {
   }
 
   private buildDestination(topic: string, subtopic: string, userId: string) {
-    let destination: string = '/socket-publisher';
+    let destination = '/socket-publisher';
     if (topic && subtopic) 
       destination += `/${topic}/${subtopic}`;
     else if (topic)
