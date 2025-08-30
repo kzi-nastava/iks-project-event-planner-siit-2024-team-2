@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -8,8 +8,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ImageService {
   private apiUrl = `${environment.apiHost}api/images`;
-
-  constructor(private httpClient: HttpClient) { }
+  private httpClient = inject(HttpClient);
 
   uploadImage(file: File): Observable<string> {
     const formData = new FormData();

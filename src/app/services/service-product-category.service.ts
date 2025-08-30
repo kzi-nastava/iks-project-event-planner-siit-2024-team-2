@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { ServiceProductCategory } from '../model/service-product/service-product-category';
@@ -10,8 +10,7 @@ import { ServiceProductCategoryDto } from './dtos/service-product/service-produc
 })
 export class ServiceProductCategoryService {
   private apiUrl = `${environment.apiHost}api/sp-categories`; 
-
-  constructor(private httpClient: HttpClient) { }
+  httpClient = inject(HttpClient);
 
   add(category: ServiceProductCategoryDto) : Observable<ServiceProductCategory> {
     return this.httpClient.post<ServiceProductCategory>(this.apiUrl, category);

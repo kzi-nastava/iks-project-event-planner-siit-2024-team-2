@@ -1,17 +1,16 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Product } from '../model/service-product/product';
+import { PageParams } from '../parameters/page-params';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  
   private apiHost = `${environment.apiHost}api/products`;
-  
-  constructor(private httpClient: HttpClient) { }
+  httpClient = inject(HttpClient);
   
   add(product: Product) : Observable<Product> {
     return this.httpClient.post<Product>(this.apiHost, product)
@@ -25,12 +24,12 @@ export class ProductService {
     return this.httpClient.get<Product>(`${this.apiHost}/${id}`)
   }
 
-  getAll(pageProperties?: any) : Observable<Product[]> {
+  getAll(pageProperties?: PageParams) : Observable<Product[]> {
     let params = new HttpParams();
     if(pageProperties) {
       params = params
       .set('page', pageProperties.page)
-      .set('size', pageProperties.pageSize)
+      .set('size', pageProperties.size)
     }
     return this.httpClient.get<Product[]>(`${this.apiHost}/mine`, { params: params});
   }

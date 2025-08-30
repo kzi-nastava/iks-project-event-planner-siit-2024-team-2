@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { PriceListDto } from './dtos/service-product/price-list.dto';
@@ -9,19 +9,18 @@ import { Observable } from 'rxjs';
 })
 export class PriceListService {
   private apiUrl = `${environment.apiHost}api/price-list`; 
-  
-    constructor(private httpClient: HttpClient) { }
-  
-    // get all services/products of the same provider
-    getBySppId(sppId: number): Observable<PriceListDto[]> {
-      return this.httpClient.get<PriceListDto[]>(`${this.apiUrl}/${sppId}`);
-    }
+  httpClient = inject(HttpClient);
 
-    update(id: number, price: number, discount: number): Observable<PriceListDto> {
-      return this.httpClient.put<PriceListDto>(`${this.apiUrl}/${id}?price=${price}&discount=${discount}`, {});
-    }
+  // get all services/products of the same provider
+  getBySppId(sppId: number): Observable<PriceListDto[]> {
+    return this.httpClient.get<PriceListDto[]>(`${this.apiUrl}/${sppId}`);
+  }
 
-    downloadPdf(sppId: number): Observable<Blob> {
-      return this.httpClient.get(`${this.apiUrl}/${sppId}/pdf`, { responseType: 'blob' });
-    }
+  update(id: number, price: number, discount: number): Observable<PriceListDto> {
+    return this.httpClient.put<PriceListDto>(`${this.apiUrl}/${id}?price=${price}&discount=${discount}`, {});
+  }
+
+  downloadPdf(sppId: number): Observable<Blob> {
+    return this.httpClient.get(`${this.apiUrl}/${sppId}/pdf`, { responseType: 'blob' });
+  }
 }
