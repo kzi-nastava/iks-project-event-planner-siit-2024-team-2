@@ -1,4 +1,4 @@
-import { Component, inject, PLATFORM_ID } from '@angular/core';
+import { Component, inject, PLATFORM_ID, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from '../../services/utils/toast-service';
 import { InvitationService } from '../../services/event/invitation.service';
@@ -6,8 +6,6 @@ import { Invitation } from '../../model/event/invitation';
 import { AuthService } from '../../services/auth-service.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoadingService } from '../../services/utils/loading.service';
-import { delay } from 'rxjs';
-import { LoginResponse } from '../../services/dtos/auth/login-response';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { InvitationErrorType } from '../../services/dtos/event/invitation-error-type';
@@ -22,7 +20,7 @@ import { MatDialog } from '@angular/material/dialog';
   templateUrl: './accept-invitation.component.html',
   styleUrl: './accept-invitation.component.css'
 })
-export class AcceptInvitationComponent {
+export class AcceptInvitationComponent implements AfterViewInit {
   readonly route = inject(ActivatedRoute);
   readonly router = inject(Router);
   readonly invitationService = inject(InvitationService);
@@ -54,7 +52,7 @@ export class AcceptInvitationComponent {
   private acceptInvitation(token: string) {
     this.invitationService.acceptInvitation(token).subscribe({
       next: (invitation: Invitation) => this.handleInvitation(token, invitation),
-      error: (err: any) => this.handleError(err, token)
+      error: (err: HttpErrorResponse) => this.handleError(err, token)
     });
   }
 
@@ -81,7 +79,7 @@ export class AcceptInvitationComponent {
   private handleError(err: HttpErrorResponse, token: string) {
     console.error('Failed to accept invitation:', err);
     
-    let errorDto: InvitationErrorDto = err.error as InvitationErrorDto;
+    const errorDto: InvitationErrorDto = err.error as InvitationErrorDto;
 
     switch (errorDto.type) {
       case InvitationErrorType.UNAUTHORIZED_QUICK_REGISTRATION:
@@ -121,7 +119,7 @@ export class AcceptInvitationComponent {
 
   private quickLogin(token: string, eventId: number | null, justRegistered: boolean, isFull: boolean) {
     this.authService.quickLogin(token).subscribe({
-      next: (response: LoginResponse) => {
+      next: () => {
         if (eventId)
           this.navigateToEvent(eventId);
         else
@@ -136,7 +134,7 @@ export class AcceptInvitationComponent {
       error: (err: HttpErrorResponse) => {
         this.navigateToHome();
         if (err?.error?.suspendedAt) {
-          let data: SuspendedDialogData = {suspendedAt: new Date(err.error.suspendedAt)};
+          const data: SuspendedDialogData = {suspendedAt: new Date(err.error.suspendedAt)};
           this.dialog.open(SuspendedDialogComponent, {data: data});
         } else
           this.toastService.show('Failed to accept invitation', 6000, true)
@@ -147,8 +145,11 @@ export class AcceptInvitationComponent {
   private navigateToHome() {
     this.router.navigate(['/home'], { queryParams: { token: null }, queryParamsHandling: 'merge' });
   }
-  private navigateToEvent(eventId: number) {
-    this.router.navigate(['/event-details'], { queryParams: { id: eventId } });
+  private navigateToEvent(eventId: number | null) {
+    if (eventId)
+      this.router.navigate(['/event-details'], { queryParams: { id: eventId } });
+    else
+      this.navigateToHome();
   }  
   private navigateToSignIn() {
     this.router.navigate(['/signin'], { queryParams: { returnUrl: this.router.url }});

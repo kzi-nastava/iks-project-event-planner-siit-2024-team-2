@@ -14,7 +14,7 @@
 
     <mat-card-content (click)="navigateToEventDetails(event.id)">
       <p><strong>Event type:</strong> {{event.type.name}}</p>
-      <p><strong>Event visibility:</strong> {{ event.open ? 'Open for everyone' : 'Invite only' }}</p>
+      <p><strong>Event visibility:</strong> {{ event.isOpen ? 'Open for everyone' : 'Invite only' }}</p>
 
     </mat-card-content>
 

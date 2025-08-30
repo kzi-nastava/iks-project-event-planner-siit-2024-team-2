@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivityFormDialogComponent } from '../../dialog/activity-form-dialog/activity-form-dialog.component';
 import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component';
+import { Activity } from '../../model/event/activity';
 
 @Component({
   selector: 'app-agenda',
@@ -22,9 +23,9 @@ import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.
   styleUrl: './agenda.component.css'
 })
 export class AgendaComponent {
-  readonly: boolean = false;
+  readonly = false;
   activities: any[] = [];
-  eventId: number = -1;
+  eventId = -1;
   displayedColumns: string[] = ['name', 'start', 'end', 'description', 'location'];
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -54,21 +55,21 @@ export class AgendaComponent {
     });
   }
 
-  editActivity(activity: any) {
+  editActivity(activity: Activity) {
     this.dialog.open(ActivityFormDialogComponent, {
       data: {
         activity
       }
     }).afterClosed().subscribe(result => {
       if (result) {
-        if (!this.isTimeValid(result.activityStart, result.activityEnd, activity.id)) {
+        if (!this.isTimeValid(result.activityStart, result.activityEnd, activity.id || -1)) {
           this.snackBar.open('Invalid time range', 'Close', {
             duration: 3000,
             panelClass: ['snackbar-error'],
           });
           return;
         }
-        this.eventService.updateActivity(this.eventId, activity.id, result).subscribe({
+        this.eventService.updateActivity(this.eventId, activity.id || -1, result).subscribe({
           next: () => {
             this.snackBar.open('Activity updated successfully', 'Close', {
               duration: 3000,

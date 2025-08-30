@@ -7,7 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MapComponent } from '../../shared/map/map.component';
 import { MatIconModule } from '@angular/material/icon';
-import { MatMenu, MatMenuModule, MatMenuTrigger } from "@angular/material/menu";
+import { MatMenuModule, MatMenuTrigger } from "@angular/material/menu";
 import { ReportDialogComponent } from '../../dialog/report-dialog/report-dialog.component';
 import { ToastService } from '../../services/utils/toast-service';
 import { MatDialog } from '@angular/material/dialog';
@@ -37,8 +37,6 @@ export class EventDetailsComponent implements OnInit {
   readonly authService = inject(AuthService);
 
   readonly isAdmin = this.authService.getUserRole() === 'ADMIN';
-
-  constructor() {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -92,7 +90,7 @@ export class EventDetailsComponent implements OnInit {
   openReportDialog() {
     const email = this.eventData?.eventOrganizerDto?.email || '';
     const name = this.eventData?.eventOrganizerDto?.firstName || '' + ' ' + this.eventData?.eventOrganizerDto?.lastName || '';
-    const dialogRef = this.dialog.open(ReportDialogComponent, {data: {email: email, name: name}});
+    this.dialog.open(ReportDialogComponent, {data: {email: email, name: name}});
   }
   
   suspendUser() {

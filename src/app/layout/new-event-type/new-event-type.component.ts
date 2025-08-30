@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -9,10 +9,14 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { EventTypeService } from '../../services/event-type.service';
-import { EventType } from '../../model/event/event-type';
 import { CreateEventType } from '../../services/dtos/event/create-event-type';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ServiceService } from '../../services/service.service';
+import { Service } from '../../model/service-product/service';
+import { PagedModel } from '../../shared/model/paged-model';
+import { EventType } from '../../model/event/event-type';
+import { ServiceProduct } from '../../model/service-product/service-product';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -31,16 +35,14 @@ import { ServiceService } from '../../services/service.service';
   templateUrl: './new-event-type.component.html',
   styleUrl: './new-event-type.component.css'
 })
-export class NewEventTypeComponent {
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private eventTypeService: EventTypeService,
-    private snackBar: MatSnackBar,
-    private serviceService: ServiceService
-  ) {
+export class NewEventTypeComponent implements OnInit {
+  // Injected
+  readonly eventTypeService = inject(EventTypeService);
+  readonly snackBar = inject(MatSnackBar);
+  readonly serviceService = inject(ServiceService);
+  readonly router = inject(Router);
+  readonly route = inject(ActivatedRoute);
 
-  }
   services = [
     { id: 1, name: 'Catering' },
     { id: 2, name: 'Photography' },
@@ -50,13 +52,13 @@ export class NewEventTypeComponent {
   inputForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(1)]),
     description: new FormControl('', [Validators.required, Validators.minLength(1)]),
-    recommendedServices: new FormControl([]),
+    recommendedServices: new FormControl<number[]>([]),
   });
   loadServices() {
     this.serviceService.getAll().subscribe({
-      next: (response: any) => {
+      next: (response: PagedModel<Service>) => {
         console.log('Services loaded:', response);
-        this.services = (response || []).map((service: any) => ({
+        this.services = (response || []).content.map((service: Service) => ({
           id: service.id,
           name: service.name
         }));
@@ -84,87 +86,85 @@ export class NewEventTypeComponent {
     });
     this.loadServices();
   }
-fetchEventTypeData(eventTypeId: number): void {
-  this.eventTypeService.getEventType(eventTypeId).subscribe(
-    (event: any) => {
-      console.log('Fetched event:', event);
-      
-      const recommendedIds = (event.recommendedServiceProducts || []).map((s: any) => s.id);
-      
-      this.inputForm.patchValue({
-        name: event.name,
-        description: event.description,
-        recommendedServices: recommendedIds
-      });
-    },
-    (error) => {
-      console.error('Error fetching event:', error);
-      this.snackBar.open('Failed to load event.', 'Close', {
-        duration: 3000,
-        panelClass: ['snackbar-error'],
-      });
-    }
-  );
-}
+  
+  fetchEventTypeData(eventTypeId: number): void {
+    this.eventTypeService.getEventType(eventTypeId).subscribe(
+      (event: EventType) => {
+        console.log('Fetched event:', event);
+        
+        const recommendedIds = (event.recommendedServiceProducts || []).map((s: ServiceProduct) => s.id || -1);
+        
+        this.inputForm.patchValue({
+          name: event.name,
+          description: event.description,
+          recommendedServices: recommendedIds
+        });
+      },
+      (error) => {
+        console.error('Error fetching event:', error);
+        this.snackBar.open('Failed to load event.', 'Close', {
+          duration: 3000,
+          panelClass: ['snackbar-error'],
+        });
+      }
+    );
+  }
 
+  onSubmit() {
+    if (this.inputForm.valid) {
+      console.log('Form Submitted:', this.inputForm.value);
 
-onSubmit() {
-  if (this.inputForm.valid) {
-    console.log('Form Submitted:', this.inputForm.value);
+      const eventType: CreateEventType = {
+        name: this.inputForm.value.name!,
+        description: this.inputForm.value.description!,
+        recommendedServiceProducts: this.inputForm.value.recommendedServices || []
+      };
 
-    const eventType: CreateEventType = {
-      name: this.inputForm.value.name!,
-      description: this.inputForm.value.description!,
-      recommendedServiceProducts: this.inputForm.value.recommendedServices || []
-    };
+      if (this.id !== -1) {
+        // Update existing Event Type
+        this.eventTypeService.update(this.id, eventType).subscribe({
+          next: (updatedEventType: EventType) => {
+            console.log('Event Type updated:', updatedEventType);
 
-    if (this.id !== -1) {
-      // Update existing Event Type
-      this.eventTypeService.update(this.id, eventType).subscribe({
-        next: (updatedEventType: any) => {
-          console.log('Event Type updated:', updatedEventType);
+            this.snackBar.open('Event Type updated successfully!', 'Close', {
+              duration: 3000,
+              panelClass: ['snack-success']
+            });
 
-          this.snackBar.open('Event Type updated successfully!', 'Close', {
-            duration: 3000,
-            panelClass: ['snack-success']
-          });
+            this.router.navigate(['../'], { relativeTo: this.route });
+          },
+          error: (err: HttpErrorResponse) => {
+            console.error('Error updating event type:', err);
+            this.snackBar.open('Failed to update Event Type. Please try again.', 'Close', {
+              duration: 3000,
+              panelClass: ['snack-error']
+            });
+          }
+        });
+      } else {
+        // Create new Event Type
+        this.eventTypeService.add(eventType).subscribe({
+          next: (createdEventType: EventType) => {
+            console.log('Event Type created:', createdEventType);
 
-          this.router.navigate(['../'], { relativeTo: this.route });
-        },
-        error: (err) => {
-          console.error('Error updating event type:', err);
-          this.snackBar.open('Failed to update Event Type. Please try again.', 'Close', {
-            duration: 3000,
-            panelClass: ['snack-error']
-          });
-        }
-      });
-    } else {
-      // Create new Event Type
-      this.eventTypeService.add(eventType).subscribe({
-        next: (createdEventType: any) => {
-          console.log('Event Type created:', createdEventType);
+            this.snackBar.open('Event Type created successfully!', 'Close', {
+              duration: 3000,
+              panelClass: ['snack-success']
+            });
 
-          this.snackBar.open('Event Type created successfully!', 'Close', {
-            duration: 3000,
-            panelClass: ['snack-success']
-          });
-
-          this.router.navigate(['../'], { relativeTo: this.route });
-        },
-        error: (err) => {
-          console.error('Error creating event type:', err);
-          this.snackBar.open('Failed to create Event Type. Please try again.', 'Close', {
-            duration: 3000,
-            panelClass: ['snack-error']
-          });
-        }
-      });
+            this.router.navigate(['../'], { relativeTo: this.route });
+          },
+          error: (err: HttpErrorResponse) => {
+            console.error('Error creating event type:', err);
+            this.snackBar.open('Failed to create Event Type. Please try again.', 'Close', {
+              duration: 3000,
+              panelClass: ['snack-error']
+            });
+          }
+        });
+      }
     }
   }
-}
-
-  
 
   onCancel(): void {
     this.router.navigate(['../'], { relativeTo: this.route });

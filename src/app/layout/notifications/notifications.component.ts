@@ -1,14 +1,14 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from '../../services/communication/notification.service';
 import { SocketService } from '../../services/communication/socket.service';
 import { PagedModel } from '../../shared/model/paged-model';
 import { Notification } from '../../model/communication/notification';
-import { MatCard, MatCardModule } from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { formatDistanceToNow, intlFormatDistance, set } from "date-fns";
-import { combineLatest, combineLatestWith, Subject, take, takeUntil } from 'rxjs';
+import { intlFormatDistance } from "date-fns";
+import { combineLatest, Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../../services/auth-service.service';
 import { NgIf } from '@angular/common';
 import { animate, style, transition, trigger } from '@angular/animations';
@@ -37,15 +37,15 @@ import { CategoryNotificationComponent } from "../category-notification/category
     ])
   ]
 })
-export class NotificationsComponent {
+export class NotificationsComponent implements OnDestroy, OnInit {
   private readonly destroy$ = new Subject<void>();
   notifications: Notification[] = [];
-  totalElements: number = 0;
-  pageIndex: number = 0;
-  pageSize: number = 10;
-  reloadPopup: boolean = false;
-  newNotificationsPopup: boolean = false;
-  newNotificationCount: number = 0;
+  totalElements = 0;
+  pageIndex = 0;
+  pageSize = 10;
+  reloadPopup = false;
+  newNotificationsPopup = false;
+  newNotificationCount = 0;
   loadedTime: Date = new Date();
 
   // Injected
@@ -74,7 +74,7 @@ export class NotificationsComponent {
       this.socketService
         .getStream('notifications', '', this.authService.getUserId())
         .pipe(takeUntil(this.destroy$))
-        .subscribe(message => {
+        .subscribe(() => {
           this.newNotificationsPopup = true;
           this.newNotificationCount += 1;
       });
@@ -90,7 +90,7 @@ export class NotificationsComponent {
           this.totalElements = response.page.totalElements;
           this.reloadPopup = false;
         },
-        error: (err: any) => {
+        error: () => {
           this.toastService.show('Failed to load notifications');
         }
       });
@@ -106,7 +106,7 @@ export class NotificationsComponent {
     this.notificationService.dismiss([notification.id])
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        error: (err: any) => {
+        error: () => {
           notification.dismissed = false;
           notification.dismissing = false;
           this.toastService.show('Failed to dismiss notification');

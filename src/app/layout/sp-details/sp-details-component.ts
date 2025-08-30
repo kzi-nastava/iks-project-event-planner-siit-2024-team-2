@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCard, MatCardTitle, MatCardSubtitle, MatCardContent, MatCardActions } from "@angular/material/card";
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,6 +9,8 @@ import { environment } from '../../../environments/environment';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { ServiceProduct } from '../../model/service-product/service-product';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-sp-details',
@@ -27,12 +29,11 @@ export class SpDetailsComponent  implements OnInit {
   isService = false;
   hasDuration = false;
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private serviceProductService: ServiceProductService,
-    private serviceService: ServiceService
-  ) {}
+  // Injected
+  readonly route = inject(ActivatedRoute);
+  readonly router = inject(Router);
+  readonly serviceProductService = inject(ServiceProductService);
+  readonly serviceService = inject(ServiceService);
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -46,7 +47,7 @@ export class SpDetailsComponent  implements OnInit {
 
   private fetchSpData(spId: number): void {
     this.serviceProductService.get(spId).subscribe({
-      next: (sp: any) => {
+      next: (sp: ServiceProduct) => {
         this.loading = false;
         if (sp.dtype == 'Service') {
           this.serviceService.getService(spId).subscribe(serviceData => {
@@ -60,7 +61,7 @@ export class SpDetailsComponent  implements OnInit {
           this.isService = false;
         }
       },
-      error: (err: any) => {
+      error: (err: HttpErrorResponse) => {
         this.error = 'Failed to load service/product details.';
         this.loading = false;
         console.error(err);
@@ -81,7 +82,7 @@ export class SpDetailsComponent  implements OnInit {
   }
 
   buy() {
-
+    
   }
 
   reserve() {

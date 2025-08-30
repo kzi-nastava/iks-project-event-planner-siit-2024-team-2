@@ -5,7 +5,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
-import { signal } from '@angular/core';
+import { signal, OnInit } from '@angular/core';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatButtonModule } from '@angular/material/button';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -25,7 +25,7 @@ export interface InvitationItem {
   templateUrl: './invitations-dialog.component.html',
   styleUrl: './invitations-dialog.component.css'
 })
-export class InvitationsDialogComponent {
+export class InvitationsDialogComponent implements OnInit {
   readonly dialog = inject(MatDialogRef<InvitationsDialogComponent>);
   readonly data = inject<InvitationItem[]>(MAT_DIALOG_DATA);
 
