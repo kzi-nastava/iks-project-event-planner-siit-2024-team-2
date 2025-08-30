@@ -36,11 +36,11 @@ export class MyProductsComponent implements OnInit {
       this.productService.getAll(pageProps).subscribe(response => {
         this.myProducts = response;
         this.productDtos = this.myProducts.map(product => ({
-          id: product.id,
-          name: product.name,
-          description: product.description,
-          price: product.price,
-          discount: product.discount,
+          id: product.id || 0,
+          name: product.name || "",
+          description: product.description || "",
+          price: product.price || 0,
+          discount: product.discount || 0,
           image: product.images ? product.images[0] : "",
           imageEncodedName: product.imageEncodedNames ? product.imageEncodedNames[0] : ""
         }));
@@ -73,15 +73,15 @@ export class MyProductsComponent implements OnInit {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       data: { id: productId }
     });
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: boolean) => {
     if (result === true) {
       this.myProducts = this.myProducts.filter(s => s.id !== productId);
        this.productDtos = this.myProducts.map(product => ({
-          id: product.id,
-          name: product.name,
-          description: product.description,
-          price: product.price,
-          discount: product.discount,
+          id: product.id || 0,
+          name: product.name || "",
+          description: product.description || "",
+          price: product.price || 0,
+          discount: product.discount || 0,
           image: product.images ? product.images[0] : "",
           imageEncodedName: product.imageEncodedNames ? product.imageEncodedNames[0] : ""
         }));
