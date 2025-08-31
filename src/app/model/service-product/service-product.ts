@@ -14,7 +14,7 @@ export interface ServiceProduct {
     images: string[] | null;
     availableEventTypes: EventType[] | null;
     serviceProductProvider: ServiceProductProvider | null;
-    dtype: string | null;
+    dtype: "Service" | "Product" | null;
 }
 /*
     private ServiceProductCategory category;

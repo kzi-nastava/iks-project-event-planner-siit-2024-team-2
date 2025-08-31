@@ -1,7 +1,7 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { ServiceProductReview } from '../../model/service-product/service-product-review';
+import { ServiceProductReview } from '../../model/review/service-product-review';
 import { intlFormatDistance } from 'date-fns';
 import { Subject, takeUntil } from 'rxjs';
 import { PagedModel } from '../../shared/model/paged-model';
@@ -11,6 +11,8 @@ import { MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardSubtitle
 import { NgIf } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Review } from '../../model/review/review';
+import { EventReview } from '../../model/review/event-review';
 
 @Component({
   selector: 'app-admin-reviews',
@@ -54,7 +56,8 @@ export class AdminReviewsComponent implements OnDestroy, OnInit {
     this.reviewService.getAllPending({ page: this.pageIndex, size: this.pageSize })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (response: PagedModel<ServiceProductReview>) => {
+        next: (response: PagedModel<Review>) => {
+          console.log(response);
           this.reviews = JSON.parse(JSON.stringify(response.content));
           this.totalElements = response.page.totalElements;
         },
@@ -123,8 +126,38 @@ export class AdminReviewsComponent implements OnDestroy, OnInit {
     element.classList.add('collapsed');
   }
 
-  getServiceProductUrl(id: number) {
-    return this.router.createUrlTree(['/sp-details'], { queryParams: { id: id } }).toString();
+  getPrefix(review: Review) {
+    if ("event" in review)
+      return 'event';
+    else if ("serviceProduct" in review)
+      if ((review as ServiceProductReview).serviceProduct.dtype == 'Product')
+        return 'product';
+      else if ((review as ServiceProductReview).serviceProduct.dtype == 'Service')
+        return 'service';
+      else
+        return 'service/product';
+    else
+      return '';
+  }
+
+  getTargetUrl(review: Review) {
+    if ("event" in review)
+      return this.router.createUrlTree(['/event-details'], 
+        { queryParams: { id: (review as EventReview).event.id } }).toString();
+    else if ("serviceProduct" in review)
+      return this.router.createUrlTree(['/sp-details'], 
+        { queryParams: { id: (review as ServiceProductReview).serviceProduct.id } }).toString();
+    else
+      return '';
+  }
+
+  getTargetName(review: Review) {
+    if ("event" in review)
+      return (review as EventReview).event.name;
+    else if ("serviceProduct" in review)
+      return (review as ServiceProductReview).serviceProduct.name;
+    else
+      return '';
   }
 
   onPageChange(event: PageEvent): void {

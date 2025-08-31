@@ -6,8 +6,8 @@
             <mat-card-header>
                 <mat-card-title>
                     <b>{{getReviewer(review)}}</b> 
-                    reviewed 
-                    <a [href]="getServiceProductUrl(review.serviceProduct.id)" target="_blank">{{review.serviceProduct.name}}</a>
+                    reviewed {{getPrefix(review)}} 
+                    <a [href]="getTargetUrl(review)" target="_blank">{{getTargetName(review)}}</a>
                 </mat-card-title>
                 <mat-card-subtitle>{{review.createdAt ? formatDate(review.createdAt) : ''}}</mat-card-subtitle>
             </mat-card-header>

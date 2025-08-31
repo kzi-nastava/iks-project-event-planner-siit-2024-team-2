@@ -8,7 +8,7 @@ import { ServiceProductFilterParams } from '../../parameters/service-product-fil
 import { ServiceProductSummaryDto } from '../dtos/service-product/service-product-summary.dto';
 import { buildHttpParams } from '../../utils/http-utils';
 import { ServiceProductFilteringValues } from '../dtos/service-product/service-product-filtering-values.dto';
-import { ServiceProductReview } from '../../model/service-product/service-product-review';
+import { ServiceProductReview } from '../../model/review/service-product-review';
 import { PageParams } from '../../parameters/page-params';
 
 @Injectable({
