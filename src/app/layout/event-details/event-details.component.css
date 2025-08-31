@@ -2,12 +2,18 @@ mat-card {
   max-width: 600px;
   margin: 2rem auto;
   padding: 1rem;
+  /* position: relative; */
 }
 .error-message {
   color: red;
   text-align: center;
   margin-top: 2rem;
 }
-button {
+mat-card-actions button {
   margin-left: 20px;
+}
+.top-right-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }

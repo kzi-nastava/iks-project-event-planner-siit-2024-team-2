@@ -1,46 +1,47 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Event } from '../model/event/event';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
 import { PagedModel } from '../shared/model/paged-model';
 import { EventFilterParams } from '../parameters/event-filter-params';
 import { EventSummaryDto } from './dtos/event/event-summary.dto';
 import { buildHttpParams } from '../utils/http-utils';
+import { EventDto } from './dtos/event/event.dto';
+import { ActivityDto } from './dtos/event/activity.dto';
+import { Activity } from '../model/event/activity';
 @Injectable({
   providedIn: 'root'
 })
 export class EventService {
-  
   private apiUrl = `${environment.apiHost}api/events`;
-  
-  constructor(private httpClient: HttpClient) { }
+  httpClient = inject(HttpClient);
 
-  getAgenda(eventId: number) {
-    return this.httpClient.get(`${this.apiUrl}/${eventId}/agenda`);
+  getAgenda(eventId: number) : Observable<Activity[]> {
+    return this.httpClient.get<Activity[]>(`${this.apiUrl}/${eventId}/agenda`);
   }
 
-  addActivity(eventId: number, activity: any) {
-    return this.httpClient.post(`${this.apiUrl}/${eventId}/agenda/activity`, activity);
+  addActivity(eventId: number, activity: ActivityDto) : Observable<Activity> {
+    return this.httpClient.post<Activity>(`${this.apiUrl}/${eventId}/agenda/activity`, activity);
   }
 
-  updateActivity(eventId: number, activityId: number, activity: any) {
-    return this.httpClient.put(`${this.apiUrl}/${eventId}/agenda/activity/${activityId}`, activity);
+  updateActivity(eventId: number, activityId: number, activity: ActivityDto) : Observable<Activity> {
+    return this.httpClient.put<Activity>(`${this.apiUrl}/${eventId}/agenda/activity/${activityId}`, activity);
   }
 
   deleteActivity(eventId: number, activityId: number) {
     return this.httpClient.delete(`${this.apiUrl}/${eventId}/agenda/activity/${activityId}`);
   }
 
-  delete(eventId: number) {
-    return this.httpClient.delete(`${this.apiUrl}/${eventId}`);
+  delete(eventId: number) : Observable<void> {
+    return this.httpClient.delete<void>(`${this.apiUrl}/${eventId}`);
   }
-  update(event: Event, id: number) {
+  update(event: EventDto, id: number) {
     return this.httpClient.put<Event>(`${this.apiUrl}/${id}`, event);
   }
 
 
-  add(event: Event) : Observable<Event> {
+  add(event: EventDto) : Observable<Event> {
     return this.httpClient.post<Event>(this.apiUrl, event)
   }
 

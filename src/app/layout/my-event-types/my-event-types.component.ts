@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -22,6 +22,11 @@ import { EventTypeDto } from '../../services/dtos/event/event-type.dto';
   styleUrls: ['./my-event-types.component.css'],
 })
 export class MyEventTypesComponent implements OnInit {
+  private eventTypeService = inject(EventTypeService);
+  private router = inject(Router);
+  dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
+
 
   myEventTypes: EventTypeDto[] = [];
   totalEventTypes = 0;
@@ -30,13 +35,6 @@ export class MyEventTypesComponent implements OnInit {
 
   loading = false;
   error = '';
-
-  constructor(
-    private eventTypeService: EventTypeService,
-    private router: Router,
-    public dialog: MatDialog,
-    private snackBar: MatSnackBar
-  ) {}
 
   ngOnInit() {
     this.loadMyEventTypes();

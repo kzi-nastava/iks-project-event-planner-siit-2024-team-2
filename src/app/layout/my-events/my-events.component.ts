@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Event } from '../../model/event/event';
 import { EventService } from '../../services/event.service';
 import { CommonModule } from '@angular/common';
@@ -44,7 +44,7 @@ export class MyEventsComponent implements OnInit {
       console.error('Error opening delete dialog:', error);
     });
   }
-  myEvents: any[] = [];
+  myEvents: Event[] = [];
   totalEvents = 0;
   pageSize = 10;
   pageIndex = 0;
@@ -52,7 +52,11 @@ export class MyEventsComponent implements OnInit {
   loading = false;
   error = '';
 
-  constructor(private eventService: EventService, private router: Router, public dialog: MatDialog, private snackBar: MatSnackBar) {}
+  // Injected
+  readonly router = inject(Router);
+  readonly eventService = inject(EventService);
+  readonly dialog = inject(MatDialog);
+  readonly snackBar = inject(MatSnackBar);
 
   ngOnInit() {
     this.loadMyEvents();

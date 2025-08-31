@@ -1,3 +1,4 @@
+
 <div *ngIf="loading">Loading event details...</div>
 
 <div *ngIf="error" class="error-message">{{ error }}</div>
@@ -5,11 +6,14 @@
 <mat-card *ngIf="eventData">
   <mat-card-title>{{ eventData.name }}</mat-card-title>
   <mat-card-subtitle>{{ eventData.date | date:'fullDate' }}</mat-card-subtitle>
+  <button mat-icon-button class="top-right-button" [matMenuTriggerFor]="reportMenu">
+    <mat-icon>report</mat-icon>
+  </button>
 
   <mat-card-content>
     <p><strong>Description:</strong> {{ eventData.description }}</p>
     <p><strong>Max Attendance:</strong> {{ eventData.maxAttendances }}</p>
-    <p><strong>Open:</strong> {{ eventData.open ? 'Open for everyone' : 'Invite only' }}</p>
+    <p><strong>Open:</strong> {{ eventData.isOpen ? 'Open for everyone' : 'Invite only' }}</p>
     <app-map [latitude]="eventData.latitude!" [longitude]="eventData.longitude!" [readonly]="true"></app-map>
   </mat-card-content>
 
@@ -21,3 +25,20 @@
     </button>
   </mat-card-actions>
 </mat-card>
+
+<mat-menu #reportMenu="matMenu" class="report-menu">
+  <ng-template matMenuContent class="report-menu-content">
+    <button mat-menu-item (click)="openReportDialog()" class="report-menu-item">
+      @if (isAdmin) {
+        <mat-icon>report</mat-icon>
+      }
+      <span>Report</span>
+    </button>
+    @if(isAdmin) {
+      <button mat-menu-item (click)="suspendUser()">
+        <mat-icon>person_off</mat-icon>
+        <span>Suspend</span>
+      </button>
+    }
+  </ng-template>
+</mat-menu>

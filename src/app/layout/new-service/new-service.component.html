@@ -69,7 +69,7 @@
 </div>
 
 <div id="right-div">
-    <label class="custom-label">Available events:</label>
+    <p class="custom-label">Available events:</p>
     <div class="listbox-container">
         <div class="listbox">
             <label class="listbox-item" *ngFor="let event of eventTypes; let i = index">
@@ -81,9 +81,9 @@
 
     <!-- 3 checkboxes: visible, available and automatic -->
     <div style="margin-top: 15px; margin-bottom: 23px;">
-        <input formControlName="visible" type="checkbox" name="visible-checkbox" value="visible"> visibility
-        <input formControlName="available" type="checkbox" name="available-checkbox" value="available" style="margin-left:50px;"> availability
-        <input formControlName="automaticReserved" type="checkbox" name="automaticReserved" value="automaticReserved"> automatic acceptance
+        <input title="Visibility" formControlName="visible" type="checkbox" name="visible-checkbox" value="visible"> visibility
+        <input title="Availability" formControlName="available" type="checkbox" name="available-checkbox" value="available" style="margin-left:50px;"> availability
+        <input title="Automatic acceptance" formControlName="automaticReserved" type="checkbox" name="automaticReserved" value="automaticReserved"> automatic acceptance
     </div>
 
 
@@ -144,7 +144,7 @@
     <input #fileInput type="file" accept="image/*" style="display: none" (change)="onImageSelected($event)">
     <button type="button" class="fancy-button" (click)="fileInput.click()" style="position: relative; right: 190px;">Attach the image 📎</button>
 
-    <div class="error-text" [class.visible]="images.length == 0 && imageEncodedNames.length == 0 && formSubmitted"
+    <div class="error-text" [class.visible]="images.length === 0 && imageEncodedNames.length === 0 && formSubmitted"
     style="position: relative; right: 150px;">
         Images are required (one at least).
     </div>
@@ -177,7 +177,7 @@
 <div class="row" id="end">
     <span>
         <button class="fancy-button" type="submit">Save</button>
-        <div class="error-text" [class.visible]="(newServiceForm.invalid || (images.length == 0 && imageEncodedNames.length == 0)) && formSubmitted" style="margin-top: 10px;">
+        <div class="error-text" [class.visible]="(newServiceForm.invalid || (images.length === 0 && imageEncodedNames.length === 0)) && formSubmitted" style="margin-top: 10px;">
             Some fields aren't valid.
         </div>
     </span>

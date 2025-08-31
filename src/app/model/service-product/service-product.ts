@@ -1,9 +1,9 @@
-import { User } from "../../services/dtos/user/user";
 import { EventType } from "../event/event-type";
+import { ServiceProductProvider } from "../user/service-product-provider";
 import { ServiceProductCategory } from "./service-product-category";
 
 export interface ServiceProduct {
-    id: number | null;
+    id: number;
     name: string | null;
     description: string | null;
     category: ServiceProductCategory | null;
@@ -13,7 +13,8 @@ export interface ServiceProduct {
     discount: number | null;
     images: string[] | null;
     availableEventTypes: EventType[] | null;
-    serviceProductProvider: User | null; // ServiceProductProvider
+    serviceProductProvider: ServiceProductProvider | null;
+    dtype: string | null;
 }
 /*
     private ServiceProductCategory category;

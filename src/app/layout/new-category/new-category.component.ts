@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,6 +10,8 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ServiceProductCategoryService } from '../../services/service-product-category.service';
 import { ServiceProductCategoryDto } from '../../services/dtos/service-product/service-product-category.dto';
+import { ServiceProductCategory } from '../../model/service-product/service-product-category';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-new-category, app-material-input',
@@ -25,13 +27,12 @@ import { ServiceProductCategoryDto } from '../../services/dtos/service-product/s
   templateUrl: './new-category.component.html',
   styleUrl: './new-category.component.css'
 })
-export class NewCategoryComponent {
-constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private spCategoryService: ServiceProductCategoryService,
-    private snackBar: MatSnackBar) {}
-
+export class NewCategoryComponent implements OnInit {
+  // Injected
+  readonly route = inject(ActivatedRoute);
+  readonly router = inject(Router);
+  readonly spCategoryService = inject(ServiceProductCategoryService);
+  readonly snackBar = inject(MatSnackBar);
 
   inputForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
@@ -89,7 +90,7 @@ constructor(
 
   createCategory(category: ServiceProductCategoryDto) {
     this.spCategoryService.add(category).subscribe({
-      next: (category: any) => {
+      next: (category: ServiceProductCategory) => {
         console.log('Category created:', category);
 
         this.snackBar.open('Category created successfully!', 'Close', {
@@ -99,7 +100,7 @@ constructor(
 
         this.router.navigate(['../'], { relativeTo: this.route });
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Error creating category:', err);
         this.snackBar.open('Failed to create category. Please try again.', 'Close', {
           duration: 3000,
@@ -111,7 +112,7 @@ constructor(
 
   updateCategory(category: ServiceProductCategoryDto) {
     this.spCategoryService.update(this.catId, category).subscribe({
-      next: (category: any) => {
+      next: (category: ServiceProductCategory) => {
         console.log('Category updated:', category);
 
         this.snackBar.open('Category updated successfully!', 'Close', {
@@ -121,7 +122,7 @@ constructor(
 
         this.router.navigate(['/all-categories']); 
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Error updating category:', err);
         this.snackBar.open('Failed to update category. Please try again.', 'Close', {
           duration: 3000,

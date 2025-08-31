@@ -24,7 +24,7 @@
       </mat-list-item>
       <mat-list-item [routerLink]="['notifications']">
         <mat-icon >notifications</mat-icon>
-        <p matBadgeOverlap="false" matBadge="{{badgeCount$ | async}}" [matBadgeHidden]="!(badgeCount$ | async)" matBadgeColor="accent" matBadgePosition="above after">Notifications</p>
+        <p matBadgeOverlap="false" matBadge="{{badgeCount$ | async}}" [matBadgeHidden]="(badgeCount$ | async) === 0 || (badgeCount$ | async) === undefined" matBadgeColor="accent" matBadgePosition="above after">Notifications</p>
       </mat-list-item>
       <mat-list-item [routerLink]="['calendar']">
         <mat-icon>calendar_today</mat-icon>
@@ -65,6 +65,10 @@
       <mat-list-item *ngIf="hasRole(['ADMIN'])" [routerLink]="['my-event-types']">
         <mat-icon>handshake</mat-icon>
         My Event Types
+      </mat-list-item>
+      <mat-list-item *ngIf="hasRole(['ADMIN'])" [routerLink]="['user-reports']">
+        <mat-icon>gavel</mat-icon>
+        User Reports
       </mat-list-item>
       <mat-list-item *ngIf="hasRole(['EVENT_ORGANIZER'])" [routerLink]="['new-event']">
         <mat-icon>add</mat-icon>

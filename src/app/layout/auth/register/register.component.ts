@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,6 +11,8 @@ import {MatRadioModule} from '@angular/material/radio';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth-service.service';
 import { Subject, takeUntil } from 'rxjs';
+import { ImageService } from '../../../services/image.service';
+import { ToastService } from '../../../services/utils/toast-service';
 
 @Component({
   selector: 'app-register',
@@ -30,18 +32,19 @@ import { Subject, takeUntil } from 'rxjs';
     CommonModule
   ]
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit, OnDestroy {
   registerForm!: FormGroup;
   isEventOrganizer = false;
   upgrading = false;
 
   destroy$ = new Subject<void>();
 
-  constructor(
-    private fb: FormBuilder, 
-    private authService: AuthService, 
-    private router: Router,
-  ) {}
+  // Injected
+  readonly fb = inject(FormBuilder);
+  readonly authService = inject(AuthService);
+  readonly router = inject(Router);
+  readonly imageService = inject(ImageService);
+  readonly toastService = inject(ToastService);
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
@@ -60,7 +63,8 @@ export class RegisterComponent {
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required],
       companyName: [''],
-      companyDescription: ['']
+      companyDescription: [''],
+      profilePicture: [null],
     }, {
       validators: this.passwordMatchValidator
     });
@@ -74,6 +78,25 @@ export class RegisterComponent {
         this.registerForm.get('email')?.updateValueAndValidity();
       }
     });
+  }
+
+  imagePreview = "";
+  selectedImage?: File;
+  imageName = "";
+  
+  onFileSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+    this.selectedImage = file;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result as string;
+        this.selectedImage = file;
+        this.imageName = file.name;
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   passwordMatchValidator(group: FormGroup): { mismatch: boolean } | null {
@@ -107,7 +130,11 @@ export class RegisterComponent {
 
   onRegister(): void {
     if (this.registerForm.valid) {
-      if (this.isEventOrganizer) {
+      if (this.selectedImage) {
+        this.imageService.uploadImage(this.selectedImage).subscribe({
+          next: response => {
+            this.imageName = atob(response);
+                  if (this.isEventOrganizer) {
         this.authService.register(
           this.registerForm.value.email,
           this.registerForm.value.password,
@@ -116,6 +143,7 @@ export class RegisterComponent {
           this.registerForm.value.address,
           this.registerForm.value.phone,
           this.isEventOrganizer ? 2 : 3,
+          this.imageName
         ).subscribe({
           next: (response) => {
             if (response) {
@@ -141,6 +169,7 @@ export class RegisterComponent {
           this.registerForm.value.address,
           this.registerForm.value.phone,
           this.isEventOrganizer ? 2 : 3,
+          this.imageName
         ).subscribe({
           next: (response) => {
             if (response) {
@@ -155,6 +184,18 @@ export class RegisterComponent {
           }
         });
       }
+            this.toastService.show('Profile picture uploaded successfully', 3000);
+          },
+          error: err => {
+            this.toastService.show('Failed to upload profile picture: ' + err.message, 3000);
+          }
+      });
     }
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

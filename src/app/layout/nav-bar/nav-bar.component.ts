@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterModule } from '@angular/router';
@@ -12,7 +12,6 @@ import { NotificationService } from '../../services/communication/notification.s
 import { MatBadgeModule } from '@angular/material/badge';
 import { LoadingService } from '../../services/utils/loading.service';
 import { UserRole } from '../../services/dtos/user/user-role';
-import { stat } from 'fs';
 
 @Component({
   selector: 'app-nav-bar',
@@ -31,15 +30,15 @@ import { stat } from 'fs';
   templateUrl: './nav-bar.component.html',
   styleUrl: './nav-bar.component.css'
 })
-export class NavBarComponent {
-  toggle: boolean = false;
-  isLoggedIn: boolean = false;
-  isLoading: boolean = false;
+export class NavBarComponent implements OnInit, OnDestroy {
+  toggle = false;
+  isLoggedIn = false;
+  isLoading = false;
   private authSub!: Subscription;
   private loadingSub!: Subscription;
   badgeCount$: Observable<number> | undefined;
   authButtonText: 'Sign in' | 'Sign out' = 'Sign in';
-  canUpgrade: boolean = false;
+  canUpgrade = false;
 
   // Injected
   readonly authService = inject(AuthService);

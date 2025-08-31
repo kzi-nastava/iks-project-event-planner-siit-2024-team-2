@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ServiceProduct } from '../../model/service-product/service-product';
 import { Observable } from 'rxjs';

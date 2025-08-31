@@ -1,18 +1,8 @@
-import {
-  Component,
-  AfterViewInit,
-  OnInit,
-  PLATFORM_ID,
-  Inject,
-  Output,
-  EventEmitter,
-  OnChanges,
-  SimpleChanges,
-  Input
-} from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, Output, EventEmitter, OnChanges, SimpleChanges, Input, inject } from '@angular/core';
 import { MapService } from './map.service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { LeafletMouseEvent } from 'leaflet';
 
 @Component({
   selector: 'app-map',
@@ -21,21 +11,19 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./map.component.css'],
   imports: [FormsModule, CommonModule],
 })
-export class MapComponent implements AfterViewInit, OnInit, OnChanges {
-  private map: any;
-  L: any;
-  private currentMarker: any;
-  searchQuery: string = '';
+export class MapComponent implements OnInit, OnChanges {
+  private mapService = inject(MapService);
+  private platformId = inject(PLATFORM_ID);
 
-  @Input() latitude: number = 0;
-  @Input() longitude: number = 0;
-  @Input() readonly: boolean = false;
+  private map: L.Map | null = null;
+  L: typeof import('leaflet') | null = null;
+  private currentMarker: L.Marker | null = null;
+  searchQuery = '';
+
+  @Input() latitude = 0;
+  @Input() longitude = 0;
+  @Input() readonly = false;
   @Output() coordinatesSelected = new EventEmitter<{ lat: number; lng: number }>();
-
-  constructor(
-    private mapService: MapService,
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if ((changes['latitude'] || changes['longitude']) && this.map) {
@@ -71,8 +59,6 @@ export class MapComponent implements AfterViewInit, OnInit, OnChanges {
     }
   }
 
-  ngAfterViewInit(): void {}
-
   setMarker(lat: number, lng: number): void {
     if (!lat || !lng || !this.L || !this.map) return;
 
@@ -96,8 +82,10 @@ export class MapComponent implements AfterViewInit, OnInit, OnChanges {
   }
 
   search(text: string): void {
+    console.log(text);
     this.mapService.search(text).subscribe({
       next: (result) => {
+        console.log(result);
         if (result.length === 0) {
           console.error('No location found.');
           return;
@@ -106,8 +94,8 @@ export class MapComponent implements AfterViewInit, OnInit, OnChanges {
         const lat = result[0].lat;
         const lon = result[0].lon;
 
-        this.setMarker(lat, lon);
-        this.coordinatesSelected.emit({ lat, lng: lon });
+        this.setMarker(lat || 0, lon || 0);
+        this.coordinatesSelected.emit({ lat: lat || 0, lng: lon || 0 });
       },
       error: (err) => {
         console.error('Search error:', err);
@@ -116,7 +104,7 @@ export class MapComponent implements AfterViewInit, OnInit, OnChanges {
   }
 
   registerOnClick(): void {
-    this.map.on('click', (e: any) => {
+    this.map?.on('click', (e: LeafletMouseEvent) => {
       if (this.readonly) return;
 
       const coord = e.latlng;

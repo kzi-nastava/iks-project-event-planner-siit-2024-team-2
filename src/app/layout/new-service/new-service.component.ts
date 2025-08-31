@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
@@ -15,6 +15,8 @@ import { ToastService } from '../../services/utils/toast-service';
 import { ImageService } from '../../services/image.service';
 import { NotificationDto } from '../../services/dtos/communication/notification.dto';
 import { NotificationService } from '../../services/communication/notification.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Service } from '../../model/service-product/service';
 
 
 @Component({
@@ -24,12 +26,16 @@ import { NotificationService } from '../../services/communication/notification.s
   templateUrl: './new-service.component.html',
   styleUrl: './new-service.component.css'
 })
-export class NewServiceComponent {
-
-  constructor(private route: ActivatedRoute, private router: Router, private serviceService: ServiceService,
-    private SPCategoryService: ServiceProductCategoryService, private eventTypeService: EventTypeService,
-    private toastService: ToastService, private imageService: ImageService, private notificationService: NotificationService) {}
-
+export class NewServiceComponent implements OnInit {
+  // Injected
+  readonly route = inject(ActivatedRoute);
+  readonly router = inject(Router);
+  readonly serviceService = inject(ServiceService);
+  readonly SPCategoryService = inject(ServiceProductCategoryService);
+  readonly eventTypeService = inject(EventTypeService);
+  readonly toastService = inject(ToastService);
+  readonly imageService = inject(ImageService); 
+  readonly notificationService = inject(NotificationService);
 
   newServiceForm = new FormGroup({
       categoryForm: new FormGroup({
@@ -76,7 +82,7 @@ export class NewServiceComponent {
   eventTypeIds: number[] = [];
   areEventTypesChecked: boolean[] = []; // for initial check
   update = true; // is it update or create service mode
-  serviceId: number = -1;
+  serviceId = -1;
   images: string[] = [];
   imageEncodedNames: string[] = [];
   categoryId = -1;
@@ -119,12 +125,12 @@ export class NewServiceComponent {
       }).subscribe(({ allEventTypes, editingService }) => {
         this.eventTypes = allEventTypes.map(t => t.name);
         this.eventTypeIds = allEventTypes.map(t => t.id);
-        this.serviceCategories.push(editingService.category.name);
-        this.initializeCheckboxValues(editingService.availableEventTypes.map(type => type.name));
+        this.serviceCategories.push(editingService.category?.name || '');
+        this.initializeCheckboxValues(editingService.availableEventTypes?.map(type => type.name) || []);
 
         this.newServiceForm.patchValue({
           categoryForm: {
-            category: editingService.category,
+            category: editingService.category?.name,
           },
           name: editingService.name,
           description: editingService.description,
@@ -142,8 +148,8 @@ export class NewServiceComponent {
           reservationDaysDeadline: editingService.reservationDaysDeadline,
           cancellationDaysDeadline: editingService.cancellationDaysDeadline
       });
-      this.images = editingService.images;
-      this.imageEncodedNames = editingService.imageEncodedNames;
+      this.images = editingService.images || [];
+      this.imageEncodedNames = editingService.imageEncodedNames || [];
     },
     error => {
       console.error('Error fetching service data:', error);
@@ -153,8 +159,8 @@ export class NewServiceComponent {
 
   selectedEvents = this.newServiceForm.get('availableEventTypes') as FormArray;
 
-  initializeCheckboxValues(availableEventTypes: any[]) {
-    var i = 0;
+  initializeCheckboxValues(availableEventTypes: string[]) {
+    let i = 0;
     this.eventTypes.forEach(type => {
       if (availableEventTypes.includes(type)) {
         this.areEventTypesChecked[i] = true;
@@ -166,8 +172,8 @@ export class NewServiceComponent {
     })
   }
 
-  onCheckboxChange(event: any, typeIndex: number) {
-    if (event.target.checked) {
+  onCheckboxChange(event: Event, typeIndex: number) {
+    if ((event.target as HTMLInputElement).checked) {
       this.selectedEvents.push(new FormControl(this.eventTypeIds[typeIndex]));
     } else {
       const index = this.selectedEvents.controls.findIndex(ctrl => ctrl.value === this.eventTypeIds[typeIndex]);
@@ -197,18 +203,18 @@ export class NewServiceComponent {
         userId: undefined
       };
       this.notificationService.sendCategoryRequest(notification).subscribe({
-        next: (not: any) => {
+        next: () => {
           this.toastService.show('Waiting for creation approval', 2000);
           this.router.navigate(['/my-services']);
         },
-        error: (err: any) => {
+        error: (err: HttpErrorResponse) => {
           console.error('Failed to create notification:', err);
           this.toastService.show('Failed to create!', 2000);
         }
       });
     }
     else {
-      let observables = this.selectedImages.map((image:File) => this.imageService.uploadImage(image));
+      const observables = this.selectedImages.map((image:File) => this.imageService.uploadImage(image));
       forkJoin(observables)
         .subscribe({
           next: (response: string[]) => {
@@ -217,11 +223,11 @@ export class NewServiceComponent {
             this.toastService.show('Updating...', 2000);
             if (this.update) {  // UPDATING
               this.serviceService.update(this.serviceId, service).subscribe({
-                next: (service: any) => {
+                next: (service: Service) => {
                   this.toastService.show('Service ' + service.name + ' updated successfully!', 2000);
                   this.router.navigate(['/my-services']);
                 },
-                error: (err: any) => {
+                error: (err: HttpErrorResponse) => {
                   console.error('Failed to update service:', err);
                   this.toastService.show('Failed to update!', 2000);
                 }
@@ -230,11 +236,11 @@ export class NewServiceComponent {
             else {  // CREATING
               this.toastService.show('Creating...', 2000);
               this.serviceService.add(service).subscribe({
-                next: (service: any) => {
+                next: (service: Service) => {
                   this.toastService.show('Service ' + service.name + ' created successfully!', 2000);
                   this.router.navigate(['/my-services']);
                 },
-                error: (err: any) => {
+                error: (err: HttpErrorResponse) => {
                   console.error('Failed to create service:', err);
                   this.toastService.show('Failed to create!', 2000);
                 }

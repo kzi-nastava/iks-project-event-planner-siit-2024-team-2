@@ -1,8 +1,7 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormArray, FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
+import { Component, OnInit, inject } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
-import { Service } from '../../model/service-product/service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { EventTypeService } from '../../services/event-type.service';
@@ -12,11 +11,13 @@ import { ServiceCategory } from '../../model/service-product/service-category';
 import { ProductService } from '../../services/product.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Product } from '../../model/service-product/product';
-import { take } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ImageService } from '../../services/image.service';
-
+import { ToastService } from '../../services/utils/toast-service';
+import { ProductDto } from '../../services/dtos/service-product/product.dto';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ProductDetailsDto } from '../../services/dtos/service-product/product-details.dto';
 
 
 @Component({
@@ -31,10 +32,19 @@ import { ImageService } from '../../services/image.service';
   templateUrl: './new-product.component.html',
   styleUrl: './new-product.component.css'
 })
-export class NewProductComponent {
+export class NewProductComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private eventTypeService = inject(EventTypeService);
+  private serviceCategoryService = inject(ServiceCategoryService);
+  private productService = inject(ProductService);
+  private snackBar = inject(MatSnackBar);
+  private imageService = inject(ImageService);
+  private toastService = inject(ToastService);
+
 
   getImageUrl(path: string): string {
-    return `http://localhost:8080/api/images/${path}`;
+    return `${environment.apiHost}api/images/${path}`;
   }
 
   removeImage(index: number): void {
@@ -55,21 +65,11 @@ export class NewProductComponent {
     { id: 3, name: "Waiter product" }
   ];
   selectedCategoryId: number = this.productCategories[0].id;
-  id: number = -1;
+  id = -1;
   eventTypes: EventType[] = [];
   selectedEvents: number[] = [];
   images: string[] = [];
   imageEncodedNames: string[] = [];
-  
-  constructor(
-    private route: ActivatedRoute, 
-    private router: Router, 
-    private eventTypeService: EventTypeService, 
-    private serviceCategoryService: ServiceCategoryService,
-    private productService: ProductService,    
-    private snackBar: MatSnackBar,
-    private imageService: ImageService
-  ) {}
 
   loadEventTypes(): void {
     this.eventTypeService.getAll().subscribe(
@@ -115,22 +115,22 @@ export class NewProductComponent {
     this.images = [];
     this.imageEncodedNames = [];
     this.productService.getProduct(productId).subscribe(
-      (product: any) => {
+      (product: ProductDetailsDto) => {
         this.createProductForm.patchValue({
           name: product.name,
           description: product.description,
-          specifies: product.specifies,
+          // specifies: product.specifies,
           price: product.price,
           discount: product.discount,
-          productCategory: product.categoryId,
+          productCategory: product.serviceProductCategoryDto?.id,
           available: product.available,
           visible: product.visible
         });
-        this.selectedEvents = product.eventTypes.map((event: any) => event.id) || []; 
-        this.selectedCategoryId = product.serviceProductCategoryDto.id || -1;
+        this.selectedEvents = product.eventTypes?.map((type: EventType) => type.id) || []; 
+        this.selectedCategoryId = product.serviceProductCategoryDto?.id || -1;
         this.createProductForm.get('productCategory')?.setValue(this.selectedCategoryId);
-        this.images = product.images;
-        this.imageEncodedNames = product.imageEncodedNames;
+        this.images = product.images || [];
+        this.imageEncodedNames = product.imageEncodedNames || [];
       },
       (error) => {
         console.error('Error fetching product data:', error);
@@ -181,52 +181,54 @@ export class NewProductComponent {
       });
       return; 
     }
-    this.selectedImages.forEach(image => {
-      this.imageService.uploadImage(image).subscribe({
-        next: response => {
-          console.log('Image uploaded successfully:', response);
-        },
-        error: err => {
-          console.error('Failed to upload image', err);
-        }
-      });
-    });
-    const product: Product = {
-      name: this.createProductForm.value.name ?? '',
-      images: this.images,
-      description: this.createProductForm.value.description ?? '',
-      specifies: this.createProductForm.value.specifies ?? '',
-      price: this.createProductForm.value.price ?? 0,
-      discount: this.createProductForm.value.discount ?? 0,
-      availableEventTypesIds: this.selectedEvents,
-      categoryId: Number(this.createProductForm.value.productCategory), 
-      available: this.createProductForm.value.available ?? false,
-      visible: this.createProductForm.value.visible ?? false,
-      serviceProductProviderId: Number(localStorage.getItem('userId')),
-    };
-    if (this.id !== -1) { // Indicates an update
-      this.productService.update(product, this.id).subscribe({
-        next: (event: any) => {
-          this.router.navigate(['../'], { relativeTo: this.route });
-        },
-        error: (err: any) => {
-          console.error('Failed to update product:', err);
-        }
-      });
-    } else {
-      this.productService.add(product).subscribe({
-        next: (event: any) => {
-          this.router.navigate(['../'], { relativeTo: this.route });
-        },
-        error: (err: any) => {
-          console.error('Failed to create product:', err);
-        }
-      });
-    }
-    this.snackBar.open('Product saved successfully!', 'Close', {
+    const observables = this.selectedImages.map((image:File) => this.imageService.uploadImage(image));
+    forkJoin(observables).subscribe({
+      next: (responses: string[]) => {
+        const product: ProductDto = {
+          name: this.createProductForm.value.name ?? '',
+          images: this.images,
+          description: this.createProductForm.value.description ?? '',
+          price: this.createProductForm.value.price ?? 0,
+          discount: this.createProductForm.value.discount ?? 0,
+          availableEventTypeIds: this.selectedEvents,
+          categoryId: Number(this.createProductForm.value.productCategory), 
+          available: this.createProductForm.value.available ?? false,
+          visible: this.createProductForm.value.visible ?? false,
+          serviceProductProviderId: Number(localStorage.getItem('userId')),
+        };
+        product.images = responses.map((path: string) => atob(path));
+      if (this.id !== -1) { // Indicates an update
+        this.productService.update(product, this.id).subscribe({
+          next: () => {
+            this.toastService.show('Product updated successfully!', 2000);
+            this.router.navigate(['../'], { relativeTo: this.route });
+          },
+          error: (err: HttpErrorResponse) => {
+            this.toastService.show('Failed to update product:', 2000);
+            console.error('Failed to update product:', err);
+          }
+        });
+      } else {
+        this.productService.add(product).subscribe({
+          next: () => {
+            this.toastService.show('Product created successfully!', 2000);
+            this.router.navigate(['../'], { relativeTo: this.route });
+          },
+          error: (err: HttpErrorResponse) => {
+            this.toastService.show('Failed to create product:', 2000);
+            console.error('Failed to create product:', err);
+          }
+        });
+      }
+      this.snackBar.open('Product saved successfully!', 'Close', {
       duration: 3000,
       panelClass: ['snackbar-success']
     });
+    }, 
+
+    });
+
+
     this.router.navigate(['../'], { relativeTo: this.route });
   }
 
@@ -234,7 +236,7 @@ export class NewProductComponent {
     this.router.navigate(['../'], { relativeTo: this.route });
   }
 
-  onEventCheckboxChange(event: any, eventTypeId: number) {
+  onEventCheckboxChange(event: Event, eventTypeId: number) {
     if (this.selectedEvents.includes(eventTypeId)) {
       this.selectedEvents = this.selectedEvents.filter(id => id !== eventTypeId);
     } else {

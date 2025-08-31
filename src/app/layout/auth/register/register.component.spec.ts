@@ -2,10 +2,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RegisterComponent } from './register.component';
 import { AuthService } from '../../../services/auth-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of, throwError } from 'rxjs';
+import { of } from 'rxjs';
 import { SharedTestingModule } from '../../../../testing/shared-testing.module';
 
 class MockAuthService {
+  isLoggedIn$ = of(false);
   register = jasmine.createSpy().and.returnValue(of(true));
   registerCompany = jasmine.createSpy().and.returnValue(of(true));
 }
@@ -106,7 +107,7 @@ describe('RegisterComponent', () => {
   it('should create the registration form with default empty values', () => {
     expect(component.registerForm).toBeTruthy();
     expect(component.registerForm.value).toEqual({
-      userType: '',
+      userType: 'serviceProvider',
       email: '',
       password: '',
       confirmPassword: '',

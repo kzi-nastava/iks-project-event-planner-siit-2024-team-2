@@ -12,12 +12,12 @@
     <mat-label class="slider-label">Max attendances:</mat-label>
     <mat-slider [min]="fullMaxAttendancesRange[0]" [max]="fullMaxAttendancesRange[1]"
       step="1" discrete class="hide-ripple" [disabled]="disabledAttendancesSlider">
-      <input matSliderStartThumb [(value)]="data.filter.minMaxAttendances">
-      <input matSliderEndThumb [(value)]="data.filter.maxMaxAttendances"> 
+      <input title="Lower max attendances limit" matSliderStartThumb [(value)]="data.filter.minMaxAttendances">
+      <input title="Upper max attendances limit" matSliderEndThumb [(value)]="data.filter.maxMaxAttendances">
     </mat-slider>
     <mat-label class="slider-label">Maximum distance (km):</mat-label>
     <mat-slider min="10" max="1000" step="10" discrete class="hide-ripple">
-      <input matSliderThumb [formControl]="maxDistance">
+      <input title="Maximum distance" matSliderStartThumb [(value)]="maxDistance.value">
     </mat-slider>
     <mat-form-field>
       <mat-label>Location:</mat-label>

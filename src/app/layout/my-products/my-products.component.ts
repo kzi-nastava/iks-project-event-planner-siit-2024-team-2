@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Product } from '../../model/service-product/product';
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -7,9 +7,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ServiceFilterDialogComponent } from '../../dialog/service-filter-dialog/service-filter-dialog.component';
 import { ProductService } from '../../services/product.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from '../../../environments/environment';
-
 
 
 @Component({
@@ -19,31 +17,30 @@ import { environment } from '../../../environments/environment';
   templateUrl: './my-products.component.html',
   styleUrl: './my-products.component.css'
 })
-export class MyProductsComponent {
-    myProducts: any[] = [];
+export class MyProductsComponent implements OnInit {
+    myProducts: Product[] = [];
     filterCategories: string[] = ['Price', 'Category', 'Available events', 'Availability'];
     productDtos: ProductCardDto[] = [];
 
-    constructor(
-      public dialog: MatDialog, 
-      private router: Router, 
-      private productService: ProductService,
-      private snackBar: MatSnackBar,
-    ) {}
+    // Injected
+    readonly dialog = inject(MatDialog);
+    readonly productService = inject(ProductService);
+    readonly router = inject(Router);
+
     ngOnInit(): void {
       this.initProducts();
     }
 
     initProducts(): void {
-      const pageProps = { page: 0, pageSize: 10 };
+      const pageProps = { page: 0, size: 10 };
       this.productService.getAll(pageProps).subscribe(response => {
         this.myProducts = response;
         this.productDtos = this.myProducts.map(product => ({
-          id: product.id,
-          name: product.name,
-          description: product.description,
-          price: product.price,
-          discount: product.discount,
+          id: product.id || 0,
+          name: product.name || "",
+          description: product.description || "",
+          price: product.price || 0,
+          discount: product.discount || 0,
           image: product.images ? product.images[0] : "",
           imageEncodedName: product.imageEncodedNames ? product.imageEncodedNames[0] : ""
         }));
@@ -72,42 +69,38 @@ export class MyProductsComponent {
     });
   }
 
-  openDeleteDialog(id?: number): void {
-    this.dialog.open(DeleteDialogComponent, {data: {entityName: 'product'}}).afterClosed().subscribe(result => {
-      if (result && id) {
-        this.productService.deleteProduct(id).subscribe(() => {
-          this.snackBar.open('Product deleted successfully.', 'Close', {
-            duration: 3000,
-            panelClass: ['snackbar-success']
-          });
-          this.initProducts(); // Refresh the product list after deletion
-        }, error => {
-          console.error('Error deleting product:', error);
-          this.snackBar.open('Failed to delete product.', 'Close', {
-            duration: 3000,
-            panelClass: ['snackbar-error']
-          });
-        });
-      } else {
-            this.snackBar.open('Delete cancelled.', 'Close', {
-            duration: 3000,
-            panelClass: ['snackbar-error']
-          });
-      }
+  openDialog(productId?: number): void {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: { id: productId }
+    });
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+    if (result === true) {
+      this.myProducts = this.myProducts.filter(s => s.id !== productId);
+       this.productDtos = this.myProducts.map(product => ({
+          id: product.id || 0,
+          name: product.name || "",
+          description: product.description || "",
+          price: product.price || 0,
+          discount: product.discount || 0,
+          image: product.images ? product.images[0] : "",
+          imageEncodedName: product.imageEncodedNames ? product.imageEncodedNames[0] : ""
+        }));
+        this.convertImageUrls(this.productDtos);
+    }
     });
   }
 
-  navigateToEditService(productId?: number): void {
+  navigateToEditProduct(productId?: number): void {
     this.router.navigate(['/new-product'], { queryParams: { id: productId } });
   }
 
-  convertImageUrls(array: any[]) {
+  convertImageUrls(array: ProductCardDto[]) {
     array.forEach(element => {
       if (element.image != null)
-        element.image = "http://localhost:8080/" + "api/images/" + element.imageEncodedName;
-    });
+        element.image = environment.apiHost + "api/images/" + element.imageEncodedName;
+      });
+    }
   }
-}
 interface ProductCardDto {
     id?: number;
     name?: string;
@@ -115,4 +108,5 @@ interface ProductCardDto {
     price?: number;
     discount?: number;
     image?: string;
+    imageEncodedName?: string;
 }

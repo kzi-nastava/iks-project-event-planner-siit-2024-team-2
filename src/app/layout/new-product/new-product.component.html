@@ -62,7 +62,7 @@
     </div>
 
     <div id="right-div">
-        <label class="custom-label">Available events:</label>
+        <p class="custom-label">Available events:</p>
         <div class="listbox-container">
             <div class="listbox">
                 <label class="listbox-item" *ngFor="let event of eventTypes">
@@ -92,7 +92,7 @@
             <input #fileInput type="file" accept="image/*" style="display: none" (change)="onImageSelected($event)">
             <button type="button" class="fancy-button" (click)="fileInput.click()" >Attach the image 📎</button>
 
-            <div class="error-text" [class.visible]="images.length == 0 && imageEncodedNames.length == 0">
+            <div class="error-text" [class.visible]="images.length === 0 && imageEncodedNames.length === 0">
                 Images are required (one at least).
             </div>  
         </div> 

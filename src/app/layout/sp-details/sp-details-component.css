@@ -1,0 +1,38 @@
+mat-card-subtitle {
+    margin-bottom: 20px;
+}
+
+mat-card {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+.error-message {
+  color: red;
+  text-align: center;
+  margin-top: 2rem;
+}
+mat-card-actions button {
+  margin-left: 20px;
+}
+
+.scroll-container {
+  display: flex;
+  flex-wrap: nowrap;        
+  overflow-x: auto;        
+  overflow-y: hidden;      
+  gap: 16px;                
+  padding: 8px;
+  scroll-behavior: smooth; 
+}
+
+.card {
+  flex: 0 0 auto;        
+  width: 80%;             
+}
+
+.top-right-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}

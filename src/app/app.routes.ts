@@ -20,9 +20,10 @@ import { MyEventTypesComponent } from './layout/my-event-types/my-event-types.co
 import { NewCategoryComponent } from './layout/new-category/new-category.component';
 import { AllCategoriesComponent } from './layout/all-categories/all-categories.component';
 import { PriceListComponent } from './layout/price-list/price-list.component';
-import { BudgetComponent } from './layout/budget/budget.component';
-import { AcceptInvitationComponent } from './layout/accept-invitation-component/accept-invitation-component';
+import { AcceptInvitationComponent } from './layout/accept-invitation/accept-invitation.component';
 import { UserRole } from './services/dtos/user/user-role';
+import { SpDetailsComponent } from './layout/sp-details/sp-details-component';
+import { UserReportsComponent } from './layout/user-reports/user-reports.component';
 
 const ALL_AUTHENTICATED: UserRole[] = ['AUTHENTICATED', 'EVENT_ORGANIZER', 'SERVICE_PRODUCT_PROVIDER', 'ADMIN'];
 
@@ -31,7 +32,8 @@ export const routes: Routes = [
     {path: 'signin', component: LoginComponent,  canActivate: []},
     {path: 'signup', component: RegisterComponent, canActivate: []},
     {path: 'home', component: HomeComponent, canActivate: []},
-    {path: 'event-details', component: EventDetailsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
+    {path: 'sp-details', component: SpDetailsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
+    {path: 'event-details', component: EventDetailsComponent, canActivate: []},
     {path: 'chat', component: ChatComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
     {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
     {path: 'calendar',component: MyEventsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
@@ -46,6 +48,7 @@ export const routes: Routes = [
     {path: 'my-events', component: MyEventsComponent, canActivate: [AuthGuard, RoleGuard] , data: { roles: ['EVENT_ORGANIZER'] }},
     {path: 'all-categories', component: AllCategoriesComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN'] }},
     {path: 'new-category', component: NewCategoryComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN'] }},
+    {path: 'user-reports', component: UserReportsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN'] }},
     {path: 'price-list', component: PriceListComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['SERVICE_PRODUCT_PROVIDER'] }},
     {path: 'budget', component: BudgetComponent, canActivate: [AuthGuard, RoleGuard] , data: { roles: ['EVENT_ORGANIZER'] }},
     {path: 'agenda', component: AgendaComponent},

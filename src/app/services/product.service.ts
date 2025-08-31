@@ -1,41 +1,42 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Product } from '../model/service-product/product';
+import { PageParams } from '../parameters/page-params';
+import { ProductDetailsDto } from './dtos/service-product/product-details.dto';
+import { ProductDto } from './dtos/service-product/product.dto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  
   private apiHost = `${environment.apiHost}api/products`;
+  httpClient = inject(HttpClient);
   
-  constructor(private httpClient: HttpClient) { }
-  
-  add(product: Product) : Observable<Product> {
+  add(product: ProductDto) : Observable<Product> {
     return this.httpClient.post<Product>(this.apiHost, product)
   }
 
-  update(product: Product, id: number): Observable<Product> {
+  update(product: ProductDto, id: number): Observable<Product> {
     return this.httpClient.put<Product>(`${this.apiHost}/${id}`, product);
   }
 
-  getProduct(id: number): Observable<Product> {
-    return this.httpClient.get<Product>(`${this.apiHost}/${id}`)
+  getProduct(id: number): Observable<ProductDetailsDto> {
+    return this.httpClient.get<ProductDetailsDto>(`${this.apiHost}/${id}`)
   }
 
-  getAll(pageProperties?: any) : Observable<Product[]> {
+  getAll(pageProperties?: PageParams) : Observable<Product[]> {
     let params = new HttpParams();
     if(pageProperties) {
       params = params
       .set('page', pageProperties.page)
-      .set('size', pageProperties.pageSize)
+      .set('size', pageProperties.size)
     }
     return this.httpClient.get<Product[]>(`${this.apiHost}/mine`, { params: params});
   }
 
-  deleteProduct(id: number): Observable<void> {
+  delete(id: number): Observable<void> {
     return this.httpClient.delete<void>(`${this.apiHost}/${id}`);
   }
   filter(category?: number, eventTypes?: number[], minPrice?: number, maxPrice?: number, available?: boolean): Observable<Product[]> {

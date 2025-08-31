@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormGroup, FormsModule, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
@@ -9,11 +9,14 @@ import { EventType } from '../../model/event/event-type';
 import { EventTypeService } from '../../services/event-type.service';
 import { EventService } from '../../services/event.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { InvitationsDialogComponent } from '../../dialog/invitations-dialog/invitations-dialog.component';
 import { InvitationItem } from '../../dialog/invitations-dialog/invitations-dialog.component';
+import { ToastService } from '../../services/utils/toast-service';
+import { EventDto } from '../../services/dtos/event/event.dto';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-create-event',
@@ -31,8 +34,7 @@ import { InvitationItem } from '../../dialog/invitations-dialog/invitations-dial
   templateUrl: './new-event.component.html',
   styleUrl: './new-event.component.css'
 })
-export class NewEventComponent {
-
+export class NewEventComponent implements OnInit {
   id = -1;
   createEventForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(1)]),
@@ -47,7 +49,16 @@ export class NewEventComponent {
   invitations: InvitationItem[] = [];
 
   eventTypes: EventType[] = [];
+  selectedType = this.eventTypes[0]; 
+
+  // Injected
   readonly dialog = inject(MatDialog);
+  readonly toastService = inject(ToastService);
+  readonly eventService = inject(EventService);
+  readonly route = inject(ActivatedRoute);
+  readonly router = inject(Router);
+  readonly eventTypeService = inject(EventTypeService);
+  readonly snackBar = inject(MatSnackBar);
 
   isOpen = () => this.createEventForm?.value?.open;
 
@@ -65,49 +76,44 @@ export class NewEventComponent {
       });
       return;
     }
-    let open = this.createEventForm.value.open;
-    const event = {
-      name: this.createEventForm.value.name,
-      description: this.createEventForm.value.description,
-      longitude: this.createEventForm.value.longitude,
-      latitude: this.createEventForm.value.latitude,
-      date: this.createEventForm.value.date,
-      eventTypeId: this.createEventForm.value.eventType,
+    const open = this.createEventForm.value.open;
+    const event: EventDto = {
+      name: this.createEventForm.value.name || null,
+      description: this.createEventForm.value.description || null,
+      longitude: this.createEventForm.value.longitude || null,
+      latitude: this.createEventForm.value.latitude || null,
+      date: this.createEventForm.value.date || null,
+      eventTypeId: this.createEventForm.value.eventType || null,
       eventOrganizerId: Number(localStorage.getItem('userId')),
-      maxAttendances: this.createEventForm.value.maxAttendances,
       budgets: [],
+      maxAttendances: this.createEventForm.value.maxAttendances || null,
       open: open,
-      invitationEmails: open ? null : this.invitations.map(invitation => invitation.email)
+      invitationEmails: open ? null : this.invitations.map(invitation => invitation.email),
+      activityIds: null,
+      budgetIds: null
     };
     if (this.id !== -1) { // Indicates an update
       this.eventService.update(event, this.id).subscribe({
-        next: (event: any) => {
+        next: () => {
           this.router.navigate(['../'], { relativeTo: this.route });
         },
-        error: (err: any) => {
+        error: (err: HttpErrorResponse) => {
           console.error('Failed to update event:', err);
+          this.toastService.show('Failed to update event', 2000, true);
         }
       });
       return;
     }
     this.eventService.add(event).subscribe({
-      next: (event: any) => {
+      next: () => {
         this.router.navigate(['../'], { relativeTo: this.route });
       },
-      error: (err: any) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Failed to create event:', err);
+          this.toastService.show('Failed to create event', 2000, true);
       }
     });
   }
-
-  selectedType = this.eventTypes[0]; 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private eventService: EventService,
-    private eventTypeService: EventTypeService,
-    private snackBar: MatSnackBar
-  ) { }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -126,7 +132,7 @@ export class NewEventComponent {
         this.eventTypes = eventTypes;
 
         this.eventService.getEvent(eventId).subscribe(
-          (event: any) => {
+          (event: Event) => {
             console.log('Fetched event:', event);
             const formattedDate = new Date(event.date).toLocaleDateString('en-CA');
             this.createEventForm.patchValue({
@@ -137,7 +143,7 @@ export class NewEventComponent {
               longitude: event.longitude,
               eventType: event.type.id,
               maxAttendances: event.maxAttendances,
-              open: event.open
+              open: event.isOpen
             });
             this.invitations = event.invitationEmails?.map((email: string) => ({ email: email, editable: false })) || [];
             this.selectedType =
@@ -165,7 +171,7 @@ export class NewEventComponent {
       next: (types: EventType[]) => {
         this.eventTypes = types;
       },
-      error: (err: any) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Failed to load event types:', err);
       }
     });
@@ -191,7 +197,6 @@ export class NewEventComponent {
     const dialogRef = this.dialog.open(InvitationsDialogComponent, {
       data: [...this.invitations],
       width: '500px',
-      // height: '500px',
     });
 
     dialogRef.afterClosed().subscribe(result => {

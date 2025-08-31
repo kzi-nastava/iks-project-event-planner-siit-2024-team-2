@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 @Injectable({ providedIn: 'root' })
 export class ToastService {
-  constructor(private snackBar: MatSnackBar) {}
+  readonly snackBar = inject(MatSnackBar);
 
   show(message: string, duration = 2000, dismissible = false) {
-    let config: MatSnackBarConfig = {
+    const config: MatSnackBarConfig = {
       duration: duration,
       horizontalPosition: 'center',
       verticalPosition: 'top',
