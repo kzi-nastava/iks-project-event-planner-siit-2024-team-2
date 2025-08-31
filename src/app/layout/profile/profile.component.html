@@ -103,28 +103,27 @@
     </div>
 
     <!-- Favorites Section -->
-    <div class="profile-section">
-      <h2>Favorites</h2>
-      <h3>Favorite Events</h3>
-      <div *ngIf="favoriteEvents.length && favoriteEvents.length > 0; else noFavoriteEvents">
-        <div *ngFor="let event of favoriteEvents" class="favorite-item">
-          {{ event.name }}
-        </div>
-      </div>
-      <ng-template #noFavoriteEvents>
-        <p>No favorite events yet.</p>
-      </ng-template>
+     <h3>Favorite Events</h3>
+     <ng-container>
+        <drag-scroll [scrollbar-hidden]="true" [drag-scroll-y-disabled]="true" [snap-disabled]="true">
+            @for(event of favoriteEvents; track event.id) {
+              <div drag-scroll-item class="drag-scroll-item">
+                <ng-template *ngTemplateOutlet="EventCard; context: {$implicit: event}"></ng-template>
+              </div>
+            }
+        </drag-scroll>
+      </ng-container>
 
       <h3>Favorite Services/Products</h3>
-      <div *ngIf="favoriteServices.length && favoriteServices.length > 0; else noFavoriteServices">
-        <div *ngFor="let service of favoriteServices" class="favorite-item">
-          {{ service.name }}
-        </div>
-      </div>
-      <ng-template #noFavoriteServices>
-        <p>No favorite services yet.</p>
-      </ng-template>
-    </div> 
+      <ng-container>
+        <drag-scroll [scrollbar-hidden]="true" [drag-scroll-y-disabled]="true" [snap-disabled]="true">
+            @for(serviceProduct of favoriteServiceProducts; track serviceProduct.id) {
+              <div drag-scroll-item class="drag-scroll-item">
+                <ng-template *ngTemplateOutlet="ServiceProductCard; context: {$implicit: serviceProduct}"></ng-template>
+              </div>
+            }
+        </drag-scroll>
+      </ng-container>
 
     <!-- Calendar/Schedule Section -->
     <!-- <div class="profile-section">
@@ -150,4 +149,64 @@
     </div>
     </div>
   </div>
-</div>
+
+  <ng-template #EventCard let-eventSummary>
+  <mat-card class="event-card" appearance="outlined">
+    <mat-card-header>
+      <img mat-card-avatar class="profile-picture" src="images/avatar.png" alt="Profile Picture" />
+      <mat-card-title-group>
+        <mat-card-title class="event-creator-name" [innerHTML]="eventSummary.creatorName"></mat-card-title>
+        <mat-card-subtitle class="event-creator-email" [innerHTML]="eventSummary.creatorEmail"></mat-card-subtitle>
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-card-content>
+      <br>
+      <p class="name">{{eventSummary.name}}</p>
+      <p class="date">{{eventSummary.date | date: 'MMMM d, yyyy'}}</p>
+      <br>
+      <p class="description">{{eventSummary.description}}</p>
+      <br>
+    </mat-card-content>
+<mat-card-actions align="start">
+  <button mat-flat-button color="primary" (click)="navigateToEventDetails(eventSummary.id)">
+    More info
+  </button>
+
+  <!-- Like / Unlike button -->
+  <button mat-icon-button color="warn"
+          (click)="removeEventFromFavorites(eventSummary.id)">
+    <mat-icon>favorite</mat-icon>
+  </button>
+
+</mat-card-actions>
+  </mat-card>
+</ng-template>
+
+<ng-template #ServiceProductCard let-serviceProduct>
+  <mat-card class="service-product-card" appearance="outlined">
+    <mat-card-header>
+      <img mat-card-avatar class="profile-picture" src="images/monogram.png" alt="Profile Picture" />
+      <mat-card-title-group>
+        <mat-card-title [innerHTML]="serviceProduct.creatorName"></mat-card-title>
+        <mat-card-subtitle [innerHTML]="serviceProduct.creatorEmail"></mat-card-subtitle>
+        <img *ngIf="serviceProduct.image" mat-card-lg-image class="card-image" [src]="serviceProduct.image" alt="Service or product image">
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-card-content>
+      <br>
+      <p class="name">{{serviceProduct.name}}</p>
+      <p class="price">Price: €{{serviceProduct.price}}</p>
+      <br>
+      <p class="description">{{serviceProduct.description}}</p>
+      <br>
+    </mat-card-content>
+    <mat-card-actions align="start">
+      <button mat-flat-button color="primary" (click)="navigateToSpDetails(serviceProduct.id)">More info</button>
+      <button mat-icon-button color="warn"
+          (click)="removeServiceProductFromFavorites(serviceProduct.id)">
+        <mat-icon>favorite</mat-icon>
+      </button>
+
+    </mat-card-actions>
+  </mat-card>
+</ng-template>

@@ -12,15 +12,3 @@ export interface ServiceProductSummaryDto {
     creatorEmail: string | null;
     image: string | null;
 }
-/*
-    private long id;
-    private ServiceProductCategoryDto category;
-    private boolean available;
-    private double price;
-    private double discount;
-    private String name;
-    private String description;
-    private String creatorName;
-    private String creatorEmail;
-    private String image;
-*/

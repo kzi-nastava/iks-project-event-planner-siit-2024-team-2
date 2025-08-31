@@ -79,3 +79,118 @@ button:hover {
 .danger-button:hover {
   background-color: #d32f2f;
 }
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  overflow-x: auto;
+}
+.tab-start{
+  margin-top: 1rem;
+  width: 100%;
+}
+.left-part {
+  flex: 1;
+}
+.options{
+  margin-left: auto;
+}
+.mat-mdc-paginator{
+  margin: -20px;
+}
+.filter-btn{
+  margin-top: 10px;
+}
+
+.drag-scroll-container {
+  gap: 0.5rem;
+  padding: 0.5rem;
+  /* height: auto !important; */
+}
+
+.drag-scroll-item {
+  white-space: normal;
+  max-width: 390px;
+}
+drag-scroll {
+  -webkit-user-select: none;
+  user-select: none;
+}
+@media (hover: none) and (pointer: coarse) { /* Re-enables scrollbar on mobile to fix an issue with drag-scroll */
+  ::ng-deep .drag-scroll-content {
+    overflow: auto hidden !important; 
+  }
+}
+.progress-spinner-container {
+  height: 430px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+mat-progress-spinner {
+  height: 70px !important;
+  width: 70px !important;
+}
+.empty-list {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* Cards */
+.event-card, .service-product-card{
+  width: 390px;
+  height: 430px;
+  margin-bottom: 8px;
+  background: white;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  border-width: 0px;
+  flex: 0 0 auto;
+}
+mat-card-content {
+  flex: 1 0 auto;
+}
+.profile-picture {
+  width: 50px;
+  height: 50px;
+  padding-right: 10px;
+  background-size: cover;
+}
+.mat-mdc-card-subtitle, .mat-mdc-card-title{
+  max-width: 170px;
+}
+.mat-mdc-card-subtitle.event-creator-email, .mat-mdc-card-title.event-creator-name{
+  max-width: 250px;
+}
+.mat-mdc-card-subtitle{
+  color:#222222;
+}
+.card-content{
+  padding-top: 50px;
+}
+.name{
+  font-size: large;
+  margin: 0;
+}
+.date, .price{
+  margin: 0;
+}
+.description{
+  margin: 0;
+  text-overflow: ellipsis;
+  overflow:hidden;
+  -webkit-line-clamp: 7;
+  line-clamp: 7;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  text-align: justify;
+}
+.card-image{
+  height: 100px;
+  width: auto;
+  max-width: 140px;
+  object-fit: contain;
+  object-position: top;
+}

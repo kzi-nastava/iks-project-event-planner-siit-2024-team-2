@@ -25,6 +25,7 @@ import { AcceptInvitationComponent } from './layout/accept-invitation/accept-inv
 import { UserRole } from './services/dtos/user/user-role';
 import { SpDetailsComponent } from './layout/sp-details/sp-details-component';
 import { UserReportsComponent } from './layout/user-reports/user-reports.component';
+import { CalendarComponent } from './layout/calendar/calendar.component';
 
 const ALL_AUTHENTICATED: UserRole[] = ['AUTHENTICATED', 'EVENT_ORGANIZER', 'SERVICE_PRODUCT_PROVIDER', 'ADMIN'];
 
@@ -37,7 +38,6 @@ export const routes: Routes = [
     {path: 'event-details', component: EventDetailsComponent, canActivate: []},
     {path: 'chat', component: ChatComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
     {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
-    {path: 'calendar',component: MyEventsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
     {path: 'notifications', component: NotificationsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
     {path: 'new-event-type', component: NewEventTypeComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN'] }},
     {path: 'my-event-types', component: MyEventTypesComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN'] }},
@@ -53,5 +53,6 @@ export const routes: Routes = [
     {path: 'price-list', component: PriceListComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['SERVICE_PRODUCT_PROVIDER'] }},
     {path: 'agenda', component: AgendaComponent},
     {path: 'accept-invitation', component: AcceptInvitationComponent, canActivate: []},
+    {path: 'calendar', component: CalendarComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
     {path: '**', redirectTo: 'home'},
 ];

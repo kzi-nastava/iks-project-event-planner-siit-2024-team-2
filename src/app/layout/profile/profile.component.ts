@@ -1,9 +1,9 @@
 import { CommonModule, Location } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProfileService } from '../../services/profile.service'; 
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component'; 
 import { UserRole } from '../../services/dtos/user/user-role';
 import { ImageService } from '../../services/image.service';
@@ -11,15 +11,29 @@ import { ToastService } from '../../services/utils/toast-service';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../services/auth-service.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ServiceProduct } from '../../model/service-product/service-product';
 import { ServiceProductCategory } from '../../model/service-product/service-product-category';
 import { EventType } from '../../model/event/event-type';
 import { Event as EP_Event } from '../../model/event/event';
+import { UserService } from '../../services/user/user.service';
+import { EventSummaryDto } from '../../services/dtos/event/event-summary.dto';
+import { MatIcon, MatIconModule } from "@angular/material/icon";
+import { ServiceProductSummaryDto } from '../../services/dtos/service-product/service-product-summary.dto';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTabsModule } from '@angular/material/tabs';
+import { DragScrollComponent, DragScrollItemDirective } from 'ngx-drag-scroll';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatIcon,     MatSidenavModule, MatCardModule, MatButtonModule, CommonModule, MatInputModule, MatIconModule, MatTabsModule,
+      MatDialogModule, MatPaginatorModule, MatProgressSpinnerModule, DragScrollComponent, DragScrollItemDirective,
+      MatMenuModule, ReactiveFormsModule],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
@@ -34,8 +48,8 @@ export class ProfileComponent implements OnInit {
   oldPassword = '';
   newPassword = '';
   confirmPassword = '';
-  favoriteEvents: EP_Event[] = [];
-  favoriteServices: ServiceProduct[] = [];
+  favoriteEvents: EventSummaryDto[] = [];
+  favoriteServiceProducts: ServiceProductSummaryDto[] = [];
   upcomingEvents: EP_Event[] = [];
   serviceCategories: ServiceProductCategory[] = [];
   eventTypes: EventType[] = [];
@@ -71,6 +85,7 @@ export class ProfileComponent implements OnInit {
   readonly router = inject(Router);
   readonly toastService = inject(ToastService);
   readonly imageService = inject(ImageService);
+  readonly userService = inject(UserService);
 
 
   loadUserData(userId?: number) {
@@ -90,8 +105,8 @@ export class ProfileComponent implements OnInit {
             address: data.address
           };
           this.userInfo.image = environment.apiHost + "api/images/" + data.imageEncodedName;
-          this.favoriteEvents = data.favoriteEvents;
-          this.favoriteServices = data.favoriteServices;
+          this.loadFavoriteEvents(Number(userId));
+          this.loadFavoriteServiceProducts(Number(userId));
           this.upcomingEvents = data.upcomingEvents;
 
           if (data.userRole === 'SERVICE_PRODUCT_PROVIDER') {
@@ -278,6 +293,76 @@ deactivateAccount() {
         console.error('Error removing profile picture:', err);
         this.toastService.show('Failed to remove profile picture: ' + err.message, 3000);
       }
+    });
+  }
+
+  loadFavoriteEvents(userId: number) {
+    this.userService.getFavoriteEvents(userId).subscribe({
+      next: (events) => {
+        this.favoriteEvents = events;
+      },
+      error: (err) => {
+        console.error('Error loading favorite events:', err);
+      }
+    });
+  }
+
+  removeEventFromFavorites(eventId: number) {
+    const userId = localStorage.getItem('userId');
+    if (!userId) return;
+
+    this.userService.removeFavoriteEvent(Number(userId), eventId).subscribe({
+      next: () => {
+        this.favoriteEvents = this.favoriteEvents.filter(ev => ev.id !== eventId);
+        this.toastService.show('Removed from favorites 💔', 2500);
+      },
+      error: (err) => {
+        console.error('Failed to remove favorite:', err);
+        this.toastService.show('Could not remove favorite', 2500);
+      }
+    });
+  }
+
+  loadFavoriteServiceProducts(userId: number) {
+    this.userService.getFavoriteServiceProducts(userId).subscribe({
+      next: (serviceProducts) => {
+        this.favoriteServiceProducts = serviceProducts;
+        this.convertImageUrls(this.favoriteServiceProducts);
+      },
+      error: (err) => {
+        console.error('Error loading favorite service products:', err);
+      }
+    });
+  }
+
+  removeServiceProductFromFavorites(serviceProductId: number) {
+    const userId = localStorage.getItem('userId');
+    if (!userId) return;
+
+    this.userService.removeFavoriteServiceProduct(Number(userId), serviceProductId).subscribe({
+      next: () => {
+        this.favoriteServiceProducts = this.favoriteServiceProducts.filter(sp => sp.id !== serviceProductId);
+        this.toastService.show('Removed from favorites 💔', 2500);
+      },
+      error: (err) => {
+        console.error('Failed to remove favorite:', err);
+        this.toastService.show('Could not remove favorite', 2500);
+      }
+    });
+  }
+
+  navigateToEventDetails(eventId?: number): void {
+    this.router.navigate(['/event-details'], { queryParams: { id: eventId } });
+  }
+
+  navigateToSpDetails(spId?: number): void {
+    this.router.navigate(['/sp-details'], { queryParams: { id: spId } });
+  }
+
+  convertImageUrls(array: ServiceProductSummaryDto[]) {
+    array.forEach(element => {
+      if (element.image != null)
+        element.image = environment.apiHost + "api/images/" + element.image;
     });
   }
 }

@@ -13,16 +13,3 @@ export interface EventSummaryDto {
     creatorName: string | null;
     creatorEmail: string | null;
 }
-/*
-    private long id;
-    private String name;
-    private String description;
-    private EventTypeDto type;
-    private int maxAttendances;
-    private boolean isOpen;
-    private double longitude;
-    private double latitude;
-    private long date;
-    private String creatorName;
-    private String creatorEmail;
-*/

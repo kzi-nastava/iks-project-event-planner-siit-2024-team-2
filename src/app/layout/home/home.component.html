@@ -148,12 +148,12 @@ aria-label="Select page">
   <!-- Like / Unlike button -->
   <button mat-icon-button color="warn"
           *ngIf="isEventFavorite(eventSummary.id); else notFav"
-          (click)="removeFromFavorites(eventSummary.id)">
+          (click)="removeEventFromFavorites(eventSummary.id)">
     <mat-icon>favorite</mat-icon>
   </button>
 
   <ng-template #notFav>
-    <button mat-icon-button (click)="addToFavorites(eventSummary.id)">
+    <button mat-icon-button (click)="addEventToFavorites(eventSummary.id)">
       <mat-icon>favorite_border</mat-icon>
     </button>
   </ng-template>
@@ -182,6 +182,17 @@ aria-label="Select page">
     </mat-card-content>
     <mat-card-actions align="start">
       <button mat-flat-button color="primary" (click)="navigateToSpDetails(serviceProduct.id)">More info</button>
+      <button mat-icon-button color="warn"
+          *ngIf="isServiceProductFavorite(serviceProduct.id); else notFav"
+          (click)="removeServiceProductFromFavorites(serviceProduct.id)">
+        <mat-icon>favorite</mat-icon>
+      </button>
+
+  <ng-template #notFav>
+    <button mat-icon-button (click)="addServiceProductToFavorites(serviceProduct.id)">
+      <mat-icon>favorite_border</mat-icon>
+    </button>
+  </ng-template>
     </mat-card-actions>
   </mat-card>
 </ng-template>
