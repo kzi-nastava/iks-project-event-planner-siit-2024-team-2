@@ -15,11 +15,12 @@ import { ServiceProduct } from '../../model/service-product/service-product';
 import { ServiceProductCategory } from '../../model/service-product/service-product-category';
 import { EventType } from '../../model/event/event-type';
 import { Event as EP_Event } from '../../model/event/event';
+import { ImgFallbackDirective } from '../../utils/image-fallback';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ImgFallbackDirective],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })

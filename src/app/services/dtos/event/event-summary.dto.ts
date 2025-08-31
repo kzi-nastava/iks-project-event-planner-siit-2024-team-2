@@ -12,6 +12,7 @@ export interface EventSummaryDto {
     date: number | null;
     creatorName: string | null;
     creatorEmail: string | null;
+    creatorProfilePicture: string | null;
 }
 /*
     private long id;
@@ -25,4 +26,5 @@ export interface EventSummaryDto {
     private long date;
     private String creatorName;
     private String creatorEmail;
+    private String creatorProfilePicture;
 */
