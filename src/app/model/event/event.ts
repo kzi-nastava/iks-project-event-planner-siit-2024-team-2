@@ -1,4 +1,5 @@
 import { UserDto } from "../../services/dtos/user/user.dto";
+import { Budget } from "../budget/budget";
 import { Activity } from "./activity";
 import { EventType } from "./event-type";
 
@@ -14,5 +15,6 @@ export interface Event {
     longitude: number | null,
     latitude: number | null,
     invitationEmails: string[] | null,
+    budgets: Budget[],
     activity: Activity[] | null
 }

@@ -40,8 +40,15 @@ export class ServiceProductService {
     return this.httpClient.get<ServiceProductFilteringValues>(this.apiUrl + "/filtering-values");
   }
 
+
   getReviews(id: number, PageParams?: PageParams) : Observable<PagedModel<ServiceProductReview>> {
     const params = buildHttpParams(PageParams)
     return this.httpClient.get<PagedModel<ServiceProductReview>>(`${this.apiUrl}/${id}/reviews`, { params: params });
+  }
+
+  getCategoriesByEventType(eventTypeId: number): Observable<string[]> {
+    return this.httpClient.get<string[]>(`${this.apiUrl}/sp-categories/by-event-type`, {
+      params: { eventTypeId: eventTypeId.toString() }
+    });
   }
 }
