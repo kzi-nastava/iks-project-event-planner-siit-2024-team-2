@@ -17,6 +17,7 @@ import { InvitationItem } from '../../dialog/invitations-dialog/invitations-dial
 import { ToastService } from '../../services/utils/toast-service';
 import { EventDto } from '../../services/dtos/event/event.dto';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Event } from '../../model/event/event'
 
 @Component({
   selector: 'app-create-event',
@@ -85,7 +86,6 @@ export class NewEventComponent implements OnInit {
       date: this.createEventForm.value.date || null,
       eventTypeId: this.createEventForm.value.eventType || null,
       eventOrganizerId: Number(localStorage.getItem('userId')),
-      budgets: [],
       maxAttendances: this.createEventForm.value.maxAttendances || null,
       open: open,
       invitationEmails: open ? null : this.invitations.map(invitation => invitation.email),

@@ -24,6 +24,7 @@ import { AcceptInvitationComponent } from './layout/accept-invitation/accept-inv
 import { UserRole } from './services/dtos/user/user-role';
 import { SpDetailsComponent } from './layout/sp-details/sp-details-component';
 import { UserReportsComponent } from './layout/user-reports/user-reports.component';
+import { BudgetComponent } from './layout/budget/budget.component';
 
 const ALL_AUTHENTICATED: UserRole[] = ['AUTHENTICATED', 'EVENT_ORGANIZER', 'SERVICE_PRODUCT_PROVIDER', 'ADMIN'];
 

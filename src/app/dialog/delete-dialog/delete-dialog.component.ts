@@ -49,13 +49,13 @@ export class DeleteDialogComponent {
       '/my-services': this.serviceService,
       '/all-categories': this.spCategoryService,
       '/my-products': this.productService,
-      '/profile': this.profileService
+      '/profile': this.profileService,
+      '/budget': this.budgetService
     }
-    else if (currentUrl.startsWith('/budget')) {
-      this.service = this.budgetService;
-    }
-
-    const service = serviceMap[this.router.url];
+    
+    const currentUrl = this.router.url;
+    const service =
+      Object.entries(serviceMap).find(([path]) => currentUrl.startsWith(path))?.[1];
 
     if (service) {
       service.delete(this.data.id).subscribe({

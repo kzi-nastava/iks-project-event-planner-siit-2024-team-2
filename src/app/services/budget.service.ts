@@ -3,7 +3,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { CreateBudgetDto } from './dtos/event/create-budget.dto';
 import { Observable } from 'rxjs';
-import { Budget } from '../model/budget';
+import { Budget } from '../model/budget/budget';
 
 @Injectable({
   providedIn: 'root'
