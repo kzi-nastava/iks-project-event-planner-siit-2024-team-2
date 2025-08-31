@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Product } from '../model/service-product/product';
 import { PageParams } from '../parameters/page-params';
+import { ProductDetailsDto } from './dtos/service-product/product-details.dto';
+import { ProductDto } from './dtos/service-product/product.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -12,16 +14,16 @@ export class ProductService {
   private apiHost = `${environment.apiHost}api/products`;
   httpClient = inject(HttpClient);
   
-  add(product: Product) : Observable<Product> {
+  add(product: ProductDto) : Observable<Product> {
     return this.httpClient.post<Product>(this.apiHost, product)
   }
 
-  update(product: Product, id: number): Observable<Product> {
+  update(product: ProductDto, id: number): Observable<Product> {
     return this.httpClient.put<Product>(`${this.apiHost}/${id}`, product);
   }
 
-  getProduct(id: number): Observable<Product> {
-    return this.httpClient.get<Product>(`${this.apiHost}/${id}`)
+  getProduct(id: number): Observable<ProductDetailsDto> {
+    return this.httpClient.get<ProductDetailsDto>(`${this.apiHost}/${id}`)
   }
 
   getAll(pageProperties?: PageParams) : Observable<Product[]> {

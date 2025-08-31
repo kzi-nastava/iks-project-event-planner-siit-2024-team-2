@@ -27,13 +27,14 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { DragScrollComponent, DragScrollItemDirective } from 'ngx-drag-scroll';
+import { ImgFallbackDirective } from '../../utils/image-fallback';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
   imports: [CommonModule, FormsModule, MatIcon,     MatSidenavModule, MatCardModule, MatButtonModule, CommonModule, MatInputModule, MatIconModule, MatTabsModule,
       MatDialogModule, MatPaginatorModule, MatProgressSpinnerModule, DragScrollComponent, DragScrollItemDirective,
-      MatMenuModule, ReactiveFormsModule],
+      MatMenuModule, ReactiveFormsModule, ImgFallbackDirective],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })

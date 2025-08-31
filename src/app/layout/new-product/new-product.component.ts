@@ -11,12 +11,13 @@ import { ServiceCategory } from '../../model/service-product/service-category';
 import { ProductService } from '../../services/product.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Product } from '../../model/service-product/product';
 import { forkJoin } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ImageService } from '../../services/image.service';
 import { ToastService } from '../../services/utils/toast-service';
-
+import { ProductDto } from '../../services/dtos/service-product/product.dto';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ProductDetailsDto } from '../../services/dtos/service-product/product-details.dto';
 
 
 @Component({
@@ -114,22 +115,22 @@ export class NewProductComponent implements OnInit {
     this.images = [];
     this.imageEncodedNames = [];
     this.productService.getProduct(productId).subscribe(
-      (product: any) => {
+      (product: ProductDetailsDto) => {
         this.createProductForm.patchValue({
           name: product.name,
           description: product.description,
-          specifies: product.specifies,
+          // specifies: product.specifies,
           price: product.price,
           discount: product.discount,
-          productCategory: product.categoryId,
+          productCategory: product.serviceProductCategoryDto?.id,
           available: product.available,
           visible: product.visible
         });
-        this.selectedEvents = product.eventTypes.map((event: any) => event.id) || []; 
-        this.selectedCategoryId = product.serviceProductCategoryDto.id || -1;
+        this.selectedEvents = product.eventTypes?.map((type: EventType) => type.id) || []; 
+        this.selectedCategoryId = product.serviceProductCategoryDto?.id || -1;
         this.createProductForm.get('productCategory')?.setValue(this.selectedCategoryId);
-        this.images = product.images;
-        this.imageEncodedNames = product.imageEncodedNames;
+        this.images = product.images || [];
+        this.imageEncodedNames = product.imageEncodedNames || [];
       },
       (error) => {
         console.error('Error fetching product data:', error);
@@ -182,28 +183,27 @@ export class NewProductComponent implements OnInit {
     }
     const observables = this.selectedImages.map((image:File) => this.imageService.uploadImage(image));
     forkJoin(observables).subscribe({
-      next: (responses: any) => {
-        const product = {
+      next: (responses: string[]) => {
+        const product: ProductDto = {
           name: this.createProductForm.value.name ?? '',
           images: this.images,
           description: this.createProductForm.value.description ?? '',
-          specifies: this.createProductForm.value.specifies ?? '',
           price: this.createProductForm.value.price ?? 0,
           discount: this.createProductForm.value.discount ?? 0,
-          availableEventTypesIds: this.selectedEvents,
+          availableEventTypeIds: this.selectedEvents,
           categoryId: Number(this.createProductForm.value.productCategory), 
           available: this.createProductForm.value.available ?? false,
           visible: this.createProductForm.value.visible ?? false,
           serviceProductProviderId: Number(localStorage.getItem('userId')),
-        } as Product;
-        product.images = responses.map((path: any) => atob(path));
+        };
+        product.images = responses.map((path: string) => atob(path));
       if (this.id !== -1) { // Indicates an update
         this.productService.update(product, this.id).subscribe({
           next: () => {
             this.toastService.show('Product updated successfully!', 2000);
             this.router.navigate(['../'], { relativeTo: this.route });
           },
-          error: (err: any) => {
+          error: (err: HttpErrorResponse) => {
             this.toastService.show('Failed to update product:', 2000);
             console.error('Failed to update product:', err);
           }
@@ -214,7 +214,7 @@ export class NewProductComponent implements OnInit {
             this.toastService.show('Product created successfully!', 2000);
             this.router.navigate(['../'], { relativeTo: this.route });
           },
-          error: (err: any) => {
+          error: (err: HttpErrorResponse) => {
             this.toastService.show('Failed to create product:', 2000);
             console.error('Failed to create product:', err);
           }
@@ -236,7 +236,7 @@ export class NewProductComponent implements OnInit {
     this.router.navigate(['../'], { relativeTo: this.route });
   }
 
-  onEventCheckboxChange(event: any, eventTypeId: number) {
+  onEventCheckboxChange(event: Event, eventTypeId: number) {
     if (this.selectedEvents.includes(eventTypeId)) {
       this.selectedEvents = this.selectedEvents.filter(id => id !== eventTypeId);
     } else {

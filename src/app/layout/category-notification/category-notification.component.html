@@ -1,10 +1,10 @@
 <div>
-<label>{{ message }}</label>
+<p>{{ message }}</p>
 
 <mat-card-content class="row" color="accent">
     <button mat-flat-button color="secondary-container" (click)="onEdit()" [disabled]="isAccepted || seen">Edit</button>
-    <label>Choose existing one:</label>
-    <mat-select [(ngModel)]="selectedCategory" color="accent">
+    <label for="category">Choose existing one:</label>
+    <mat-select [(ngModel)]="selectedCategory" color="accent" name="category">
         <mat-option *ngFor="let category of categories" [value]="category">{{ category }}</mat-option>
     </mat-select>
     <button mat-stroked-button color="primary" id="accept" (click)="onAccept()" [disabled]="isAccepted || seen">Accept</button>

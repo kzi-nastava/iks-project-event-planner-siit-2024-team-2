@@ -125,12 +125,12 @@ export class NewServiceComponent implements OnInit {
       }).subscribe(({ allEventTypes, editingService }) => {
         this.eventTypes = allEventTypes.map(t => t.name);
         this.eventTypeIds = allEventTypes.map(t => t.id);
-        this.serviceCategories.push(editingService.category.name);
-        this.initializeCheckboxValues(editingService.availableEventTypes.map(type => type.name));
+        this.serviceCategories.push(editingService.category?.name || '');
+        this.initializeCheckboxValues(editingService.availableEventTypes?.map(type => type.name) || []);
 
         this.newServiceForm.patchValue({
           categoryForm: {
-            category: editingService.category,
+            category: editingService.category?.name,
           },
           name: editingService.name,
           description: editingService.description,
@@ -148,8 +148,8 @@ export class NewServiceComponent implements OnInit {
           reservationDaysDeadline: editingService.reservationDaysDeadline,
           cancellationDaysDeadline: editingService.cancellationDaysDeadline
       });
-      this.images = editingService.images;
-      this.imageEncodedNames = editingService.imageEncodedNames;
+      this.images = editingService.images || [];
+      this.imageEncodedNames = editingService.imageEncodedNames || [];
     },
     error => {
       console.error('Error fetching service data:', error);
@@ -172,8 +172,8 @@ export class NewServiceComponent implements OnInit {
     })
   }
 
-  onCheckboxChange(event: any, typeIndex: number) {
-    if (event.target.checked) {
+  onCheckboxChange(event: Event, typeIndex: number) {
+    if ((event.target as HTMLInputElement).checked) {
       this.selectedEvents.push(new FormControl(this.eventTypeIds[typeIndex]));
     } else {
       const index = this.selectedEvents.controls.findIndex(ctrl => ctrl.value === this.eventTypeIds[typeIndex]);

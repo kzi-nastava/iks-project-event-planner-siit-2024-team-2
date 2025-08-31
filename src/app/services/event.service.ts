@@ -9,6 +9,7 @@ import { EventSummaryDto } from './dtos/event/event-summary.dto';
 import { buildHttpParams } from '../utils/http-utils';
 import { EventDto } from './dtos/event/event.dto';
 import { ActivityDto } from './dtos/event/activity.dto';
+import { Activity } from '../model/event/activity';
 @Injectable({
   providedIn: 'root'
 })
@@ -16,24 +17,24 @@ export class EventService {
   private apiUrl = `${environment.apiHost}api/events`;
   httpClient = inject(HttpClient);
 
-  getAgenda(eventId: number) {
-    return this.httpClient.get(`${this.apiUrl}/${eventId}/agenda`);
+  getAgenda(eventId: number) : Observable<Activity[]> {
+    return this.httpClient.get<Activity[]>(`${this.apiUrl}/${eventId}/agenda`);
   }
 
-  addActivity(eventId: number, activity: ActivityDto) {
-    return this.httpClient.post(`${this.apiUrl}/${eventId}/agenda/activity`, activity);
+  addActivity(eventId: number, activity: ActivityDto) : Observable<Activity> {
+    return this.httpClient.post<Activity>(`${this.apiUrl}/${eventId}/agenda/activity`, activity);
   }
 
-  updateActivity(eventId: number, activityId: number, activity: ActivityDto) {
-    return this.httpClient.put(`${this.apiUrl}/${eventId}/agenda/activity/${activityId}`, activity);
+  updateActivity(eventId: number, activityId: number, activity: ActivityDto) : Observable<Activity> {
+    return this.httpClient.put<Activity>(`${this.apiUrl}/${eventId}/agenda/activity/${activityId}`, activity);
   }
 
   deleteActivity(eventId: number, activityId: number) {
     return this.httpClient.delete(`${this.apiUrl}/${eventId}/agenda/activity/${activityId}`);
   }
 
-  delete(eventId: number) {
-    return this.httpClient.delete(`${this.apiUrl}/${eventId}`);
+  delete(eventId: number) : Observable<void> {
+    return this.httpClient.delete<void>(`${this.apiUrl}/${eventId}`);
   }
   update(event: EventDto, id: number) {
     return this.httpClient.put<Event>(`${this.apiUrl}/${id}`, event);
@@ -69,6 +70,10 @@ export class EventService {
   
   getMaxAttendancesRange(): Observable<number[]> {
     return this.httpClient.get<number[]>(this.apiUrl + "/max-attendances-range");
+  }
+
+  addBudgetToEvent(id: number, budget: any) {
+    return this.httpClient.post(`${this.apiUrl}/${id}/budgets`, budget);
   }
 
   dowloadPdf(eventId: number): Observable<Blob> {

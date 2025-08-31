@@ -5,7 +5,7 @@ import { ServiceProductCategory } from "../../../model/service-product/service-p
 import { EventSummaryDto } from "../event/event-summary.dto";
 import { UserRole } from "./user-role";
 
-export interface User {
+export interface UserDto {
     firstName: string;
     lastName: string;
     email: string;

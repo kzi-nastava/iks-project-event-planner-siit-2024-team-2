@@ -11,4 +11,5 @@ export interface ServiceProductSummaryDto {
     creatorName: string | null;
     creatorEmail: string | null;
     image: string | null;
+    creatorProfilePicture: string | null;
 }

@@ -78,7 +78,9 @@ export class ActivityFormDialogComponent {
 
   parseTimeString(time: string): [number, number] {
     const [timePart, meridiem] = time.split(' ');
-    let [hours, minutes] = timePart.split(':').map(Number);
+    const result = timePart.split(':').map(Number);
+    let hours = result[0];
+    const minutes = result[1];
 
     if (meridiem?.toLowerCase() === 'pm' && hours !== 12) hours += 12;
     if (meridiem?.toLowerCase() === 'am' && hours === 12) hours = 0;

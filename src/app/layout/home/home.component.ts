@@ -43,6 +43,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth-service.service';
 import { UserService } from '../../services/user/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ImgFallbackDirective } from '../../utils/image-fallback';
 
 const pageSize = 12;
 const imagesApi = "api/images/";
@@ -52,7 +53,7 @@ const imagesApi = "api/images/";
   imports: [
     MatSidenavModule, MatCardModule, MatButtonModule, CommonModule, MatFormField, MatInputModule, MatIconModule, MatTabsModule,
     MatDialogModule, MatSelect, MatOption, MatPaginatorModule, MatProgressSpinnerModule, DragScrollComponent, DragScrollItemDirective,
-    MatMenuModule, ReactiveFormsModule
+    MatMenuModule, ReactiveFormsModule, ImgFallbackDirective
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
@@ -138,6 +139,7 @@ export class HomeComponent implements OnInit {
       next: (response : EventSummaryDto[]) => {
         this.topEvents = JSON.parse(JSON.stringify(response));
         this.addEmailBreaks(this.topEvents);
+        this.convertProfilePictureUrls(this.topEvents);
       },
       error: (err: HttpErrorResponse) => {
         console.error('Failed to load top events:', err);
@@ -151,6 +153,7 @@ export class HomeComponent implements OnInit {
         this.topServiceProducts = JSON.parse(JSON.stringify(response));
         this.addEmailBreaks(this.topServiceProducts);
         this.convertImageUrls(this.topServiceProducts);
+        this.convertProfilePictureUrls(this.topServiceProducts);
       },
       error: (err: HttpErrorResponse) => {
         console.error('Failed to load top serviceproducts:', err);
@@ -179,6 +182,7 @@ export class HomeComponent implements OnInit {
 
             this.otherEvents = JSON.parse(JSON.stringify(response.content));
             this.addEmailBreaks(this.otherEvents);
+            this.convertProfilePictureUrls(this.otherEvents);
           },
           error: (err: HttpErrorResponse) => {
             console.error('Failed to load events:', err);
@@ -200,6 +204,7 @@ export class HomeComponent implements OnInit {
             this.otherServiceProducts = JSON.parse(JSON.stringify(response.content));
             this.addEmailBreaks(this.otherServiceProducts);
             this.convertImageUrls(this.otherServiceProducts);
+            this.convertProfilePictureUrls(this.otherServiceProducts);
           },
           error: (err: HttpErrorResponse) => {
             console.error('Failed to load serviceproducts:', err);
@@ -387,6 +392,12 @@ export class HomeComponent implements OnInit {
     array.forEach(element => {
       if (element.image != null)
         element.image = environment.apiHost + imagesApi + element.image;
+    });
+  }
+  convertProfilePictureUrls(array: EventSummaryDto[] | ServiceProductSummaryDto[]) {
+    array.forEach(element => {
+      if (element.creatorProfilePicture != null)
+        element.creatorProfilePicture = environment.apiHost + imagesApi + element.creatorProfilePicture;
     });
   }
   navigateToEventDetails(eventId?: number): void {
