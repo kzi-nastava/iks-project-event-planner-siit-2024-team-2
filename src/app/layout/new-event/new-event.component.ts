@@ -13,11 +13,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { InvitationsDialogComponent } from '../../dialog/invitations-dialog/invitations-dialog.component';
-import { Event } from '../../model/event/event';
 import { InvitationItem } from '../../dialog/invitations-dialog/invitations-dialog.component';
 import { ToastService } from '../../services/utils/toast-service';
 import { EventDto } from '../../services/dtos/event/event.dto';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Event } from '../../model/event/event'
 
 @Component({
   selector: 'app-create-event',

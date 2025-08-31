@@ -108,4 +108,8 @@ export class MyEventsComponent implements OnInit {
       }
     });
   }
+
+  seeBugdetPlan(eventId: number, eventTypeId: number): void {
+    this.router.navigate(['/budget'], { queryParams: { id: eventId, eventTypeId: eventTypeId} });
+  }
 }

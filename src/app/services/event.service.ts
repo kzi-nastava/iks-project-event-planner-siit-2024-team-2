@@ -72,6 +72,10 @@ export class EventService {
     return this.httpClient.get<number[]>(this.apiUrl + "/max-attendances-range");
   }
 
+  addBudgetToEvent(id: number, budget: any) {
+    return this.httpClient.post(`${this.apiUrl}/${id}/budgets`, budget);
+  }
+
   dowloadPdf(eventId: number): Observable<Blob> {
     return this.httpClient.get(`${this.apiUrl}/${eventId}/pdf`, { responseType: 'blob' });
   }
