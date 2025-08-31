@@ -11,7 +11,6 @@ import { MatCardContent } from "@angular/material/card";
 import { MatButtonModule } from '@angular/material/button';
 import { NotificationService } from '../../services/communication/notification.service';
 import { NotificationDto } from '../../services/dtos/communication/notification.dto';
-import { Service } from '../../model/service-product/service';
 import { CreateServiceDto } from '../../services/dtos/service-product/create-service.dto';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -38,7 +37,7 @@ export class CategoryNotificationComponent implements OnInit {
 
 
   category = {name: '', description: ''};
-  service: Service | null = null;
+  serviceDto: CreateServiceDto | null = null;
   selectedCategory = '';
   categories: string[] = [];
   categoryName = '';
@@ -48,13 +47,13 @@ export class CategoryNotificationComponent implements OnInit {
 
   ngOnInit(): void {
     const messageObj = JSON.parse(String(this.message));
-    this.service = messageObj.service;
+    this.serviceDto = messageObj.service;
     this.categoryName = messageObj.categoryName;
     this.categoryDescription = messageObj.categoryDescription;
     this.category.name = this.categoryName;
     this.category.description = this.categoryDescription;
     this.message = 'Name: ' + this.categoryName + ',  Description: ' + this.categoryDescription;
-    this.providerMessage = 'Your service ' + this.service?.name + ' created successfully. You can find it in "My services".\n';
+    this.providerMessage = 'Your service ' + this.serviceDto?.name + ' created successfully. You can find it in "My services".\n';
 
     this.spCategoryService.getAll().subscribe(allCategories => {
       this.categories = allCategories.map(c => c.name || '');
@@ -74,7 +73,7 @@ export class CategoryNotificationComponent implements OnInit {
     // chosen the existing category from the combo box
     if (this.selectedCategory != '') {
       this.spCategoryService.getByName(this.selectedCategory).subscribe(category => {
-        this.service!.category = category;
+        this.serviceDto!.categoryId = category.id;
         this.createService();
       });
       this.providerMessage += 'Your category request for ' + this.categoryName + ' was denied. ' +
@@ -88,7 +87,7 @@ export class CategoryNotificationComponent implements OnInit {
 
       this.spCategoryService.add(this.category).subscribe({
         next: (newCategory: ServiceProductCategory) => {
-          this.service!.category = newCategory.id;
+          this.serviceDto!.categoryId = newCategory.id;
           this.createService();
           this.snackBar.open('Category ' + this.category.name + ' created successfully!', 'Close', {duration: 3000, panelClass: ['snack-success']});
       },
@@ -109,7 +108,7 @@ export class CategoryNotificationComponent implements OnInit {
       message: this.providerMessage,
       dismissed: false,
       seen: false,
-      userId: this.service?.serviceProductProvider.id
+      userId: this.serviceDto?.serviceProductProviderId || -1
     };
     this.notificationService.add(notification).subscribe({
       next: () => {
@@ -130,28 +129,10 @@ export class CategoryNotificationComponent implements OnInit {
   }
 
   private createService() {
-    const dto: CreateServiceDto = {
-      name: this.service?.name,
-      description: this.service?.description,
-      specifies: this.service?.specifies,
-      price: this.service?.price,
-      discount: this.service?.discount,
-      categoryId: this.service?.category.id,
-      availableEventTypeIds: this.service?.availableEventTypes.map(type => type.id),
-      duration: this.service?.duration,
-      minEngagementDuration: this.service?.minEngagementDuration,
-      maxEngagementDuration: this.service?.maxEngagementDuration,
-      reservationDaysDeadline: this.service?.reservationDaysDeadline,
-      cancellationDaysDeadline: this.service?.cancellationDaysDeadline,
-      automaticReserved: this.service?.automaticReserved,
-      images: this.service?.images,
-      available: this.service?.available,
-      visible: this.service?.visible,
-      serviceProductProviderId: this.service?.serviceProductProvider.id
-    }
-    this.serviceService.add(dto).subscribe({
+    if (!this.serviceDto) return;
+    this.serviceService.add(this.serviceDto).subscribe({
       next: () => {
-        this.snackBar.open('Service ' + this.service?.name + ' created successfully!', 'Close', { duration: 3000, panelClass: ['snack-success'] });
+        this.snackBar.open('Service ' + this.serviceDto?.name + ' created successfully!', 'Close', { duration: 3000, panelClass: ['snack-success'] });
       },
       error: (err: HttpErrorResponse) => {
         console.error('Failed to create service:', err);

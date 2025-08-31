@@ -12,7 +12,7 @@ mat-card {
   text-align: center;
   margin-top: 2rem;
 }
-button {
+mat-card-actions button {
   margin-left: 20px;
 }
 
@@ -29,4 +29,10 @@ button {
 .card {
   flex: 0 0 auto;        
   width: 80%;             
+}
+
+.top-right-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }

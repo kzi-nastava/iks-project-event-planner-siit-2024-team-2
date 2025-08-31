@@ -1,15 +1,19 @@
-export interface Product {
-    id?: number,
-    name?: string,
-    description?: string,
-    specifies?: string,
-    price?: number,
-    discount?: number,
-    categoryId?: number,
-    availableEventTypesIds?: number[],
-    visible: boolean,
-    available: boolean,
-    serviceProductProviderId?: number,
-    images: string[];
-    imageEncodedNames: string[];
+import { ServiceProduct } from "./service-product";
+
+export interface Product extends ServiceProduct {
+    imageEncodedNames: string[] | null;
 }
+
+/*
+public class ProductDto {
+    private long id;
+    private ServiceProductProviderDto serviceProductProvider;
+    private boolean available;
+    private double price;
+    private double discount;
+    private String name;
+    private String description;
+    private List<String> images;
+    private List<String> imageEncodedNames;
+}
+*/
