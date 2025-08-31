@@ -13,10 +13,7 @@ export interface ServiceProduct {
     discount: number | null;
     images: string[] | null;
     availableEventTypes: EventType[] | null;
-<<<<<<< HEAD
-    serviceProductProvider: User | null;
-=======
     serviceProductProvider: ServiceProductProvider | null;
->>>>>>> develop
-    dtype: string | null;
+    dtype: "Service" | "Product" | null;
 }
+
