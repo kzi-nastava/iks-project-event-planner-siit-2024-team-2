@@ -1,0 +1,37 @@
+<div class="review-container">
+    @for(review of reviews; let i = $index; track review.id) {
+        <mat-card class="review-card" appearance="outlined"
+         *ngIf="!review.hidden"
+        [@.disabled]="!review.hiding" [@fadeOut]>
+            <mat-card-header>
+                <mat-card-title>
+                    <b>{{getReviewer(review)}}</b> 
+                    reviewed 
+                    <a [href]="getServiceProductUrl(review.serviceProduct.id)" target="_blank">{{review.serviceProduct.name}}</a>
+                </mat-card-title>
+                <mat-card-subtitle>{{review.createdAt ? formatDate(review.createdAt) : ''}}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <p>Grade: {{review.grade}}</p>
+                <p>Comment:</p>
+                <p class="review-comment collapsed" #reviewEl>{{review.comment}}</p>
+                <button mat-button color="primary" class="read-button" (click)="readMore(reviewEl)" *ngIf="isEllipsisActive(reviewEl)">Read more</button>
+                <button mat-button color="primary" class="read-button" (click)="readLess(reviewEl)" *ngIf="reviewEl?.classList?.contains('expanded')">Read less</button>
+            </mat-card-content>
+            <mat-card-actions align="end">
+                <button mat-button color="primary" (click)="approve(review)">Approve</button>
+                <button mat-button color="primary" (click)="reject(review)">Reject</button>
+            </mat-card-actions>
+        </mat-card>
+    } @empty {
+        <div class="empty-list">No reviews found</div>
+    }
+</div>
+<mat-paginator [length]="totalElements"
+[pageIndex]="pageIndex"
+[pageSize]="pageSize"
+[pageSizeOptions]="[10, 20, 50]"
+[showFirstLastButtons]="true"
+(page)="onPageChange($event)"
+aria-label="Select page">
+</mat-paginator>

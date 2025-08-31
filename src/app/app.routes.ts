@@ -25,6 +25,7 @@ import { AcceptInvitationComponent } from './layout/accept-invitation/accept-inv
 import { UserRole } from './services/dtos/user/user-role';
 import { SpDetailsComponent } from './layout/sp-details/sp-details-component';
 import { UserReportsComponent } from './layout/user-reports/user-reports.component';
+import { AdminReviewsComponent } from './layout/admin-reviews/admin-reviews.component';
 
 const ALL_AUTHENTICATED: UserRole[] = ['AUTHENTICATED', 'EVENT_ORGANIZER', 'SERVICE_PRODUCT_PROVIDER', 'ADMIN'];
 
@@ -50,6 +51,7 @@ export const routes: Routes = [
     {path: 'all-categories', component: AllCategoriesComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN'] }},
     {path: 'new-category', component: NewCategoryComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN'] }},
     {path: 'user-reports', component: UserReportsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN'] }},
+    {path: 'admin-reviews', component: AdminReviewsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN'] }},
     {path: 'price-list', component: PriceListComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['SERVICE_PRODUCT_PROVIDER'] }},
     {path: 'agenda', component: AgendaComponent},
     {path: 'accept-invitation', component: AcceptInvitationComponent, canActivate: []},
