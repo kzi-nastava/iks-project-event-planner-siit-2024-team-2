@@ -1,3 +1,4 @@
+import { SafeHtml } from "@angular/platform-browser";
 import { UserDto } from "../../services/dtos/user/user.dto";
 
 export interface Notification {
@@ -8,5 +9,7 @@ export interface Notification {
     seen: boolean | null,
     dismissed: boolean | null,
     dismissing: boolean | null,
-    userDto: UserDto | null
+    userDto: UserDto | null,
+    formattedTitle: SafeHtml | null,
+    formattedMessage: SafeHtml | null,
 }

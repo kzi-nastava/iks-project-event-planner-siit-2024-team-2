@@ -1,4 +1,4 @@
 export enum ReviewStatus {
-    PEDNING = "PENDING",
+    PENDING = "PENDING",
     APPROVED = "APPROVED"
 }
