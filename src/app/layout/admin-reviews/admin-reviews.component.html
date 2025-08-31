@@ -12,9 +12,12 @@
                 <mat-card-subtitle>{{review.createdAt ? formatDate(review.createdAt) : ''}}</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
-                <p>Grade: {{review.grade}}</p>
-                <p>Comment:</p>
-                <p class="review-comment collapsed" #reviewEl>{{review.comment}}</p>
+                <p class="review-comment collapsed" #reviewEl>
+                    <b>Grade:</b> {{review.grade}}
+                    <br>
+                    <b>Comment: </b>
+                    {{review.comment}}
+                </p>
                 <button mat-button color="primary" class="read-button" (click)="readMore(reviewEl)" *ngIf="isEllipsisActive(reviewEl)">Read more</button>
                 <button mat-button color="primary" class="read-button" (click)="readLess(reviewEl)" *ngIf="reviewEl?.classList?.contains('expanded')">Read less</button>
             </mat-card-content>

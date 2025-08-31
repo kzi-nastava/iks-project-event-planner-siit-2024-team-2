@@ -15,6 +15,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { ToastService } from '../../services/utils/toast-service';
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { CategoryNotificationComponent } from "../category-notification/category-notification.component";
+import { FormatUtilService } from '../../utils/format-util.service';
 
 @Component({
   selector: 'app-notifications',
@@ -53,6 +54,7 @@ export class NotificationsComponent implements OnDestroy, OnInit {
   readonly socketService = inject(SocketService);
   readonly authService = inject(AuthService);
   readonly toastService = inject(ToastService);
+  readonly formatUtilService = inject(FormatUtilService);
 
   ngOnInit(): void {
     this.loadedTime = new Date();
@@ -89,6 +91,10 @@ export class NotificationsComponent implements OnDestroy, OnInit {
           this.notifications = JSON.parse(JSON.stringify(response.content));
           this.totalElements = response.page.totalElements;
           this.reloadPopup = false;
+          for (const notification of this.notifications) {
+            notification.formattedTitle = this.formatUtilService.formatAndSanitize(notification.title);
+            notification.formattedMessage = this.formatUtilService.formatAndSanitize(notification.message);
+          }
         },
         error: () => {
           this.toastService.show('Failed to load notifications');

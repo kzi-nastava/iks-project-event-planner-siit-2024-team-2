@@ -4,12 +4,14 @@
          *ngIf="!notification.dismissed"
         [@.disabled]="!notification.dismissing" [@fadeOut]>
             <mat-card-header>
-                <mat-card-title>{{notification.title}}</mat-card-title>
+                <mat-card-title>
+                    <span [innerHTML]="notification.formattedTitle"></span>
+                </mat-card-title>
                 <mat-card-subtitle>{{notification.sentAt ? formatDate(notification.sentAt) : ''}}</mat-card-subtitle>
             </mat-card-header>
             <div *ngIf="notification.title !== 'New category request'; else notApproved">
                 <mat-card-content>
-                    <p class="notification-message collapsed" #messageEl>{{notification.message}}</p>
+                    <span class="notification-message collapsed" #messageEl [innerHTML]="notification.formattedMessage"></span>
                     <button mat-button color="primary" class="read-button" (click)="readMore(messageEl)" *ngIf="isEllipsisActive(messageEl)">Read more</button>
                     <button mat-button color="primary" class="read-button" (click)="readLess(messageEl)" *ngIf="messageEl?.classList?.contains('expanded')">Read less</button>
                 </mat-card-content>
