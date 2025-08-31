@@ -39,7 +39,6 @@ export const routes: Routes = [
     {path: 'event-details', component: EventDetailsComponent, canActivate: []},
     {path: 'chat', component: ChatComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
     {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
-    {path: 'calendar',component: MyEventsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
     {path: 'notifications', component: NotificationsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
     {path: 'new-event-type', component: NewEventTypeComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN'] }},
     {path: 'my-event-types', component: MyEventTypesComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN'] }},
