@@ -19,11 +19,14 @@ import { ApprovedReviewCardComponent } from "../approved-review-card/approved-re
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { ReviewSummaryDto } from '../../services/dtos/review/review-summary.dto';
 import { ReviewDialogComponent, ReviewDialogData } from '../../dialog/review-dialog/review-dialog.component';
+import { ReviewEligibilityDto } from '../../services/dtos/review/review-eligibility.dto';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-event-details',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MapComponent, MatIconModule, MatMenuModule, MatMenuTrigger, ApprovedReviewCardComponent, MatPaginator],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MapComponent, MatIconModule, 
+    MatMenuModule, MatMenuTrigger, ApprovedReviewCardComponent, MatPaginator, MatTooltipModule],
   templateUrl: './event-details.component.html',
   styleUrl: './event-details.component.css'
 })
@@ -36,6 +39,8 @@ export class EventDetailsComponent implements OnInit {
   totalElements = 0;
   pageIndex = 0;
   pageSize = 10;
+  canReview: boolean | null = null;
+  reason = "Not loaded";
 
   // Injected
   readonly route = inject(ActivatedRoute);
@@ -54,6 +59,7 @@ export class EventDetailsComponent implements OnInit {
       if (eventId) {
         this.fetchEventData(eventId);
         this.fetchReviews(eventId);
+        this.checkReviewEligibility(eventId);
         this.eventId = Number(eventId);
       }
     });
@@ -82,6 +88,18 @@ export class EventDetailsComponent implements OnInit {
       next: (reviews: PagedModel<ReviewSummaryDto>) => {
         this.reviews = reviews;
         this.totalElements = reviews.page.totalElements;
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error(err);
+      }
+    });
+  }
+
+  private checkReviewEligibility(eventId: number): void {
+    this.eventService.getReviewEligibility(eventId).subscribe({
+      next: (eligibility: ReviewEligibilityDto) => {
+        this.canReview = eligibility.canReview;
+        this.reason = eligibility.reason || "Can't review";
       },
       error: (err: HttpErrorResponse) => {
         console.error(err);

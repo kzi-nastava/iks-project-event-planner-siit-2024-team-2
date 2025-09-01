@@ -12,6 +12,7 @@ import { ActivityDto } from './dtos/event/activity.dto';
 import { Activity } from '../model/event/activity';
 import { ReviewSummaryDto } from './dtos/review/review-summary.dto';
 import { PageParams } from '../parameters/page-params';
+import { ReviewEligibilityDto } from './dtos/review/review-eligibility.dto';
 @Injectable({
   providedIn: 'root'
 })
@@ -85,5 +86,9 @@ export class EventService {
   getReviews(eventId: number, pageParams?: PageParams): Observable<PagedModel<ReviewSummaryDto>> {
     const params = buildHttpParams(pageParams)
     return this.httpClient.get<PagedModel<ReviewSummaryDto>>(`${this.apiUrl}/${eventId}/reviews`, { params: params });
+  }
+
+  getReviewEligibility(id: number): Observable<ReviewEligibilityDto> {
+    return this.httpClient.get<ReviewEligibilityDto>(`${this.apiUrl}/${id}/review-eligibility`);
   }
 }

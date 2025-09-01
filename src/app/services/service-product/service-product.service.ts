@@ -11,6 +11,7 @@ import { ServiceProductFilteringValues } from '../dtos/service-product/service-p
 import { ServiceProductReview } from '../../model/review/service-product-review';
 import { PageParams } from '../../parameters/page-params';
 import { ReviewSummaryDto } from '../dtos/review/review-summary.dto';
+import { ReviewEligibilityDto } from '../dtos/review/review-eligibility.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -51,5 +52,9 @@ export class ServiceProductService {
     return this.httpClient.get<string[]>(`${this.apiUrl}/sp-categories/by-event-type`, {
       params: { eventTypeId: eventTypeId.toString() }
     });
+  }
+
+  getReviewEligibility(id: number): Observable<ReviewEligibilityDto> {
+    return this.httpClient.get<ReviewEligibilityDto>(`${this.apiUrl}/${id}/review-eligibility`);
   }
 }

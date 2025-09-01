@@ -18,12 +18,19 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { ServiceProduct } from '../../model/service-product/service-product';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { ApprovedReviewCardComponent } from "../approved-review-card/approved-review-card.component";
+import { PagedModel } from '../../shared/model/paged-model';
+import { ReviewSummaryDto } from '../../services/dtos/review/review-summary.dto';
+import { ReviewDialogComponent, ReviewDialogData } from '../../dialog/review-dialog/review-dialog.component';
+import { ReviewEligibilityDto } from '../../services/dtos/review/review-eligibility.dto';
+import { MatTooltip } from "@angular/material/tooltip";
 
 @Component({
   selector: 'app-sp-details',
   standalone: true,
   imports: [MatCard, MatCardTitle, MatCardSubtitle, MatCardContent, MatCardActions, CommonModule,
-    MatCardModule, MatButtonModule, MatIconModule, MatMenuModule],
+    MatCardModule, MatButtonModule, MatIconModule, MatMenuModule, MatPaginator, ApprovedReviewCardComponent, MatTooltip],
   templateUrl: './sp-details-component.html',
   styleUrl: './sp-details-component.css'
 })
@@ -34,6 +41,12 @@ export class SpDetailsComponent  implements OnInit {
   error = '';
   isService = false;
   hasDuration = false;
+  totalElements = 0;
+  pageIndex = 0;
+  pageSize = 10;
+  reviews: PagedModel<ReviewSummaryDto> | null = null;
+  canReview: boolean | null = null;
+  reason = "Not loaded";
 
   // Injected
   readonly route = inject(ActivatedRoute);
@@ -52,6 +65,8 @@ export class SpDetailsComponent  implements OnInit {
       const spId = params['id'];
       if (spId) {
         this.fetchSpData(spId);
+        this.fetchReviews(spId);
+        this.checkReviewEligibility(spId);
         this.spId = Number(spId);
       }
     });
@@ -76,6 +91,30 @@ export class SpDetailsComponent  implements OnInit {
       error: (err: HttpErrorResponse) => {
         this.error = 'Failed to load service/product details.';
         this.loading = false;
+        console.error(err);
+      }
+    });
+  }
+
+  private fetchReviews(eventId: number): void {
+    this.serviceProductService.getReviews(eventId, { page: this.pageIndex, size: this.pageSize }).subscribe({
+      next: (reviews: PagedModel<ReviewSummaryDto>) => {
+        this.reviews = reviews;
+        this.totalElements = reviews.page.totalElements;
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error(err);
+      }
+    });
+  }
+
+  private checkReviewEligibility(eventId: number): void {
+    this.serviceProductService.getReviewEligibility(eventId).subscribe({
+      next: (eligibility: ReviewEligibilityDto) => {
+        this.canReview = eligibility.canReview;
+        this.reason = eligibility.reason || "Can't review";
+      },
+      error: (err: HttpErrorResponse) => {
         console.error(err);
       }
     });
@@ -118,5 +157,23 @@ export class SpDetailsComponent  implements OnInit {
         this.toastService.show('Failed to suspend user', 2000);
       }
     });
+  }
+
+
+  onPageChange(event: PageEvent): void {
+    this.pageIndex = event.pageIndex;
+    if (this.pageSize != event.pageSize)
+      if (this.totalElements > this.pageIndex * event.pageSize) // enough elements for another page
+        this.pageSize = event.pageSize;
+    this.fetchReviews(this.spId);
+  }
+
+  openReviewDialog() {
+    const data: ReviewDialogData = {
+      entityId: this.spId,
+      entityType: 'SERVICE_PRODUCT',
+      entityName: this.spData?.name || ''
+    };
+    this.dialog.open(ReviewDialogComponent, {data: data});
   }
 }

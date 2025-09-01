@@ -28,7 +28,10 @@
 <div *ngIf="eventData" class="reviews-container">
   <div class="reviews-header">
     <h3>Reviews</h3>
-    <button mat-raised-button color="primary" (click)="openReviewDialog()">Add Review</button>
+    <div [matTooltip]="reason" [matTooltipDisabled]="canReview">
+      <button mat-raised-button color="primary" (click)="openReviewDialog()"
+        [disabled]="!canReview">Add Review</button>
+    </div>
   </div>
   @for (review of reviews?.content?.entries(); track review[0]) {
     <app-approved-review-card [review]="review[1]"></app-approved-review-card>
