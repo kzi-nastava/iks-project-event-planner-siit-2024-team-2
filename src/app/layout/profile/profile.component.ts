@@ -28,6 +28,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { DragScrollComponent, DragScrollItemDirective } from 'ngx-drag-scroll';
 import { ImgFallbackDirective } from '../../utils/image-fallback';
+import { EventService } from '../../services/event.service';
 
 @Component({
   selector: 'app-profile',
@@ -56,6 +57,7 @@ export class ProfileComponent implements OnInit {
   eventTypes: EventType[] = [];
   selectedEventTypes: EventType[] = [];
   showAllProfileData = true;
+  attendingEvents: number[] = [];
 
   // Injected
   readonly route = inject(ActivatedRoute);
@@ -77,6 +79,7 @@ export class ProfileComponent implements OnInit {
         this.loadUserData(userId);
       }
     });
+    this.loadAttendingEvents();
   }
 
   readonly profileService = inject(ProfileService);
@@ -87,6 +90,7 @@ export class ProfileComponent implements OnInit {
   readonly toastService = inject(ToastService);
   readonly imageService = inject(ImageService);
   readonly userService = inject(UserService);
+  readonly eventService = inject(EventService);
 
 
   loadUserData(userId?: number) {
@@ -369,10 +373,51 @@ deactivateAccount() {
     });
   }
 
-    convertProfilePictureUrls(array: EventSummaryDto[] | ServiceProductSummaryDto[]) {
-      array.forEach(element => {
-        if (element.creatorProfilePicture != null)
-          element.creatorProfilePicture = environment.apiHost + "api/images/" + element.creatorProfilePicture;
-      });
-    }
+  convertProfilePictureUrls(array: EventSummaryDto[] | ServiceProductSummaryDto[]) {
+    array.forEach(element => {
+      if (element.creatorProfilePicture != null)
+        element.creatorProfilePicture = environment.apiHost + "api/images/" + element.creatorProfilePicture;
+    });
+  }
+
+    loadAttendingEvents(): void {
+    this.eventService.getAttendingEventsIds().subscribe({
+      next: (eventIds) => {
+        this.attendingEvents = eventIds;
+      },
+      error: (err) => {
+        console.error('Failed to load attending events:', err);
+      }
+    });
+  }
+
+  attendEvent(eventId: number) {
+    this.eventService.attendEvent(eventId).subscribe({
+      next: () => {
+        this.loadAttendingEvents();
+        this.toastService.show('Successfully joined the event', 2000);
+      },
+      error: (err) => {
+        console.error('Failed to join event:', err);
+        this.toastService.show('Failed to join event', 2000);
+      }
+    });
+  }
+
+  cancelAttendance(eventId: number) {
+    this.eventService.cancelAttendance(eventId).subscribe({
+      next: () => {
+        this.loadAttendingEvents();
+        this.toastService.show('Successfully left the event', 2000);
+      },
+      error: (err) => {
+        console.error('Failed to leave event:', err);
+        this.toastService.show('Failed to leave event', 2000);
+      }
+    });
+  }
+
+  isUserAttending(eventId: number): boolean {
+    return this.attendingEvents.includes(eventId);
+  }
 }

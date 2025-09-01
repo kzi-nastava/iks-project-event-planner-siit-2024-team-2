@@ -88,6 +88,7 @@ export class HomeComponent implements OnInit {
   selectedCities: City[] = [];
   selectedCategories: ServiceProductCategory[] = [];
   selectedAvailableTypes: EventType[] = [];
+  attendingEvents: number[] = [];
 
 
   // Injected
@@ -126,6 +127,18 @@ export class HomeComponent implements OnInit {
     this.fetchFilteringValue();
     this.loadCities();
     this.loadFavorites();
+    this.loadAttendingEvents();
+  }
+
+  loadAttendingEvents(): void {
+    this.eventService.getAttendingEventsIds().subscribe({
+      next: (eventIds) => {
+        this.attendingEvents = eventIds;
+      },
+      error: (err) => {
+        console.error('Failed to load attending events:', err);
+      }
+    });
   }
 
   fetchTop5(): void {
@@ -406,6 +419,36 @@ export class HomeComponent implements OnInit {
 
   navigateToSpDetails(spId?: number): void {
     this.router.navigate(['/sp-details'], { queryParams: { id: spId } });
+  }
+
+  attendEvent(eventId: number) {
+    this.eventService.attendEvent(eventId).subscribe({
+      next: () => {
+        this.loadAttendingEvents();
+        this.toastService.show('Successfully joined the event', 2000);
+      },
+      error: (err) => {
+        console.error('Failed to join event:', err);
+        this.toastService.show('Failed to join event', 2000);
+      }
+    });
+  }
+
+  cancelAttendance(eventId: number) {
+    this.eventService.cancelAttendance(eventId).subscribe({
+      next: () => {
+        this.loadAttendingEvents();
+        this.toastService.show('Successfully left the event', 2000);
+      },
+      error: (err) => {
+        console.error('Failed to leave event:', err);
+        this.toastService.show('Failed to leave event', 2000);
+      }
+    });
+  }
+
+  isUserAttending(eventId: number): boolean {
+    return this.attendingEvents.includes(eventId);
   }
   
   openReportDialog(email: string, name: string) {

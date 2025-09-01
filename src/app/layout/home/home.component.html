@@ -146,6 +146,17 @@ aria-label="Select page">
     More info
   </button>
 
+    <button mat-flat-button color="primary"
+      *ngIf="!isUserAttending(eventSummary.id); else attending"
+      (click)="attendEvent(eventSummary.id)">
+      Attend Event
+    </button>
+    <ng-template #attending>
+      <button mat-flat-button color="warn" (click)="cancelAttendance(eventSummary.id)">
+      Cancel Attendance
+      </button>
+    </ng-template>
+
   <!-- Like / Unlike button -->
   <button mat-icon-button color="warn"
           *ngIf="isEventFavorite(eventSummary.id); else notFav"
