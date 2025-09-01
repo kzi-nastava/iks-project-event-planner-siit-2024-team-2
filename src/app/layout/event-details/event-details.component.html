@@ -13,7 +13,7 @@
   <mat-card-content>
     <p><strong>Description:</strong> {{ eventData.description }}</p>
     <p><strong>Max Attendance:</strong> {{ eventData.maxAttendances }}</p>
-    <p><strong>Open:</strong> {{ eventData.isOpen ? 'Open for everyone' : 'Invite only' }}</p>
+    <p><strong>Open:</strong> {{ eventData.open ? 'Open for everyone' : 'Invite only' }}</p>
     <app-map [latitude]="eventData.latitude!" [longitude]="eventData.longitude!" [readonly]="true"></app-map>
   </mat-card-content>
 
