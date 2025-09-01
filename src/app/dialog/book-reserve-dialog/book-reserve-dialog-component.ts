@@ -13,8 +13,8 @@ import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { ServiceProductCategory } from '../../model/service-product/service-product-category';
 import { ToastService } from '../../services/utils/toast-service';
-import { PurchaseDto } from '../../services/dtos/event/purchase.dto';
-import { BookingDto } from '../../services/dtos/event/booking.dto';
+import { PurchaseDto } from '../../services/dtos/order/purchase.dto';
+import { BookingDto } from '../../services/dtos/order/booking.dto';
 import { randomInt } from 'crypto';
 
 

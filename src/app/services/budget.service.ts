@@ -4,8 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { CreateBudgetDto } from './dtos/event/create-budget.dto';
 import { Observable } from 'rxjs';
 import { Budget } from '../model/budget/budget';
-import { BookingDto } from './dtos/event/booking.dto';
-import { PurchaseDto } from './dtos/event/purchase.dto';
+import { BookingDto } from './dtos/order/booking.dto';
+import { PurchaseDto } from './dtos/order/purchase.dto';
 
 @Injectable({
   providedIn: 'root'

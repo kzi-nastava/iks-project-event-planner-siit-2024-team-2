@@ -194,3 +194,6 @@ mat-card-content {
   object-fit: contain;
   object-position: top;
 }
+mat-card-actions button {
+  margin-right: 6px;
+}

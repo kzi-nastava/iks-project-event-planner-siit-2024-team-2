@@ -6,8 +6,8 @@ import { ToastService } from '../../services/utils/toast-service';
 import { AuthService } from '../../services/auth-service.service';
 import { MatFormField, MatFormFieldModule, MatLabel } from "@angular/material/form-field";
 import { MatButtonModule } from '@angular/material/button';
-import { ReviewDto } from '../../services/dtos/review/review.dto';
-import { ReviewType } from '../../services/dtos/review/review-type';
+import { ReviewDto } from '../../services/dtos/order/review.dto';
+import { ReviewType } from '../../services/dtos/order/review-type';
 import { MatIcon } from "@angular/material/icon";
 import { MatInputModule } from '@angular/material/input';
 

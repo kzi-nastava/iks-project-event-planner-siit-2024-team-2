@@ -10,9 +10,9 @@ import { buildHttpParams } from '../utils/http-utils';
 import { EventDto } from './dtos/event/event.dto';
 import { ActivityDto } from './dtos/event/activity.dto';
 import { Activity } from '../model/event/activity';
-import { ReviewSummaryDto } from './dtos/review/review-summary.dto';
+import { ReviewSummaryDto } from './dtos/order/review-summary.dto';
 import { PageParams } from '../parameters/page-params';
-import { ReviewEligibilityDto } from './dtos/review/review-eligibility.dto';
+import { ReviewEligibilityDto } from './dtos/order/review-eligibility.dto';
 @Injectable({
   providedIn: 'root'
 })

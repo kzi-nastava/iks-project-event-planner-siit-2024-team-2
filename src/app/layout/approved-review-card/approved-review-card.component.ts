@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
 import { MatIcon } from "@angular/material/icon";
 import { intlFormatDistance } from 'date-fns';
 import { MatButtonModule } from '@angular/material/button';
-import { ReviewSummaryDto } from '../../services/dtos/review/review-summary.dto';
+import { ReviewSummaryDto } from '../../services/dtos/order/review-summary.dto';
 import { FormatUtilService } from '../../utils/format-util.service';
 
 @Component({
