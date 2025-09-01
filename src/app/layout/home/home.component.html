@@ -127,9 +127,10 @@ aria-label="Select page">
     <mat-card-header>
       <img mat-card-avatar class="profile-picture" alt="Profile Picture" 
       [src]="eventSummary.creatorProfilePicture || 'images/avatar.svg'" [imgFallback]="'images/avatar.svg'"
-      [matMenuTriggerFor]="reportMenu" [matMenuTriggerData]="{email: eventSummary.creatorEmail, name: eventSummary.creatorName}"/>
+      [matMenuTriggerFor]="eventSummary.creatorEmail ? reportMenu : null"
+      [matMenuTriggerData]="{email: eventSummary.creatorEmail, name: eventSummary.creatorName}"/>
       <mat-card-title-group>
-        <mat-card-title class="event-creator-name" [innerHTML]="eventSummary.creatorName"></mat-card-title>
+        <mat-card-title class="event-creator-name" [innerHTML]="eventSummary.creatorName ?? 'Deleted User'"></mat-card-title>
         <mat-card-subtitle class="event-creator-email" [innerHTML]="eventSummary.creatorEmail"></mat-card-subtitle>
       </mat-card-title-group>
     </mat-card-header>
@@ -152,9 +153,10 @@ aria-label="Select page">
     <mat-card-header>
       <img mat-card-avatar class="profile-picture" alt="Profile Picture" 
       [src]="serviceProduct.creatorProfilePicture || 'images/avatar.svg'" imgFallback="images/avatar.svg"
-      [matMenuTriggerFor]="reportMenu" [matMenuTriggerData]="{email: serviceProduct.creatorEmail, name: serviceProduct.creatorName}"/>
+      [matMenuTriggerFor]="serviceProduct.creatorEmail ? reportMenu : null"
+      [matMenuTriggerData]="{email: serviceProduct.creatorEmail, name: serviceProduct.creatorName}"/>
       <mat-card-title-group>
-        <mat-card-title [innerHTML]="serviceProduct.creatorName"></mat-card-title>
+        <mat-card-title [innerHTML]="serviceProduct.creatorName ?? 'Deleted User'"></mat-card-title>
         <mat-card-subtitle [innerHTML]="serviceProduct.creatorEmail"></mat-card-subtitle>
         <img *ngIf="serviceProduct.image" mat-card-lg-image class="card-image" [src]="serviceProduct.image" alt="Service or product image" imgFallback>
       </mat-card-title-group>

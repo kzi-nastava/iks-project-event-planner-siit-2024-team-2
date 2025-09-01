@@ -1,0 +1,64 @@
+.review-card {
+    width: 80%;
+    height: auto;
+    margin-bottom: 8px;
+    background: white; 
+    color: black;
+    display: flex;
+    flex-direction: column;
+    border-width: 0px;
+    flex: 0 0 auto;
+    margin: 0 auto 8px 0;
+}
+
+.review-rating {
+    display: flex;
+    flex-direction: row;
+    margin-top: 8px;
+}
+
+.profile-picture {
+    margin-right: 8px;
+    width: 50px;
+    height: 50px;
+}
+
+/* .reviewer-date {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+} */
+/* .review-name {
+    position: relative;
+} */
+.collapsed {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-clamp: 2;
+}
+.review-comment-container {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+.read-button {
+    margin: 5px -10px;
+    padding: 0 10px;
+}
+.review-name {
+    flex: 1;
+    /* width: 100%; */
+    display: flex; 
+    flex-direction: row; 
+    justify-content: space-between;
+}
+.mat-mdc-card-title-group {
+    width: 100%;
+    display: inline-block;
+}
+.review-date {
+    white-space: nowrap;
+}

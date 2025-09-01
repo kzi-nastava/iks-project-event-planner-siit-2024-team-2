@@ -13,19 +13,28 @@ import { ToastService } from '../../services/utils/toast-service';
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../../services/user/user.service';
 import { AuthService } from '../../services/auth-service.service';
+import { Review } from '../../model/review/review';
+import { PagedModel } from '../../shared/model/paged-model';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ApprovedReviewCardComponent } from "../approved-review-card/approved-review-card.component";
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
 
 @Component({
   selector: 'app-event-details',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MapComponent, MatIconModule, MatMenuModule, MatMenuTrigger],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MapComponent, MatIconModule, MatMenuModule, MatMenuTrigger, ApprovedReviewCardComponent, MatPaginator],
   templateUrl: './event-details.component.html',
   styleUrl: './event-details.component.css'
 })
 export class EventDetailsComponent implements OnInit {
   eventId!: number;
   eventData?: Event;
+  reviews: PagedModel<Review> | null = null;
   loading = true;
   error = '';
+  totalElements = 0;
+  pageIndex = 0;
+  pageSize = 10;
 
   // Injected
   readonly route = inject(ActivatedRoute);
@@ -43,6 +52,7 @@ export class EventDetailsComponent implements OnInit {
       const eventId = params['id'];
       if (eventId) {
         this.fetchEventData(eventId);
+        this.fetchReviews(eventId);
         this.eventId = Number(eventId);
       }
     });
@@ -61,6 +71,17 @@ export class EventDetailsComponent implements OnInit {
       error: (err) => {
         this.error = 'Failed to load event details.';
         this.loading = false;
+        console.error(err);
+      }
+    });
+  }
+
+  private fetchReviews(eventId: number): void {
+    this.eventService.getReviews(eventId).subscribe({
+      next: (reviews: PagedModel<Review>) => {
+        this.reviews = reviews;
+      },
+      error: (err: HttpErrorResponse) => {
         console.error(err);
       }
     });
@@ -104,5 +125,13 @@ export class EventDetailsComponent implements OnInit {
         this.toastService.show('Failed to suspend user', 2000);
       }
     });
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.pageIndex = event.pageIndex;
+    if (this.pageSize != event.pageSize)
+      if (this.totalElements > this.pageIndex * event.pageSize) // enough elements for another page
+        this.pageSize = event.pageSize;
+    this.fetchReviews(this.eventId);
   }
 }

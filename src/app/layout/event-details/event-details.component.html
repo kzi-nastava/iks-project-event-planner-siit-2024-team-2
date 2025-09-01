@@ -6,7 +6,7 @@
 <mat-card *ngIf="eventData">
   <mat-card-title>{{ eventData.name }}</mat-card-title>
   <mat-card-subtitle>{{ eventData.date | date:'fullDate' }}</mat-card-subtitle>
-  <button mat-icon-button class="top-right-button" [matMenuTriggerFor]="reportMenu">
+  <button mat-icon-button class="top-right-button" [matMenuTriggerFor]="reportMenu" [disabled]="!eventData.eventOrganizerDto">
     <mat-icon>report</mat-icon>
   </button>
 
@@ -25,6 +25,23 @@
     </button>
   </mat-card-actions>
 </mat-card>
+<div *ngIf="eventData" class="reviews-container">
+  <h3>Reviews</h3>
+  @for (review of reviews?.content; track review.id) {
+    <app-approved-review-card [review]="review"></app-approved-review-card>
+  } @empty {
+    <p>No reviews yet.</p>
+  }
+</div>
+<mat-paginator [length]="totalElements"
+[pageIndex]="pageIndex"
+[pageSize]="pageSize"
+[pageSizeOptions]="[10, 20, 50]"
+[showFirstLastButtons]="true"
+(page)="onPageChange($event)"
+
+aria-label="Select page">
+</mat-paginator>
 
 <mat-menu #reportMenu="matMenu" class="report-menu">
   <ng-template matMenuContent class="report-menu-content">

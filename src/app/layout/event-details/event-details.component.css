@@ -17,3 +17,13 @@ mat-card-actions button {
   top: 5px;
   right: 5px;
 }
+.reviews-container {
+  margin-top: 2rem;
+  width: 100%;
+  flex-direction: column;
+  display: flex;
+  /* align-items: center; */
+  align-items: stretch;
+  justify-content: flex-start;
+  padding-bottom: 56px;   
+}
