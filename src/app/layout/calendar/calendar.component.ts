@@ -37,16 +37,16 @@ export class CalendarComponent implements OnInit {
 
   constructor() {}
   calendarService = inject(CalendarService);
-ngOnInit(): void {
-  this.userId = Number(localStorage.getItem('userId'));
+  ngOnInit(): void {
+    this.userId = Number(localStorage.getItem('userId'));
 
-  this.calendarService.getAttendingEvents(this.userId).subscribe(events => {
-    this.addEvents(events.map(e => ({
-      title: `Attending: ${e.name}`,
-      start: e.date,
-      color: '#42a5f5'
-    })));
-  });
+    this.calendarService.getAttendingEvents(this.userId).subscribe(events => {
+      this.addEvents(events.map(e => ({
+        title: `Attending: ${e.name}`,
+        start: e.date,
+        color: '#42a5f5'
+      })));
+    });
 
   if (this.role === 'EVENT_ORGANIZER') {
     this.calendarService.getOrganizerEvents(this.userId).subscribe(events => {

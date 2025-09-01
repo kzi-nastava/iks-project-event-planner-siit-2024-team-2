@@ -8,8 +8,8 @@
 
     <div class="profile-picture-actions" *ngIf="showAllProfileData">
       <input title="Profile Picture" type="file" accept="image/*" (change)="onFileSelected($event)">
-      <button *ngIf="selectedFile" (click)="uploadProfilePicture()">Save New Picture</button>
-      <button *ngIf="userInfo.image" (click)="removeProfilePicture()">Remove Picture</button>
+      <button *ngIf="selectedFile" (click)="uploadProfilePicture()" class="button">Save New Picture</button>
+      <button *ngIf="userInfo.image" (click)="removeProfilePicture()" class="button">Remove Picture</button>
     </div>
 
     <h1>{{ userInfo.firstName }} {{ userInfo.lastName }}</h1>
@@ -42,7 +42,7 @@
           <label for="address">Address</label>
           <input title="Address" type="text" [(ngModel)]="userInfo.address" name="address" [disabled]="!showAllProfileData">
         </div>
-        <button type="submit" *ngIf="showAllProfileData">Update Personal Info</button>
+        <button type="submit" *ngIf="showAllProfileData" class="button">Update Personal Info</button>
       </form>
     </div>
 
@@ -58,8 +58,8 @@
           <label for="description">Description</label>
           <textarea title="Description" [(ngModel)]="companyInfo.companyDescription" name="description" [disabled]="!showAllProfileData"></textarea>
         </div>
-        <button type="submit" *ngIf="showAllProfileData">Update Company Info</button>
-        <button type="button" *ngIf="!showAllProfileData" (click)="goBack()">Back</button>
+        <button type="submit" *ngIf="showAllProfileData" class="button">Update Company Info</button>
+        <button type="button" *ngIf="!showAllProfileData" (click)="goBack()" class="button">Back</button>
       </form>
 
       <div *ngIf="showAllProfileData">
@@ -84,23 +84,24 @@
 
     <!-- Change Password Section -->
     <div *ngIf="showAllProfileData">
-    <div class="profile-section" *ngIf="userRole !== 'AUTHENTICATED'">
-      <h2>Change Password</h2>
-      <form (ngSubmit)="changePassword()">
-        <div class="form-group">
-          <label for="oldPassword">Old Password</label>
-          <input title="Old Password" type="password" [(ngModel)]="oldPassword" name="oldPassword" required>
-        </div>
-        <div class="form-group">
-          <label for="newPassword">New Password</label>
-          <input title="New Password" type="password" [(ngModel)]="newPassword" name="newPassword" required>
-        </div>
-        <div class="form-group">
-          <label for="confirmPassword">Confirm New Password</label>
-          <input title="Confirm New Password" type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required>
-        </div>
-        <button type="submit">Change Password</button>
-      </form>
+      <div class="profile-section" *ngIf="userRole !== 'AUTHENTICATED'">
+        <h2>Change Password</h2>
+        <form (ngSubmit)="changePassword()">
+          <div class="form-group">
+            <label for="oldPassword">Old Password</label>
+            <input title="Old Password" type="password" [(ngModel)]="oldPassword" name="oldPassword" required>
+          </div>
+          <div class="form-group">
+            <label for="newPassword">New Password</label>
+            <input title="New Password" type="password" [(ngModel)]="newPassword" name="newPassword" required>
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">Confirm New Password</label>
+            <input title="Confirm New Password" type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required>
+          </div>
+          <button type="submit" class="button">Change Password</button>
+        </form>
+      </div>
     </div>
 
     <!-- Favorites Section -->
@@ -126,24 +127,10 @@
         </drag-scroll>
       </ng-container>
 
-    <!-- Calendar/Schedule Section -->
-    <!-- <div class="profile-section">
-      <h2>Upcoming Events</h2>
-      <div *ngIf="upcomingEvents.length && upcomingEvents.length > 0; else noUpcomingEvents">
-        <div *ngFor="let event of upcomingEvents" class="event-item">
-          <h4>{{ event.title }}</h4>
-          <p>{{ event.date | date }}</p>
-        </div>
-      </div>
-      <ng-template #noUpcomingEvents>
-        <p>No upcoming events.</p>
-      </ng-template>
-    </div>
-
     <!-- Account Deactivation -->
     <div class="profile-section danger-zone">
       <h2>Account Settings</h2>
-      <button type="button" class="danger-button" (click)="deactivateAccount()">
+      <button type="button" class="danger-button button" (click)="deactivateAccount()">
         Deactivate Account
       </button>
       <p>Note: Deactivating your profile cannot be undone.</p>
@@ -151,10 +138,11 @@
     </div>
   </div>
 
-  <ng-template #EventCard let-eventSummary>
+<ng-template #EventCard let-eventSummary>
   <mat-card class="event-card" appearance="outlined">
     <mat-card-header>
-      <img mat-card-avatar class="profile-picture" src="images/avatar.png" alt="Profile Picture" />
+      <img mat-card-avatar class="profile-picture" 
+      [src]="eventSummary.creatorProfilePicture || 'images/avatar.svg'" [imgFallback]="'images/avatar.svg'" alt="Profile Picture" />
       <mat-card-title-group>
         <mat-card-title class="event-creator-name" [innerHTML]="eventSummary.creatorName"></mat-card-title>
         <mat-card-subtitle class="event-creator-email" [innerHTML]="eventSummary.creatorEmail"></mat-card-subtitle>
@@ -168,18 +156,16 @@
       <p class="description">{{eventSummary.description}}</p>
       <br>
     </mat-card-content>
-<mat-card-actions align="start">
-  <button mat-flat-button color="primary" (click)="navigateToEventDetails(eventSummary.id)">
-    More info
-  </button>
+    <mat-card-actions align="start">
+    <button mat-flat-button color="primary" (click)="navigateToEventDetails(eventSummary.id)">
+      More info
+    </button>
 
-  <!-- Like / Unlike button -->
-  <button mat-icon-button color="warn"
-          (click)="removeEventFromFavorites(eventSummary.id)">
-    <mat-icon>favorite</mat-icon>
-  </button>
-
-</mat-card-actions>
+    <button mat-icon-button color="warn"
+            (click)="removeEventFromFavorites(eventSummary.id)">
+      <mat-icon>favorite</mat-icon>
+    </button>
+    </mat-card-actions>
   </mat-card>
 </ng-template>
 

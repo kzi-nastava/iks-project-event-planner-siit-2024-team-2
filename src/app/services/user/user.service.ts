@@ -17,27 +17,27 @@ export class UserService {
   }
 
   getFavoriteEvents(userId: number) {
-    return this.httpClient.get<EventSummaryDto[]>(`${environment.apiHost}api/users/${userId}/favorite-events`);
+    return this.httpClient.get<EventSummaryDto[]>(`${this.usersUrl}/${userId}/favorite-events`);
   }
 
   addFavoriteEvent(userId: number, eventId: number) {
-    return this.httpClient.post(`${environment.apiHost}api/users/${userId}/favorite-events/${eventId}`, {});
+    return this.httpClient.post(`${this.usersUrl}/${userId}/favorite-events/${eventId}`, {});
   }
 
   removeFavoriteEvent(userId: number, eventId: number) {
-    return this.httpClient.delete(`${environment.apiHost}api/users/${userId}/favorite-events/${eventId}`);
+    return this.httpClient.delete(`${this.usersUrl}/${userId}/favorite-events/${eventId}`);
   }
 
   getFavoriteServiceProducts(userId: number) {
-    return this.httpClient.get<ServiceProductSummaryDto[]>(`${environment.apiHost}api/users/${userId}/favorite-service-products`);
+    return this.httpClient.get<ServiceProductSummaryDto[]>(`${this.usersUrl}/${userId}/favorite-service-products`);
   }
 
   addFavoriteServiceProduct(userId: number, serviceProductId: number) {
-    return this.httpClient.post(`${environment.apiHost}api/users/${userId}/favorite-service-products/${serviceProductId}`, {});
+    return this.httpClient.post(`${this.usersUrl}/${userId}/favorite-service-products/${serviceProductId}`, {});
   }
 
   removeFavoriteServiceProduct(userId: number, serviceProductId: number) {
-    return this.httpClient.delete(`${environment.apiHost}api/users/${userId}/favorite-service-products/${serviceProductId}`);
+    return this.httpClient.delete(`${this.usersUrl}/${userId}/favorite-service-products/${serviceProductId}`);
   }
 
 }

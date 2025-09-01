@@ -32,7 +32,7 @@ import { ImgFallbackDirective } from '../../utils/image-fallback';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIcon,     MatSidenavModule, MatCardModule, MatButtonModule, CommonModule, MatInputModule, MatIconModule, MatTabsModule,
+  imports: [CommonModule, FormsModule, MatIcon, MatSidenavModule, MatCardModule, MatButtonModule, CommonModule, MatInputModule, MatIconModule, MatTabsModule,
       MatDialogModule, MatPaginatorModule, MatProgressSpinnerModule, DragScrollComponent, DragScrollItemDirective,
       MatMenuModule, ReactiveFormsModule, ImgFallbackDirective],
   templateUrl: './profile.component.html',
@@ -301,6 +301,7 @@ deactivateAccount() {
     this.userService.getFavoriteEvents(userId).subscribe({
       next: (events) => {
         this.favoriteEvents = events;
+        this.convertProfilePictureUrls(this.favoriteEvents);
       },
       error: (err) => {
         console.error('Error loading favorite events:', err);
@@ -329,6 +330,7 @@ deactivateAccount() {
       next: (serviceProducts) => {
         this.favoriteServiceProducts = serviceProducts;
         this.convertImageUrls(this.favoriteServiceProducts);
+        this.convertProfilePictureUrls(this.favoriteServiceProducts);
       },
       error: (err) => {
         console.error('Error loading favorite service products:', err);
@@ -366,4 +368,11 @@ deactivateAccount() {
         element.image = environment.apiHost + "api/images/" + element.image;
     });
   }
+
+    convertProfilePictureUrls(array: EventSummaryDto[] | ServiceProductSummaryDto[]) {
+      array.forEach(element => {
+        if (element.creatorProfilePicture != null)
+          element.creatorProfilePicture = environment.apiHost + "api/images/" + element.creatorProfilePicture;
+      });
+    }
 }
