@@ -1,0 +1,15 @@
+.form-input {
+    width: 220px;
+    padding: 6px 6px;
+    border-radius: 8px;
+    margin: 5px;
+}
+
+button {
+    width: 150px;
+    margin-top: 15px;
+    justify-content: center;
+}
+.no-budgets {
+    font-size: small;
+}

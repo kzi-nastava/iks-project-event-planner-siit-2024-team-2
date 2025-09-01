@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
@@ -33,7 +33,7 @@ export class BudgetComponent {
   constructor(private router: Router, private route: ActivatedRoute,
               private eventService: EventService, private spCategoryService: ServiceProductCategoryService,
               private budgetService: BudgetService, public dialog: MatDialog,
-              private serviceProductService: ServiceProductService) {}
+              private serviceProductService: ServiceProductService, private location: Location) {}
 
   eventId: number = -1;
   budgets: any[] = [];
@@ -86,7 +86,7 @@ export class BudgetComponent {
   }
 
   back() {
-    this.router.navigate(['/my-events'])
+    this.location.back();
   }
 
   onEdit(item: Budget) {
