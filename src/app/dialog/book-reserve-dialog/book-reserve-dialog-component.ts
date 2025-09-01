@@ -12,6 +12,10 @@ import { EventService } from '../../services/event.service';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { ServiceProductCategory } from '../../model/service-product/service-product-category';
+import { ToastService } from '../../services/utils/toast-service';
+import { PurchaseDto } from '../../services/dtos/event/purchase.dto';
+import { BookingDto } from '../../services/dtos/event/booking.dto';
+import { randomInt } from 'crypto';
 
 
 
@@ -31,9 +35,10 @@ export class BookReserveDialogComponent {
   readonly budgetService = inject(BudgetService);
   readonly router = inject(Router);
   readonly dialogRef = inject(MatDialogRef);
+  readonly toastService = inject(ToastService);
 
   spData: ServiceProduct = this.data.sp;
-  selectedBudget = new FormControl('', Validators.required);
+  selectedBudget = new FormControl(-1, Validators.required);
   budgets: Budget[] = [];
 
   selectedEvent = new FormControl(-1, Validators.required);
@@ -45,8 +50,10 @@ export class BookReserveDialogComponent {
     this.eventService.getAllMine({ page: 0, size: 50 }).subscribe(response => {
       this.events = response.content; 
     });
-    if (this.spData.discount && this.spData.price)
+    if (this.spData.price && this.spData.discount)
       this.totalPrice = this.spData.price - this.spData.discount;
+    else if (this.spData.price)
+      this.totalPrice = this.spData.price;
   }
 
   onEventSelected(event: MatSelectChange) {
@@ -62,5 +69,40 @@ export class BookReserveDialogComponent {
       this.router.navigate(['/budget'], { queryParams: { id: event.id, eventTypeId: event.type.id} });
       this.dialogRef.close();
     }
+  }
+
+  confirmBookingPurchase() {
+    if (this.selectedBudget.value && this.selectedBudget.value !== -1) {
+      this.budgetService.getBudget(this.selectedBudget.value).subscribe(budget => {
+        if (budget.currentSpent + this.totalPrice > budget.plannedSpending)
+          this.toastService.show('Your budget is only ' + (budget.plannedSpending - budget.currentSpent) +
+                                 ' €! Increase it.', 4000);
+        
+        else {
+          if (this.spData.dtype === 'Product') {
+            const newPurchase: PurchaseDto = {
+              productId: this.spData.id,
+              price: this.totalPrice
+            };
+            this.budgetService.addNewPurchase(Number(this.selectedBudget.value), newPurchase).subscribe();
+            this.toastService.show('Purchase added successfully', 2000);
+          }
+          else {
+            const newBooking: BookingDto = {
+              serviceId: this.spData.id,
+              duration: Math.floor(Number(this.spData.price) / 3),
+              price: this.totalPrice
+            };
+            this.budgetService.addNewBooking(Number(this.selectedBudget.value), newBooking).subscribe();
+            this.toastService.show('Booking added successfully', 2000);
+          }
+          this.dialogRef.close(true);
+        }
+      })
+    }
+  }
+
+  onCancel() {
+    this.dialogRef.close(false);
   }
 }

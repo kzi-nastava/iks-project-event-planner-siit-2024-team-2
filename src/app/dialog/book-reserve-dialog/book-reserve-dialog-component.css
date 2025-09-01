@@ -1,12 +1,12 @@
 .form-input {
-    width: 220px;
-    padding: 6px 6px;
+    width: 270px;
+    padding: 10px 10px;
     border-radius: 8px;
     margin: 5px;
 }
 
 button {
-    width: 150px;
+    width: 130px;
     margin-top: 15px;
     justify-content: center;
 }

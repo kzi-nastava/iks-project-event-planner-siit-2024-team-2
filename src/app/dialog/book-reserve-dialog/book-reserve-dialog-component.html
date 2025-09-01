@@ -29,10 +29,14 @@
     </mat-error>
 </mat-form-field>
 
-<button *ngIf="budgets.length === 0 && index >= 0" mat-raised-button color="primary" (click)="goToBudget()">Go to budget</button>
+<button [disabled]="(index < 0)" mat-raised-button color="primary" (click)="goToBudget()">Go to budget</button>
 
 <p style="margin-top: 20px;">Price: {{ spData.price}} €</p>
 <p>Discount: {{ spData.discount}} €</p>
 <p><strong>Total: {{ totalPrice }} €</strong></p>
+
+<button mat-raised-button color="primary" (click)="confirmBookingPurchase()"
+    style="margin-right: 8px;">Confirm</button>
+<button mat-stroked-button color="accent" (click)="onCancel()">Cancel</button>
 
 </div>
