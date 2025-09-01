@@ -52,10 +52,12 @@
 <div *ngIf="spData" class="reviews-container">
   <div class="reviews-header">
     <h3>Reviews</h3>
-    <div [matTooltip]="reason" [matTooltipDisabled]="canReview">
-      <button mat-raised-button color="primary" (click)="openReviewDialog()"
-        [disabled]="!canReview" [matTooltip]="reason" [matTooltipDisabled]="canReview">Add Review</button>
-    </div>
+    @if (isOrganizer) {
+      <div [matTooltip]="reason" [matTooltipDisabled]="canReview">
+        <button mat-raised-button color="primary" (click)="openReviewDialog()"
+          [disabled]="!canReview" [matTooltip]="reason" [matTooltipDisabled]="canReview">Add Review</button>
+      </div>
+    }
   </div>
   @for (review of reviews?.content?.entries(); track review[0]) {
     <app-approved-review-card [review]="review[1]"></app-approved-review-card>

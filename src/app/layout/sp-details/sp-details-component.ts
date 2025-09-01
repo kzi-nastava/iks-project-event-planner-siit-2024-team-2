@@ -59,6 +59,7 @@ export class SpDetailsComponent  implements OnInit {
   readonly dialog = inject(MatDialog);
 
   readonly isAdmin = this.authService.getUserRole() === 'ADMIN';
+  readonly isOrganizer = this.authService.getUserRole() === 'EVENT_ORGANIZER';
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
