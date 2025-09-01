@@ -143,7 +143,7 @@ export class NewEventComponent implements OnInit {
               longitude: event.longitude,
               eventType: event.type.id,
               maxAttendances: event.maxAttendances,
-              open: event.isOpen
+              open: event.open
             });
             this.invitations = event.invitationEmails?.map((email: string) => ({ email: email, editable: false })) || [];
             this.selectedType =

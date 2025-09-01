@@ -6,14 +6,14 @@
 <mat-card *ngIf="eventData">
   <mat-card-title>{{ eventData.name }}</mat-card-title>
   <mat-card-subtitle>{{ eventData.date | date:'fullDate' }}</mat-card-subtitle>
-  <button mat-icon-button class="top-right-button" [matMenuTriggerFor]="reportMenu">
+  <button mat-icon-button class="top-right-button" [matMenuTriggerFor]="reportMenu" [disabled]="!eventData.eventOrganizerDto">
     <mat-icon>report</mat-icon>
   </button>
 
   <mat-card-content>
     <p><strong>Description:</strong> {{ eventData.description }}</p>
     <p><strong>Max Attendance:</strong> {{ eventData.maxAttendances }}</p>
-    <p><strong>Open:</strong> {{ eventData.isOpen ? 'Open for everyone' : 'Invite only' }}</p>
+    <p><strong>Open:</strong> {{ eventData.open ? 'Open for everyone' : 'Invite only' }}</p>
     <app-map [latitude]="eventData.latitude!" [longitude]="eventData.longitude!" [readonly]="true"></app-map>
   </mat-card-content>
 
@@ -25,6 +25,28 @@
     </button>
   </mat-card-actions>
 </mat-card>
+<div *ngIf="eventData" class="reviews-container">
+  <div class="reviews-header">
+    <h3>Reviews</h3>
+    <div [matTooltip]="reason" [matTooltipDisabled]="canReview">
+      <button mat-raised-button color="primary" (click)="openReviewDialog()"
+        [disabled]="!canReview">Add Review</button>
+    </div>
+  </div>
+  @for (review of reviews?.content?.entries(); track review[0]) {
+    <app-approved-review-card [review]="review[1]"></app-approved-review-card>
+  } @empty {
+    <p>No reviews yet.</p>
+  }
+</div>
+<mat-paginator [length]="totalElements"
+[pageIndex]="pageIndex"
+[pageSize]="pageSize"
+hidePageSize="true"
+[showFirstLastButtons]="true"
+(page)="onPageChange($event)"
+aria-label="Select page">
+</mat-paginator>
 
 <mat-menu #reportMenu="matMenu" class="report-menu">
   <ng-template matMenuContent class="report-menu-content">

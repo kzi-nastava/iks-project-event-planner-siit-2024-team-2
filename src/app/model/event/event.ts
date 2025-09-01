@@ -10,7 +10,7 @@ export interface Event {
     date: string,
     type: EventType,
     eventOrganizerDto: UserDto | null,
-    isOpen: boolean,
+    open: boolean,
     maxAttendances: number | null,
     longitude: number | null,
     latitude: number | null,

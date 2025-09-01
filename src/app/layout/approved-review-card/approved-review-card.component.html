@@ -1,0 +1,34 @@
+<mat-card class="review-card" appearance="raised">
+    <mat-card-header>
+        <img mat-card-avatar class="profile-picture" alt="Profile Picture" 
+        [src]="getImagePath(review)" [imgFallback]="'images/avatar.svg'"/>
+        <mat-card-title-group>
+            <mat-card-title class="review-name">
+                <span [innerHTML]="getName(review)"></span>
+                <mat-card-subtitle class="review-date" [innerHTML]="review.createdAt ? formatDate(review.createdAt) : ''"></mat-card-subtitle>
+            </mat-card-title>
+            <mat-card-subtitle class="review-email" [innerHTML]="getEmail(review)"></mat-card-subtitle>
+            
+        </mat-card-title-group>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="review-rating">
+            <p><strong>Rating:</strong></p> 
+            @if (!review.grade || review.grade < 1 || review.grade > 5) {
+                <mat-icon>error</mat-icon>
+            } @else {
+                @for (star of getStarIcons(review.grade); track star[0]) {
+                    <mat-icon>{{ star[1] }}</mat-icon>
+                }
+            }
+        </div>
+        <div class="review-comment-container">
+            <span class="review-comment collapsed" #messageEl [innerHTML]="getComment(review)"></span>
+            @if (isEllipsisActive(messageEl)){
+                <button mat-button color="primary" class="read-button" (click)="readMore(messageEl)">Read more</button>
+            } @else if (messageEl?.classList?.contains('expanded')) {
+                <button mat-button color="primary" class="read-button" (click)="readLess(messageEl)">Read less</button>
+            }
+        </div>
+    </mat-card-content>
+</mat-card>

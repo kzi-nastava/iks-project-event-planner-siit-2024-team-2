@@ -6,7 +6,7 @@ export interface EventSummaryDto {
     description: string | null;
     type: EventTypeDto | null;
     maxAttendances: number | null;
-    isOpen: boolean | null;
+    open: boolean | null;
     longitude: number | null;
     latitude: number | null;
     date: number | null;
