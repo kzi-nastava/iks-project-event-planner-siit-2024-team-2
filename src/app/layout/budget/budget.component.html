@@ -89,7 +89,7 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Bookings </th>
       <td mat-cell *matCellDef="let row" class="muted">
         <div *ngFor="let booking of row.bookings" class="purchase-item">
-          {{ booking.service.name }} - {{ booking.price | currency }}
+          {{ booking.service.name }} - {{ booking.price }} €
         </div>
       </td>
     </ng-container>
@@ -99,7 +99,7 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Purchases </th>
       <td mat-cell *matCellDef="let row" class="muted">
         <div class="purchase-list" *ngFor="let purchase of row.purchases">
-          {{ purchase.product.name }} - {{ purchase.price | currency }}
+          {{ purchase.product.name }} - {{ purchase.price }} €
         </div>
       </td>
     </ng-container>

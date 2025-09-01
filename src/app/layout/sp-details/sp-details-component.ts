@@ -25,6 +25,7 @@ import { ReviewSummaryDto } from '../../services/dtos/review/review-summary.dto'
 import { ReviewDialogComponent, ReviewDialogData } from '../../dialog/review-dialog/review-dialog.component';
 import { ReviewEligibilityDto } from '../../services/dtos/review/review-eligibility.dto';
 import { MatTooltip } from "@angular/material/tooltip";
+import { BookReserveDialogComponent } from '../../dialog/book-reserve-dialog/book-reserve-dialog-component';
 
 @Component({
   selector: 'app-sp-details',
@@ -133,12 +134,8 @@ export class SpDetailsComponent  implements OnInit {
     this.router.navigate(['../'], { relativeTo: this.route });
   }
 
-  buy() {
-    console.log('Buy');
-  }
-
-  reserve() {
-    console.log('Reserve');
+  buyReserve() {
+    this.dialog.open(BookReserveDialogComponent, {data: {sp: this.spData}});
   }
 
   openReportDialog() {

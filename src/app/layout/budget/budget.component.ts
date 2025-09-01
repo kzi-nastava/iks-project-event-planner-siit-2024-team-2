@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,6 +17,7 @@ import { Budget } from '../../model/budget/budget';
 import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ServiceProductService } from '../../services/service-product/service-product.service';
+import { ToastService } from '../../services/utils/toast-service';
 
 
 @Component({
@@ -30,10 +31,10 @@ import { ServiceProductService } from '../../services/service-product/service-pr
 })
 export class BudgetComponent {
 
-  constructor(private router: Router, private route: ActivatedRoute,
+  constructor(private route: ActivatedRoute, private location: Location,
               private eventService: EventService, private spCategoryService: ServiceProductCategoryService,
               private budgetService: BudgetService, public dialog: MatDialog,
-              private serviceProductService: ServiceProductService) {}
+              private serviceProductService: ServiceProductService, private toastService: ToastService) {}
 
   eventId: number = -1;
   budgets: any[] = [];
@@ -86,13 +87,15 @@ export class BudgetComponent {
   }
 
   back() {
-    this.router.navigate(['/my-events'])
+    this.location.back();
   }
 
   onEdit(item: Budget) {
     let usersForm = this.spendingForm.get(item.name);
     if (usersForm?.valid) {
+      this.totalProvided += usersForm.value - item.plannedSpending;
       this.budgetService.setNewAmount(item.id, usersForm.value).subscribe();
+      this.toastService.show('Budget updated successfully', 2000);
     }
   }
 

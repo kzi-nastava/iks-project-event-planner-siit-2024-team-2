@@ -20,6 +20,18 @@ export class EventService {
   private apiUrl = `${environment.apiHost}api/events`;
   httpClient = inject(HttpClient);
 
+  attendEvent(eventId: number) {
+    return this.httpClient.post<void>(`${this.apiUrl}/${eventId}/attend`, {});
+  }
+
+  cancelAttendance(eventId: number) {
+    return this.httpClient.delete<void>(`${this.apiUrl}/${eventId}/attend`);
+  }
+
+  getAttendingEventsIds() {
+    return this.httpClient.get<number[]>(`${this.apiUrl}/attendances`);
+  }
+
   getAgenda(eventId: number) : Observable<Activity[]> {
     return this.httpClient.get<Activity[]>(`${this.apiUrl}/${eventId}/agenda`);
   }
