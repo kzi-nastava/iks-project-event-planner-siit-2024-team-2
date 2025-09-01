@@ -11,6 +11,7 @@ import { EventDto } from './dtos/event/event.dto';
 import { ActivityDto } from './dtos/event/activity.dto';
 import { Activity } from '../model/event/activity';
 import { ReviewSummaryDto } from './dtos/review/review-summary.dto';
+import { PageParams } from '../parameters/page-params';
 @Injectable({
   providedIn: 'root'
 })
@@ -81,7 +82,8 @@ export class EventService {
     return this.httpClient.get(`${this.apiUrl}/${eventId}/pdf`, { responseType: 'blob' });
   }
 
-  getReviews(eventId: number): Observable<PagedModel<ReviewSummaryDto>> {
-    return this.httpClient.get<PagedModel<ReviewSummaryDto>>(`${this.apiUrl}/${eventId}/reviews`);
+  getReviews(eventId: number, pageParams?: PageParams): Observable<PagedModel<ReviewSummaryDto>> {
+    const params = buildHttpParams(pageParams)
+    return this.httpClient.get<PagedModel<ReviewSummaryDto>>(`${this.apiUrl}/${eventId}/reviews`, { params: params });
   }
 }

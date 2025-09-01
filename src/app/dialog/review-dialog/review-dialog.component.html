@@ -1,0 +1,33 @@
+@if (isLoggedIn) {
+    <div class="review-dialog">
+        <h2 mat-dialog-title>Review {{data.entityName}}</h2>
+        <mat-dialog-content color="primary">
+            <div class="star-container">
+                @for (star of getStarIcons(); track star[0]) {
+                    <mat-icon (click)="setRating($event, star[0])" (mousemove)="setPreview($event, star[0])"
+                        (mouseleave)="previewGrade = -1">
+                        {{ star[1] }}
+                    </mat-icon>
+                }
+            </div>
+            <mat-form-field appearance="fill">
+                <mat-label>Enter comment</mat-label>
+                <textarea title="Review comment" matInput [formControl]="commentFormControl" name="comment" required rows="5" cols="50"></textarea>
+            </mat-form-field>
+        </mat-dialog-content>
+        <mat-dialog-actions>
+            <button  color="primary" mat-flat-button mat-dialog-close>Cancel</button>
+            <button  color="primary" mat-flat-button (click)="onReview()">Submit</button>
+        </mat-dialog-actions>
+    </div>
+} @else {
+    <div class="review-dialog">
+        <h2 mat-dialog-title>Authentication Required</h2>
+        <mat-dialog-content>
+            <p>To submit a review, you need to be logged in. Please log in to continue.</p>
+        </mat-dialog-content>
+        <mat-dialog-actions>
+            <button  color="primary" mat-flat-button mat-dialog-close>Close</button>
+        </mat-dialog-actions>
+    </div>
+}

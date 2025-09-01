@@ -18,6 +18,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ApprovedReviewCardComponent } from "../approved-review-card/approved-review-card.component";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { ReviewSummaryDto } from '../../services/dtos/review/review-summary.dto';
+import { ReviewDialogComponent, ReviewDialogData } from '../../dialog/review-dialog/review-dialog.component';
 
 @Component({
   selector: 'app-event-details',
@@ -77,7 +78,7 @@ export class EventDetailsComponent implements OnInit {
   }
 
   private fetchReviews(eventId: number): void {
-    this.eventService.getReviews(eventId).subscribe({
+    this.eventService.getReviews(eventId, { page: this.pageIndex, size: this.pageSize }).subscribe({
       next: (reviews: PagedModel<ReviewSummaryDto>) => {
         this.reviews = reviews;
         this.totalElements = reviews.page.totalElements;
@@ -134,5 +135,14 @@ export class EventDetailsComponent implements OnInit {
       if (this.totalElements > this.pageIndex * event.pageSize) // enough elements for another page
         this.pageSize = event.pageSize;
     this.fetchReviews(this.eventId);
+  }
+
+  openReviewDialog() {
+    const data: ReviewDialogData = {
+      entityId: this.eventId,
+      entityType: 'EVENT',
+      entityName: this.eventData?.name || ''
+    };
+    this.dialog.open(ReviewDialogComponent, {data: data});
   }
 }
