@@ -16,15 +16,4 @@ export interface ServiceProduct {
     serviceProductProvider: ServiceProductProvider | null;
     dtype: "Service" | "Product" | null;
 }
-/*
-    private ServiceProductCategory category;
-    private boolean available;
-    private boolean visible;
-    private double price;
-    private double discount;
-    private String name;
-    private String description;
-    private List<String> images;
-    private List<EventType> availableEventTypes;
-    private ServiceProductProvider serviceProductProvider;
-*/
+

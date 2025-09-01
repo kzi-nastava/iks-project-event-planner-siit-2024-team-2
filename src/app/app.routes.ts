@@ -24,6 +24,7 @@ import { AcceptInvitationComponent } from './layout/accept-invitation/accept-inv
 import { UserRole } from './services/dtos/user/user-role';
 import { SpDetailsComponent } from './layout/sp-details/sp-details-component';
 import { UserReportsComponent } from './layout/user-reports/user-reports.component';
+import { CalendarComponent } from './layout/calendar/calendar.component';
 import { AdminReviewsComponent } from './layout/admin-reviews/admin-reviews.component';
 import { BudgetComponent } from './layout/budget/budget.component';
 
@@ -37,8 +38,7 @@ export const routes: Routes = [
     {path: 'sp-details', component: SpDetailsComponent, canActivate: []},
     {path: 'event-details', component: EventDetailsComponent, canActivate: []},
     {path: 'chat', component: ChatComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
-    {path: 'profile', component: ProfileComponent, canActivate: []},
-    {path: 'calendar',component: MyEventsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
+    {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
     {path: 'notifications', component: NotificationsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
     {path: 'new-event-type', component: NewEventTypeComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN'] }},
     {path: 'my-event-types', component: MyEventTypesComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN'] }},
@@ -56,5 +56,6 @@ export const routes: Routes = [
     {path: 'budget', component: BudgetComponent, canActivate: [AuthGuard, RoleGuard] , data: { roles: ['EVENT_ORGANIZER'] }},
     {path: 'agenda', component: AgendaComponent},
     {path: 'accept-invitation', component: AcceptInvitationComponent, canActivate: []},
+    {path: 'calendar', component: CalendarComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ALL_AUTHENTICATED }},
     {path: '**', redirectTo: 'home'},
 ];

@@ -2,6 +2,7 @@ import { Event } from "../../../model/event/event";
 import { EventType } from "../../../model/event/event-type";
 import { ServiceProduct } from "../../../model/service-product/service-product";
 import { ServiceProductCategory } from "../../../model/service-product/service-product-category";
+import { EventSummaryDto } from "../event/event-summary.dto";
 import { UserRole } from "./user-role";
 
 export interface UserDto {
@@ -12,7 +13,7 @@ export interface UserDto {
     imageEncodedName: string;
     phoneNumber: string;
     address: string;
-    favoriteEvents: Event[];
+    favoriteEvents: EventSummaryDto[];
     favoriteServices: ServiceProduct[];
     upcomingEvents: Event[];
     // Additional properties for SERVICE_PRODUCT_PROVIDER
