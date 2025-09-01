@@ -1,12 +1,13 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { MatCardHeader, MatCard, MatCardContent, MatCardTitleGroup, MatCardTitle, MatCardSubtitle } from "@angular/material/card";
 import { MatMenuModule } from "@angular/material/menu";
 import { ImgFallbackDirective } from "../../utils/image-fallback";
-import { Review } from '../../model/review/review';
 import { environment } from '../../../environments/environment';
 import { MatIcon } from "@angular/material/icon";
 import { intlFormatDistance } from 'date-fns';
 import { MatButtonModule } from '@angular/material/button';
+import { ReviewSummaryDto } from '../../services/dtos/review/review-summary.dto';
+import { FormatUtilService } from '../../utils/format-util.service';
 
 @Component({
   selector: 'app-approved-review-card',
@@ -18,22 +19,29 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './approved-review-card.component.css'
 })
 export class ApprovedReviewCardComponent {
-  @Input() review!: Review;
+  @Input() review!: ReviewSummaryDto;
+  readonly formatUtilService = inject(FormatUtilService);
 
-  getName(review: Review) {
-    if (!review.user)
+  getName(review: ReviewSummaryDto) {
+    if (!review.creatorName)
       return 'Deleted User';
-    return review.user.firstName + ' ' + review.user.lastName;
+    return review.creatorName;
   }
 
-  getEmail(review: Review) {
-    return review.user?.email || '';
+  getEmail(review: ReviewSummaryDto) {
+    return review.creatorEmail || '';
   }
 
-  getImagePath(review: Review) {
-    if (!review?.user?.imageEncodedName)
+  getComment(review: ReviewSummaryDto) {
+    if (review.formattedComment == null)
+      review.formattedComment = this.formatUtilService.formatAndSanitize(review.comment);
+    return review.formattedComment || review.comment;
+  }
+
+  getImagePath(review: ReviewSummaryDto) {
+    if (!review?.creatorProfilePicture)
       return 'images/avatar.svg';
-    return environment.apiHost + "api/images/" + review.user?.imageEncodedName;
+    return environment.apiHost + "api/images/" + review.creatorProfilePicture;
   }
 
   getStarIcons(grade: number) {

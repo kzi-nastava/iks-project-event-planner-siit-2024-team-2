@@ -10,6 +10,7 @@ import { buildHttpParams } from '../../utils/http-utils';
 import { ServiceProductFilteringValues } from '../dtos/service-product/service-product-filtering-values.dto';
 import { ServiceProductReview } from '../../model/review/service-product-review';
 import { PageParams } from '../../parameters/page-params';
+import { ReviewSummaryDto } from '../dtos/review/review-summary.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -41,9 +42,9 @@ export class ServiceProductService {
   }
 
 
-  getReviews(id: number, PageParams?: PageParams) : Observable<PagedModel<ServiceProductReview>> {
+  getReviews(id: number, PageParams?: PageParams) : Observable<PagedModel<ReviewSummaryDto>> {
     const params = buildHttpParams(PageParams)
-    return this.httpClient.get<PagedModel<ServiceProductReview>>(`${this.apiUrl}/${id}/reviews`, { params: params });
+    return this.httpClient.get<PagedModel<ReviewSummaryDto>>(`${this.apiUrl}/${id}/reviews`, { params: params });
   }
 
   getCategoriesByEventType(eventTypeId: number): Observable<string[]> {

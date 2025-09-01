@@ -10,7 +10,6 @@ export interface Review {
     createdAt: Date,
     hiding: boolean,
     hidden: boolean,
-    formattedComment: string | null,
 }
 
 /*

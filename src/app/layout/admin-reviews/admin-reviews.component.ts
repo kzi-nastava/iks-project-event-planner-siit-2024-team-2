@@ -6,7 +6,7 @@ import { intlFormatDistance } from 'date-fns';
 import { Subject, takeUntil } from 'rxjs';
 import { PagedModel } from '../../shared/model/paged-model';
 import { ToastService } from '../../services/utils/toast-service';
-import { ReviewService } from '../../services/service-product/review.service';
+import { ReviewService } from '../../services/review/review.service';
 import { MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle } from '@angular/material/card';
 import { NgIf } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';

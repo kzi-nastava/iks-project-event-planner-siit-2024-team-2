@@ -13,11 +13,11 @@ import { ToastService } from '../../services/utils/toast-service';
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../../services/user/user.service';
 import { AuthService } from '../../services/auth-service.service';
-import { Review } from '../../model/review/review';
 import { PagedModel } from '../../shared/model/paged-model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ApprovedReviewCardComponent } from "../approved-review-card/approved-review-card.component";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { ReviewSummaryDto } from '../../services/dtos/review/review-summary.dto';
 
 @Component({
   selector: 'app-event-details',
@@ -29,7 +29,7 @@ import { MatPaginator, PageEvent } from "@angular/material/paginator";
 export class EventDetailsComponent implements OnInit {
   eventId!: number;
   eventData?: Event;
-  reviews: PagedModel<Review> | null = null;
+  reviews: PagedModel<ReviewSummaryDto> | null = null;
   loading = true;
   error = '';
   totalElements = 0;
@@ -78,8 +78,9 @@ export class EventDetailsComponent implements OnInit {
 
   private fetchReviews(eventId: number): void {
     this.eventService.getReviews(eventId).subscribe({
-      next: (reviews: PagedModel<Review>) => {
+      next: (reviews: PagedModel<ReviewSummaryDto>) => {
         this.reviews = reviews;
+        this.totalElements = reviews.page.totalElements;
       },
       error: (err: HttpErrorResponse) => {
         console.error(err);

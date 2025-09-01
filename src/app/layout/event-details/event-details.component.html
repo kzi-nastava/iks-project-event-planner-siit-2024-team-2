@@ -27,8 +27,9 @@
 </mat-card>
 <div *ngIf="eventData" class="reviews-container">
   <h3>Reviews</h3>
-  @for (review of reviews?.content; track review.id) {
-    <app-approved-review-card [review]="review"></app-approved-review-card>
+  <button mat-raised-button color="primary" (click)="openReviewDialog()">Add Review</button>
+  @for (review of reviews?.content?.entries(); track review[0]) {
+    <app-approved-review-card [review]="review[1]"></app-approved-review-card>
   } @empty {
     <p>No reviews yet.</p>
   }
@@ -36,10 +37,9 @@
 <mat-paginator [length]="totalElements"
 [pageIndex]="pageIndex"
 [pageSize]="pageSize"
-[pageSizeOptions]="[10, 20, 50]"
+hidePageSize="true"
 [showFirstLastButtons]="true"
 (page)="onPageChange($event)"
-
 aria-label="Select page">
 </mat-paginator>
 
