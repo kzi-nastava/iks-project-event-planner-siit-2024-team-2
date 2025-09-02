@@ -21,6 +21,8 @@
     <br>
     <div *ngIf="isService">
         <p><strong>Specifics: </strong> {{ spData.specifies }}</p>
+        <p><strong>Reservation deadline: </strong> {{ spData.reservationDaysDeadline }} days</p>
+        <p><strong>Cancellation deadline: </strong> {{ spData.cancellationDaysDeadline }} days</p>
         <div *ngIf="hasDuration; else engagement">
             <p><strong>Duration: </strong> {{ spData.duration }} h</p>
         </div>
@@ -43,9 +45,10 @@
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="goToSpp(spData.serviceProductProvider?.id || -1)">See Provider's Data</button>
     <button mat-stroked-button color="accent" (click)="goBack()">Back</button>
-    <button *ngIf="!isService" [disabled]="!spData.available" mat-raised-button color="primary" (click)="buyReserve()">Buy</button>
-    <button *ngIf="isService" [disabled]="!spData.available" mat-raised-button color="primary" (click)="buyReserve()">Reserve</button>
-
+    @if (isOrganizer) {
+      <button *ngIf="!isService" [disabled]="!spData.available" mat-raised-button color="primary" (click)="buyBook()">Buy</button>
+      <button *ngIf="isService" [disabled]="!spData.available" mat-raised-button color="primary" (click)="buyBook()">Book service</button>
+    }
   </mat-card-actions>
 </mat-card>
 

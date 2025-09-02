@@ -1,8 +1,5 @@
 .form-input {
-    width: 270px;
-    padding: 10px 10px;
-    border-radius: 8px;
-    margin: 5px;
+    width: 400px;
 }
 
 button {
@@ -10,6 +7,20 @@ button {
     margin-top: 15px;
     justify-content: center;
 }
-.no-budgets {
+.no-budgets{
     font-size: small;
+}
+.price-info {
+    margin-top: 20px;
+    font-size: medium;
+}
+mat-form-field {
+    width: 100%;
+}
+.fixed-duration {
+    font-size: medium;
+}
+.second-step {
+    margin-bottom: -24px;
+    margin-top: 5px
 }

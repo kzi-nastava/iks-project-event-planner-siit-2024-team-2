@@ -134,7 +134,7 @@ export class SpDetailsComponent  implements OnInit {
     this.router.navigate(['../'], { relativeTo: this.route });
   }
 
-  buyReserve() {
+  buyBook() {
     this.dialog.open(BookPurchaseDialogComponent, {data: {sp: this.spData}});
   }
 

@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BookPurchaseDialogComponent } from './book-purchase-dialog-component';
 import { SharedTestingModule } from '../../../testing/shared-testing.module';
 
-describe('BookReserveDialogComponent', () => {
+describe('BookPurchaseDialogComponent', () => {
   let component: BookPurchaseDialogComponent;
   let fixture: ComponentFixture<BookPurchaseDialogComponent>;
 
