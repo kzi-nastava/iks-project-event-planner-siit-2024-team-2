@@ -13,7 +13,8 @@
   <mat-card-content>
     <p><strong>Description:</strong> {{ eventData.description }}</p>
     <p><strong>Max Attendance:</strong> {{ eventData.maxAttendances }}</p>
-    <p><strong>Open:</strong> {{ eventData.open ? 'Open for everyone' : 'Invite only' }}</p>
+    <span><strong>Open:</strong> {{ eventData.open ? 'Open for everyone' : 'Invite only' }}</span>
+    <button style="margin: 5px" mat-stroked-button color="accent" (click)="chat()">Chat with organizer</button>
     <app-map [latitude]="eventData.latitude!" [longitude]="eventData.longitude!" [readonly]="true"></app-map>
   </mat-card-content>
 
