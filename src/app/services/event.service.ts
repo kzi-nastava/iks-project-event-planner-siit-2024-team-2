@@ -13,6 +13,8 @@ import { Activity } from '../model/event/activity';
 import { ReviewSummaryDto } from './dtos/review/review-summary.dto';
 import { PageParams } from '../parameters/page-params';
 import { ReviewEligibilityDto } from './dtos/review/review-eligibility.dto';
+import { CreateBudgetDto } from './dtos/budget/create-budget.dto';
+import { Budget } from '../model/budget/budget';
 @Injectable({
   providedIn: 'root'
 })
@@ -87,8 +89,8 @@ export class EventService {
     return this.httpClient.get<number[]>(this.apiUrl + "/max-attendances-range");
   }
 
-  addBudgetToEvent(id: number, budget: any) {
-    return this.httpClient.post(`${this.apiUrl}/${id}/budgets`, budget);
+  addBudgetToEvent(id: number, budgetId: number) : Observable<void> {
+    return this.httpClient.post<void>(`${this.apiUrl}/${id}/budgets`, budgetId);
   }
 
   dowloadPdf(eventId: number): Observable<Blob> {
