@@ -25,7 +25,7 @@ import { ReviewSummaryDto } from '../../services/dtos/review/review-summary.dto'
 import { ReviewDialogComponent, ReviewDialogData } from '../../dialog/review-dialog/review-dialog.component';
 import { ReviewEligibilityDto } from '../../services/dtos/review/review-eligibility.dto';
 import { MatTooltip } from "@angular/material/tooltip";
-import { BookReserveDialogComponent } from '../../dialog/book-reserve-dialog/book-reserve-dialog-component';
+import { BookPurchaseDialogComponent } from '../../dialog/book-purchase-dialog/book-purchase-dialog-component';
 
 @Component({
   selector: 'app-sp-details',
@@ -135,7 +135,7 @@ export class SpDetailsComponent  implements OnInit {
   }
 
   buyReserve() {
-    this.dialog.open(BookReserveDialogComponent, {data: {sp: this.spData}});
+    this.dialog.open(BookPurchaseDialogComponent, {data: {sp: this.spData}});
   }
 
   openReportDialog() {

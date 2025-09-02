@@ -11,27 +11,24 @@ import { Budget } from '../../model/budget/budget';
 import { EventService } from '../../services/event.service';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { ServiceProductCategory } from '../../model/service-product/service-product-category';
 import { ToastService } from '../../services/utils/toast-service';
 import { PurchaseDto } from '../../services/dtos/budget/purchase.dto';
 import { BookingDto } from '../../services/dtos/budget/booking.dto';
-import { randomInt } from 'crypto';
-import { PagedModel } from '../../shared/model/paged-model';
 import { Event } from '../../model/event/event';
 
 
 
 @Component({
-  selector: 'app-book-reserve-dialog',
+  selector: 'app-book-purchase-dialog',
   standalone: true,
   imports: [CommonModule, MatFormField, MatLabel, MatSelect, MatOptionModule, MatError, ReactiveFormsModule,
     MatButtonModule
   ],
-  templateUrl: './book-reserve-dialog-component.html',
-  styleUrl: './book-reserve-dialog-component.css'
+  templateUrl: './book-purchase-dialog-component.html',
+  styleUrl: './book-purchase-dialog-component.css'
 })
 
-export class BookReserveDialogComponent implements OnInit {
+export class BookPurchaseDialogComponent implements OnInit {
   readonly data = inject<{ sp: ServiceProduct }>(MAT_DIALOG_DATA);
   readonly eventService = inject(EventService);
   readonly budgetService = inject(BudgetService);
@@ -61,7 +58,7 @@ export class BookReserveDialogComponent implements OnInit {
   onEventSelected(event: MatSelectChange) {
     this.index = event.value;
     this.budgets = this.events[this.index].budgets.filter(
-        (b: { serviceProductCategory: ServiceProductCategory | undefined; }) => b.serviceProductCategory?.id === this.spData.category?.id);
+        b => b.serviceProductCategory?.id === this.spData.category?.id);
     this.selectedEvent.setValue(this.index);
   }
 
