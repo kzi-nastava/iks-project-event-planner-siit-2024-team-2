@@ -7,6 +7,7 @@ import { PagedModel } from '../shared/model/paged-model';
 import { ServiceCardDto } from './dtos/service-product/service-card-dto.dto';
 import { CreateServiceDto } from './dtos/service-product/create-service.dto';
 import { PageParams } from '../parameters/page-params';
+import { DateRangeDto } from './dtos/utils/date-range.dto';
 @Injectable({
   providedIn: 'root'
 })
@@ -42,5 +43,9 @@ export class ServiceService {
       .set('size', pageProperties.size)
     }
     return this.httpClient.get<PagedModel<Service>>(this.apiUrl, { params: params});
+  }
+
+  getAvailability(id: number): Observable<DateRangeDto[]> {
+    return this.httpClient.get<DateRangeDto[]>(`${this.apiUrl}/${id}/availability`);
   }
 }

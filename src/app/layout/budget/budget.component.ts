@@ -12,7 +12,7 @@ import { MatOption } from "@angular/material/core";
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { BudgetService } from '../../services/budget.service';
-import { CreateBudgetDto } from '../../services/dtos/event/create-budget.dto';
+import { CreateBudgetDto } from '../../services/dtos/budget/create-budget.dto';
 import { Budget } from '../../model/budget/budget';
 import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component';
 import { MatDialog } from '@angular/material/dialog';

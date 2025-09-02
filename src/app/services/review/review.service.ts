@@ -3,12 +3,12 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { PagedModel } from '../../shared/model/paged-model';
-import { ReviewStatusDto } from '../dtos/order/review-status.dto';
-import { ReviewCommentDto } from '../dtos/order/review-comment.dto';
+import { ReviewStatusDto } from '../dtos/review/review-status.dto';
+import { ReviewCommentDto } from '../dtos/review/review-comment.dto';
 import { buildHttpParams } from '../../utils/http-utils';
 import { PageParams } from '../../parameters/page-params';
 import { Review } from '../../model/review/review';
-import { ReviewDto } from '../dtos/order/review.dto';
+import { ReviewDto } from '../dtos/review/review.dto';
 
 @Injectable({
   providedIn: 'root'

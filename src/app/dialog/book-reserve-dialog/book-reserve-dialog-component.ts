@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ServiceProduct } from '../../model/service-product/service-product';
@@ -13,9 +13,11 @@ import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { ServiceProductCategory } from '../../model/service-product/service-product-category';
 import { ToastService } from '../../services/utils/toast-service';
-import { PurchaseDto } from '../../services/dtos/order/purchase.dto';
-import { BookingDto } from '../../services/dtos/order/booking.dto';
+import { PurchaseDto } from '../../services/dtos/budget/purchase.dto';
+import { BookingDto } from '../../services/dtos/budget/booking.dto';
 import { randomInt } from 'crypto';
+import { PagedModel } from '../../shared/model/paged-model';
+import { Event } from '../../model/event/event';
 
 
 
@@ -29,7 +31,7 @@ import { randomInt } from 'crypto';
   styleUrl: './book-reserve-dialog-component.css'
 })
 
-export class BookReserveDialogComponent {
+export class BookReserveDialogComponent implements OnInit {
   readonly data = inject<{ sp: ServiceProduct }>(MAT_DIALOG_DATA);
   readonly eventService = inject(EventService);
   readonly budgetService = inject(BudgetService);
@@ -42,9 +44,9 @@ export class BookReserveDialogComponent {
   budgets: Budget[] = [];
 
   selectedEvent = new FormControl(-1, Validators.required);
-  events: any[] = [];
-  index: number = -1; // index of selected event
-  totalPrice: number = 0;
+  events: Event[] = [];
+  index = -1; // index of selected event
+  totalPrice = 0;
 
   ngOnInit() {
     this.eventService.getAllMine({ page: 0, size: 50 }).subscribe(response => {
@@ -91,6 +93,7 @@ export class BookReserveDialogComponent {
             const newBooking: BookingDto = {
               serviceId: this.spData.id,
               duration: Math.floor(Number(this.spData.price) / 3),
+              date: new Date().toISOString(),
               price: this.totalPrice
             };
             this.budgetService.addNewBooking(Number(this.selectedBudget.value), newBooking).subscribe();
