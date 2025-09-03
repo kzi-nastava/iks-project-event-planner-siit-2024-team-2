@@ -18,6 +18,7 @@ import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.
 import { MatDialog } from '@angular/material/dialog';
 import { ServiceProductService } from '../../services/service-product/service-product.service';
 import { ToastService } from '../../services/utils/toast-service';
+import { validationSuffix } from '../../utils/error-utils';
 
 
 @Component({
@@ -129,6 +130,8 @@ export class BudgetComponent implements OnInit {
                                         [Validators.required, Validators.min(0)]));
             this.eventService.addBudgetToEvent(this.eventId, created.id).subscribe();
             this.newBudgetForm.reset({name: ' ', plannedSpending: 0, category: ' '});
+          }, error: (err) => {
+            this.toastService.show('Failed to create budget' + validationSuffix(err), 6000);
           }
         })
       })

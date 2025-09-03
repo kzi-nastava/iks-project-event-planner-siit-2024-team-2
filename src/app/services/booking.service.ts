@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { PageParams } from '../parameters/page-params';
 import { buildHttpParams } from '../utils/http-utils';
 import { PagedModel } from '../shared/model/paged-model';
-import { Booking } from '../model/budget/booking';
 import { Observable } from 'rxjs';
 import { PendingBookingDto } from './dtos/budget/pending-booking.dto';
 

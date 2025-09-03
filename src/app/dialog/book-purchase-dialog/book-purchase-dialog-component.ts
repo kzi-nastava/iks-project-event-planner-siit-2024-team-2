@@ -25,6 +25,7 @@ import { ServiceService } from '../../services/service.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Service } from '../../model/service-product/service';
 import { addMilliseconds, differenceInMilliseconds, endOfDay, isBefore, max, min, parse, startOfDay } from 'date-fns';
+import { validationSuffix } from '../../utils/error-utils';
 
 @Component({
   selector: 'app-book-purchase-dialog',
@@ -141,7 +142,7 @@ export class BookPurchaseDialogComponent implements OnInit {
               },
               error: (err) => {
                 console.error('Failed to add purchase:', err);
-                this.toastService.show('Failed to purchase', 2000);
+                this.toastService.show('Failed to purchase' + validationSuffix(err), 6000);
               }
             });
           }
@@ -164,7 +165,9 @@ export class BookPurchaseDialogComponent implements OnInit {
               },
               error: (err) => {
                 console.error('Failed to add booking:', err);
-                if (err.status >= 400 && err.status < 500 && err.status != 404)
+                if (validationSuffix(err))
+                  this.toastService.show("Failed to book" + validationSuffix(err), 6000);
+                else if (err.status >= 400 && err.status < 500 && err.status != 404)
                   this.toastService.show(err.error.message, 2000);
                 else
                   this.toastService.show('Failed to book', 2000);

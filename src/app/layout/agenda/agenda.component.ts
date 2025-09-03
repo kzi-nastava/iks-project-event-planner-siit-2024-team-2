@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivityFormDialogComponent } from '../../dialog/activity-form-dialog/activity-form-dialog.component';
 import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component';
 import { Activity } from '../../model/event/activity';
+import { validationSuffix } from '../../utils/error-utils';
 
 @Component({
   selector: 'app-agenda',
@@ -84,8 +85,8 @@ export class AgendaComponent implements OnInit {
           },
           error: (err) => {
             console.error('Failed to update activity:', err);
-            this.snackBar.open('Failed to update activity', 'Close', {
-              duration: 3000,
+            this.snackBar.open('Failed to update activity' + validationSuffix(err), 'Close', {
+              duration: 6000,
               panelClass: ['snackbar-error'],
             });
           }
@@ -137,8 +138,8 @@ export class AgendaComponent implements OnInit {
           },
           error: (err) => {
               console.error('Failed to add activity:', err);
-              this.snackBar.open('Failed to add activity', 'Close', {
-                duration: 3000,
+              this.snackBar.open('Failed to add activity' + validationSuffix(err), 'Close', {
+                duration: 6000,
                 panelClass: ['snackbar-error']
             });
           }
