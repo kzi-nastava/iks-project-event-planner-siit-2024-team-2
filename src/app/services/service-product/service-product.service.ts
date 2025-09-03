@@ -10,8 +10,8 @@ import { buildHttpParams } from '../../utils/http-utils';
 import { ServiceProductFilteringValues } from '../dtos/service-product/service-product-filtering-values.dto';
 import { ServiceProductReview } from '../../model/review/service-product-review';
 import { PageParams } from '../../parameters/page-params';
-import { ReviewSummaryDto } from '../dtos/order/review-summary.dto';
-import { ReviewEligibilityDto } from '../dtos/order/review-eligibility.dto';
+import { ReviewSummaryDto } from '../dtos/review/review-summary.dto';
+import { ReviewEligibilityDto } from '../dtos/review/review-eligibility.dto';
 
 @Injectable({
   providedIn: 'root'

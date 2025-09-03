@@ -429,7 +429,10 @@ export class HomeComponent implements OnInit {
       },
       error: (err) => {
         console.error('Failed to join event:', err);
-        this.toastService.show('Failed to join event', 2000);
+        if (err.status == 409)
+          this.toastService.show('Failed to join event, it\'s full', 2000);
+        else
+          this.toastService.show('Failed to join event', 2000);
       }
     });
   }

@@ -1,4 +1,4 @@
-.review-card {
+.booking-card {
     width: 70%;
     margin: 0.5rem;
 }
@@ -13,14 +13,14 @@ mat-card-content {
     -webkit-box-orient: vertical;
     line-clamp: 5;
 }
-.review-container {
+.booking-container {
     align-items: center;
     justify-content: flex-start;
     flex-direction: column;
     display: flex;
     padding-bottom: 56px;   
 }
-.review-comment {
+.booking-details {
     margin-bottom: 0;
 }
 .read-button {

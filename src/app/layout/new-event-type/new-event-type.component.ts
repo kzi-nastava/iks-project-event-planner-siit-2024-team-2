@@ -17,6 +17,7 @@ import { PagedModel } from '../../shared/model/paged-model';
 import { EventType } from '../../model/event/event-type';
 import { ServiceProduct } from '../../model/service-product/service-product';
 import { HttpErrorResponse } from '@angular/common/http';
+import { validationSuffix } from '../../utils/error-utils';
 
 export interface IdName {
   id: number;
@@ -139,8 +140,8 @@ export class NewEventTypeComponent implements OnInit {
           },
           error: (err: HttpErrorResponse) => {
             console.error('Error updating event type:', err);
-            this.snackBar.open('Failed to update Event Type. Please try again.', 'Close', {
-              duration: 3000,
+            this.snackBar.open('Failed to update Event Type' + validationSuffix(err) + '. Please try again.', 'Close', {
+              duration: 6000,
               panelClass: ['snack-error']
             });
           }
@@ -160,8 +161,8 @@ export class NewEventTypeComponent implements OnInit {
           },
           error: (err: HttpErrorResponse) => {
             console.error('Error creating event type:', err);
-            this.snackBar.open('Failed to create Event Type. Please try again.', 'Close', {
-              duration: 3000,
+            this.snackBar.open('Failed to create Event Type' + validationSuffix(err) + '. Please try again.', 'Close', {
+              duration: 6000,
               panelClass: ['snack-error']
             });
           }

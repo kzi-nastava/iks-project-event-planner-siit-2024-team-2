@@ -1,23 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
-import { FormControl, FormGroup, FormsModule, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { EventService } from '../../services/event.service';
 import { ServiceProductCategoryService } from '../../services/service-product-category.service';
 import { MatOption } from "@angular/material/core";
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { BudgetService } from '../../services/budget.service';
-import { CreateBudgetDto } from '../../services/dtos/event/create-budget.dto';
+import { CreateBudgetDto } from '../../services/dtos/budget/create-budget.dto';
 import { Budget } from '../../model/budget/budget';
 import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ServiceProductService } from '../../services/service-product/service-product.service';
 import { ToastService } from '../../services/utils/toast-service';
+import { validationSuffix } from '../../utils/error-utils';
 
 
 @Component({
@@ -29,22 +30,25 @@ import { ToastService } from '../../services/utils/toast-service';
   templateUrl: './budget.component.html',
   styleUrl: './budget.component.css'
 })
-export class BudgetComponent {
+export class BudgetComponent implements OnInit {
+  readonly route = inject(ActivatedRoute);
+  readonly location = inject(Location);
+  readonly eventService = inject(EventService);
+  readonly spCategoryService = inject(ServiceProductCategoryService);
+  readonly budgetService = inject(BudgetService);
+  readonly dialog = inject(MatDialog);
+  readonly serviceProductService = inject(ServiceProductService);
+  readonly toastService = inject(ToastService);
 
-  constructor(private route: ActivatedRoute, private location: Location,
-              private eventService: EventService, private spCategoryService: ServiceProductCategoryService,
-              private budgetService: BudgetService, public dialog: MatDialog,
-              private serviceProductService: ServiceProductService, private toastService: ToastService) {}
-
-  eventId: number = -1;
-  budgets: any[] = [];
+  eventId = -1;
+  budgets: Budget[] = [];
   displayedColumns = ['index', 'name', 'category', 'currentSpent', 'plannedSpending', 'bookings', 'purchases', 'actions', 'invalid'];
   categories: string[] = [];
   uniqueCategories = new Set();
-  recommendedNumber: number = 0;
+  recommendedNumber = 0;
   hasSomethingReserved: boolean[] = []; // if deletion is acceptable for each budget item
-  totalSpent: number = 0;
-  totalProvided: number = 0;
+  totalSpent = 0;
+  totalProvided = 0;
 
   spendingForm = new FormGroup({});
 
@@ -91,7 +95,7 @@ export class BudgetComponent {
   }
 
   onEdit(item: Budget) {
-    let usersForm = this.spendingForm.get(item.name);
+    const usersForm = this.spendingForm.get(item.name);
     if (usersForm?.valid) {
       this.totalProvided += usersForm.value - item.plannedSpending;
       this.budgetService.setNewAmount(item.id, usersForm.value).subscribe();
@@ -124,8 +128,10 @@ export class BudgetComponent {
             this.budgets = [...this.budgets, created];
             this.spendingForm.addControl(budget.name, new FormControl(budget.plannedSpending,
                                         [Validators.required, Validators.min(0)]));
-            this.eventService.addBudgetToEvent(this.eventId, created).subscribe();
+            this.eventService.addBudgetToEvent(this.eventId, created.id).subscribe();
             this.newBudgetForm.reset({name: ' ', plannedSpending: 0, category: ' '});
+          }, error: (err) => {
+            this.toastService.show('Failed to create budget' + validationSuffix(err), 6000);
           }
         })
       })

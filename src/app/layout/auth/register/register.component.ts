@@ -13,6 +13,7 @@ import { AuthService } from '../../../services/auth-service.service';
 import { Subject, takeUntil } from 'rxjs';
 import { ImageService } from '../../../services/image.service';
 import { ToastService } from '../../../services/utils/toast-service';
+import { validationSuffix } from '../../../utils/error-utils';
 
 @Component({
   selector: 'app-register',
@@ -155,6 +156,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
           }
           , error: (error) => {
             console.error('Registration error:', error);
+            this.toastService.show('Failed to register' + validationSuffix(error), 6000);
           }
         });
       }
@@ -181,6 +183,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
           }
           , error: (error) => {
             console.error('Registration error:', error);
+            this.toastService.show('Failed to register' + validationSuffix(error), 6000);
           }
         });
       }

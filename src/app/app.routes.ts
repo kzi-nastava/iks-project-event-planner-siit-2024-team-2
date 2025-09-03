@@ -27,6 +27,7 @@ import { UserReportsComponent } from './layout/user-reports/user-reports.compone
 import { CalendarComponent } from './layout/calendar/calendar.component';
 import { AdminReviewsComponent } from './layout/admin-reviews/admin-reviews.component';
 import { BudgetComponent } from './layout/budget/budget.component';
+import { BookingsComponent } from './layout/bookings/bookings.component';
 
 const ALL_AUTHENTICATED: UserRole[] = ['AUTHENTICATED', 'EVENT_ORGANIZER', 'SERVICE_PRODUCT_PROVIDER', 'ADMIN'];
 
@@ -46,6 +47,7 @@ export const routes: Routes = [
     {path: 'new-product', component: NewProductComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['SERVICE_PRODUCT_PROVIDER', 'ADMIN'] }}, 
     {path: 'my-services', component: MyServicesComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['SERVICE_PRODUCT_PROVIDER', 'ADMIN'] }},
     {path: 'my-products', component: MyProductsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['SERVICE_PRODUCT_PROVIDER', 'ADMIN'] }},
+    {path: 'bookings', component: BookingsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['SERVICE_PRODUCT_PROVIDER'] }},
     {path: 'new-event', component: NewEventComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['EVENT_ORGANIZER'] }},
     {path: 'my-events', component: MyEventsComponent, canActivate: [AuthGuard, RoleGuard] , data: { roles: ['EVENT_ORGANIZER'] }},
     {path: 'all-categories', component: AllCategoriesComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['ADMIN'] }},

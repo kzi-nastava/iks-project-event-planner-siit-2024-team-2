@@ -21,11 +21,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { ApprovedReviewCardComponent } from "../approved-review-card/approved-review-card.component";
 import { PagedModel } from '../../shared/model/paged-model';
-import { ReviewSummaryDto } from '../../services/dtos/order/review-summary.dto';
+import { ReviewSummaryDto } from '../../services/dtos/review/review-summary.dto';
 import { ReviewDialogComponent, ReviewDialogData } from '../../dialog/review-dialog/review-dialog.component';
-import { ReviewEligibilityDto } from '../../services/dtos/order/review-eligibility.dto';
+import { ReviewEligibilityDto } from '../../services/dtos/review/review-eligibility.dto';
 import { MatTooltip } from "@angular/material/tooltip";
-import { BookReserveDialogComponent } from '../../dialog/book-reserve-dialog/book-reserve-dialog-component';
+import { BookPurchaseDialogComponent } from '../../dialog/book-purchase-dialog/book-purchase-dialog-component';
 
 @Component({
   selector: 'app-sp-details',
@@ -134,8 +134,8 @@ export class SpDetailsComponent  implements OnInit {
     this.router.navigate(['../'], { relativeTo: this.route });
   }
 
-  buyReserve() {
-    this.dialog.open(BookReserveDialogComponent, {data: {sp: this.spData}});
+  buyBook() {
+    this.dialog.open(BookPurchaseDialogComponent, {data: {sp: this.spData}});
   }
 
   openReportDialog() {

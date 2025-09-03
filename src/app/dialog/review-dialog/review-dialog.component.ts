@@ -6,10 +6,11 @@ import { ToastService } from '../../services/utils/toast-service';
 import { AuthService } from '../../services/auth-service.service';
 import { MatFormField, MatFormFieldModule, MatLabel } from "@angular/material/form-field";
 import { MatButtonModule } from '@angular/material/button';
-import { ReviewDto } from '../../services/dtos/order/review.dto';
-import { ReviewType } from '../../services/dtos/order/review-type';
+import { ReviewDto } from '../../services/dtos/review/review.dto';
+import { ReviewType } from '../../services/dtos/review/review-type';
 import { MatIcon } from "@angular/material/icon";
 import { MatInputModule } from '@angular/material/input';
+import { validationSuffix } from '../../utils/error-utils';
 
 export interface ReviewDialogData {
   entityId: number,
@@ -56,7 +57,7 @@ export class ReviewDialogComponent {
       error: (err) => {
         console.error('Failed to review:', err);
         this.dialogRef.close(false);
-        this.toastService.show('Failed to submit review', 2000);
+        this.toastService.show('Failed to submit review' + validationSuffix(err), 6000);
       }
     });
   }

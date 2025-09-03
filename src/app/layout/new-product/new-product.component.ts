@@ -18,6 +18,7 @@ import { ToastService } from '../../services/utils/toast-service';
 import { ProductDto } from '../../services/dtos/service-product/product.dto';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ProductDetailsDto } from '../../services/dtos/service-product/product-details.dto';
+import { validationSuffix } from '../../utils/error-utils';
 
 
 @Component({
@@ -204,7 +205,7 @@ export class NewProductComponent implements OnInit {
             this.router.navigate(['../'], { relativeTo: this.route });
           },
           error: (err: HttpErrorResponse) => {
-            this.toastService.show('Failed to update product:', 2000);
+            this.toastService.show('Failed to update product' + validationSuffix(err), 6000);
             console.error('Failed to update product:', err);
           }
         });
@@ -215,7 +216,7 @@ export class NewProductComponent implements OnInit {
             this.router.navigate(['../'], { relativeTo: this.route });
           },
           error: (err: HttpErrorResponse) => {
-            this.toastService.show('Failed to create product:', 2000);
+            this.toastService.show('Failed to create product' + validationSuffix(err), 6000);
             console.error('Failed to create product:', err);
           }
         });

@@ -73,7 +73,7 @@ export class CalendarComponent implements OnInit {
           start: b.date,
           end: addHours(b.date, b.duration),
           color: '#ef5350',
-          url: `/sp-details?id=${b.id}`
+          url: `/sp-details?id=${b.service.id}`
         })));
       });
     }
