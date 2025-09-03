@@ -45,7 +45,7 @@
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="goToSpp(spData.serviceProductProvider?.id || -1)">See Provider's Data</button>
     <button mat-stroked-button color="accent" (click)="goBack()">Back</button>
-    @if (isOrganizer) {
+    @if (isOrganizer && spData.available) {
       <button *ngIf="!isService" [disabled]="!spData.available" mat-raised-button color="primary" (click)="buyBook()">Buy</button>
       <button *ngIf="isService" [disabled]="!spData.available" mat-raised-button color="primary" (click)="buyBook()">Book service</button>
     }

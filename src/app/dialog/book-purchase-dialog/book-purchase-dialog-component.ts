@@ -24,7 +24,7 @@ import { DateRangeDto } from '../../services/dtos/utils/date-range.dto';
 import { ServiceService } from '../../services/service.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Service } from '../../model/service-product/service';
-import { addMilliseconds, differenceInMilliseconds, endOfDay, isAfter, isBefore, isSameDay, max, min, parse, startOfDay } from 'date-fns';
+import { addMilliseconds, differenceInMilliseconds, endOfDay, isBefore, max, min, parse, startOfDay } from 'date-fns';
 
 @Component({
   selector: 'app-book-purchase-dialog',
