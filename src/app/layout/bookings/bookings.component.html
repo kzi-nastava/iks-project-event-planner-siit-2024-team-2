@@ -1,0 +1,43 @@
+<div class="booking-container">
+    @for(booking of bookings; let i = $index; track booking.id) {
+        <mat-card class="booking-card" appearance="outlined"
+         *ngIf="!booking.hidden"
+        [@.disabled]="!booking.hiding" [@fadeOut]>
+            <mat-card-header>
+                <mat-card-title>
+                    <b>{{getBooker(booking)}}</b> 
+                    wants to book service 
+                    <a [href]="getTargetUrl(booking)" target="_blank">{{booking.service.name}}</a>
+                </mat-card-title>
+                <mat-card-subtitle>{{booking.createdAt ? formatDate(booking.createdAt) : ''}}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <p class="booking-details collapsed" #bookingEl>
+                    <b>Date:</b> {{booking.date | date:'dd.MM.yyyy'}}
+                    <br>
+                    <b>Start time:</b> {{booking.date | date:'HH:mm'}}
+                    <br>
+                    <b>End time:</b> {{adjustEnd((booking.date+booking.duration*60*60*1000) | date:'HH:mm')}}
+                    <br>
+                    <b>Price:</b> {{booking.price}} €
+                </p>
+                <button mat-button color="primary" class="read-button" (click)="readMore(bookingEl)" *ngIf="isEllipsisActive(bookingEl)">Read more</button>
+                <button mat-button color="primary" class="read-button" (click)="readLess(bookingEl)" *ngIf="bookingEl?.classList?.contains('expanded')">Read less</button>
+            </mat-card-content>
+            <mat-card-actions align="end">
+                <button mat-button color="primary" (click)="accept(booking)">Accept</button>
+                <button mat-button color="primary" (click)="decline(booking)">Decline</button>
+            </mat-card-actions>
+        </mat-card>
+    } @empty {
+        <div class="empty-list">No bookings found</div>
+    }
+</div>
+<mat-paginator [length]="totalElements"
+[pageIndex]="pageIndex"
+[pageSize]="pageSize"
+[pageSizeOptions]="[10, 20, 50]"
+[showFirstLastButtons]="true"
+(page)="onPageChange($event)"
+aria-label="Select page">
+</mat-paginator>

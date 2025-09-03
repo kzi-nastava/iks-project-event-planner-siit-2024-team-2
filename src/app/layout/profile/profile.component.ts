@@ -29,6 +29,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { DragScrollComponent, DragScrollItemDirective } from 'ngx-drag-scroll';
 import { ImgFallbackDirective } from '../../utils/image-fallback';
 import { EventService } from '../../services/event.service';
+import { validationSuffix } from '../../utils/error-utils';
 
 @Component({
   selector: 'app-profile',
@@ -156,7 +157,9 @@ export class ProfileComponent implements OnInit {
             phoneNumber: data.phoneNumber,
             address: data.address,
           };
-      },
+      }, error: (err) => {
+        this.toastService.show('Failed to update personal info' + validationSuffix(err), 6000);
+      }
     });
   }
 
@@ -175,7 +178,9 @@ export class ProfileComponent implements OnInit {
             companyName: data.companyName,
             companyDescription: data.companyDescription,
           };
-      },
+      }, error: (err) => {
+        this.toastService.show('Failed to update company info' + validationSuffix(err), 6000);
+      }
     });
   }
 
@@ -199,7 +204,7 @@ export class ProfileComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error changing password:', err);
-        this.snackBar.open('Failed to change password. Please try again..', 'Close', {
+        this.snackBar.open('Failed to change password'+validationSuffix(err)+'. Please try again..', 'Close', {
           duration: 4000,
           panelClass: ['snackbar-error']
         });

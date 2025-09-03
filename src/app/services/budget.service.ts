@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { CreateBudgetDto } from './dtos/event/create-budget.dto';
+import { CreateBudgetDto } from './dtos/budget/create-budget.dto';
 import { Observable } from 'rxjs';
 import { Budget } from '../model/budget/budget';
-import { BookingDto } from './dtos/order/booking.dto';
-import { PurchaseDto } from './dtos/order/purchase.dto';
+import { BookingDto } from './dtos/budget/booking.dto';
+import { PurchaseDto } from './dtos/budget/purchase.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +13,7 @@ import { PurchaseDto } from './dtos/order/purchase.dto';
 export class BudgetService {
   
   private apiUrl = `${environment.apiHost}api/budgets`; 
-
-  constructor(private httpClient: HttpClient) { }
+  private httpClient = inject(HttpClient);
 
   add(budget: CreateBudgetDto): Observable<Budget> {
     return this.httpClient.post<Budget>(this.apiUrl, budget);
@@ -25,11 +24,11 @@ export class BudgetService {
   }
 
   addNewBooking(id: number, booking: BookingDto) {
-    return this.httpClient.put(`${this.apiUrl}/${id}/new-booking`, booking);
+    return this.httpClient.post(`${this.apiUrl}/${id}/bookings`, booking);
   }
 
   addNewPurchase(id: number, purchase: PurchaseDto) {
-    return this.httpClient.put(`${this.apiUrl}/${id}/new-purchase`, purchase);
+    return this.httpClient.post(`${this.apiUrl}/${id}/purchases`, purchase);
   }
 
   delete(id: number): Observable<boolean> {

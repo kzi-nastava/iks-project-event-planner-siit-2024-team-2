@@ -37,7 +37,7 @@ import { EventReview } from '../../model/review/event-review';
 })
 export class AdminReviewsComponent implements OnDestroy, OnInit {
   private readonly destroy$ = new Subject<void>();
-  reviews: ServiceProductReview[] = [];
+  reviews: Review[] = [];
   totalElements = 0;
   pageIndex = 0;
   pageSize = 10;
@@ -57,17 +57,16 @@ export class AdminReviewsComponent implements OnDestroy, OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response: PagedModel<Review>) => {
-          console.log(response);
           this.reviews = JSON.parse(JSON.stringify(response.content));
           this.totalElements = response.page.totalElements;
         },
         error: () => {
-          this.toastService.show('Failed to suspend user');
+          this.toastService.show('Failed to load reviews');
         }
       });
   }
 
-  reject(review: ServiceProductReview) {
+  reject(review: Review) {
     review.hiding = true;
     setTimeout(() => { // Allow animation to start
       review.hidden = true;
@@ -84,7 +83,7 @@ export class AdminReviewsComponent implements OnDestroy, OnInit {
       });
   }
 
-  approve(review: ServiceProductReview) {
+  approve(review: Review) {
     review.hiding = true;
     setTimeout(() => { // Allow animation to start
       review.hidden = true;
@@ -105,7 +104,7 @@ export class AdminReviewsComponent implements OnDestroy, OnInit {
     return intlFormatDistance(date, Date.now(), {locale: 'en-US'});
   }
 
-  getReviewer(review: ServiceProductReview) {
+  getReviewer(review: Review) {
     const reviewerName = review?.user?.firstName
       ? review?.user?.firstName + ' ' + review?.user?.lastName
       : undefined;

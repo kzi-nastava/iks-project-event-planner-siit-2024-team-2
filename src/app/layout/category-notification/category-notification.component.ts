@@ -13,6 +13,7 @@ import { NotificationService } from '../../services/communication/notification.s
 import { NotificationDto } from '../../services/dtos/communication/notification.dto';
 import { CreateServiceDto } from '../../services/dtos/service-product/create-service.dto';
 import { HttpErrorResponse } from '@angular/common/http';
+import { validationSuffix } from '../../utils/error-utils';
 
 
 @Component({
@@ -93,7 +94,7 @@ export class CategoryNotificationComponent implements OnInit {
       },
         error: (err) => {
           console.error('Error creating category:', err);
-          this.snackBar.open('Failed to create category. Please try again.', 'Close', {duration: 3000, panelClass: ['snack-error']});
+          this.snackBar.open('Failed to create category'+ validationSuffix(err) +'. Please try again.', 'Close', {duration: 6000, panelClass: ['snack-error']});
         }
       });
     }

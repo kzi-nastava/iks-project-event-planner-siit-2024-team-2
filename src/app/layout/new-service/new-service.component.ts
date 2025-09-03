@@ -17,6 +17,8 @@ import { NotificationDto } from '../../services/dtos/communication/notification.
 import { NotificationService } from '../../services/communication/notification.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Service } from '../../model/service-product/service';
+import { validationSuffix } from '../../utils/error-utils';
+import { environment } from '../../../environments/environment';
 
 
 @Component({
@@ -229,7 +231,7 @@ export class NewServiceComponent implements OnInit {
                 },
                 error: (err: HttpErrorResponse) => {
                   console.error('Failed to update service:', err);
-                  this.toastService.show('Failed to update!', 2000);
+                  this.toastService.show('Failed to update service' + validationSuffix(err), 6000);
                 }
               });
             }
@@ -242,7 +244,7 @@ export class NewServiceComponent implements OnInit {
                 },
                 error: (err: HttpErrorResponse) => {
                   console.error('Failed to create service:', err);
-                  this.toastService.show('Failed to create!', 2000);
+                  this.toastService.show('Failed to create service' + validationSuffix(err), 6000);
                 }
               });
             }
@@ -293,7 +295,7 @@ export class NewServiceComponent implements OnInit {
   }
 
   getImageUrl(path: string): string {
-    return `http://localhost:8080/api/images/${path}`;
+    return `${environment.apiHost}api/images/${path}`;
   }
 
   removeImage(index: number): void {
