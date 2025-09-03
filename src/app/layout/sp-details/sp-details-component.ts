@@ -26,6 +26,7 @@ import { ReviewDialogComponent, ReviewDialogData } from '../../dialog/review-dia
 import { ReviewEligibilityDto } from '../../services/dtos/review/review-eligibility.dto';
 import { MatTooltip } from "@angular/material/tooltip";
 import { BookPurchaseDialogComponent } from '../../dialog/book-purchase-dialog/book-purchase-dialog-component';
+import { OrderEligibilityDto } from '../../services/dtos/budget/order-eligibility.dto';
 
 @Component({
   selector: 'app-sp-details',
@@ -47,7 +48,9 @@ export class SpDetailsComponent  implements OnInit {
   pageSize = 10;
   reviews: PagedModel<ReviewSummaryDto> | null = null;
   canReview: boolean | null = null;
+  canOrder: boolean | null = null;
   reason = "Not loaded";
+  orderReason = "Not loaded";
 
   // Injected
   readonly route = inject(ActivatedRoute);
@@ -68,6 +71,7 @@ export class SpDetailsComponent  implements OnInit {
       if (spId) {
         this.fetchSpData(spId);
         this.fetchReviews(spId);
+        this.checkOrderEligibility(spId);
         this.checkReviewEligibility(spId);
         this.spId = Number(spId);
       }
@@ -103,6 +107,18 @@ export class SpDetailsComponent  implements OnInit {
       next: (reviews: PagedModel<ReviewSummaryDto>) => {
         this.reviews = reviews;
         this.totalElements = reviews.page.totalElements;
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error(err);
+      }
+    });
+  }
+
+  private checkOrderEligibility(eventId: number): void {
+    this.serviceProductService.getOrderEligibility(eventId).subscribe({
+      next: (eligibility: OrderEligibilityDto) => {
+        this.canOrder = eligibility.canOrder;
+        this.orderReason = eligibility.reason || (this.isService ? "Can't book" : "Can't buy");
       },
       error: (err: HttpErrorResponse) => {
         console.error(err);
