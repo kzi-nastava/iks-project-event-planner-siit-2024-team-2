@@ -68,15 +68,16 @@
     <p>No reviews yet.</p>
   }
 </div>
-<mat-paginator [length]="totalElements"
-[pageIndex]="pageIndex"
-[pageSize]="pageSize"
-hidePageSize="true"
-[showFirstLastButtons]="true"
-(page)="onPageChange($event)"
-aria-label="Select page">
-</mat-paginator>
-
+@if (!loading) {
+  <mat-paginator [length]="totalElements"
+  [pageIndex]="pageIndex"
+  [pageSize]="pageSize"
+  hidePageSize="true"
+  [showFirstLastButtons]="true"
+  (page)="onPageChange($event)"
+  aria-label="Select page">
+  </mat-paginator>
+}
 
 
 
