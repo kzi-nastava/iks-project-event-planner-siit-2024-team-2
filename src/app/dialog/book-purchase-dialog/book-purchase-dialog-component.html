@@ -66,6 +66,7 @@
         <p>Duration: {{ duration ?? 'Not selected' }} h</p>
         <p>Start time: {{ getTimeEnd(selectedTime.value, 0) | date: 'HH:mm' }}</p>
         <p>End time: {{ getTimeEnd(selectedTime.value, duration || 0) | date: 'HH:mm' }}</p>
+        <p>Automatic reservation: {{ isAutomaticReservation() }}</p>
     </div>
     }
     <div class="price-info">

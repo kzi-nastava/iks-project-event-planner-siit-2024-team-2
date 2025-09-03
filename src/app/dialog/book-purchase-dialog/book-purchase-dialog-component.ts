@@ -68,6 +68,7 @@ export class BookPurchaseDialogComponent implements OnInit {
   hasFixedDuration = () => {
     return !this.isProduct() && !!(this.spData as Service).duration;
   }
+  isAutomaticReservation = (): string => (this.spData as Service).automaticReserved ? 'Yes' : 'No'
 
   ngOnInit() {
     this.eventService.getAllMine({ page: 0, size: -1 }).subscribe(response => {
@@ -156,7 +157,10 @@ export class BookPurchaseDialogComponent implements OnInit {
             };
             this.budgetService.addNewBooking(Number(this.selectedBudget.value), newBooking).subscribe({
               next: () => {
-                this.toastService.show('Booking added successfully', 2000);
+                if ((this.spData as Service).automaticReserved)
+                  this.toastService.show('Booking added successfully', 2000);
+                else
+                  this.toastService.show('Booking request sent successfully', 2000);
               },
               error: (err) => {
                 console.error('Failed to add booking:', err);
