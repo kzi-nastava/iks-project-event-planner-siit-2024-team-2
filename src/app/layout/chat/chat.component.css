@@ -25,7 +25,7 @@
 }
 
 .chat-sidebar li.active {
-  background: #7C96FF;
+  background: #C2CFFF;;
   color: white;
 }
 
@@ -54,7 +54,7 @@ li {
 }
 
 .messages div.mine {
-  background: #007bff;
+  background: #7C96FF;
   color: white;
   margin-left: auto;
 }

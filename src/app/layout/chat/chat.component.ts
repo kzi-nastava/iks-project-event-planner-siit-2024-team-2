@@ -9,7 +9,6 @@ import { Chat } from '../../model/communication/chat';
 import { FormsModule } from '@angular/forms';
 import { ChatMessageDto } from '../../services/dtos/communication/chat-message.dto';
 import { ChatMessageService } from '../../services/communication/chat-message.service';
-import { ChatMessage } from '../../model/communication/chat-message';
 import { MatButtonModule } from '@angular/material/button';
 import { User } from '../../model/user/user';
 
@@ -51,15 +50,20 @@ export class ChatComponent {
           }
           this.chatService.add(chat).subscribe(chat => {
             this.chat = chat;
+            this.chat.messages.sort((a, b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime());
           });
         }
-        else this.chat = chat;
+        else {
+          this.chat = chat;
+          this.chat.messages.sort((a, b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime());
+        }
       });
     }
   }
   // 2. with someone you've chatted with before (you found them on chat sidebar)
   selectChat(chat: Chat) {
     this.chat = chat;
+    this.chat.messages.sort((a, b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime());
     // find a user who is chatting with you
     if (chat.user1.id === this.myId) {
       this.chatFriend = chat.user2;
@@ -83,6 +87,7 @@ export class ChatComponent {
       this.chatService.sendMessage(this.chat.id, message).subscribe(chat => {
         this.chat = chat;
         this.newMessage = '';
+        this.myChats.unshift(this.myChats.splice(this.myChats.indexOf(this.chat), 1)[0]);
       });
     });
     }
