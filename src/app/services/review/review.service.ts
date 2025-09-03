@@ -38,7 +38,7 @@ export class ReviewService {
     return this.httpClient.get<PagedModel<Review>>(`${this.apiUrl}/pending`, { params: params });
   }
   approve(id: number) : Observable<ReviewStatusDto> {
-    return this.httpClient.post<ReviewStatusDto>(`${this.apiUrl}/approve`, id);
+    return this.httpClient.post<ReviewStatusDto>(`${this.apiUrl}/${id}/approve`, {});
   }
   updateComment(id: number, comment: string) : Observable<ReviewCommentDto> {
     return this.httpClient.put<ReviewCommentDto>(`${this.apiUrl}/${id}/comment`, comment);

@@ -46,6 +46,10 @@
         <mat-icon>handshake</mat-icon>
         My products
       </mat-list-item>
+      <mat-list-item *ngIf="hasRole(['SERVICE_PRODUCT_PROVIDER'])" [routerLink]="['bookings']">
+        <mat-icon>event_note</mat-icon>
+        Review bookings
+      </mat-list-item>
       <mat-list-item *ngIf="hasRole(['ADMIN'])" [routerLink]="['new-event-type']">
         <mat-icon>add</mat-icon>
         New Event Type
