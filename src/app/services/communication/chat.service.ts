@@ -7,6 +7,7 @@ import { PagedModel } from '../../shared/model/paged-model';
 import { Chat } from '../../model/communication/chat';
 import { buildHttpParams } from '../../utils/http-utils';
 import { ChatDto } from '../dtos/communication/chat.dto';
+import { ChatMessage } from '../../model/communication/chat-message';
 
 @Injectable({
   providedIn: 'root'
@@ -27,5 +28,9 @@ export class ChatService {
 
   getMineUser2Id(user2Id: number): Observable<Chat | null> {
     return this.httpClient.get<Chat | null>(`${this.apiUrl}/mine-and/${user2Id}`);
+  }
+
+  sendMessage(id: number, message: ChatMessage): Observable<Chat> {
+    return this.httpClient.put<Chat>(`${this.apiUrl}/${id}/send-message`, message);
   }
 }

@@ -4,6 +4,6 @@ export interface ChatMessage {
     id: number;
     text: string;
     sentAt: Date;
-    fromUser: User;
+    toUser: User;
     seen: boolean;
 }

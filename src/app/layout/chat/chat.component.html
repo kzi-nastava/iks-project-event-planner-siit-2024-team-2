@@ -1,6 +1,12 @@
-<mat-sidenav-content>
-    <div class="content">
-      <h1>Welcome to Event planner!</h1>
-      <p>This is your chat area</p>
+<div class="chat-container">
+  <div class="messages">
+    <div *ngFor="let msg of chat?.messages" class="message">
+      <strong>{{ msg.toUser.firstName }}:</strong> {{ msg.text }}
     </div>
-</mat-sidenav-content>
+  </div>
+
+  <div class="new-message">
+    <input [(ngModel)]="newMessage" placeholder="Type a message..." />
+    <button (click)="sendMessage()">Send</button>
+  </div>
+</div>
