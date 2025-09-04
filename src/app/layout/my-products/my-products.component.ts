@@ -59,6 +59,16 @@ export class MyProductsComponent implements OnInit {
         const { categories, eventTypes, minPrice, maxPrice, available } = result;
         this.productService.filter(categories, eventTypes, minPrice, maxPrice, available).subscribe(filteredProducts => {
           this.myProducts = filteredProducts;
+          this.productDtos = this.myProducts.map(product => ({
+          id: product.id || 0,
+          name: product.name || "",
+          description: product.description || "",
+          price: product.price || 0,
+          discount: product.discount || 0,
+          image: product.images ? product.images[0] : "",
+          imageEncodedName: product.imageEncodedNames ? product.imageEncodedNames[0] : ""
+        }));
+        this.convertImageUrls(this.productDtos);
         }, error => {
           console.error('Error filtering products:', error);
         });
