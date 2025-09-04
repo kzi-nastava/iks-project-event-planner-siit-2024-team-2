@@ -44,6 +44,9 @@
 
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="goToSpp(spData.serviceProductProvider?.id || -1)">See Provider's Data</button>
+    @if (isOrganizer) {
+    <button style="margin: 5px" mat-stroked-button color="accent" (click)="chat()">Chat with provider</button>
+    }
     <button mat-stroked-button color="accent" (click)="goBack()">Back</button>
     @if (isOrganizer) {
       <div [matTooltip]="orderReason" [matTooltipDisabled]="canOrder">

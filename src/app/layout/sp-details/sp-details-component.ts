@@ -28,6 +28,7 @@ import { MatTooltip } from "@angular/material/tooltip";
 import { BookPurchaseDialogComponent } from '../../dialog/book-purchase-dialog/book-purchase-dialog-component';
 import { OrderEligibilityDto } from '../../services/dtos/budget/order-eligibility.dto';
 import { userBlockedError } from '../../utils/error-utils';
+import { UserContextService } from '../../services/utils/user-context.service';
 
 @Component({
   selector: 'app-sp-details',
@@ -62,6 +63,7 @@ export class SpDetailsComponent  implements OnInit {
   readonly authService = inject(AuthService);
   readonly userService = inject(UserService);
   readonly dialog = inject(MatDialog);
+  readonly userContextService = inject(UserContextService);
 
   readonly isAdmin = this.authService.getUserRole() === 'ADMIN';
   readonly isOrganizer = this.authService.getUserRole() === 'EVENT_ORGANIZER';
@@ -193,5 +195,12 @@ export class SpDetailsComponent  implements OnInit {
       entityName: this.spData?.name || ''
     };
     this.dialog.open(ReviewDialogComponent, {data: data});
+  }
+
+  chat() {
+    if (this.spData?.serviceProductProvider?.id) {
+      this.userContextService.setUserId(this.spData?.serviceProductProvider?.id);
+      this.router.navigate(['/chat']);
+    }
   }
 }
