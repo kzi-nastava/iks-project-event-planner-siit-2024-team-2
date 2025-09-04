@@ -11,12 +11,16 @@ import { ChatMessageDto } from '../../services/dtos/communication/chat-message.d
 import { ChatMessageService } from '../../services/communication/chat-message.service';
 import { MatButtonModule } from '@angular/material/button';
 import { User } from '../../model/user/user';
+import { MatIconModule } from "@angular/material/icon";
+import { UserService } from '../../services/user/user.service';
+import { ToastService } from '../../services/utils/toast-service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [ MatSidenavModule, CommonModule, FormsModule, MatButtonModule],
+  imports: [MatSidenavModule, CommonModule, FormsModule, MatButtonModule, MatIconModule],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
 })
@@ -24,6 +28,10 @@ export class ChatComponent {
   readonly userContextService = inject(UserContextService);
   readonly chatService = inject(ChatService);
   readonly chatMessageService = inject(ChatMessageService);
+  readonly userService = inject(UserService);
+  readonly toastService = inject(ToastService);
+  readonly router = inject(Router);
+  readonly route = inject(ActivatedRoute);
 
   myChats: Chat[] = [];
   chatFriendId: number | null = null;
@@ -33,8 +41,16 @@ export class ChatComponent {
   myId: Number = Number(localStorage.getItem('userId'))
 
   ngOnInit(): void {
-    this.chatService.getAllMyChats({ page: 0, size: 10 }).subscribe(response => {
+    this.chatService.getAllMyChats({ page: 0, size: -1 }).subscribe(response => {
       this.myChats = response.content;
+      this.route.queryParams.subscribe(params => {
+        const chatId = params['id'];
+        if (chatId) {
+          const existingChat = this.myChats.find(chat => chat.id === Number(chatId))
+          if (existingChat)
+            this.selectChat(existingChat);
+        }
+      });
     });
 
     // With whom are you chatting?
@@ -73,6 +89,11 @@ export class ChatComponent {
       this.chatFriend = chat.user1;
       this.chatFriendId = chat.user1.id;
     }
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { id: this.chat.id },
+      queryParamsHandling: 'merge'
+    });
   }
 
   sendMessage() {
@@ -90,6 +111,61 @@ export class ChatComponent {
         this.myChats.unshift(this.myChats.splice(this.myChats.indexOf(this.chat), 1)[0]);
       });
     });
+    }
+  }
+
+  canBlockUser() {
+    return this.chatFriendId && this.chat;
+  }
+  hasBlockedUser() {
+    if (!this.chat) return false;
+    const isUser1 = this.chat.user1.id === this.myId;
+    return isUser1 ? this.chat.user1BlockedUser2 : this.chat.user2BlockedUser1;
+  }
+  bothBlocked() {
+    if (!this.chat) return false;
+    return this.chat.user1BlockedUser2 && this.chat.user2BlockedUser1;
+  }
+  chatBlocked() {
+    if (!this.chat) return false;
+    return this.chat.user1BlockedUser2 || this.chat.user2BlockedUser1;
+  }
+
+  toggleBlock() {
+    const requestChat = this.chat;
+    if (this.chatFriendId) {
+      if (this.hasBlockedUser())
+        this.userService.unblockUser(this.chatFriendId).subscribe({
+          next: () => {
+            this.toastService.show('User unblocked', 2000);
+            if (requestChat) {
+              if (requestChat.user1.id === this.myId)
+                requestChat.user1BlockedUser2 = false;
+              else
+                requestChat.user2BlockedUser1 = false;
+            }
+            window.location.reload();
+          },
+          error: () => {
+            this.toastService.show('Failed to unblock user', 2000);
+          }
+        });
+      else
+        this.userService.blockUser(this.chatFriendId).subscribe({
+          next: () => {
+            this.toastService.show('User blocked', 2000);
+            if (requestChat) {
+              if (requestChat.user1.id === this.myId)
+                requestChat.user1BlockedUser2 = true;
+              else
+                requestChat.user2BlockedUser1 = true;
+              requestChat.messages = [];
+            }
+          },
+          error: () => {
+            this.toastService.show('Failed to block user', 2000);
+          }
+        });
     }
   }
 }
