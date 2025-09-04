@@ -72,3 +72,8 @@ input {
   flex: 1;
   padding: 8px;
 }
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+}

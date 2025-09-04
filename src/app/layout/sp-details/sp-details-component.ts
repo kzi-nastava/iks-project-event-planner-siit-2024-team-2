@@ -27,6 +27,7 @@ import { ReviewEligibilityDto } from '../../services/dtos/review/review-eligibil
 import { MatTooltip } from "@angular/material/tooltip";
 import { BookPurchaseDialogComponent } from '../../dialog/book-purchase-dialog/book-purchase-dialog-component';
 import { OrderEligibilityDto } from '../../services/dtos/budget/order-eligibility.dto';
+import { userBlockedError } from '../../utils/error-utils';
 
 @Component({
   selector: 'app-sp-details',
@@ -95,7 +96,10 @@ export class SpDetailsComponent  implements OnInit {
         }
       },
       error: (err: HttpErrorResponse) => {
-        this.error = 'Failed to load service/product details.';
+        if (userBlockedError(err)) {
+          this.error = userBlockedError(err);
+        } else
+          this.error = 'Failed to load service/product details.';
         this.loading = false;
         console.error(err);
       }

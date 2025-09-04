@@ -73,7 +73,7 @@
     <p>No reviews yet.</p>
   }
 </div>
-@if (!loading) {
+@if (!loading && spData) {
   <mat-paginator [length]="totalElements"
   [pageIndex]="pageIndex"
   [pageSize]="pageSize"

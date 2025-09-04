@@ -11,4 +11,6 @@ export interface Chat {
     sentAt: Date;
     messages: ChatMessage[];
     status: ChatStatus;
+    user1BlockedUser2: boolean;
+    user2BlockedUser1: boolean;
 }
