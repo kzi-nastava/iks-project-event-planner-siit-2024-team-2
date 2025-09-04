@@ -11,6 +11,8 @@ import { environment } from '../../../environments/environment';
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { ServiceCardDto } from '../../services/dtos/service-product/service-card-dto.dto';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ServiceProductService } from '../../services/service-product/service-product.service';
+import { ServiceProductSummaryDto } from '../../services/dtos/service-product/service-product-summary.dto';
 
 const imagesApi = "api/images/";
 
@@ -24,6 +26,7 @@ const imagesApi = "api/images/";
 export class MyServicesComponent implements OnInit {
   // Injected
   readonly serviceService = inject(ServiceService);
+  readonly serviceProductService = inject(ServiceProductService);
   readonly dialog = inject(MatDialog);
   readonly router = inject(Router);
 
@@ -37,7 +40,7 @@ export class MyServicesComponent implements OnInit {
   fetchServices(): void {
       this.isLoading = true;
       this.myServices = [];
-      this.serviceService.getAllCards()
+      this.serviceService.getMine()
         .pipe(finalize(() => this.isLoading = false))
         .subscribe({ 
           next: (response : ServiceCardDto[]) => {
@@ -53,11 +56,29 @@ export class MyServicesComponent implements OnInit {
   openFilterDialog(): void {
   const dialogRef = this.dialog.open(ServiceFilterDialogComponent);
 
-  dialogRef.afterClosed().subscribe(() => {
-    console.log('The dialog was closed');
-    // TODO: filter the services
+  dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const { category, eventTypes, minPrice, maxPrice, available } = result;
+        console.log(result)
+        const categories = category ? [category] : []; // "", categories, available, minPrice, maxPrice, eventTypes
+        this.serviceService.getMyServiceCards(0, 10, '', categories, available, minPrice, maxPrice, eventTypes).subscribe((services) => {
+          this.myServices = services.content.map(this.mapToServiceCard)
+          this.convertImageUrls(this.myServices);
+        });
+      }
     });
   }
+
+  mapToServiceCard(dto: ServiceProductSummaryDto): ServiceCardDto {
+  return {
+    id: dto.id || 0,
+    name: dto.name,
+    description: dto.description,
+    discount: dto.discount,
+    price: dto.price,
+    image: dto.image,
+  };
+}
 
   openDialog(serviceId: number): void {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {

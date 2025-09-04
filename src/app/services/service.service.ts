@@ -8,6 +8,7 @@ import { ServiceCardDto } from './dtos/service-product/service-card-dto.dto';
 import { CreateServiceDto } from './dtos/service-product/create-service.dto';
 import { PageParams } from '../parameters/page-params';
 import { DateRangeDto } from './dtos/utils/date-range.dto';
+import { ServiceProductSummaryDto } from './dtos/service-product/service-product-summary.dto';
 @Injectable({
   providedIn: 'root'
 })
@@ -32,7 +33,39 @@ export class ServiceService {
   }
 
   getAllCards(): Observable<ServiceCardDto[]> {
-    return this.httpClient.get<ServiceCardDto[]>(this.apiUrl);
+    return this.httpClient.get<ServiceCardDto[]>(this.apiUrl + '/all');
+  }
+
+   getMyServiceCards(
+    page: number = 0,
+    size?: number,
+    name: string = '',
+    categoryIds?: number[],
+    available?: boolean,
+    minPrice?: number,
+    maxPrice?: number,
+    availableEventTypeIds?: number[]
+  ): Observable<PagedModel<ServiceProductSummaryDto>> {
+    let params = new HttpParams().set('page', page);
+
+    if (size !== undefined) params = params.set('size', size);
+    if (name) params = params.set('name', name);
+    if (categoryIds && categoryIds.length > 0) {
+      categoryIds.forEach(id => params = params.append('categoryIds', id));
+    }
+    if (available !== undefined && available !== null) params = params.set('available', available);
+    if (minPrice !==  undefined && minPrice !== null) params = params.set('minPrice', minPrice);
+    if (maxPrice !== undefined && maxPrice !== null) params = params.set('maxPrice', maxPrice);
+    if (availableEventTypeIds && availableEventTypeIds.length > 0) {
+      availableEventTypeIds.forEach(id => params = params.append('availableEventTypeIds', id));
+    }
+    console.log(params)
+
+    return this.httpClient.get<PagedModel<ServiceProductSummaryDto>>(`${this.apiUrl}`, { params });
+  }
+
+  getMine(): Observable<ServiceCardDto[]> {
+    return this.httpClient.get<ServiceCardDto[]>(this.apiUrl + '/mine');
   }
 
   getAll(pageProperties?: PageParams) : Observable<PagedModel<Service>> {

@@ -105,6 +105,7 @@
     </div>
 
     <!-- Favorites Section -->
+     @if (showAllProfileData) {
      <h3>Favorite Events</h3>
      <ng-container>
         <drag-scroll [scrollbar-hidden]="true" [drag-scroll-y-disabled]="true" [snap-disabled]="true">
@@ -135,6 +136,7 @@
       </button>
       <p>Note: Deactivating your profile cannot be undone.</p>
     </div>
+  }
     </div>
   </div>
 
