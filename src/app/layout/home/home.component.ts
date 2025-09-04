@@ -131,6 +131,8 @@ export class HomeComponent implements OnInit {
   }
 
   loadAttendingEvents(): void {
+    if (Number(localStorage.getItem('userId')) === 0)
+      return;
     this.eventService.getAttendingEventsIds().subscribe({
       next: (eventIds) => {
         this.attendingEvents = eventIds;
@@ -476,6 +478,8 @@ export class HomeComponent implements OnInit {
   favoriteServiceProductIds: Set<number> = new Set<number>();
 
   loadFavorites(): void {
+    if (Number(localStorage.getItem('userId')) === 0)
+      return;
     this.userService.getFavoriteEvents(Number(localStorage.getItem('userId'))).subscribe({
       next: (favorites: EventSummaryDto[]) => {
         this.favoriteEventIds = new Set(favorites.map(f => f.id!));
