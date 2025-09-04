@@ -12,6 +12,7 @@ import { ServiceProductReview } from '../../model/review/service-product-review'
 import { PageParams } from '../../parameters/page-params';
 import { ReviewSummaryDto } from '../dtos/review/review-summary.dto';
 import { ReviewEligibilityDto } from '../dtos/review/review-eligibility.dto';
+import { OrderEligibilityDto } from '../dtos/budget/order-eligibility.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -56,5 +57,9 @@ export class ServiceProductService {
 
   getReviewEligibility(id: number): Observable<ReviewEligibilityDto> {
     return this.httpClient.get<ReviewEligibilityDto>(`${this.apiUrl}/${id}/review-eligibility`);
+  }
+
+  getOrderEligibility(id: number): Observable<OrderEligibilityDto> {
+    return this.httpClient.get<OrderEligibilityDto>(`${this.apiUrl}/${id}/order-eligibility`);
   }
 }

@@ -44,10 +44,18 @@
 
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="goToSpp(spData.serviceProductProvider?.id || -1)">See Provider's Data</button>
+    @if (isOrganizer) {
+    <button style="margin: 5px" mat-stroked-button color="accent" (click)="chat()">Chat with provider</button>
+    }
     <button mat-stroked-button color="accent" (click)="goBack()">Back</button>
-    @if (isOrganizer && spData.available) {
-      <button *ngIf="!isService" [disabled]="!spData.available" mat-raised-button color="primary" (click)="buyBook()">Buy</button>
-      <button *ngIf="isService" [disabled]="!spData.available" mat-raised-button color="primary" (click)="buyBook()">Book service</button>
+    @if (isOrganizer) {
+      <div [matTooltip]="orderReason" [matTooltipDisabled]="canOrder">
+        @if (isService) {
+          <button [disabled]="!canOrder" mat-raised-button color="primary" (click)="buyBook()">Book service</button>
+        } @else {
+          <button [disabled]="!canOrder" mat-raised-button color="primary" (click)="buyBook()">Buy</button>
+        }
+      </div>
     }
   </mat-card-actions>
 </mat-card>
@@ -68,7 +76,7 @@
     <p>No reviews yet.</p>
   }
 </div>
-@if (!loading) {
+@if (!loading && spData) {
   <mat-paginator [length]="totalElements"
   [pageIndex]="pageIndex"
   [pageSize]="pageSize"

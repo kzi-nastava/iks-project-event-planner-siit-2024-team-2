@@ -6,3 +6,10 @@ export function validationSuffix(error: HttpErrorResponse): string {
     else
         return "";
 }
+
+export function userBlockedError(error: HttpErrorResponse): string {
+    if (error?.error?.error === 'UserBlocked')
+        return error.error.message;
+    else
+        return "";
+}

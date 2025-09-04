@@ -21,6 +21,8 @@ import { ReviewSummaryDto } from '../../services/dtos/review/review-summary.dto'
 import { ReviewDialogComponent, ReviewDialogData } from '../../dialog/review-dialog/review-dialog.component';
 import { ReviewEligibilityDto } from '../../services/dtos/review/review-eligibility.dto';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { UserContextService } from '../../services/utils/user-context.service';
+import { userBlockedError } from '../../utils/error-utils';
 
 @Component({
   selector: 'app-event-details',
@@ -50,6 +52,7 @@ export class EventDetailsComponent implements OnInit {
   readonly toastService = inject(ToastService);
   readonly userService = inject(UserService);
   readonly authService = inject(AuthService);
+  readonly userContextService = inject(UserContextService);
 
   readonly isAdmin = this.authService.getUserRole() === 'ADMIN';
 
@@ -76,7 +79,10 @@ export class EventDetailsComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        this.error = 'Failed to load event details.';
+        if (userBlockedError(err)) {
+          this.error = userBlockedError(err);
+        } else
+          this.error = 'Failed to load event details.';
         this.loading = false;
         console.error(err);
       }
@@ -162,5 +168,12 @@ export class EventDetailsComponent implements OnInit {
       entityName: this.eventData?.name || ''
     };
     this.dialog.open(ReviewDialogComponent, {data: data});
+  }
+
+  chat() {
+    if (this.eventData?.eventOrganizerDto?.id) {
+      this.userContextService.setUserId(this.eventData?.eventOrganizerDto?.id);
+      this.router.navigate(['/chat']);
+    }
   }
 }
