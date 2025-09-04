@@ -22,6 +22,7 @@ import { ReviewDialogComponent, ReviewDialogData } from '../../dialog/review-dia
 import { ReviewEligibilityDto } from '../../services/dtos/review/review-eligibility.dto';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { UserContextService } from '../../services/utils/user-context.service';
+import { userBlockedError } from '../../utils/error-utils';
 
 @Component({
   selector: 'app-event-details',
@@ -78,7 +79,10 @@ export class EventDetailsComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        this.error = 'Failed to load event details.';
+        if (userBlockedError(err)) {
+          this.error = userBlockedError(err);
+        } else
+          this.error = 'Failed to load event details.';
         this.loading = false;
         console.error(err);
       }
