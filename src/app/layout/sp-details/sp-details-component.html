@@ -43,20 +43,20 @@
   </mat-card-content>
 
   <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="goToSpp(spData.serviceProductProvider?.id || -1)">See Provider's Data</button>
-    @if (isOrganizer) {
-    <button style="margin: 5px" mat-stroked-button color="accent" (click)="chat()">Chat with provider</button>
-    }
-    <button mat-stroked-button color="accent" (click)="goBack()">Back</button>
-    @if (isOrganizer) {
-      <div [matTooltip]="orderReason" [matTooltipDisabled]="canOrder">
-        @if (isService) {
-          <button [disabled]="!canOrder" mat-raised-button color="primary" (click)="buyBook()">Book service</button>
-        } @else {
-          <button [disabled]="!canOrder" mat-raised-button color="primary" (click)="buyBook()">Buy</button>
-        }
-      </div>
-    }
+    <div class="actions-container">
+      <button mat-raised-button color="primary" (click)="goToSpp(spData.serviceProductProvider?.id || -1)">See Provider's Data</button>
+      @if (isOrganizer) {
+        <button mat-raised-button color="primary" (click)="chat()">Chat with provider</button>
+        <div [matTooltip]="orderReason" [matTooltipDisabled]="canOrder">
+          @if (isService) {
+            <button [disabled]="!canOrder" mat-raised-button color="primary" (click)="buyBook()">Book service</button>
+          } @else {
+            <button [disabled]="!canOrder" mat-raised-button color="primary" (click)="buyBook()">Buy</button>
+          }
+        </div>
+      }
+      <button mat-stroked-button color="accent" (click)="goBack()">Back</button>
+    </div>
   </mat-card-actions>
 </mat-card>
 
