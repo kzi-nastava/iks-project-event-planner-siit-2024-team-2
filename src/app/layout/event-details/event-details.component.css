@@ -40,3 +40,14 @@ mat-card-actions button {
   justify-content: space-between;
   align-items: center;
 }
+.actions-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.actions-container > * {
+  margin-right: -5px;
+  margin-top: 10px;
+}
+.spacer {
+  height: 20px;
+}

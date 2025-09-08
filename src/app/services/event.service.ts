@@ -32,6 +32,10 @@ export class EventService {
     return this.httpClient.get<number[]>(`${this.apiUrl}/attendances`);
   }
 
+  checkAttendance(eventId: number) {
+    return this.httpClient.get<boolean>(`${this.apiUrl}/${eventId}/attend`);
+  }
+
   getAgenda(eventId: number) : Observable<Activity[]> {
     return this.httpClient.get<Activity[]>(`${this.apiUrl}/${eventId}/agenda`);
   }

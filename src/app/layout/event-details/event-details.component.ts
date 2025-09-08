@@ -43,6 +43,7 @@ export class EventDetailsComponent implements OnInit {
   pageSize = 10;
   canReview: boolean | null = null;
   reason = "Not loaded";
+  attending: boolean | null = null;
 
   // Injected
   readonly route = inject(ActivatedRoute);
@@ -55,6 +56,7 @@ export class EventDetailsComponent implements OnInit {
   readonly userContextService = inject(UserContextService);
 
   readonly isAdmin = this.authService.getUserRole() === 'ADMIN';
+  readonly isLoggedIn = this.authService.isLoggedIn();
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -63,6 +65,7 @@ export class EventDetailsComponent implements OnInit {
         this.fetchEventData(eventId);
         this.fetchReviews(eventId);
         this.checkReviewEligibility(eventId);
+        this.checkAttendance(eventId);
         this.eventId = Number(eventId);
       }
     });
@@ -109,6 +112,17 @@ export class EventDetailsComponent implements OnInit {
       },
       error: (err: HttpErrorResponse) => {
         console.error(err);
+      }
+    });
+  }
+
+  checkAttendance(eventId: number) {
+    this.eventService.checkAttendance(eventId).subscribe({
+      next: (attending) => {
+        this.attending = attending;
+      },
+      error: (err) => {
+        console.error('Failed to check attendance:', err);
       }
     });
   }
@@ -175,5 +189,36 @@ export class EventDetailsComponent implements OnInit {
       this.userContextService.setUserId(this.eventData?.eventOrganizerDto?.id);
       this.router.navigate(['/chat']);
     }
+  }
+
+  attendEvent() {
+    this.eventService.attendEvent(this.eventId).subscribe({
+      next: () => {
+        this.toastService.show('Successfully joined the event', 2000);
+        this.attending = true;
+        this.checkReviewEligibility(this.eventId);
+      },
+      error: (err) => {
+        console.error('Failed to join event:', err);
+        if (err.status == 409)
+          this.toastService.show('Failed to join event, it\'s full', 2000);
+        else
+          this.toastService.show('Failed to join event', 2000);
+      }
+    });
+  }
+
+  cancelAttendance() {
+    this.eventService.cancelAttendance(this.eventId).subscribe({
+      next: () => {
+        this.toastService.show('Successfully left the event', 2000);
+        this.attending = false;
+        this.checkReviewEligibility(this.eventId);
+      },
+      error: (err) => {
+        console.error('Failed to leave event:', err);
+        this.toastService.show('Failed to leave event', 2000);
+      }
+    });
   }
 }
