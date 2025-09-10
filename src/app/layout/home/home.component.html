@@ -127,9 +127,10 @@ aria-label="Select page">
     <mat-card-header>
       <img mat-card-avatar class="profile-picture" alt="Profile Picture" 
       [src]="eventSummary.creatorProfilePicture || 'images/avatar.svg'" [imgFallback]="'images/avatar.svg'"
-      [matMenuTriggerFor]="reportMenu" [matMenuTriggerData]="{email: eventSummary.creatorEmail, name: eventSummary.creatorName}"/>
+      [matMenuTriggerFor]="eventSummary.creatorEmail ? reportMenu : null"
+      [matMenuTriggerData]="{email: eventSummary.creatorEmail, name: eventSummary.creatorName}"/>
       <mat-card-title-group>
-        <mat-card-title class="event-creator-name" [innerHTML]="eventSummary.creatorName"></mat-card-title>
+        <mat-card-title class="event-creator-name" [innerHTML]="eventSummary.creatorName ?? 'Deleted User'"></mat-card-title>
         <mat-card-subtitle class="event-creator-email" [innerHTML]="eventSummary.creatorEmail"></mat-card-subtitle>
       </mat-card-title-group>
     </mat-card-header>
@@ -141,35 +142,35 @@ aria-label="Select page">
       <p class="description">{{eventSummary.description}}</p>
       <br>
     </mat-card-content>
-<mat-card-actions align="start">
-  <button mat-flat-button color="primary" (click)="navigateToEventDetails(eventSummary.id)">
-    More info
-  </button>
-
-    <button mat-flat-button color="primary"
-      *ngIf="!isUserAttending(eventSummary.id); else attending"
-      (click)="attendEvent(eventSummary.id)">
-      Attend Event
-    </button>
-    <ng-template #attending>
-      <button mat-flat-button color="warn" (click)="cancelAttendance(eventSummary.id)">
-      Cancel Attendance
+    <mat-card-actions align="start">
+      <button mat-flat-button color="primary" (click)="navigateToEventDetails(eventSummary.id)">
+        More info
       </button>
-    </ng-template>
 
-  <!-- Like / Unlike button -->
-  <button mat-icon-button color="warn"
-          *ngIf="isEventFavorite(eventSummary.id); else notFav"
-          (click)="removeEventFromFavorites(eventSummary.id)">
-    <mat-icon>favorite</mat-icon>
-  </button>
+        <button mat-flat-button color="primary"
+          *ngIf="!isUserAttending(eventSummary.id); else attending"
+          (click)="attendEvent(eventSummary.id)">
+          Attend Event
+        </button>
+        <ng-template #attending>
+          <button mat-flat-button color="warn" (click)="cancelAttendance(eventSummary.id)">
+          Cancel Attendance
+          </button>
+        </ng-template>
 
-  <ng-template #notFav>
-    <button mat-icon-button (click)="addEventToFavorites(eventSummary.id)">
-      <mat-icon>favorite_border</mat-icon>
-    </button>
-  </ng-template>
-</mat-card-actions>
+      <!-- Like / Unlike button -->
+      <button mat-icon-button color="warn"
+              *ngIf="isEventFavorite(eventSummary.id); else notFav"
+              (click)="removeEventFromFavorites(eventSummary.id)">
+        <mat-icon>favorite</mat-icon>
+      </button>
+
+      <ng-template #notFav>
+        <button mat-icon-button (click)="addEventToFavorites(eventSummary.id)">
+          <mat-icon>favorite_border</mat-icon>
+        </button>
+      </ng-template>
+    </mat-card-actions>
   </mat-card>
 </ng-template>
 
@@ -178,9 +179,10 @@ aria-label="Select page">
     <mat-card-header>
       <img mat-card-avatar class="profile-picture" alt="Profile Picture" 
       [src]="serviceProduct.creatorProfilePicture || 'images/avatar.svg'" imgFallback="images/avatar.svg"
-      [matMenuTriggerFor]="reportMenu" [matMenuTriggerData]="{email: serviceProduct.creatorEmail, name: serviceProduct.creatorName}"/>
+      [matMenuTriggerFor]="serviceProduct.creatorEmail ? reportMenu : null"
+      [matMenuTriggerData]="{email: serviceProduct.creatorEmail, name: serviceProduct.creatorName}"/>
       <mat-card-title-group>
-        <mat-card-title [innerHTML]="serviceProduct.creatorName"></mat-card-title>
+        <mat-card-title [innerHTML]="serviceProduct.creatorName ?? 'Deleted User'"></mat-card-title>
         <mat-card-subtitle [innerHTML]="serviceProduct.creatorEmail"></mat-card-subtitle>
         <img *ngIf="serviceProduct.image" mat-card-lg-image class="card-image" [src]="serviceProduct.image" alt="Service or product image" imgFallback>
       </mat-card-title-group>
@@ -201,11 +203,11 @@ aria-label="Select page">
         <mat-icon>favorite</mat-icon>
       </button>
 
-  <ng-template #notFav>
-    <button mat-icon-button (click)="addServiceProductToFavorites(serviceProduct.id)">
-      <mat-icon>favorite_border</mat-icon>
-    </button>
-  </ng-template>
+      <ng-template #notFav>
+        <button mat-icon-button (click)="addServiceProductToFavorites(serviceProduct.id)">
+          <mat-icon>favorite_border</mat-icon>
+        </button>
+      </ng-template>
     </mat-card-actions>
   </mat-card>
 </ng-template>

@@ -18,6 +18,7 @@ import { ToastService } from '../../services/utils/toast-service';
 import { EventDto } from '../../services/dtos/event/event.dto';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Event } from '../../model/event/event'
+import { validationSuffix } from '../../utils/error-utils';
 
 @Component({
   selector: 'app-create-event',
@@ -100,7 +101,7 @@ export class NewEventComponent implements OnInit {
         },
         error: (err: HttpErrorResponse) => {
           console.error('Failed to update event:', err);
-          this.toastService.show('Failed to update event', 2000, true);
+          this.toastService.show('Failed to update event' + validationSuffix(err), 6000, true);
         }
       });
       return;
@@ -112,7 +113,7 @@ export class NewEventComponent implements OnInit {
       },
       error: (err: HttpErrorResponse) => {
         console.error('Failed to create event:', err);
-          this.toastService.show('Failed to create event', 2000, true);
+          this.toastService.show('Failed to create event' + validationSuffix(err), 6000, true);
       }
     });
   }
@@ -145,7 +146,7 @@ export class NewEventComponent implements OnInit {
               longitude: event.longitude,
               eventType: event.type.id,
               maxAttendances: event.maxAttendances,
-              open: event.isOpen
+              open: event.open
             });
             this.invitations = event.invitationEmails?.map((email: string) => ({ email: email, editable: false })) || [];
             this.selectedType =

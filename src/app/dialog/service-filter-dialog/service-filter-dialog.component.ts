@@ -22,7 +22,7 @@ export class ServiceFilterDialogComponent implements OnInit {
   // Form controls
   minPrice = new FormControl();
   maxPrice = new FormControl();
-  available = new FormControl(false);
+  available = new FormControl();
   selectedCategory = new FormControl();
   selectedEventTypes = new FormControl([]);
 
@@ -54,10 +54,10 @@ export class ServiceFilterDialogComponent implements OnInit {
       available: this.available.value,
     });
     this.dialogRef.close({
-      category: Number(this.selectedCategory.value),
+      category: this.selectedCategory.value,
       eventTypes: this.selectedEventTypes.value,
-      minPrice: Number(this.minPrice.value || 0),
-      maxPrice: Number(this.maxPrice.value || 0),
+      minPrice: this.minPrice.value,
+      maxPrice: this.maxPrice.value,
       available: this.available.value
     });
   }

@@ -5,7 +5,7 @@
 <mat-card *ngIf="spData">
   <mat-card-title>{{ spData.name }}</mat-card-title>
   <mat-card-subtitle>{{ spData.category?.name }}</mat-card-subtitle>
-  <button mat-icon-button class="top-right-button" [matMenuTriggerFor]="reportMenu">
+  <button mat-icon-button class="top-right-button" [matMenuTriggerFor]="reportMenu" [disabled]="!spData.serviceProductProvider">
     <mat-icon>report</mat-icon>
   </button>
 
@@ -21,6 +21,8 @@
     <br>
     <div *ngIf="isService">
         <p><strong>Specifics: </strong> {{ spData.specifies }}</p>
+        <p><strong>Reservation deadline: </strong> {{ spData.reservationDaysDeadline }} days</p>
+        <p><strong>Cancellation deadline: </strong> {{ spData.cancellationDaysDeadline }} days</p>
         <div *ngIf="hasDuration; else engagement">
             <p><strong>Duration: </strong> {{ spData.duration }} h</p>
         </div>
@@ -41,13 +43,51 @@
   </mat-card-content>
 
   <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="goToSpp(spData.serviceProductProvider?.id || -1)">See Provider's Data</button>
-    <button mat-stroked-button color="accent" (click)="goBack()">Back</button>
-    <button *ngIf="!isService" [disabled]="!spData.available" mat-raised-button color="primary" (click)="buy()">Buy</button>
-    <button *ngIf="isService" [disabled]="!spData.available" mat-raised-button color="primary" (click)="reserve()">Reserve</button>
-
+    <div class="actions-container">
+      <button mat-raised-button color="primary" (click)="goToSpp(spData.serviceProductProvider?.id || -1)">See Provider's Data</button>
+      @if (isOrganizer) {
+        <button mat-raised-button color="primary" (click)="chat()">Chat with provider</button>
+        <div [matTooltip]="orderReason" [matTooltipDisabled]="canOrder">
+          @if (isService) {
+            <button [disabled]="!canOrder" mat-raised-button color="primary" (click)="buyBook()">Book service</button>
+          } @else {
+            <button [disabled]="!canOrder" mat-raised-button color="primary" (click)="buyBook()">Buy</button>
+          }
+        </div>
+      }
+      <button mat-stroked-button color="accent" (click)="goBack()">Back</button>
+    </div>
   </mat-card-actions>
 </mat-card>
+
+<div *ngIf="spData" class="reviews-container">
+  <div class="reviews-header">
+    <h3>Reviews</h3>
+    @if (isOrganizer) {
+      <div [matTooltip]="reason" [matTooltipDisabled]="canReview">
+        <button mat-raised-button color="primary" (click)="openReviewDialog()"
+          [disabled]="!canReview" [matTooltip]="reason" [matTooltipDisabled]="canReview">Add Review</button>
+      </div>
+    }
+  </div>
+  @for (review of reviews?.content?.entries(); track review[0]) {
+    <app-approved-review-card [review]="review[1]"></app-approved-review-card>
+  } @empty {
+    <p>No reviews yet.</p>
+  }
+</div>
+@if (!loading && spData) {
+  <mat-paginator [length]="totalElements"
+  [pageIndex]="pageIndex"
+  [pageSize]="pageSize"
+  hidePageSize="true"
+  [showFirstLastButtons]="true"
+  (page)="onPageChange($event)"
+  aria-label="Select page">
+  </mat-paginator>
+}
+
+
 
 <mat-menu #reportMenu="matMenu" class="report-menu">
   <ng-template matMenuContent class="report-menu-content">

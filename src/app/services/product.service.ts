@@ -47,13 +47,13 @@ export class ProductService {
     if (eventTypes && eventTypes.length > 0) {
       params = params.set('eventTypes', eventTypes.join(','));
     }
-    if (minPrice !== undefined) {
+    if (minPrice !== undefined && minPrice !== null) {
       params = params.set('minPrice', minPrice.toString());
     }
-    if (maxPrice !== undefined) {
+    if (maxPrice !== undefined && maxPrice !== null) {
       params = params.set('maxPrice', maxPrice.toString());
     }
-    if (available !== undefined) {
+    if (available !== undefined && available !== null) {
       params = params.set('available', available.toString());
     }
     return this.httpClient.get<Product[]>(`${this.apiHost}/filter`, { params });

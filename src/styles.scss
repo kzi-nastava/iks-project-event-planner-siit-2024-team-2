@@ -74,10 +74,14 @@ $red-container: #fff2f2;
   @include mat.card-overrides((
     container-color: $lighter-primary-container,
   ));
+  @include mat.stepper-overrides((
+    container-color: $lighter-primary-container
+  ));
 }
 .mat-mdc-outlined-button {
   @include mat.button-overrides((
-    label-text-color: $primary
+    label-text-color: $primary,
+    container-color: red
 ));}
 .mat-mdc-raised-button, .mat-mdc-unelevated-button{
   @include mat.button-overrides((
@@ -198,6 +202,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
 }
 .hide-ripple .mat-ripple{
   display: none !important;
+}
+.inline-block {
+  display: inline-block;
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

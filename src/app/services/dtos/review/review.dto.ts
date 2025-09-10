@@ -1,11 +1,8 @@
-import { ReviewStatus } from "../../../model/utils/review-status";
 import { ReviewType } from "./review-type";
 
 export interface ReviewDto {
     grade: number,
     comment: string | null,
-    userId: number,
-    reviewStatus: ReviewStatus,
     entityId: number,
     reviewType: ReviewType
 }

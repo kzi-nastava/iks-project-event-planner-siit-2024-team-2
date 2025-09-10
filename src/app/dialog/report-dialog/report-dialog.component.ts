@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { ToastService } from '../../services/utils/toast-service';
 import { AuthService } from '../../services/auth-service.service';
+import { validationSuffix } from '../../utils/error-utils';
 
 export interface ReportDialogData {
   email: string;
@@ -44,8 +45,7 @@ export class ReportDialogComponent {
       },
       error: (err) => {
         console.error('Failed to report:', err);
-        this.dialogRef.close(false);
-        this.toastService.show('Failed to send report', 2000);
+        this.toastService.show('Failed to send report' + validationSuffix(err), 6000);
       }
     });
   }

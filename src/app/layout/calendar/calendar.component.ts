@@ -1,12 +1,16 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CalendarOptions } from '@fullcalendar/core';
+import { CalendarOptions, EventClickArg, EventInput } from '@fullcalendar/core';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { CalendarService, EventDto, BookingDto } from '../../services/user/calendar.service';
+import { CalendarService } from '../../services/user/calendar.service';
 import { AuthService } from '../../services/auth-service.service';
+import { Router } from '@angular/router';
+import { addHours } from 'date-fns';
+import { Booking } from '../../model/budget/booking';
+import { Event } from '../../model/event/event';
 
 @Component({
   selector: 'app-calendar',
@@ -16,7 +20,7 @@ import { AuthService } from '../../services/auth-service.service';
   styleUrls: ['./calendar.component.css'],
 })
 export class CalendarComponent implements OnInit {
-    calendarOptions: CalendarOptions = {
+  calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
     initialView: 'dayGridMonth',
     headerToolbar: {
@@ -27,16 +31,18 @@ export class CalendarComponent implements OnInit {
     events: [],
     selectable: true,
     editable: false,
+    eventClick: this.onEventClick.bind(this)
   };
-  attendingEvents: EventDto[] = [];
-  organizerEvents: EventDto[] = [];
-  providerBookings: BookingDto[] = [];
+  attendingEvents: Event[] = [];
+  organizerEvents: Event[] = [];
+  providerBookings: Booking[] = [];
   authService = inject(AuthService);
   role = this.authService.getUserRole();
   userId = 1;
 
-  constructor() {}
   calendarService = inject(CalendarService);
+  router = inject(Router);
+
   ngOnInit(): void {
     this.userId = Number(localStorage.getItem('userId'));
 
@@ -44,37 +50,49 @@ export class CalendarComponent implements OnInit {
       this.addEvents(events.map(e => ({
         title: `Attending: ${e.name}`,
         start: e.date,
-        color: '#42a5f5'
+        color: '#42a5f5',
+        url: `/event-details?id=${e.id}`
       })));
     });
 
-  if (this.role === 'EVENT_ORGANIZER') {
-    this.calendarService.getOrganizerEvents(this.userId).subscribe(events => {
-      this.addEvents(events.map(e => ({
-        title: `Organizer: ${e.name}`,
-        start: e.date,
-        color: '#66bb6a'
-      })));
-    });
+    if (this.role === 'EVENT_ORGANIZER') {
+      this.calendarService.getOrganizerEvents(this.userId).subscribe(events => {
+        this.addEvents(events.map(e => ({
+          title: `Organizer: ${e.name}`,
+          start: e.date,
+          color: '#66bb6a',
+          url: `/event-details?id=${e.id}`    
+        })));
+      });
+    }
+
+    if (this.role === 'SERVICE_PRODUCT_PROVIDER') {
+      this.calendarService.getProviderBookings(this.userId).subscribe(bookings => {
+        this.addEvents(bookings.map(b => ({
+          title: `Booking: ${b.service.name}`,
+          start: b.date,
+          end: addHours(b.date, b.duration),
+          color: '#ef5350',
+          url: `/sp-details?id=${b.service.id}`
+        })));
+      });
+    }
   }
 
-  if (this.role === 'SERVICE_PRODUCT_PROVIDER') {
-    this.calendarService.getProviderBookings(this.userId).subscribe(bookings => {
-      this.addEvents(bookings.map(b => ({
-        title: `Booking: ${b.serviceProductName}`,
-        start: b.date,
-        color: '#ef5350'
-      })));
-    });
-  }
-}
 
-
-  private addEvents(newEvents: any[]): void {
-    const existingEvents = (this.calendarOptions.events as any[]) || [];
+  private addEvents(newEvents: EventInput[]): void {
+    const existingEvents = (this.calendarOptions.events as EventInput[]) || [];
     this.calendarOptions = {
       ...this.calendarOptions,
       events: [...existingEvents, ...newEvents]
     };
+  }
+
+  onEventClick(info: EventClickArg): void {
+    console.log(info);
+    info.jsEvent.preventDefault();
+    if (info.event.url) {
+      this.router.navigateByUrl(info.event.url);
+    }
   }
 }

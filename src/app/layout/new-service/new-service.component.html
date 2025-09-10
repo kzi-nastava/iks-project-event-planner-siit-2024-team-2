@@ -8,8 +8,8 @@
         <div class="custom-combobox">
             <label for="serviceCategories" class="custom-label">Service category:</label>
             <div class="custom-select-wrapper">
-                <select formControlName="category" id="serviceCategories" class="custom-select" (click) = "getCategoryId()">
-                    <option *ngFor="let category of serviceCategories" [value]="category">{{ category }}</option>
+                <select formControlName="category" id="serviceCategories" class="custom-select">
+                    <option *ngFor="let category of serviceCategories" [value]="category.id">{{ category.name }}</option>
                 </select>
                 <span class="custom-arrow">▼</span>
             </div>

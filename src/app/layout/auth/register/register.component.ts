@@ -13,6 +13,7 @@ import { AuthService } from '../../../services/auth-service.service';
 import { Subject, takeUntil } from 'rxjs';
 import { ImageService } from '../../../services/image.service';
 import { ToastService } from '../../../services/utils/toast-service';
+import { validationSuffix } from '../../../utils/error-utils';
 
 @Component({
   selector: 'app-register',

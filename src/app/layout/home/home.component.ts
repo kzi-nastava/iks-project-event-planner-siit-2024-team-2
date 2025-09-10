@@ -131,6 +131,8 @@ export class HomeComponent implements OnInit {
   }
 
   loadAttendingEvents(): void {
+    if (Number(localStorage.getItem('userId')) === 0)
+      return;
     this.eventService.getAttendingEventsIds().subscribe({
       next: (eventIds) => {
         this.attendingEvents = eventIds;
@@ -429,7 +431,10 @@ export class HomeComponent implements OnInit {
       },
       error: (err) => {
         console.error('Failed to join event:', err);
-        this.toastService.show('Failed to join event', 2000);
+        if (err.status == 409)
+          this.toastService.show('Failed to join event, it\'s full', 2000);
+        else
+          this.toastService.show('Failed to join event', 2000);
       }
     });
   }
@@ -473,6 +478,8 @@ export class HomeComponent implements OnInit {
   favoriteServiceProductIds: Set<number> = new Set<number>();
 
   loadFavorites(): void {
+    if (Number(localStorage.getItem('userId')) === 0)
+      return;
     this.userService.getFavoriteEvents(Number(localStorage.getItem('userId'))).subscribe({
       next: (favorites: EventSummaryDto[]) => {
         this.favoriteEventIds = new Set(favorites.map(f => f.id!));

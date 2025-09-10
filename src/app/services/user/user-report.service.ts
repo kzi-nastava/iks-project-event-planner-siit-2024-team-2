@@ -24,14 +24,11 @@ export class UserReportService {
   add(userReportDto: UserReportDto): Observable<UserReport> {
     return this.httpClient.post<UserReport>(this.apiUrl, userReportDto);
   }
-  update(id: number, userReportDto: UserReportDto): Observable<UserReport> {
-    return this.httpClient.put<UserReport>(`${this.apiUrl}/${id}`, userReportDto);
-  }
   delete(id: number): Observable<boolean> {
     return this.httpClient.delete<boolean>(`${this.apiUrl}/${id}`);
   }
   approve(id: number): Observable<UserReport> {
-    return this.httpClient.post<UserReport>(`${this.apiUrl}/approve`, id);
+    return this.httpClient.post<UserReport>(`${this.apiUrl}/${id}/approve`, {});
   }
   getAllNotApproved(pageParams: PageParams): Observable<PagedModel<UserReport>> {
     const params: HttpParams = buildHttpParams(pageParams);

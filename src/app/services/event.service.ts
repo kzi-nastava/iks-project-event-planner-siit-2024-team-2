@@ -10,6 +10,9 @@ import { buildHttpParams } from '../utils/http-utils';
 import { EventDto } from './dtos/event/event.dto';
 import { ActivityDto } from './dtos/event/activity.dto';
 import { Activity } from '../model/event/activity';
+import { ReviewSummaryDto } from './dtos/review/review-summary.dto';
+import { PageParams } from '../parameters/page-params';
+import { ReviewEligibilityDto } from './dtos/review/review-eligibility.dto';
 @Injectable({
   providedIn: 'root'
 })
@@ -27,6 +30,10 @@ export class EventService {
 
   getAttendingEventsIds() {
     return this.httpClient.get<number[]>(`${this.apiUrl}/attendances`);
+  }
+
+  checkAttendance(eventId: number) {
+    return this.httpClient.get<boolean>(`${this.apiUrl}/${eventId}/attend`);
   }
 
   getAgenda(eventId: number) : Observable<Activity[]> {
@@ -84,11 +91,20 @@ export class EventService {
     return this.httpClient.get<number[]>(this.apiUrl + "/max-attendances-range");
   }
 
-  addBudgetToEvent(id: number, budget: any) {
-    return this.httpClient.post(`${this.apiUrl}/${id}/budgets`, budget);
+  addBudgetToEvent(id: number, budgetId: number) : Observable<void> {
+    return this.httpClient.post<void>(`${this.apiUrl}/${id}/budgets`, budgetId);
   }
 
   dowloadPdf(eventId: number): Observable<Blob> {
     return this.httpClient.get(`${this.apiUrl}/${eventId}/pdf`, { responseType: 'blob' });
+  }
+
+  getReviews(eventId: number, pageParams?: PageParams): Observable<PagedModel<ReviewSummaryDto>> {
+    const params = buildHttpParams(pageParams)
+    return this.httpClient.get<PagedModel<ReviewSummaryDto>>(`${this.apiUrl}/${eventId}/reviews`, { params: params });
+  }
+
+  getReviewEligibility(id: number): Observable<ReviewEligibilityDto> {
+    return this.httpClient.get<ReviewEligibilityDto>(`${this.apiUrl}/${id}/review-eligibility`);
   }
 }

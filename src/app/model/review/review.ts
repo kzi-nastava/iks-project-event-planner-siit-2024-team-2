@@ -9,7 +9,7 @@ export interface Review {
     reviewStatus: ReviewStatus,
     createdAt: Date,
     hiding: boolean,
-    hidden: boolean
+    hidden: boolean,
 }
 
 /*

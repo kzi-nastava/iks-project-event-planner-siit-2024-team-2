@@ -17,6 +17,9 @@ import { NotificationDto } from '../../services/dtos/communication/notification.
 import { NotificationService } from '../../services/communication/notification.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Service } from '../../model/service-product/service';
+import { validationSuffix } from '../../utils/error-utils';
+import { environment } from '../../../environments/environment';
+import { ServiceProductCategory } from '../../model/service-product/service-product-category';
 
 
 @Component({
@@ -39,7 +42,7 @@ export class NewServiceComponent implements OnInit {
 
   newServiceForm = new FormGroup({
       categoryForm: new FormGroup({
-        category: new FormControl(''),
+        category: new FormControl(),
         newCategoryName: new FormControl(''),
         newCategoryDescription: new FormControl(''),
       }, {validators: this.oneCategoryRequiredValidator}),
@@ -77,7 +80,7 @@ export class NewServiceComponent implements OnInit {
     return (category || (newCategoryName && newCategoryDescription)) ? null : { oneCategoryRequiredValidator: true };
   }
   
-  serviceCategories : string[] = [];
+  serviceCategories : ServiceProductCategory[] = [];
   eventTypes: string[] = [];
   eventTypeIds: number[] = [];
   areEventTypesChecked: boolean[] = []; // for initial check
@@ -103,7 +106,7 @@ export class NewServiceComponent implements OnInit {
           this.eventTypeIds = allEventTypes.map(type => type.id)
         })
         this.SPCategoryService.getAll().subscribe(allCategories => {
-          this.serviceCategories = allCategories.map(c => c.name || '');
+          this.serviceCategories = allCategories;
         });
         this.initializeCheckboxValues([]);
         this.images = [];
@@ -125,7 +128,8 @@ export class NewServiceComponent implements OnInit {
       }).subscribe(({ allEventTypes, editingService }) => {
         this.eventTypes = allEventTypes.map(t => t.name);
         this.eventTypeIds = allEventTypes.map(t => t.id);
-        this.serviceCategories.push(editingService.category?.name || '');
+        if (editingService.category !== null)
+          this.serviceCategories.push(editingService.category);
         this.initializeCheckboxValues(editingService.availableEventTypes?.map(type => type.name) || []);
 
         this.newServiceForm.patchValue({
@@ -222,6 +226,8 @@ export class NewServiceComponent implements OnInit {
             service.images = response.map(path => atob(path));
             this.toastService.show('Updating...', 2000);
             if (this.update) {  // UPDATING
+              console.log(service)
+              console.log("UPDATUJE SEE")
               this.serviceService.update(this.serviceId, service).subscribe({
                 next: (service: Service) => {
                   this.toastService.show('Service ' + service.name + ' updated successfully!', 2000);
@@ -229,12 +235,13 @@ export class NewServiceComponent implements OnInit {
                 },
                 error: (err: HttpErrorResponse) => {
                   console.error('Failed to update service:', err);
-                  this.toastService.show('Failed to update!', 2000);
+                  this.toastService.show('Failed to update service' + validationSuffix(err), 6000);
                 }
               });
             }
             else {  // CREATING
               this.toastService.show('Creating...', 2000);
+              console.log(service)
               this.serviceService.add(service).subscribe({
                 next: (service: Service) => {
                   this.toastService.show('Service ' + service.name + ' created successfully!', 2000);
@@ -242,7 +249,7 @@ export class NewServiceComponent implements OnInit {
                 },
                 error: (err: HttpErrorResponse) => {
                   console.error('Failed to create service:', err);
-                  this.toastService.show('Failed to create!', 2000);
+                  this.toastService.show('Failed to create service' + validationSuffix(err), 6000);
                 }
               });
             }
@@ -256,7 +263,7 @@ export class NewServiceComponent implements OnInit {
 
   recieveDataFromForm() {
     const service = {
-      categoryId: this.categoryId,
+      categoryId: this.newServiceForm.get('categoryForm')?.get('category')?.value,
       images: this.images,
       name: this.newServiceForm.get('name')?.value,
       description: this.newServiceForm.get('description')?.value,
@@ -277,23 +284,15 @@ export class NewServiceComponent implements OnInit {
     return service;
   }
 
-  getCategoryId() {
-    const categoryName = this.newServiceForm.get('category')?.value;
-    if (categoryName != undefined)
-      this.SPCategoryService.getByName(categoryName).subscribe(category => {
-        this.categoryId = category.id;
-    });
-  }
-
   onCancel(): void {
     if (this.serviceId !== undefined)
       this.router.navigate(['/my-services']); 
     else
-      this.router.navigate(['/home']); 
+      this.router.navigate(['/home']);
   }
 
   getImageUrl(path: string): string {
-    return `http://localhost:8080/api/images/${path}`;
+    return `${environment.apiHost}api/images/${path}`;
   }
 
   removeImage(index: number): void {

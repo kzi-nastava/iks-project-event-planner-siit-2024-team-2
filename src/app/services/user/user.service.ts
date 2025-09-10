@@ -40,4 +40,10 @@ export class UserService {
     return this.httpClient.delete(`${this.usersUrl}/${userId}/favorite-service-products/${serviceProductId}`);
   }
 
+  blockUser(userId: number) {
+    return this.httpClient.post(`${this.usersUrl}/${userId}/block`, {});
+  }
+  unblockUser(userId: number) {
+    return this.httpClient.delete(`${this.usersUrl}/${userId}/block`);
+  }
 }
