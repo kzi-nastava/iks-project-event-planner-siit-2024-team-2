@@ -128,71 +128,80 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.registerForm.get('companyDescription')?.updateValueAndValidity();
   }
 
-  onRegister(): void {
-    if (this.registerForm.valid) {
-      if (this.selectedImage) {
-        this.imageService.uploadImage(this.selectedImage).subscribe({
-          next: response => {
-            this.imageName = atob(response);
-                  if (this.isEventOrganizer) {
-        this.authService.register(
-          this.registerForm.value.email,
-          this.registerForm.value.password,
-          this.registerForm.value.firstName,
-          this.registerForm.value.lastName,
-          this.registerForm.value.address,
-          this.registerForm.value.phone,
-          this.isEventOrganizer ? 2 : 3,
-          this.imageName
-        ).subscribe({
-          next: (response) => {
-            if (response) {
-              console.log('Registration successful');
-              this.router.navigate(['/signin']);
-            } else {
-              console.error('Registration failed');
-            }
+onRegister(): void {
+  if (!this.registerForm.valid) {
+    return;
+  }
+
+  const doRegister = (imageName?: string) => {
+    if (this.isEventOrganizer) {
+      this.authService.register(
+        this.registerForm.value.email,
+        this.registerForm.value.password,
+        this.registerForm.value.firstName,
+        this.registerForm.value.lastName,
+        this.registerForm.value.address,
+        this.registerForm.value.phone,
+        this.isEventOrganizer ? 2 : 3,
+        imageName
+      ).subscribe({
+        next: (response) => {
+          if (response) {
+            console.log('Registration successful');
+            this.router.navigate(['/signin']);
+          } else {
+            console.error('Registration failed');
           }
-          , error: (error) => {
-            console.error('Registration error:', error);
+        },
+        error: (error) => {
+          console.error('Registration error:', error);
+        }
+      });
+    } else {
+      this.authService.registerCompany(
+        this.registerForm.value.email,
+        this.registerForm.value.password,
+        this.registerForm.value.firstName,
+        this.registerForm.value.lastName,
+        this.registerForm.value.companyName,
+        this.registerForm.value.companyDescription,
+        this.registerForm.value.address,
+        this.registerForm.value.phone,
+        this.isEventOrganizer ? 2 : 3,
+        imageName
+      ).subscribe({
+        next: (response) => {
+          if (response) {
+            console.log('Registration successful');
+            this.router.navigate(['/signin']);
+          } else {
+            console.error('Registration failed');
           }
-        });
-      }
-      else {
-        this.authService.registerCompany(
-          this.registerForm.value.email,
-          this.registerForm.value.password,
-          this.registerForm.value.firstName,
-          this.registerForm.value.lastName,
-          this.registerForm.value.companyName,
-          this.registerForm.value.companyDescription,
-          this.registerForm.value.address,
-          this.registerForm.value.phone,
-          this.isEventOrganizer ? 2 : 3,
-          this.imageName
-        ).subscribe({
-          next: (response) => {
-            if (response) {
-              console.log('Registration successful');
-              this.router.navigate(['/signin']);
-            } else {
-              console.error('Registration failed');
-            }
-          }
-          , error: (error) => {
-            console.error('Registration error:', error);
-          }
-        });
-      }
-            this.toastService.show('Profile picture uploaded successfully', 3000);
-          },
-          error: err => {
-            this.toastService.show('Failed to upload profile picture: ' + err.message, 3000);
-          }
+        },
+        error: (error) => {
+          console.error('Registration error:', error);
+        }
       });
     }
-    }
+  };
+
+  if (this.selectedImage) {
+    this.imageService.uploadImage(this.selectedImage).subscribe({
+      next: (response) => {
+        this.imageName = atob(response);
+        doRegister(this.imageName);
+        this.toastService.show('Profile picture uploaded successfully', 3000);
+      },
+      error: (err) => {
+        this.toastService.show('Failed to upload profile picture: ' + err.message, 3000);
+        doRegister();
+      }
+    });
+  } else {
+    doRegister();
   }
+}
+
 
   ngOnDestroy(): void {
     this.destroy$.next();

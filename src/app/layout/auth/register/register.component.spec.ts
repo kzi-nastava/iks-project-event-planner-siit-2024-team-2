@@ -116,7 +116,8 @@ describe('RegisterComponent', () => {
       address: '',
       phone: '',
       companyName: '',
-      companyDescription: ''
+      companyDescription: '',
+      profilePicture: null
     });
   });
 

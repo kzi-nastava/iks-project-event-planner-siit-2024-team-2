@@ -96,6 +96,7 @@ export class NewEventComponent implements OnInit {
       this.eventService.update(event, this.id).subscribe({
         next: () => {
           this.router.navigate(['../'], { relativeTo: this.route });
+          this.toastService.show('Event updated successfully', 2000, true);
         },
         error: (err: HttpErrorResponse) => {
           console.error('Failed to update event:', err);
@@ -107,6 +108,7 @@ export class NewEventComponent implements OnInit {
     this.eventService.add(event).subscribe({
       next: () => {
         this.router.navigate(['../'], { relativeTo: this.route });
+        this.toastService.show('Event added successfully', 2000, true);
       },
       error: (err: HttpErrorResponse) => {
         console.error('Failed to create event:', err);
