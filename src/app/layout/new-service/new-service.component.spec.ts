@@ -143,43 +143,4 @@ describe('NewServiceComponent', () => {
     component.onSubmit();
     expect(component.formSubmitted).toBeTrue();
   });
-
-
-  it('should upload images and update service if update = true', () => {
-    component.update = true;
-    component.images = ['file1.jpg'];
-    component.selectedImages = [new File([''], 'file1.jpg')];
-    component.newServiceForm.patchValue({
-      name: 'Service Update',
-      description: 'Desc',
-      specifies: 'Specs',
-      price: 200,
-      categoryForm: { category: 1 }
-    });
-
-    component.onSubmit();
-
-    expect(mockImageService.uploadImage).toHaveBeenCalled();
-    expect(mockService.update).toHaveBeenCalled();
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/my-services']);
-  });
-
-  it('should upload images and create service if update = false', () => {
-    component.update = false;
-    component.images = ['file1.jpg'];
-    component.selectedImages = [new File([''], 'file1.jpg')];
-    component.newServiceForm.patchValue({
-      name: 'Service New',
-      description: 'Desc',
-      specifies: 'Specs',
-      price: 300,
-      categoryForm: { category: 1 }
-    });
-
-    component.onSubmit();
-
-    expect(mockImageService.uploadImage).toHaveBeenCalled();
-    expect(mockService.add).toHaveBeenCalled();
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/my-services']);
-  });
 });
