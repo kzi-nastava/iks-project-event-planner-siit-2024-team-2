@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { PriceListService } from './price-list.service';
-import { SharedTestingModule } from '../../testing/shared-testing.module';
+import { SharedTestingModule } from '../../../testing/shared-testing.module';
 
 describe('PriceListService', () => {
   let service: PriceListService;

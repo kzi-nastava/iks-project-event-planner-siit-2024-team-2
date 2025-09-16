@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EventService } from '../../services/event.service';
+import { EventService } from '../../services/event/event.service';
 import { Event } from '../../model/event/event';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,7 +12,7 @@ import { ReportDialogComponent } from '../../dialog/report-dialog/report-dialog.
 import { ToastService } from '../../services/utils/toast-service';
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../../services/user/user.service';
-import { AuthService } from '../../services/auth-service.service';
+import { AuthService } from '../../services/auth/auth-service.service';
 import { PagedModel } from '../../shared/model/paged-model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ApprovedReviewCardComponent } from "../approved-review-card/approved-review-card.component";

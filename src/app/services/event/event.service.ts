@@ -1,18 +1,18 @@
 import { inject, Injectable } from '@angular/core';
-import { Event } from '../model/event/event';
+import { Event } from '../../model/event/event';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {environment} from '../../environments/environment';
-import { PagedModel } from '../shared/model/paged-model';
-import { EventFilterParams } from '../parameters/event-filter-params';
-import { EventSummaryDto } from '../dto/event/event-summary.dto';
-import { buildHttpParams } from '../utils/http-utils';
-import { EventDto } from '../dto/event/event.dto';
-import { ActivityDto } from '../dto/event/activity.dto';
-import { Activity } from '../model/event/activity';
-import { ReviewSummaryDto } from '../dto/review/review-summary.dto';
-import { PageParams } from '../parameters/page-params';
-import { ReviewEligibilityDto } from '../dto/review/review-eligibility.dto';
+import {environment} from '../../../environments/environment';
+import { PagedModel } from '../../shared/model/paged-model';
+import { EventFilterParams } from '../../parameters/event-filter-params';
+import { EventSummaryDto } from '../../dto/event/event-summary.dto';
+import { buildHttpParams } from '../../utils/http-utils';
+import { EventDto } from '../../dto/event/event.dto';
+import { ActivityDto } from '../../dto/event/activity.dto';
+import { Activity } from '../../model/event/activity';
+import { ReviewSummaryDto } from '../../dto/review/review-summary.dto';
+import { PageParams } from '../../parameters/page-params';
+import { ReviewEligibilityDto } from '../../dto/review/review-eligibility.dto';
 @Injectable({
   providedIn: 'root'
 })

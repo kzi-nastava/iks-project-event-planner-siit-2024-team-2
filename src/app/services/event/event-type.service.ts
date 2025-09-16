@@ -1,13 +1,13 @@
 import { inject, Injectable } from '@angular/core';
-import { EventType } from '../model/event/event-type';
+import { EventType } from '../../model/event/event-type';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
-import { PagedModel } from '../shared/model/paged-model';
-import { EventFilterParams } from '../parameters/event-filter-params';
-import { buildHttpParams } from '../utils/http-utils';
-import { EventTypeDto } from '../dto/event/event-type.dto';
-import { CreateEventType } from '../dto/event/create-event-type';
+import { environment } from '../../../environments/environment';
+import { PagedModel } from '../../shared/model/paged-model';
+import { EventFilterParams } from '../../parameters/event-filter-params';
+import { buildHttpParams } from '../../utils/http-utils';
+import { EventTypeDto } from '../../dto/event/event-type.dto';
+import { CreateEventType } from '../../dto/event/create-event-type';
 
 @Injectable({
   providedIn: 'root'

@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Event } from '../../model/event/event';
-import { EventService } from '../../services/event.service';
+import { EventService } from '../../services/event/event.service';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';

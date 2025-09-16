@@ -1,15 +1,15 @@
 import { CommonModule, Location } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ProfileService } from '../../services/profile.service'; 
+import { ProfileService } from '../../services/user/profile.service'; 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component'; 
 import { UserRole } from '../../dto/user/user-role';
-import { ImageService } from '../../services/image.service';
+import { ImageService } from '../../services/service-product/image.service';
 import { ToastService } from '../../services/utils/toast-service';
 import { environment } from '../../../environments/environment';
-import { AuthService } from '../../services/auth-service.service';
+import { AuthService } from '../../services/auth/auth-service.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ServiceProductCategory } from '../../model/service-product/service-product-category';
 import { EventType } from '../../model/event/event-type';
@@ -28,7 +28,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { DragScrollComponent, DragScrollItemDirective } from 'ngx-drag-scroll';
 import { ImgFallbackDirective } from '../../utils/image-fallback';
-import { EventService } from '../../services/event.service';
+import { EventService } from '../../services/event/event.service';
 import { validationSuffix } from '../../utils/error-utils';
 
 @Component({

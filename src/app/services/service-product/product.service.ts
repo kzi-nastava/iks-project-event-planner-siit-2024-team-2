@@ -1,11 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
-import { Product } from '../model/service-product/product';
-import { PageParams } from '../parameters/page-params';
-import { ProductDetailsDto } from '../dto/service-product/product-details.dto';
-import { ProductDto } from '../dto/service-product/product.dto';
+import { environment } from '../../../environments/environment';
+import { Product } from '../../model/service-product/product';
+import { PageParams } from '../../parameters/page-params';
+import { ProductDetailsDto } from '../../dto/service-product/product-details.dto';
+import { ProductDto } from '../../dto/service-product/product.dto';
 
 @Injectable({
   providedIn: 'root'

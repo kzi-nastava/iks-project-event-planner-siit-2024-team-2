@@ -1,15 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule, FormsModule, FormControl } from '@angular/forms';
-import { of, throwError } from 'rxjs';
+import { of } from 'rxjs';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { NewServiceComponent } from './new-service.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { mock } from 'node:test';
-import { ServiceService } from '../../services/service.service';
+import { ServiceService } from '../../services/service-product/service.service';
 import { NotificationService } from '../../services/communication/notification.service';
-import { ImageService } from '../../services/image.service';
-import { ToastService } from '../../services/utils/toast-service';
+import { ImageService } from '../../services/service-product/image.service';
 
 
 class MockServiceService {
@@ -84,14 +82,22 @@ describe('NewServiceComponent', () => {
 
   it('should fail oneDurationRequiredValidator if all zero', () => {
     const group = component.newServiceForm.get('durationForm');
+    if (!group) {
+      fail('Duration form group not found');
+      return;
+    }
     group?.setValue({ duration: 0, minEngagementDuration: 0, maxEngagementDuration: 0 });
-    expect(component.oneDurationRequiredValidator(group as any)).toEqual({ oneDurationRequiredValidator: true });
+    expect(component.oneDurationRequiredValidator(group)).toEqual({ oneDurationRequiredValidator: true });
   });
 
   it('should pass oneCategoryRequiredValidator if newCategoryName and newCategoryDescription are set', () => {
     const group = component.newServiceForm.get('categoryForm');
+    if (!group) {
+      fail('Category form group not found');
+      return;
+    }
     group?.setValue({ category: null, newCategoryName: 'Name', newCategoryDescription: 'Desc' });
-    expect(component.oneCategoryRequiredValidator(group as any)).toBeNull();
+    expect(component.oneCategoryRequiredValidator(group)).toBeNull();
   });
 
   it('should initialize checkbox values and push into form array', () => {
@@ -131,7 +137,7 @@ describe('NewServiceComponent', () => {
   });
 
   it('should navigate to /home when no serviceId', () => {
-    component.serviceId = undefined as any;
+    component.serviceId = undefined;
     component.onCancel();
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/home']);
   });

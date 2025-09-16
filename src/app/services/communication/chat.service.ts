@@ -22,7 +22,7 @@ export class ChatService {
   }
 
   getAllMyChats(pageParams: PageParams): Observable<PagedModel<Chat>> {
-    let params = buildHttpParams(pageParams);
+    const params = buildHttpParams(pageParams);
     return this.httpClient.get<PagedModel<Chat>>(`${this.apiUrl}/mine`, { params: params });
   }
 

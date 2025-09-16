@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { EventTypeService } from '../../services/event-type.service';
+import { EventTypeService } from '../../services/event/event-type.service';
 import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component';
 import { EventFilterParams } from '../../parameters/event-filter-params';
 import { PagedModel } from '../../shared/model/paged-model';

@@ -3,14 +3,14 @@ import { CommonModule } from '@angular/common';
 import { MatCard, MatCardTitle, MatCardSubtitle, MatCardContent, MatCardActions } from "@angular/material/card";
 import { ActivatedRoute, Router } from '@angular/router';
 import { ServiceProductService } from '../../services/service-product/service-product.service';
-import { ServiceService } from '../../services/service.service';
+import { ServiceService } from '../../services/service-product/service.service';
 import { environment } from '../../../environments/environment';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ToastService } from '../../services/utils/toast-service';
-import { AuthService } from '../../services/auth-service.service';
+import { AuthService } from '../../services/auth/auth-service.service';
 import { UserService } from '../../services/user/user.service';
 import { Service } from '../../model/service-product/service';
 import { ReportDialogComponent } from '../../dialog/report-dialog/report-dialog.component';

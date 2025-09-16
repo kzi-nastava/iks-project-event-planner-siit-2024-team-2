@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { ProfileService } from './profile.service';
-import { SharedTestingModule } from '../../testing/shared-testing.module';
+import { SharedTestingModule } from '../../../testing/shared-testing.module';
 
 describe('ProfileServiceService', () => {
   let service: ProfileService;

@@ -1,13 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ServiceService } from '../../services/service.service';
-import { ServiceProductCategoryService } from '../../services/service-product-category.service';
+import { ServiceService } from '../../services/service-product/service.service';
+import { ServiceProductCategoryService } from '../../services/service-product/service-product-category.service';
 import { Router } from '@angular/router';
 import { ToastService } from '../../services/utils/toast-service';
-import { BudgetService } from '../../services/budget.service';
-import { ProductService } from '../../services/product.service';
-import { ProfileService } from '../../services/profile.service';
+import { BudgetService } from '../../services/order/budget.service';
+import { ProductService } from '../../services/service-product/product.service';
+import { ProfileService } from '../../services/user/profile.service';
 import { Observable } from "rxjs";
 
 export interface DeletableService {

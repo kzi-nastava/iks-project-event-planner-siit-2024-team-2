@@ -7,12 +7,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
-import { ServiceService } from '../../services/service.service';
-import { ServiceProductCategoryService } from '../../services/service-product-category.service';
-import { EventTypeService } from '../../services/event-type.service';
+import { ServiceService } from '../../services/service-product/service.service';
+import { ServiceProductCategoryService } from '../../services/service-product/service-product-category.service';
+import { EventTypeService } from '../../services/event/event-type.service';
 import { forkJoin } from 'rxjs';
 import { ToastService } from '../../services/utils/toast-service';
-import { ImageService } from '../../services/image.service';
+import { ImageService } from '../../services/service-product/image.service';
 import { NotificationDto } from '../../dto/communication/notification.dto';
 import { NotificationService } from '../../services/communication/notification.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -85,7 +85,7 @@ export class NewServiceComponent implements OnInit {
   eventTypeIds: number[] = [];
   areEventTypesChecked: boolean[] = []; // for initial check
   update = true; // is it update or create service mode
-  serviceId = -1;
+  serviceId? = -1;
   images: string[] = [];
   imageEncodedNames: string[] = [];
   categoryId = -1;
@@ -124,7 +124,7 @@ export class NewServiceComponent implements OnInit {
   fetchServiceData(): void {
     forkJoin({
         allEventTypes: this.eventTypeService.getAll(),
-        editingService: this.serviceService.getService(this.serviceId)
+        editingService: this.serviceService.getService(this.serviceId || -1)
       }).subscribe(({ allEventTypes, editingService }) => {
         this.eventTypes = allEventTypes.map(t => t.name);
         this.eventTypeIds = allEventTypes.map(t => t.id);
@@ -228,7 +228,7 @@ export class NewServiceComponent implements OnInit {
             if (this.update) {  // UPDATING
               console.log(service)
               console.log("UPDATUJE SEE")
-              this.serviceService.update(this.serviceId, service).subscribe({
+              this.serviceService.update(this.serviceId || -1, service).subscribe({
                 next: (service: Service) => {
                   this.toastService.show('Service ' + service.name + ' updated successfully!', 2000);
                   this.router.navigate(['/my-services']);

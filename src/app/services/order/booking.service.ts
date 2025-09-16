@@ -1,11 +1,11 @@
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { PageParams } from '../parameters/page-params';
-import { buildHttpParams } from '../utils/http-utils';
-import { PagedModel } from '../shared/model/paged-model';
+import { PageParams } from '../../parameters/page-params';
+import { buildHttpParams } from '../../utils/http-utils';
+import { PagedModel } from '../../shared/model/paged-model';
 import { Observable } from 'rxjs';
-import { PendingBookingDto } from '../dto/budget/pending-booking.dto';
+import { PendingBookingDto } from '../../dto/budget/pending-booking.dto';
 
 @Injectable({
   providedIn: 'root'

@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { EventService } from '../../services/event.service';
+import { EventService } from '../../services/event/event.service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';

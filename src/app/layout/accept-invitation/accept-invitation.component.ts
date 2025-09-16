@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from '../../services/utils/toast-service';
 import { InvitationService } from '../../services/event/invitation.service';
 import { Invitation } from '../../model/event/invitation';
-import { AuthService } from '../../services/auth-service.service';
+import { AuthService } from '../../services/auth/auth-service.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoadingService } from '../../services/utils/loading.service';
 import { isPlatformBrowser } from '@angular/common';

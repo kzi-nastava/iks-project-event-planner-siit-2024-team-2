@@ -5,7 +5,7 @@ import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.
 import { Router } from '@angular/router';   
 import { FormsModule } from '@angular/forms';
 import { ServiceFilterDialogComponent } from '../../dialog/service-filter-dialog/service-filter-dialog.component';
-import { ServiceService } from '../../services/service.service';
+import { ServiceService } from '../../services/service-product/service.service';
 import { finalize } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { MatProgressSpinner } from "@angular/material/progress-spinner";

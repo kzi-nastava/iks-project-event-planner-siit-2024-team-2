@@ -8,10 +8,10 @@ import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angula
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
-import { EventTypeService } from '../../services/event-type.service';
+import { EventTypeService } from '../../services/event/event-type.service';
 import { CreateEventType } from '../../dto/event/create-event-type';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { ServiceService } from '../../services/service.service';
+import { ServiceService } from '../../services/service-product/service.service';
 import { Service } from '../../model/service-product/service';
 import { PagedModel } from '../../shared/model/paged-model';
 import { EventType } from '../../model/event/event-type';

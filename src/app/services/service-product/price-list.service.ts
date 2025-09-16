@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { PriceListDto } from '../dto/service-product/price-list.dto';
+import { PriceListDto } from '../../dto/service-product/price-list.dto';
 import { Observable } from 'rxjs';
 
 @Injectable({

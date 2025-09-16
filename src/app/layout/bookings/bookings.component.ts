@@ -10,7 +10,7 @@ import { NgIf } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PendingBookingDto } from '../../dto/budget/pending-booking.dto';
-import { BookingService } from '../../services/booking.service';
+import { BookingService } from '../../services/order/booking.service';
 import { DatePipe } from '@angular/common';
 
 @Component({

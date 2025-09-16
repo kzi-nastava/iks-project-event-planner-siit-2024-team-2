@@ -5,7 +5,7 @@ import { SharedTestingModule } from '../../../testing/shared-testing.module';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Service } from '../../model/service-product/service';
 import { ToastService } from '../../services/utils/toast-service';
-import { BudgetService } from '../../services/budget.service';
+import { BudgetService } from '../../services/order/budget.service';
 import { of, throwError } from 'rxjs';
 import { BookingDto } from '../../dto/budget/booking.dto';
 import { endOfDay, parse, startOfDay } from 'date-fns';

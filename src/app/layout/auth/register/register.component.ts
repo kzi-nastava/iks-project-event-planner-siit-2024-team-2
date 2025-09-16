@@ -9,9 +9,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Router, RouterModule } from '@angular/router';
 import {MatRadioModule} from '@angular/material/radio';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../../services/auth-service.service';
+import { AuthService } from '../../../services/auth/auth-service.service';
 import { Subject, takeUntil } from 'rxjs';
-import { ImageService } from '../../../services/image.service';
+import { ImageService } from '../../../services/service-product/image.service';
 import { ToastService } from '../../../services/utils/toast-service';
 import { validationSuffix } from '../../../utils/error-utils';
 

@@ -6,7 +6,7 @@ import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.
 import { Router } from '@angular/router';   
 import { FormsModule } from '@angular/forms';
 import { ServiceFilterDialogComponent } from '../../dialog/service-filter-dialog/service-filter-dialog.component';
-import { ProductService } from '../../services/product.service';
+import { ProductService } from '../../services/service-product/product.service';
 import { environment } from '../../../environments/environment';
 
 

@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { intlFormatDistance } from "date-fns";
 import { combineLatest, Subject, takeUntil } from 'rxjs';
-import { AuthService } from '../../services/auth-service.service';
+import { AuthService } from '../../services/auth/auth-service.service';
 import { NgIf } from '@angular/common';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { ToastService } from '../../services/utils/toast-service';

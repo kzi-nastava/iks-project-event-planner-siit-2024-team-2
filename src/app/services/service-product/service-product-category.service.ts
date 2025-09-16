@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { ServiceProductCategory } from '../model/service-product/service-product-category';
+import { ServiceProductCategory } from '../../model/service-product/service-product-category';
 import { Observable } from 'rxjs';
-import { ServiceProductCategoryDto } from '../dto/service-product/service-product-category.dto';
+import { ServiceProductCategoryDto } from '../../dto/service-product/service-product-category.dto';
 
 @Injectable({
   providedIn: 'root'

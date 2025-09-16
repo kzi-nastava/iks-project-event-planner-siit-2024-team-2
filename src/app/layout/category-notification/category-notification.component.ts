@@ -1,7 +1,7 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ServiceProductCategoryService } from '../../services/service-product-category.service';
-import { ServiceService } from '../../services/service.service';
+import { ServiceProductCategoryService } from '../../services/service-product/service-product-category.service';
+import { ServiceService } from '../../services/service-product/service.service';
 import { ServiceProductCategory } from '../../model/service-product/service-product-category';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSelectModule } from '@angular/material/select';
