@@ -15,7 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { InvitationsDialogComponent } from '../../dialog/invitations-dialog/invitations-dialog.component';
 import { InvitationItem } from '../../dialog/invitations-dialog/invitations-dialog.component';
 import { ToastService } from '../../services/utils/toast-service';
-import { EventDto } from '../../services/dtos/event/event.dto';
+import { EventDto } from '../../dto/event/event.dto';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Event } from '../../model/event/event'
 import { validationSuffix } from '../../utils/error-utils';

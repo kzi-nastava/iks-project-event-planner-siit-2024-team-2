@@ -11,7 +11,7 @@ import { Observable, Subscription } from 'rxjs';
 import { NotificationService } from '../../services/communication/notification.service';
 import { MatBadgeModule } from '@angular/material/badge';
 import { LoadingService } from '../../services/utils/loading.service';
-import { UserRole } from '../../services/dtos/user/user-role';
+import { UserRole } from '../../dto/user/user-role';
 
 @Component({
   selector: 'app-nav-bar',

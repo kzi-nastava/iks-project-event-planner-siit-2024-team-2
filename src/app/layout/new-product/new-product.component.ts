@@ -15,9 +15,9 @@ import { forkJoin } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ImageService } from '../../services/image.service';
 import { ToastService } from '../../services/utils/toast-service';
-import { ProductDto } from '../../services/dtos/service-product/product.dto';
+import { ProductDto } from '../../dto/service-product/product.dto';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ProductDetailsDto } from '../../services/dtos/service-product/product-details.dto';
+import { ProductDetailsDto } from '../../dto/service-product/product-details.dto';
 import { validationSuffix } from '../../utils/error-utils';
 
 

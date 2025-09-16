@@ -5,7 +5,7 @@ import { PageParams } from '../parameters/page-params';
 import { buildHttpParams } from '../utils/http-utils';
 import { PagedModel } from '../shared/model/paged-model';
 import { Observable } from 'rxjs';
-import { PendingBookingDto } from './dtos/budget/pending-booking.dto';
+import { PendingBookingDto } from '../dto/budget/pending-booking.dto';
 
 @Injectable({
   providedIn: 'root'

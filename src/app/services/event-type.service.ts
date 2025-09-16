@@ -6,8 +6,8 @@ import { environment } from '../../environments/environment';
 import { PagedModel } from '../shared/model/paged-model';
 import { EventFilterParams } from '../parameters/event-filter-params';
 import { buildHttpParams } from '../utils/http-utils';
-import { EventTypeDto } from './dtos/event/event-type.dto';
-import { CreateEventType } from './dtos/event/create-event-type';
+import { EventTypeDto } from '../dto/event/event-type.dto';
+import { CreateEventType } from '../dto/event/create-event-type';
 
 @Injectable({
   providedIn: 'root'

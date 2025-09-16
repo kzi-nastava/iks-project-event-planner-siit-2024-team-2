@@ -2,9 +2,9 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { LoginResponse } from './dtos/auth/login-response';
-import { QuickLoginDto } from './dtos/auth/quick-login.dto';
-import { UserRole } from './dtos/user/user-role';
+import { LoginResponse } from '../dto/auth/login-response';
+import { QuickLoginDto } from '../dto/auth/quick-login.dto';
+import { UserRole } from '../dto/user/user-role';
 
 @Injectable({
   providedIn: 'root'

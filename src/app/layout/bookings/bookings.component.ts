@@ -9,7 +9,7 @@ import { MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardSubtitle
 import { NgIf } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PendingBookingDto } from '../../services/dtos/budget/pending-booking.dto';
+import { PendingBookingDto } from '../../dto/budget/pending-booking.dto';
 import { BookingService } from '../../services/booking.service';
 import { DatePipe } from '@angular/common';
 

@@ -1,4 +1,4 @@
-import { Service } from "../../../model/service-product/service";
+import { Service } from "../../model/service-product/service";
 
 export interface PendingBookingDto {
     id: number,

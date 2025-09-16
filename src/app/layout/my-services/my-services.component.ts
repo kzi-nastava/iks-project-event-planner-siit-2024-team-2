@@ -9,10 +9,10 @@ import { ServiceService } from '../../services/service.service';
 import { finalize } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
-import { ServiceCardDto } from '../../services/dtos/service-product/service-card-dto.dto';
+import { ServiceCardDto } from '../../dto/service-product/service-card-dto.dto';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ServiceProductService } from '../../services/service-product/service-product.service';
-import { ServiceProductSummaryDto } from '../../services/dtos/service-product/service-product-summary.dto';
+import { ServiceProductSummaryDto } from '../../dto/service-product/service-product-summary.dto';
 
 const imagesApi = "api/images/";
 

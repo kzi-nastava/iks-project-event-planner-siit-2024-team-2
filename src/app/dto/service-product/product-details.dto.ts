@@ -1,6 +1,6 @@
-import { EventType } from "../../../model/event/event-type";
-import { ServiceProductCategory } from "../../../model/service-product/service-product-category";
-import { ServiceProductProvider } from "../../../model/user/service-product-provider";
+import { EventType } from "../../model/event/event-type";
+import { ServiceProductCategory } from "../../model/service-product/service-product-category";
+import { ServiceProductProvider } from "../../model/user/service-product-provider";
 
 export interface ProductDetailsDto {
     serviceProductProvider: ServiceProductProvider | null;

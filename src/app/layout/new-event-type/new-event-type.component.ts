@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { EventTypeService } from '../../services/event-type.service';
-import { CreateEventType } from '../../services/dtos/event/create-event-type';
+import { CreateEventType } from '../../dto/event/create-event-type';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ServiceService } from '../../services/service.service';
 import { Service } from '../../model/service-product/service';

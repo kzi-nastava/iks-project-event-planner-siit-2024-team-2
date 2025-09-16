@@ -1,5 +1,5 @@
-import { EventType } from "../../../model/event/event-type";
-import { ServiceProductCategory } from "../../../model/service-product/service-product-category";
+import { EventType } from "../../model/event/event-type";
+import { ServiceProductCategory } from "../../model/service-product/service-product-category";
 
 export interface ServiceProductFilteringValues {
     minPrice: number | null;

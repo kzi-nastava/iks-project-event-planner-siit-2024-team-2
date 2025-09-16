@@ -8,8 +8,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoadingService } from '../../services/utils/loading.service';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { InvitationErrorType } from '../../services/dtos/event/invitation-error-type';
-import { InvitationErrorDto } from '../../services/dtos/event/invitation-error.dto';
+import { InvitationErrorType } from '../../dto/event/invitation-error-type';
+import { InvitationErrorDto } from '../../dto/event/invitation-error.dto';
 import { SuspendedDialogComponent, SuspendedDialogData } from '../../dialog/suspended-dialog/suspended-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 

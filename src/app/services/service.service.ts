@@ -4,11 +4,11 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
 import { PagedModel } from '../shared/model/paged-model';
-import { ServiceCardDto } from './dtos/service-product/service-card-dto.dto';
-import { CreateServiceDto } from './dtos/service-product/create-service.dto';
+import { ServiceCardDto } from '../dto/service-product/service-card-dto.dto';
+import { CreateServiceDto } from '../dto/service-product/create-service.dto';
 import { PageParams } from '../parameters/page-params';
-import { DateRangeDto } from './dtos/utils/date-range.dto';
-import { ServiceProductSummaryDto } from './dtos/service-product/service-product-summary.dto';
+import { DateRangeDto } from '../dto/utils/date-range.dto';
+import { ServiceProductSummaryDto } from '../dto/service-product/service-product-summary.dto';
 @Injectable({
   providedIn: 'root'
 })

@@ -1,4 +1,4 @@
-import { ChatStatus } from "../../../model/utils/chat-status";
+import { ChatStatus } from "../../model/utils/chat-status";
 
 export interface ChatDto {
     toId: number;

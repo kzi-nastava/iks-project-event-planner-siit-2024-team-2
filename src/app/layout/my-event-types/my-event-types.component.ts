@@ -12,7 +12,7 @@ import { EventTypeService } from '../../services/event-type.service';
 import { DeleteDialogComponent } from '../../dialog/delete-dialog/delete-dialog.component';
 import { EventFilterParams } from '../../parameters/event-filter-params';
 import { PagedModel } from '../../shared/model/paged-model';
-import { EventTypeDto } from '../../services/dtos/event/event-type.dto';
+import { EventTypeDto } from '../../dto/event/event-type.dto';
 
 @Component({
   selector: 'app-my-event-types',

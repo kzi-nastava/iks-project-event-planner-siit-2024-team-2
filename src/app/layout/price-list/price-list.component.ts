@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
-import { PriceListDto } from '../../services/dtos/service-product/price-list.dto';
+import { PriceListDto } from '../../dto/service-product/price-list.dto';
 import { PriceListService } from '../../services/price-list.service';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';

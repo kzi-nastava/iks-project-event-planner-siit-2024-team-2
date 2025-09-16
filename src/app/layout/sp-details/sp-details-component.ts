@@ -21,12 +21,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { ApprovedReviewCardComponent } from "../approved-review-card/approved-review-card.component";
 import { PagedModel } from '../../shared/model/paged-model';
-import { ReviewSummaryDto } from '../../services/dtos/review/review-summary.dto';
+import { ReviewSummaryDto } from '../../dto/review/review-summary.dto';
 import { ReviewDialogComponent, ReviewDialogData } from '../../dialog/review-dialog/review-dialog.component';
-import { ReviewEligibilityDto } from '../../services/dtos/review/review-eligibility.dto';
+import { ReviewEligibilityDto } from '../../dto/review/review-eligibility.dto';
 import { MatTooltip } from "@angular/material/tooltip";
 import { BookPurchaseDialogComponent } from '../../dialog/book-purchase-dialog/book-purchase-dialog-component';
-import { OrderEligibilityDto } from '../../services/dtos/budget/order-eligibility.dto';
+import { OrderEligibilityDto } from '../../dto/budget/order-eligibility.dto';
 import { userBlockedError } from '../../utils/error-utils';
 import { UserContextService } from '../../services/utils/user-context.service';
 

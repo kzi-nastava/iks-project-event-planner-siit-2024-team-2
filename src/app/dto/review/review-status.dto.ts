@@ -1,4 +1,4 @@
-import { ReviewStatus } from "../../../model/utils/review-status";
+import { ReviewStatus } from "../../model/utils/review-status";
 
 export interface ReviewStatusDto {
     id: number,

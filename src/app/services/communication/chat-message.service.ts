@@ -3,7 +3,7 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ChatMessage } from '../../model/communication/chat-message';
-import { ChatMessageDto } from '../dtos/communication/chat-message.dto';
+import { ChatMessageDto } from '../../dto/communication/chat-message.dto';
 
 @Injectable({
   providedIn: 'root'

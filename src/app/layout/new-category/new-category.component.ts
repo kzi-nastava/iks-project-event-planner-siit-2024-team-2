@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ServiceProductCategoryService } from '../../services/service-product-category.service';
-import { ServiceProductCategoryDto } from '../../services/dtos/service-product/service-product-category.dto';
+import { ServiceProductCategoryDto } from '../../dto/service-product/service-product-category.dto';
 import { ServiceProductCategory } from '../../model/service-product/service-product-category';
 import { HttpErrorResponse } from '@angular/common/http';
 

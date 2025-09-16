@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { PagedModel } from '../../shared/model/paged-model';
 import { Chat } from '../../model/communication/chat';
 import { buildHttpParams } from '../../utils/http-utils';
-import { ChatDto } from '../dtos/communication/chat.dto';
+import { ChatDto } from '../../dto/communication/chat.dto';
 import { ChatMessage } from '../../model/communication/chat-message';
 
 @Injectable({

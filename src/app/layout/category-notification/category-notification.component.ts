@@ -10,8 +10,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatCardContent } from "@angular/material/card";
 import { MatButtonModule } from '@angular/material/button';
 import { NotificationService } from '../../services/communication/notification.service';
-import { NotificationDto } from '../../services/dtos/communication/notification.dto';
-import { CreateServiceDto } from '../../services/dtos/service-product/create-service.dto';
+import { NotificationDto } from '../../dto/communication/notification.dto';
+import { CreateServiceDto } from '../../dto/service-product/create-service.dto';
 import { HttpErrorResponse } from '@angular/common/http';
 import { validationSuffix } from '../../utils/error-utils';
 

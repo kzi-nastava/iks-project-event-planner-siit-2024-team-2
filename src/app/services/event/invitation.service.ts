@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Invitation } from '../../model/event/invitation';
-import { InvitationDto } from '../dtos/event/invitation.dto';
+import { InvitationDto } from '../../dto/event/invitation.dto';
 
 @Injectable({
   providedIn: 'root'
