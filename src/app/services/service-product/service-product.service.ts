@@ -5,14 +5,13 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { PagedModel } from '../../shared/model/paged-model';
 import { ServiceProductFilterParams } from '../../parameters/service-product-filter-params';
-import { ServiceProductSummaryDto } from '../dtos/service-product/service-product-summary.dto';
+import { ServiceProductSummaryDto } from '../../dto/service-product/service-product-summary.dto';
 import { buildHttpParams } from '../../utils/http-utils';
-import { ServiceProductFilteringValues } from '../dtos/service-product/service-product-filtering-values.dto';
-import { ServiceProductReview } from '../../model/review/service-product-review';
+import { ServiceProductFilteringValues } from '../../dto/service-product/service-product-filtering-values.dto';
 import { PageParams } from '../../parameters/page-params';
-import { ReviewSummaryDto } from '../dtos/review/review-summary.dto';
-import { ReviewEligibilityDto } from '../dtos/review/review-eligibility.dto';
-import { OrderEligibilityDto } from '../dtos/budget/order-eligibility.dto';
+import { ReviewSummaryDto } from '../../dto/review/review-summary.dto';
+import { ReviewEligibilityDto } from '../../dto/review/review-eligibility.dto';
+import { OrderEligibilityDto } from '../../dto/budget/order-eligibility.dto';
 
 @Injectable({
   providedIn: 'root'

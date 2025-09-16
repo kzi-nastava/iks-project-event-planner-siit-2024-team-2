@@ -1,6 +1,6 @@
 import { EventType } from "../model/event/event-type";
 import { ServiceProductCategory } from "../model/service-product/service-product-category";
-import { ServiceProductFilteringValues } from "../services/dtos/service-product/service-product-filtering-values.dto";
+import { ServiceProductFilteringValues } from "../dto/service-product/service-product-filtering-values.dto";
 import { ServiceProductFilterParams } from "./service-product-filter-params";
 
 export interface HomeServiceProductFilterDialogParams {

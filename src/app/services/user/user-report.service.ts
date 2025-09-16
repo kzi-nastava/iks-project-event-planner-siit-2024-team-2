@@ -3,7 +3,7 @@ import { environment } from '../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserReport } from '../../model/user/user-report';
-import { UserReportDto } from '../dtos/user/user-report.dto';
+import { UserReportDto } from '../../dto/user/user-report.dto';
 import { PageParams } from '../../parameters/page-params';
 import { buildHttpParams } from '../../utils/http-utils';
 import { PagedModel } from '../../shared/model/paged-model';

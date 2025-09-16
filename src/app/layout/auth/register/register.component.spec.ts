@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RegisterComponent } from './register.component';
-import { AuthService } from '../../../services/auth-service.service';
+import { AuthService } from '../../../services/auth/auth-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { SharedTestingModule } from '../../../../testing/shared-testing.module';

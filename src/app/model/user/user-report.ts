@@ -1,4 +1,4 @@
-import { UserDto } from "../../services/dtos/user/user.dto";
+import { UserDto } from "../../dto/user/user.dto";
 
 export interface UserReport {
     id: number | null,

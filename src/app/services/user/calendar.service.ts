@@ -18,18 +18,17 @@ export interface EventDto {
 export class CalendarService {
   private apiUrl = `${environment.apiHost}api/calendar`;
 
-  constructor() {}
   httpClient = inject(HttpClient);
 
-  getAttendingEvents(userId: number): Observable<EventDto[]> {
+  getAttendingEvents(): Observable<EventDto[]> {
     return this.httpClient.get<EventDto[]>(`${this.apiUrl}/attending`);
   }
 
-  getOrganizerEvents(organizerId: number): Observable<Event[]> {
+  getOrganizerEvents(): Observable<Event[]> {
     return this.httpClient.get<Event[]>(`${this.apiUrl}/organized`);
   }
 
-  getProviderBookings(providerId: number): Observable<Booking[]> {
+  getProviderBookings(): Observable<Booking[]> {
     return this.httpClient.get<Booking[]>(`${this.apiUrl}/bookings`);
   }
 }

@@ -2,7 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavBarComponent } from "./layout/nav-bar/nav-bar.component";
 import { combineLatestWith, Subject, takeUntil } from 'rxjs';
-import { AuthService } from './services/auth-service.service';
+import { AuthService } from './services/auth/auth-service.service';
 import { CommonModule } from '@angular/common';
 import { SocketService } from './services/communication/socket.service';
 import { NotificationService } from './services/communication/notification.service';

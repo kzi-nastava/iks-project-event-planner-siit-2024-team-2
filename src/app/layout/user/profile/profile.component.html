@@ -1,0 +1,212 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <img 
+      [src]="profilePreview || userInfo.image || 'images/avatar.svg'"
+      [appImgFallback]="'images/avatar.svg'"
+      alt="Profile Picture" 
+      class="profile-picture">
+
+    <div class="profile-picture-actions" *ngIf="showAllProfileData">
+      <input title="Profile Picture" type="file" accept="image/*" (change)="onFileSelected($event)">
+      <button *ngIf="selectedFile" (click)="uploadProfilePicture()" class="button">Save New Picture</button>
+      <button *ngIf="userInfo.image" (click)="removeProfilePicture()" class="button">Remove Picture</button>
+    </div>
+
+    <h1>{{ userInfo.firstName }} {{ userInfo.lastName }}</h1>
+    <p>{{ userInfo.email }}</p>
+  </div>
+
+
+  <div class="profile-sections">
+    <!-- Personal Information Section -->
+    <div class="profile-section">
+      <h2>Personal Information</h2>
+      <form (ngSubmit)="updatePersonalInfo()">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input title="Email" type="email" [(ngModel)]="userInfo.email" name="email" disabled>
+        </div>
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input title="First Name" type="text" [(ngModel)]="userInfo.firstName" name="firstName" required [disabled]="!showAllProfileData">
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input title="Last Name" type="text" [(ngModel)]="userInfo.lastName" name="lastName" required [disabled]="!showAllProfileData">
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone</label>
+          <input title="Phone" type="tel" [(ngModel)]="userInfo.phoneNumber" name="phone" [disabled]="!showAllProfileData">
+        </div>
+        <div class="form-group">
+          <label for="address">Address</label>
+          <input title="Address" type="text" [(ngModel)]="userInfo.address" name="address" [disabled]="!showAllProfileData">
+        </div>
+        <button type="submit" *ngIf="showAllProfileData" class="button">Update Personal Info</button>
+      </form>
+    </div>
+
+    <!-- Company Information Section (for PUP) -->
+    <div class="profile-section" *ngIf="userRole === 'SERVICE_PRODUCT_PROVIDER'">
+      <h2>Company Information</h2>
+      <form (ngSubmit)="updateCompanyInfo()">
+        <div class="form-group">
+          <label for="companyName">Company Name</label>
+          <input title="Company Name" type="text" [(ngModel)]="companyInfo.companyName" name="companyName" disabled>
+        </div>
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea title="Description" [(ngModel)]="companyInfo.companyDescription" name="description" [disabled]="!showAllProfileData"></textarea>
+        </div>
+        <button type="submit" *ngIf="showAllProfileData" class="button">Update Company Info</button>
+        <button type="button" *ngIf="!showAllProfileData" (click)="goBack()" class="button">Back</button>
+      </form>
+
+      <div *ngIf="showAllProfileData">
+      <h3>Service Categories</h3>
+      <ul>
+        <li *ngFor="let category of serviceCategories">{{ category }}</li>
+      </ul>
+
+      <h3>Event Types</h3>
+      <div *ngFor="let type of eventTypes">
+        <label>
+          <input type="checkbox" 
+                 [checked]="selectedEventTypes.includes(type)"
+                 (change)="updateEventTypes()"
+                 [(ngModel)]="selectedEventTypes"
+                 [value]="type">
+          {{ type }}
+        </label>
+      </div>
+      </div>
+    </div>
+
+    <!-- Change Password Section -->
+    <div *ngIf="showAllProfileData">
+      <div class="profile-section" *ngIf="userRole !== 'AUTHENTICATED'">
+        <h2>Change Password</h2>
+        <form (ngSubmit)="changePassword()">
+          <div class="form-group">
+            <label for="oldPassword">Old Password</label>
+            <input title="Old Password" type="password" [(ngModel)]="oldPassword" name="oldPassword" required>
+          </div>
+          <div class="form-group">
+            <label for="newPassword">New Password</label>
+            <input title="New Password" type="password" [(ngModel)]="newPassword" name="newPassword" required>
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">Confirm New Password</label>
+            <input title="Confirm New Password" type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required>
+          </div>
+          <button type="submit" class="button">Change Password</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Favorites Section -->
+     @if (showAllProfileData) {
+     <h3>Favorite Events</h3>
+     <ng-container>
+        <drag-scroll [scrollbar-hidden]="true" [drag-scroll-y-disabled]="true" [snap-disabled]="true">
+            @for(event of favoriteEvents; track event.id) {
+              <div drag-scroll-item class="drag-scroll-item">
+                <ng-template *ngTemplateOutlet="EventCard; context: {$implicit: event}"></ng-template>
+              </div>
+            }
+        </drag-scroll>
+      </ng-container>
+
+      <h3>Favorite Services/Products</h3>
+      <ng-container>
+        <drag-scroll [scrollbar-hidden]="true" [drag-scroll-y-disabled]="true" [snap-disabled]="true">
+            @for(serviceProduct of favoriteServiceProducts; track serviceProduct.id) {
+              <div drag-scroll-item class="drag-scroll-item">
+                <ng-template *ngTemplateOutlet="ServiceProductCard; context: {$implicit: serviceProduct}"></ng-template>
+              </div>
+            }
+        </drag-scroll>
+      </ng-container>
+
+    <!-- Account Deactivation -->
+    <div class="profile-section danger-zone">
+      <h2>Account Settings</h2>
+      <button type="button" class="danger-button button" (click)="deactivateAccount()">
+        Deactivate Account
+      </button>
+      <p>Note: Deactivating your profile cannot be undone.</p>
+    </div>
+  }
+    </div>
+  </div>
+
+<ng-template #EventCard let-eventSummary>
+  <mat-card class="event-card" appearance="outlined">
+    <mat-card-header>
+      <img mat-card-avatar class="profile-picture" 
+      [src]="eventSummary.creatorProfilePicture || 'images/avatar.svg'" [appImgFallback]="'images/avatar.svg'" alt="Profile Picture" />
+      <mat-card-title-group>
+        <mat-card-title class="event-creator-name" [innerHTML]="eventSummary.creatorName"></mat-card-title>
+        <mat-card-subtitle class="event-creator-email" [innerHTML]="eventSummary.creatorEmail"></mat-card-subtitle>
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-card-content>
+      <br>
+      <p class="name">{{eventSummary.name}}</p>
+      <p class="date">{{eventSummary.date | date: 'MMMM d, yyyy'}}</p>
+      <br>
+      <p class="description">{{eventSummary.description}}</p>
+      <br>
+    </mat-card-content>
+    <mat-card-actions align="start">
+    <button mat-flat-button color="primary" (click)="navigateToEventDetails(eventSummary.id)">
+      More info
+    </button>
+    
+    <button mat-flat-button color="primary"
+      *ngIf="!isUserAttending(eventSummary.id); else attending"
+      (click)="attendEvent(eventSummary.id)">
+      Attend Event
+    </button>
+    <ng-template #attending>
+      <button mat-flat-button color="warn" (click)="cancelAttendance(eventSummary.id)">
+      Cancel Attendance
+      </button>
+    </ng-template>
+
+    <button mat-icon-button color="warn"
+            (click)="removeEventFromFavorites(eventSummary.id)">
+      <mat-icon>favorite</mat-icon>
+    </button>
+    </mat-card-actions>
+  </mat-card>
+</ng-template>
+
+<ng-template #ServiceProductCard let-serviceProduct>
+  <mat-card class="service-product-card" appearance="outlined">
+    <mat-card-header>
+      <img mat-card-avatar class="profile-picture" src="images/monogram.png" alt="Profile Picture" />
+      <mat-card-title-group>
+        <mat-card-title [innerHTML]="serviceProduct.creatorName"></mat-card-title>
+        <mat-card-subtitle [innerHTML]="serviceProduct.creatorEmail"></mat-card-subtitle>
+        <img *ngIf="serviceProduct.image" mat-card-lg-image class="card-image" [src]="serviceProduct.image" alt="Service or product image">
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-card-content>
+      <br>
+      <p class="name">{{serviceProduct.name}}</p>
+      <p class="price">Price: €{{serviceProduct.price}}</p>
+      <br>
+      <p class="description">{{serviceProduct.description}}</p>
+      <br>
+    </mat-card-content>
+    <mat-card-actions align="start">
+      <button mat-flat-button color="primary" (click)="navigateToSpDetails(serviceProduct.id)">More info</button>
+      <button mat-icon-button color="warn"
+          (click)="removeServiceProductFromFavorites(serviceProduct.id)">
+        <mat-icon>favorite</mat-icon>
+      </button>
+
+    </mat-card-actions>
+  </mat-card>
+</ng-template>

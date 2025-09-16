@@ -2,8 +2,8 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { EventSummaryDto } from '../dtos/event/event-summary.dto';
-import { ServiceProductSummaryDto } from '../dtos/service-product/service-product-summary.dto';
+import { EventSummaryDto } from '../../dto/event/event-summary.dto';
+import { ServiceProductSummaryDto } from '../../dto/service-product/service-product-summary.dto';
 
 @Injectable({
   providedIn: 'root'

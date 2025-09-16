@@ -1,13 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogContent, MatDialogActions, MatDialogModule } from '@angular/material/dialog';
 import { UserReportService } from '../../services/user/user-report.service';
-import { UserReportDto } from '../../services/dtos/user/user-report.dto';
+import { UserReportDto } from '../../dto/user/user-report.dto';
 import { MatFormField, MatFormFieldModule, MatLabel } from "@angular/material/form-field";
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { ToastService } from '../../services/utils/toast-service';
-import { AuthService } from '../../services/auth-service.service';
+import { AuthService } from '../../services/auth/auth-service.service';
 import { validationSuffix } from '../../utils/error-utils';
 
 export interface ReportDialogData {

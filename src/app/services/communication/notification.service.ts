@@ -3,7 +3,7 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { PagedModel } from '../../shared/model/paged-model';
-import { NotificationDto } from '../dtos/communication/notification.dto';
+import { NotificationDto } from '../../dto/communication/notification.dto';
 import { Notification } from '../../model/communication/notification';
 import { buildHttpParams } from '../../utils/http-utils';
 import { PageParams } from '../../parameters/page-params';

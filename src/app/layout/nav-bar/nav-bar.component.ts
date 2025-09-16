@@ -6,12 +6,12 @@ import { Router, RouterModule } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { AuthService } from '../../services/auth-service.service';
+import { AuthService } from '../../services/auth/auth-service.service';
 import { Observable, Subscription } from 'rxjs';
 import { NotificationService } from '../../services/communication/notification.service';
 import { MatBadgeModule } from '@angular/material/badge';
 import { LoadingService } from '../../services/utils/loading.service';
-import { UserRole } from '../../services/dtos/user/user-role';
+import { UserRole } from '../../dto/user/user-role';
 
 @Component({
   selector: 'app-nav-bar',
