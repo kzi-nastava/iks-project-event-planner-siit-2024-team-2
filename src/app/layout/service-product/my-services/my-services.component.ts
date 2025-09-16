@@ -59,7 +59,6 @@ export class MyServicesComponent implements OnInit {
   dialogRef.afterClosed().subscribe(result => {
       if (result) {
         const { category, eventTypes, minPrice, maxPrice, available } = result;
-        console.log(result)
         const categories = category ? [category] : []; // "", categories, available, minPrice, maxPrice, eventTypes
         this.serviceService.getMyServiceCards(0, 10, '', categories, available, minPrice, maxPrice, eventTypes).subscribe((services) => {
           this.myServices = services.content.map(this.mapToServiceCard)

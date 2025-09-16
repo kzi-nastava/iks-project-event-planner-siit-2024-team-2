@@ -106,6 +106,15 @@ mat-checkbox { // the intended color override doesn't seem to work so this is a 
     container-color: $red-container,
   ));
 }
+.mute-notifications-slide-toggle {
+  @include mat.slide-toggle-overrides((
+    label-text-size: 16px,
+    selected-track-color: $primary
+  ));
+  .mdc-switch__track::after {
+    background: $primary !important;
+  }
+}
 
 html, body { 
     height: 100%; 

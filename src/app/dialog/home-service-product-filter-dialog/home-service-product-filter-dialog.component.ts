@@ -165,10 +165,6 @@ export class HomeServiceProductFilterDialogComponent implements OnInit {
           this.selectedDType = ServiceProductDType.PRODUCT;
         this.serviceProductType.setValue([this.selectedDType])
     }
-    // if (this.selectedDType == ServiceProductDType.SERVICE)
-    //   console.log("Enable options")
-    // else
-    //   console.log("Disable options")
   }
   
   formatPrice(value: number): string {

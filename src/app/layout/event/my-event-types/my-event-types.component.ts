@@ -50,7 +50,6 @@ export class MyEventTypesComponent implements OnInit {
 
     this.eventTypeService.getAllPaginated(filters).subscribe({
       next: (paged: PagedModel<EventTypeDto>) => {
-        console.log(paged);
         this.myEventTypes = paged.content;
         this.totalEventTypes = paged.page.totalElements;
         this.pageIndex = paged.page.number;

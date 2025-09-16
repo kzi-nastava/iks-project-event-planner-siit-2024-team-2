@@ -54,7 +54,6 @@ export class PriceListComponent implements OnInit {
 
       this.priceListService.update(item.id, newPrice, newDiscount).subscribe({
         next: (updated) => {
-          console.log('Saved:', updated);
           item.price = updated.price;
           item.discount = updated.discount;
           item.total = updated.total;

@@ -197,3 +197,6 @@ mat-card-content {
 mat-card-actions button {
   margin-right: 6px;
 }
+.danger-zone p {
+  font-size: 16px;
+}

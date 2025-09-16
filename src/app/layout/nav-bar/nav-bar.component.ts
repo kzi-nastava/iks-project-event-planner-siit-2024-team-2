@@ -78,7 +78,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log('ngOnInit');
     this.authSub = this.authService.isLoggedIn$.subscribe(status => {
       this.isLoggedIn = status;
       this.authButtonText = this.isLoggedIn ? 'Sign out' : 'Sign in';

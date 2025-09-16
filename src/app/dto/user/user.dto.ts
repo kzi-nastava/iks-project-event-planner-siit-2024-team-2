@@ -16,6 +16,7 @@ export interface UserDto {
     favoriteEvents: EventSummaryDto[];
     favoriteServices: ServiceProduct[];
     upcomingEvents: Event[];
+    mutedNotifications: boolean | undefined
     // Additional properties for SERVICE_PRODUCT_PROVIDER
     companyName: string;
     companyDescription: string;

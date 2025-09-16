@@ -30,13 +30,14 @@ import { DragScrollComponent, DragScrollItemDirective } from 'ngx-drag-scroll';
 import { AppImgFallbackDirective } from '../../../utils/image-fallback';
 import { EventService } from '../../../services/event/event.service';
 import { validationSuffix } from '../../../utils/error-utils';
+import { MatSlideToggleChange, MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
   imports: [CommonModule, FormsModule, MatIcon, MatSidenavModule, MatCardModule, MatButtonModule, CommonModule, MatInputModule, MatIconModule, MatTabsModule,
       MatDialogModule, MatPaginatorModule, MatProgressSpinnerModule, DragScrollComponent, DragScrollItemDirective,
-      MatMenuModule, ReactiveFormsModule, AppImgFallbackDirective],
+      MatMenuModule, ReactiveFormsModule, AppImgFallbackDirective, MatSlideToggleModule],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
@@ -59,6 +60,7 @@ export class ProfileComponent implements OnInit {
   selectedEventTypes: EventType[] = [];
   showAllProfileData = true;
   attendingEvents: number[] = [];
+  mutedNotifications = false;
 
   // Injected
   readonly route = inject(ActivatedRoute);
@@ -114,6 +116,7 @@ export class ProfileComponent implements OnInit {
           this.loadFavoriteEvents(Number(userId));
           this.loadFavoriteServiceProducts(Number(userId));
           this.upcomingEvents = data.upcomingEvents;
+          this.mutedNotifications = data.mutedNotifications ?? false;
 
           if (data.userRole === 'SERVICE_PRODUCT_PROVIDER') {
             this.profileService.getCompanyData(Number(userId)).subscribe({
@@ -157,6 +160,7 @@ export class ProfileComponent implements OnInit {
             phoneNumber: data.phoneNumber,
             address: data.address,
           };
+
       }, error: (err) => {
         this.toastService.show('Failed to update personal info' + validationSuffix(err), 6000);
       }
@@ -243,7 +247,6 @@ deactivateAccount() {
 }
 
   updateEventTypes() {
-    // TODO: endpoint doesn't exist
     // this.profileService.updateEventTypes(this.selectedEventTypes);
   }
 
@@ -424,5 +427,33 @@ deactivateAccount() {
 
   isUserAttending(eventId: number): boolean {
     return this.attendingEvents.includes(eventId);
+  }
+
+  updateMutedNotifications(event: MatSlideToggleChange) {
+    const muted = event.checked;
+    const userId = localStorage.getItem('userId');
+    if (!userId) return;
+    if (muted)
+      this.userService.muteNotifications(Number(userId)).subscribe({
+        next: () => {
+          this.toastService.show('Notifications muted', 2000);
+          this.mutedNotifications = true;
+        },
+        error: () => {
+          this.toastService.show('Failed to mute notifications', 2000);
+          this.mutedNotifications = false;
+        }
+    });
+    else
+      this.userService.unmuteNotifications(Number(userId)).subscribe({
+        next: () => {
+          this.toastService.show('Notifications unmuted', 2000);
+          this.mutedNotifications = false;
+        },
+        error: () => {
+          this.toastService.show('Failed to unmute notifications', 2000);
+          this.mutedNotifications = true;
+        }
+    });
   }
 }

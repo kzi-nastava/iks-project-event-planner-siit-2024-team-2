@@ -89,7 +89,6 @@ export class CalendarComponent implements OnInit {
   }
 
   onEventClick(info: EventClickArg): void {
-    console.log(info);
     info.jsEvent.preventDefault();
     if (info.event.url) {
       this.router.navigateByUrl(info.event.url);
