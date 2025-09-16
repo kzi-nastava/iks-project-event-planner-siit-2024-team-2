@@ -43,7 +43,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth-service.service';
 import { UserService } from '../../services/user/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ImgFallbackDirective } from '../../utils/image-fallback';
+import { AppImgFallbackDirective } from '../../utils/image-fallback';
 
 const pageSize = 12;
 const imagesApi = "api/images/";
@@ -53,7 +53,7 @@ const imagesApi = "api/images/";
   imports: [
     MatSidenavModule, MatCardModule, MatButtonModule, CommonModule, MatFormField, MatInputModule, MatIconModule, MatTabsModule,
     MatDialogModule, MatSelect, MatOption, MatPaginatorModule, MatProgressSpinnerModule, DragScrollComponent, DragScrollItemDirective,
-    MatMenuModule, ReactiveFormsModule, ImgFallbackDirective
+    MatMenuModule, ReactiveFormsModule, AppImgFallbackDirective
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'

@@ -1,17 +1,17 @@
     import { Directive, HostListener, Input, ElementRef, inject } from '@angular/core';
 
     @Directive({
-      selector: 'img[imgFallback]',
+      selector: 'img[appImgFallback]',
       standalone: true
     })
-    export class ImgFallbackDirective {
-        @Input() imgFallback: string | undefined;
+    export class AppImgFallbackDirective {
+        @Input() appImgFallback: string | undefined;
         readonly el = inject(ElementRef);
 
         @HostListener('error')
         onError() {
-            if (this.imgFallback) {
-                this.el.nativeElement.src = this.imgFallback;
+            if (this.appImgFallback) {
+                this.el.nativeElement.src = this.appImgFallback;
                 this.el.nativeElement.style.visibility = 'visible';
             }
             else

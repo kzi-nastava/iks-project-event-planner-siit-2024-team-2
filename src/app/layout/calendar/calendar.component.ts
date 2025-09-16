@@ -46,7 +46,7 @@ export class CalendarComponent implements OnInit {
   ngOnInit(): void {
     this.userId = Number(localStorage.getItem('userId'));
 
-    this.calendarService.getAttendingEvents(this.userId).subscribe(events => {
+    this.calendarService.getAttendingEvents().subscribe(events => {
       this.addEvents(events.map(e => ({
         title: `Attending: ${e.name}`,
         start: e.date,
@@ -56,7 +56,7 @@ export class CalendarComponent implements OnInit {
     });
 
     if (this.role === 'EVENT_ORGANIZER') {
-      this.calendarService.getOrganizerEvents(this.userId).subscribe(events => {
+      this.calendarService.getOrganizerEvents().subscribe(events => {
         this.addEvents(events.map(e => ({
           title: `Organizer: ${e.name}`,
           start: e.date,
@@ -67,7 +67,7 @@ export class CalendarComponent implements OnInit {
     }
 
     if (this.role === 'SERVICE_PRODUCT_PROVIDER') {
-      this.calendarService.getProviderBookings(this.userId).subscribe(bookings => {
+      this.calendarService.getProviderBookings().subscribe(bookings => {
         this.addEvents(bookings.map(b => ({
           title: `Booking: ${b.service.name}`,
           start: b.date,

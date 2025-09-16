@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ChatMessage } from '../../model/communication/chat-message';
 import { ChatMessageDto } from '../../dto/communication/chat-message.dto';
 

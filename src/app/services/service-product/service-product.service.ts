@@ -8,7 +8,6 @@ import { ServiceProductFilterParams } from '../../parameters/service-product-fil
 import { ServiceProductSummaryDto } from '../../dto/service-product/service-product-summary.dto';
 import { buildHttpParams } from '../../utils/http-utils';
 import { ServiceProductFilteringValues } from '../../dto/service-product/service-product-filtering-values.dto';
-import { ServiceProductReview } from '../../model/review/service-product-review';
 import { PageParams } from '../../parameters/page-params';
 import { ReviewSummaryDto } from '../../dto/review/review-summary.dto';
 import { ReviewEligibilityDto } from '../../dto/review/review-eligibility.dto';

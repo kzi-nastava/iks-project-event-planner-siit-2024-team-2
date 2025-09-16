@@ -27,7 +27,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { DragScrollComponent, DragScrollItemDirective } from 'ngx-drag-scroll';
-import { ImgFallbackDirective } from '../../utils/image-fallback';
+import { AppImgFallbackDirective } from '../../utils/image-fallback';
 import { EventService } from '../../services/event/event.service';
 import { validationSuffix } from '../../utils/error-utils';
 
@@ -36,7 +36,7 @@ import { validationSuffix } from '../../utils/error-utils';
   standalone: true,
   imports: [CommonModule, FormsModule, MatIcon, MatSidenavModule, MatCardModule, MatButtonModule, CommonModule, MatInputModule, MatIconModule, MatTabsModule,
       MatDialogModule, MatPaginatorModule, MatProgressSpinnerModule, DragScrollComponent, DragScrollItemDirective,
-      MatMenuModule, ReactiveFormsModule, ImgFallbackDirective],
+      MatMenuModule, ReactiveFormsModule, AppImgFallbackDirective],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })

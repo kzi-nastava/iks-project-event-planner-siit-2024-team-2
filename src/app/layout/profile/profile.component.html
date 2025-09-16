@@ -2,7 +2,7 @@
   <div class="profile-header">
     <img 
       [src]="profilePreview || userInfo.image || 'images/avatar.svg'"
-      [imgFallback]="'images/avatar.svg'"
+      [appImgFallback]="'images/avatar.svg'"
       alt="Profile Picture" 
       class="profile-picture">
 
@@ -144,7 +144,7 @@
   <mat-card class="event-card" appearance="outlined">
     <mat-card-header>
       <img mat-card-avatar class="profile-picture" 
-      [src]="eventSummary.creatorProfilePicture || 'images/avatar.svg'" [imgFallback]="'images/avatar.svg'" alt="Profile Picture" />
+      [src]="eventSummary.creatorProfilePicture || 'images/avatar.svg'" [appImgFallback]="'images/avatar.svg'" alt="Profile Picture" />
       <mat-card-title-group>
         <mat-card-title class="event-creator-name" [innerHTML]="eventSummary.creatorName"></mat-card-title>
         <mat-card-subtitle class="event-creator-email" [innerHTML]="eventSummary.creatorEmail"></mat-card-subtitle>

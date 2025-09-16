@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { UserContextService } from '../../services/utils/user-context.service';
@@ -24,7 +24,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
 })
-export class ChatComponent {
+export class ChatComponent implements OnInit {
   readonly userContextService = inject(UserContextService);
   readonly chatService = inject(ChatService);
   readonly chatMessageService = inject(ChatMessageService);
@@ -38,7 +38,7 @@ export class ChatComponent {
   chatFriend: User | null = null;
   chat: Chat | null = null;
   newMessage = '';
-  myId: Number = Number(localStorage.getItem('userId'))
+  myId = Number(localStorage.getItem('userId'))
 
   ngOnInit(): void {
     this.chatService.getAllMyChats({ page: 0, size: -1 }).subscribe(response => {

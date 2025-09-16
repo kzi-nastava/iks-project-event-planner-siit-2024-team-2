@@ -5,6 +5,10 @@
     <ul>
       <li *ngFor="let myChat of myChats" 
           (click)="selectChat(myChat)" 
+          (keydown.enter)="selectChat(myChat)"
+          (keydown.space)="selectChat(myChat)"
+          tabindex="0"
+          role="button"
           [class.active]="myChat.id === chat?.id">
         @if (myChat.user1.id === myId) {
           <p>{{ myChat.user2.firstName }} {{ myChat.user2.lastName }}</p>

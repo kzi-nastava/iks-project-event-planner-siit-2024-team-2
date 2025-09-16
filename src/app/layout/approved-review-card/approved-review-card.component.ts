@@ -1,7 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
 import { MatCardHeader, MatCard, MatCardContent, MatCardTitleGroup, MatCardTitle, MatCardSubtitle } from "@angular/material/card";
 import { MatMenuModule } from "@angular/material/menu";
-import { ImgFallbackDirective } from "../../utils/image-fallback";
+import { AppImgFallbackDirective } from "../../utils/image-fallback";
 import { environment } from '../../../environments/environment';
 import { MatIcon } from "@angular/material/icon";
 import { intlFormatDistance } from 'date-fns';
@@ -13,7 +13,7 @@ import { FormatUtilService } from '../../utils/format-util.service';
   selector: 'app-approved-review-card',
   standalone: true,
   imports: [
-    MatCardHeader, MatCard, MatCardContent, MatCardTitleGroup, MatMenuModule, ImgFallbackDirective, MatCardTitle, MatCardSubtitle, MatIcon, MatButtonModule
+    MatCardHeader, MatCard, MatCardContent, MatCardTitleGroup, MatMenuModule, AppImgFallbackDirective, MatCardTitle, MatCardSubtitle, MatIcon, MatButtonModule
   ],
   templateUrl: './approved-review-card.component.html',
   styleUrl: './approved-review-card.component.css'
