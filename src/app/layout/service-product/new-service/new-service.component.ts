@@ -226,8 +226,6 @@ export class NewServiceComponent implements OnInit {
             service.images = response.map(path => atob(path));
             this.toastService.show('Updating...', 2000);
             if (this.update) {  // UPDATING
-              console.log(service)
-              console.log("UPDATUJE SEE")
               this.serviceService.update(this.serviceId || -1, service).subscribe({
                 next: (service: Service) => {
                   this.toastService.show('Service ' + service.name + ' updated successfully!', 2000);
@@ -241,7 +239,6 @@ export class NewServiceComponent implements OnInit {
             }
             else {  // CREATING
               this.toastService.show('Creating...', 2000);
-              console.log(service)
               this.serviceService.add(service).subscribe({
                 next: (service: Service) => {
                   this.toastService.show('Service ' + service.name + ' created successfully!', 2000);

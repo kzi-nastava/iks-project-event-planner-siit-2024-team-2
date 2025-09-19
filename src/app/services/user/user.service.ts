@@ -46,4 +46,11 @@ export class UserService {
   unblockUser(userId: number) {
     return this.httpClient.delete(`${this.usersUrl}/${userId}/block`);
   }
+
+  muteNotifications(userId: number) {
+    return this.httpClient.post(`${this.usersUrl}/${userId}/mute-notifications`, {});
+  }
+  unmuteNotifications(userId: number) {
+    return this.httpClient.delete(`${this.usersUrl}/${userId}/mute-notifications`);
+  }
 }

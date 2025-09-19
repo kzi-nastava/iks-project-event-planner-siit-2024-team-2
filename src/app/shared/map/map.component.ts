@@ -82,10 +82,8 @@ export class MapComponent implements OnInit, OnChanges {
   }
 
   search(text: string): void {
-    console.log(text);
     this.mapService.search(text).subscribe({
       next: (result) => {
-        console.log(result);
         if (result.length === 0) {
           console.error('No location found.');
           return;

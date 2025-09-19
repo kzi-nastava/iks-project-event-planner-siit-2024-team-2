@@ -46,13 +46,6 @@ export class ServiceFilterDialogComponent implements OnInit {
   }
 
   filter() {
-    console.log('Filtering with:', {
-      category: this.selectedCategory.value,
-      eventTypes: this.selectedEventTypes.value,
-      minPrice: this.minPrice.value,
-      maxPrice: this.maxPrice.value,
-      available: this.available.value,
-    });
     this.dialogRef.close({
       category: this.selectedCategory.value,
       eventTypes: this.selectedEventTypes.value,

@@ -59,7 +59,6 @@ export class ServiceService {
     if (availableEventTypeIds && availableEventTypeIds.length > 0) {
       availableEventTypeIds.forEach(id => params = params.append('availableEventTypeIds', id));
     }
-    console.log(params)
 
     return this.httpClient.get<PagedModel<ServiceProductSummaryDto>>(`${this.apiUrl}`, { params });
   }

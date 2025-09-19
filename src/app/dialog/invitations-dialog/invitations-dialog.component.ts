@@ -51,7 +51,6 @@ export class InvitationsDialogComponent implements OnInit {
       this.emailFormControl.reset();
     } else 
       this.emailFormControl.markAsTouched();
-    console.log(this.emailFormControl.invalid);
   }
 
   remove(invitation: InvitationItem): void {

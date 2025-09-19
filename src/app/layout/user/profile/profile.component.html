@@ -131,6 +131,8 @@
     <!-- Account Deactivation -->
     <div class="profile-section danger-zone">
       <h2>Account Settings</h2>
+      <p><mat-slide-toggle labelPosition="before" (change)="updateMutedNotifications($event)" [(ngModel)]="mutedNotifications"
+        class="mute-notifications-slide-toggle">Mute notifications</mat-slide-toggle></p>
       <button type="button" class="danger-button button" (click)="deactivateAccount()">
         Deactivate Account
       </button>

@@ -67,8 +67,6 @@ export class NewCategoryComponent implements OnInit {
 
   onSubmit() {
     if (this.inputForm.valid) {
-      console.log('Form Submitted:', this.inputForm.value);
-  
       const category: ServiceProductCategoryDto = {
         name: this.inputForm.value.name,
         description: this.inputForm.value.description, 
