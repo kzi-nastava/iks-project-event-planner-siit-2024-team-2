@@ -1,0 +1,32 @@
+<div class="userreport-container">
+    @for(userReport of userReports; let i = $index; track userReport.id) {
+        <mat-card class="userreport-card" appearance="outlined"
+         *ngIf="!userReport.hidden"
+        [@.disabled]="!userReport.hiding" [@fadeOut]>
+            <mat-card-header>
+                <mat-card-title><b>{{getReporter(userReport)}}</b> reported <b>{{getReported(userReport)}}</b></mat-card-title>
+                <mat-card-subtitle>{{userReport.createdAt ? formatDate(userReport.createdAt) : ''}}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <p>Reason:</p>
+                <p class="userreport-reason collapsed" #reasonEl>{{userReport.reason}}</p>
+                <button mat-button color="primary" class="read-button" (click)="readMore(reasonEl)" *ngIf="isEllipsisActive(reasonEl)">Read more</button>
+                <button mat-button color="primary" class="read-button" (click)="readLess(reasonEl)" *ngIf="reasonEl?.classList?.contains('expanded')">Read less</button>
+            </mat-card-content>
+            <mat-card-actions align="end">
+                <button mat-button color="primary" (click)="approve(userReport)">Suspend</button>
+                <button mat-button color="primary" (click)="deny(userReport)">Deny</button>
+            </mat-card-actions>
+        </mat-card>
+    } @empty {
+        <div class="empty-list">No user reports found</div>
+    }
+</div>
+<mat-paginator [length]="totalElements"
+[pageIndex]="pageIndex"
+[pageSize]="pageSize"
+[pageSizeOptions]="[10, 20, 50]"
+[showFirstLastButtons]="true"
+(page)="onPageChange($event)"
+aria-label="Select page">
+</mat-paginator>

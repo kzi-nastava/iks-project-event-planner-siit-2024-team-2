@@ -1,0 +1,125 @@
+* {
+  background-color: white;
+  color: black;
+}
+.sidenav-container {
+  height: calc(100vh - 64px); /* 64px is toolbar full height */
+}
+
+.content {
+  padding: 20px;
+  text-align: center;
+}
+
+mat-sidenav {
+  width: 250px;
+}
+
+mat-sidenav-content {
+  padding: 20px;
+  box-sizing: border-box; 
+}
+
+mat-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #EEF2FF;
+  padding: 0 16px;
+  height: 64px; 
+  line-height: 56px;
+  box-sizing: border-box;
+}
+
+.toolbar-title {
+  background-color: #EEF2FF;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.toolbar-actions {
+  background-color: #EEF2FF;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.custom-signin-button {
+  background-color: #7C96FF !important;
+  color: white !important;
+}
+
+.custom-signin-button:hover {
+  background-color: #5B78CC !important;
+  color: white !important;
+}
+
+
+mat-nav-list {
+  margin-top: 60px;
+}
+
+mat-list-item {
+  display: flex;
+  align-items: center;
+  color: #7C96FF !important;
+  background-color: #EEF2FF;
+}
+
+mat-list-item:hover {
+  background-color: #EEF2FF !important;
+  color: #5B78CC !important;
+}
+
+mat-list-item .mat-line {
+  color: inherit !important;
+}
+
+
+mat-icon {
+  margin-right: 10px;
+  color: #7C96FF;
+  background-color: transparent;
+}
+.mdc-icon-button {
+  background-color: #EEF2FF;
+}
+mat-list-item p {
+  display:inline-block; 
+  margin: 0px; 
+  padding:0px; 
+  background-color: transparent;
+}
+span {
+  cursor: pointer;
+  flex: 6;
+  text-align: center;
+}
+.nav-right {
+  cursor: pointer;
+  flex:auto;
+  display: flex;
+  justify-content: flex-end;
+}
+a {
+  text-decoration: none;
+  color: #7C96FF;
+}
+.secondary {
+  background-color: #EEF2FF;
+  color: black;
+}
+
+.hidden {
+  display: none !important;
+}
+
+mat-list-item[color="primary"] {
+  color: white;
+}
+
+mat-list-item[color="primary"]:hover {
+  background-color: #303f9f;
+}

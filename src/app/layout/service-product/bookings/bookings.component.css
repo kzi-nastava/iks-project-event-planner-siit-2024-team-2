@@ -1,0 +1,40 @@
+.booking-card {
+    width: 70%;
+    margin: 0.5rem;
+}
+mat-card-content {
+    margin: 0.5rem 0;
+}
+.collapsed {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    line-clamp: 5;
+}
+.booking-container {
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    display: flex;
+    padding-bottom: 56px;   
+}
+.booking-details {
+    margin-bottom: 0;
+}
+.read-button {
+    margin: 5px -10px;
+    padding: 0 10px;
+}
+.mat-mdc-paginator{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    z-index: 10;
+}
+mat-card-actions button {
+    margin: 2px;
+}

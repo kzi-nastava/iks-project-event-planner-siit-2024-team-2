@@ -1,0 +1,53 @@
+.notification-card {
+    width: 70%;
+    /* box-sizing: border-box; */
+    margin: 0.5rem;
+}
+mat-card-content {
+    margin: 0.5rem 0;
+}
+.collapsed {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    line-clamp: 5;
+}
+.notification-container {
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    display: flex;
+    padding-bottom: 56px;   
+}
+.notification-message {
+    margin-bottom: 0;
+}
+.read-button {
+    margin: 5px -10px;
+    padding: 0 10px;
+}
+.mat-mdc-paginator{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    z-index: 10;
+}
+
+#reload-popup {
+    position: fixed;
+    right: 0;
+    bottom: 60px;
+    z-index: 11;
+    margin: 1rem;
+}
+#new-notifications-popup {
+    position: fixed;
+    right: 0;
+    top: 60px;
+    z-index: 11;
+    margin: 1rem;
+}

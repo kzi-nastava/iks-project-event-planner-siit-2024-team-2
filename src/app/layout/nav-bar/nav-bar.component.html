@@ -1,0 +1,90 @@
+<mat-toolbar color="primary">
+  <button [class.hidden]="isLoading" mat-icon-button (click)="toggleSidenav()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span class="toolbar-title" [routerLink]="['home']">Event Planner</span>
+  <div class="toolbar-actions" *ngIf="!isLoading">
+    <button mat-button (click)="clickAuthButton()" class="custom-signin-button">{{authButtonText}}</button>
+    <button mat-button *ngIf="canUpgrade" (click)="upgrade()" class="custom-signin-button">Upgrade</button>
+    <mat-icon *ngIf="isLoggedIn" [routerLink]="['profile']">account_circle</mat-icon>
+  </div>
+</mat-toolbar>
+
+
+<mat-sidenav-container [class.hidden]="isLoading" class="sidenav-container secondary">
+  <mat-sidenav #sidenav mode="side" class="secondary" [opened]="toggle">
+    <mat-nav-list class="secondary">
+      <mat-list-item [routerLink]="['home']" color="primary">
+        <mat-icon>home</mat-icon>
+        Home
+      </mat-list-item>
+      <mat-list-item [routerLink]="['chat']">
+        <mat-icon>chat</mat-icon>
+        Chat
+      </mat-list-item>
+      <mat-list-item [routerLink]="['notifications']">
+        <mat-icon >notifications</mat-icon>
+        <p matBadgeOverlap="false" matBadge="{{badgeCount$ | async}}" [matBadgeHidden]="(badgeCount$ | async) === 0 || (badgeCount$ | async) === undefined" matBadgeColor="accent" matBadgePosition="above after">Notifications</p>
+      </mat-list-item>
+      <mat-list-item [routerLink]="['calendar']">
+        <mat-icon>calendar_today</mat-icon>
+        Calendar
+      </mat-list-item>
+      <mat-list-item *ngIf="hasRole(['SERVICE_PRODUCT_PROVIDER'])" [routerLink]="['new-service']">
+        <mat-icon>add</mat-icon>
+        New service
+      </mat-list-item>
+      <mat-list-item *ngIf="hasRole(['SERVICE_PRODUCT_PROVIDER'])" [routerLink]="['new-product']">
+        <mat-icon>add</mat-icon>
+        New product
+      </mat-list-item>
+      <mat-list-item *ngIf="hasRole(['SERVICE_PRODUCT_PROVIDER'])" [routerLink]="['my-services']">
+        <mat-icon>handshake</mat-icon>
+        My services
+      </mat-list-item>
+      <mat-list-item *ngIf="hasRole(['SERVICE_PRODUCT_PROVIDER'])" [routerLink]="['my-products']">
+        <mat-icon>handshake</mat-icon>
+        My products
+      </mat-list-item>
+      <mat-list-item *ngIf="hasRole(['SERVICE_PRODUCT_PROVIDER'])" [routerLink]="['bookings']">
+        <mat-icon>event_note</mat-icon>
+        Review bookings
+      </mat-list-item>
+      <mat-list-item *ngIf="hasRole(['ADMIN'])" [routerLink]="['new-event-type']">
+        <mat-icon>add</mat-icon>
+        New Event Type
+      </mat-list-item>
+      <mat-list-item *ngIf="hasRole(['ADMIN'])" [routerLink]="['my-event-types']">
+        <mat-icon>handshake</mat-icon>
+        My Event Types
+      </mat-list-item>
+      <mat-list-item *ngIf="hasRole(['ADMIN'])" [routerLink]="['all-categories']">
+        <mat-icon>category</mat-icon>
+        All Categories
+      </mat-list-item>
+      <mat-list-item *ngIf="hasRole(['ADMIN'])" [routerLink]="['new-category']">
+        <mat-icon>add</mat-icon>
+        New Category
+      </mat-list-item>
+      <mat-list-item *ngIf="hasRole(['ADMIN'])" [routerLink]="['user-reports']">
+        <mat-icon>gavel</mat-icon>
+        User Reports
+      </mat-list-item>
+      <mat-list-item *ngIf="hasRole(['ADMIN'])" [routerLink]="['admin-reviews']">
+        <mat-icon>rate_review</mat-icon>
+        Reviews
+      </mat-list-item>
+      <mat-list-item *ngIf="hasRole(['EVENT_ORGANIZER'])" [routerLink]="['new-event']">
+        <mat-icon>add</mat-icon>
+        New event
+      </mat-list-item>
+      <mat-list-item *ngIf="hasRole(['EVENT_ORGANIZER'])" [routerLink]="['my-events']">
+        <mat-icon>handshake</mat-icon>
+        My events
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

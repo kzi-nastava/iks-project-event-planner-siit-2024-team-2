@@ -1,0 +1,1 @@
+export type ReviewType = 'SERVICE_PRODUCT' | 'EVENT';

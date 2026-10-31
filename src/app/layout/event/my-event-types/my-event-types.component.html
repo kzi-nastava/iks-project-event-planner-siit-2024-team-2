@@ -1,0 +1,31 @@
+<div *ngIf="loading">Loading event types...</div>
+<div *ngIf="error" class="error-message">{{ error }}</div>
+
+<div *ngIf="!loading && !error && myEventTypes.length === 0">
+  <p>No event types found.</p>
+</div>
+
+<div class="event-types-container" *ngIf="myEventTypes.length > 0">
+  <mat-card *ngFor="let eventType of myEventTypes" class="event-type-card" (click)="navigateToEventTypeDetails(eventType.id)">
+    <mat-card-header>
+      <mat-card-title>{{ eventType.name }}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <p><strong>Description:</strong> {{ eventType.description || 'No description' }}</p>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-button color="primary" (click)="navigateToEventTypeDetails(eventType.id)">Edit</button>
+      <button mat-button color="warn" (click)="deleteEventType(eventType.id)">Delete</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+
+<mat-paginator
+  [length]="totalEventTypes"
+  [pageSize]="pageSize"
+  [pageIndex]="pageIndex"
+  [pageSizeOptions]="[5, 10, 25]"
+  (page)="onPageChange($event)">
+</mat-paginator>

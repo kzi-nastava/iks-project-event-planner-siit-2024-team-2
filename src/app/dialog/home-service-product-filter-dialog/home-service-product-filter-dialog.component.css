@@ -1,0 +1,25 @@
+.form-container{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+    overflow: hidden !important;
+}
+.slider-label{
+    margin-bottom: 12px;
+    margin-left: 2px;
+    font-weight: 500;
+}
+mat-button-toggle{
+    width: 100%;
+}
+mat-button-toggle-group{
+    margin-bottom: 16px;
+}
+.service-options{
+    display: flex;
+    flex-direction: column;
+    /* overflow: hidden; */
+}
+[hidden]{
+  display: none;
+}

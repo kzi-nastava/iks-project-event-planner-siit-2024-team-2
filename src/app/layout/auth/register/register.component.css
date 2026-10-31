@@ -1,0 +1,46 @@
+.register-card {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  background-color: #EEF2FF;
+  border-radius: 8px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+ng:deep button {
+  margin: 10px;
+  background-color: #7C96FF important!;
+  color: black important!;;
+}
+
+button:disabled {
+  background-color: #D1D8FF;
+  color: gray;
+}
+
+mat-form-field {
+  margin-bottom: 15px;
+}
+
+button {
+  margin: 10px;
+}
+
+.profile-upload {
+  margin: 1rem 0;
+}
+
+.preview {
+  margin-top: 0.5rem;
+}
+
+.preview img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+}

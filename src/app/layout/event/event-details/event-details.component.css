@@ -1,0 +1,53 @@
+mat-card {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1rem;
+  /* position: relative; */
+}
+.error-message {
+  color: red;
+  text-align: center;
+  margin-top: 2rem;
+}
+mat-card-actions button {
+  margin-left: 20px;
+}
+.top-right-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+.reviews-container {
+  margin-top: 2rem;
+  width: 80%;
+  flex-direction: column;
+  display: flex;
+  /* align-items: center; */
+  align-items: stretch;
+  justify-content: flex-start;
+  padding-bottom: 0px;  
+}
+.mat-mdc-paginator{
+  width: 80%;
+  height: 56px;
+  margin-bottom: -10px;
+  margin-top: 10px;
+  padding-right: 20px;
+  background-color: transparent;
+}
+.reviews-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.actions-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.actions-container > * {
+  margin-right: -5px;
+  margin-top: 10px;
+}
+.spacer {
+  height: 20px;
+}

@@ -1,0 +1,28 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height:70vh;
+  }
+  
+  form {
+    width: 300px;
+  }
+  
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .snack-success {
+    background-color: #4caf50; /* green */
+    color: #fff;
+  }
+  
+  .snack-error {
+    background-color: #f44336; /* red */
+    color: #fff;
+  }
+  

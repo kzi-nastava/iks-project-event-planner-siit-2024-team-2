@@ -1,0 +1,115 @@
+import { Component, inject, OnInit } from '@angular/core';
+import { Event } from '../../../model/event/event';
+import { EventService } from '../../../services/event/event.service';
+import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatButtonModule } from '@angular/material/button';
+import { EventFilterParams } from '../../../parameters/event-filter-params';
+import { PagedModel } from '../../../shared/model/paged-model';
+import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteDialogComponent } from '../../../dialog/delete-dialog/delete-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
+
+@Component({
+  selector: 'app-my-events',
+  standalone: true,
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatPaginatorModule, MatIconModule],
+  templateUrl: './my-events.component.html',
+  styleUrls: ['./my-events.component.css'],
+})
+export class MyEventsComponent implements OnInit {
+  
+  deleteEvent(eventId: number) {
+    this.dialog.open(DeleteDialogComponent, {data: {entityName: 'event'}}).afterClosed().subscribe(result => {
+      if (result) {
+        this.eventService.delete(eventId).subscribe({
+          next: () => {
+            this.loadMyEvents(); 
+            this.snackBar.open('Event deleted successfully', 'Close', {
+              duration: 3000,
+            });
+          },
+          error: (err) => {
+            console.error('Failed to delete event:', err);
+            this.snackBar.open('Failed to delete event', 'Close', {
+              duration: 3000,
+            });
+          }
+        });
+      }
+    }, error => {
+      console.error('Error opening delete dialog:', error);
+    });
+  }
+  myEvents: Event[] = [];
+  totalEvents = 0;
+  pageSize = 10;
+  pageIndex = 0;
+
+  loading = false;
+  error = '';
+
+  // Injected
+  readonly router = inject(Router);
+  readonly eventService = inject(EventService);
+  readonly dialog = inject(MatDialog);
+  readonly snackBar = inject(MatSnackBar);
+
+  ngOnInit() {
+    this.loadMyEvents();
+  }
+
+  loadMyEvents() {
+    this.loading = true;
+    const filters: EventFilterParams = {
+      page: this.pageIndex,
+      size: this.pageSize
+    };
+
+    this.eventService.getAllMine(filters).subscribe({
+      next: (paged: PagedModel<Event>) => {
+        this.myEvents = paged.content;
+        this.totalEvents = paged.page.totalElements;
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'Failed to load events.';
+        this.loading = false;
+      }
+    });
+  }
+
+  onPageChange(event: PageEvent) {
+    this.pageSize = event.pageSize;
+    this.pageIndex = event.pageIndex;
+    this.loadMyEvents();
+  }
+  navigateToEventDetails(eventId?: number): void {
+    this.router.navigate(['/new-event'], { queryParams: { id: eventId } });
+  }
+
+  downloadPdf(eventId: number): void {
+    this.eventService.dowloadPdf(eventId).subscribe({
+      next: (response) => {
+        const blob = new Blob([response], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `event-${eventId}.pdf`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        this.error = 'Failed to download PDF.';
+        console.error(err);
+      }
+    });
+  }
+
+  seeBugdetPlan(eventId: number, eventTypeId: number): void {
+    this.router.navigate(['/budget'], { queryParams: { id: eventId, eventTypeId: eventTypeId} });
+  }
+}

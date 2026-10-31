@@ -1,0 +1,35 @@
+h3, h6 {
+    margin-left: 15px;
+}
+
+.small-input {
+  width: 60px;       
+  margin-right: 4px;
+  padding: 2px 4px; 
+  font-size: 13px;  
+}
+
+.purchase-list {
+  max-height: 120px;   
+  overflow-y: auto;     
+  padding-right: 4px;
+}
+
+.container {
+    margin-bottom: 20px;
+    margin: 0 auto;
+}
+
+.btn-edit {
+  background: linear-gradient(135deg, #dfe1ea, #9dacd6, #EEF2FF);
+  margin-right: 5px;
+}
+
+.btn-delete {
+  background: linear-gradient(135deg, #ffb3b3, #ff7a7a, #ffecec);
+}
+
+.highlighted-option {
+  font-weight: bold;
+  background-color: #9dacd6 !important;
+}

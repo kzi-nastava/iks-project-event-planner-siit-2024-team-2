@@ -1,0 +1,219 @@
+@use "@angular/material" as mat;
+@include mat.core();
+
+$primary: #7C96FF;
+$warn: #FFD52F;
+$primary-container: #EEF2FF;
+$lighter-primary-container: #eff2fa;
+$selection-color: #C2CFFF;
+$secondary-container: #D8E0FF;
+$secondary-container-night: #425283;
+$pickled-bluewood: #2B3352;
+$placeholder-text-color: #49454FB5;
+$cod-gray: #1E1E1E;
+$dark-gray: #4D4D4D;
+$gray: #8A8A8A;
+$light-gray: #B6B6B6;
+$transparent: #FFFFFF00;
+$red-container: #fff2f2;
+
+:root {
+    --mdc-dialog-container-color: $primary-container;
+    --mdc-filled-text-field-container-color: $primary-container !important;
+    --mdc-filled-text-field-label-text-color: $cod-gray !important;
+    --mat-select-enabled-trigger-text-color: $cod-gray !important;
+    --mdc-icon-button-icon-color: $cod-gray !important;
+    --mdc-filled-text-field-focus-label-text-color: $primary !important;
+    --mdc-dialog-supporting-text-color: $primary !important;
+    --mdc-checkbox-selected-icon-color: $primary !important;
+
+  @include mat.paginator-overrides((
+    container-text-color: $cod-gray,
+    container-background-color: $primary-container,
+    enabled-icon-color: $primary
+  ));
+  @include mat.button-overrides((
+    label-text-color: $primary
+  ));
+  @include mat.progress-spinner-overrides((
+    active-indicator-color: $primary,
+  ));
+  @include mat.dialog-overrides((
+    container-color: $primary-container,
+    subhead-color: $cod-gray,
+  ));
+  @include mat.slider-overrides((
+    active-track-color: $selection-color,
+    handle-color: $primary,
+    focus-handle-color: $primary,
+    label-container-color: $primary
+  ));
+  @include mat.select-overrides((
+    panel-background-color: $lighter-primary-container,
+    enabled-arrow-color : $primary,
+    focused-arrow-color : $primary,
+  ));
+  @include mat.pseudo-checkbox-overrides((
+    selected-icon-color: $primary,
+  ));
+  @include mat.checkbox-overrides((
+    selected-icon-color: $primary,
+  ));
+  @include mat.tabs-overrides((
+    active-focus-indicator-color: $primary,
+  ));
+  @include mat.datepicker-overrides((
+    // calendar-body-label-text-color: orange,
+    calendar-container-background-color: $lighter-primary-container,
+    calendar-date-today-outline-color: $primary,
+    calendar-date-selected-state-background-color: $primary
+  ));
+  @include mat.menu-overrides((
+    container-color: $primary-container,
+  ));
+  @include mat.card-overrides((
+    container-color: $lighter-primary-container,
+  ));
+  @include mat.stepper-overrides((
+    container-color: $lighter-primary-container
+  ));
+}
+.mat-mdc-outlined-button {
+  @include mat.button-overrides((
+    label-text-color: $primary,
+    container-color: red
+));}
+.mat-mdc-raised-button, .mat-mdc-unelevated-button{
+  @include mat.button-overrides((
+    container-color: $primary,
+    label-text-color: white
+));}
+.mat-mdc-text-button {
+  @include mat.button-overrides((
+    label-text-color: $primary
+));}
+
+mat-checkbox { // the intended color override doesn't seem to work so this is a neccessary workaround
+  input[aria-checked="mixed"], .mdc-checkbox--selected {
+    ~ .mdc-checkbox__background {
+      background-color: $primary !important;
+      border-color: $primary !important;
+    }
+  }
+}
+.report-menu { // you are not able to select menu coloring, so we will target it directly with the class
+  @include mat.menu-overrides((
+    container-color: $red-container,
+  ));
+}
+.mute-notifications-slide-toggle {
+  @include mat.slide-toggle-overrides((
+    label-text-size: 16px,
+    selected-track-color: $primary
+  ));
+  .mdc-switch__track::after {
+    background: $primary !important;
+  }
+}
+
+html, body { 
+    height: 100%; 
+    // overflow: hidden !important; /* Disable body scroll */
+}
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
+
+/* Select dropdown styling */
+.custom-select {
+    font-size: 18px;
+    padding: 12px 40px 12px 15px; /* Space for the arrow on the right */
+    border: 2px solid #7C96FF; /* Blue border */
+    border-radius: 8px; /* Rounded corners */
+    background-color: #EEF2FF; /* Light gray background */
+    color: #333; /* Dark text color */
+    outline: none; /* Remove default outline */
+    transition: all 0.3s ease;
+    -webkit-appearance: none; /* Safari-specific */
+    appearance: none; /* Remove default arrow */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Hover effect for the dropdown */
+.custom-select:hover {
+    background-color: #EEF2FF;
+    border-color: #7C96FF;
+}
+
+/* Focus effect for the dropdown */
+.custom-select:focus {
+    border-color: #7C96FF;
+    box-shadow: 0 0 8px rgba(25, 118, 210, 0.5);
+}
+
+/* Button styling */
+.fancy-button {
+    padding: 12px 24px; /* Top and bottom padding, left and right padding */
+    font-size: 16px; /* Font size */
+    font-weight: bold; /* Bold text */
+    text-transform: uppercase; /* Uppercase text */
+    color: white; /* Text color */
+    background-color: #7C96FF; /* Button background color */
+    border: none; /* Remove default border */
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4); /* Shadow effect */
+    outline: none; /* Remove focus outline */
+    width: 300px;
+}
+
+/* Hover effect */
+.fancy-button:hover, #attachmentBtn {
+    background-color: #0056b3; /* Darker background on hover */
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.6); /* Darker shadow on hover */
+}
+
+/* Focus effect */
+.fancy-button:focus{
+    outline: 3px solid #ffcc00; /* Yellow outline on focus */
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.6); /* Subtle glow effect */
+}
+
+/* Active effect (when button is clicked) */
+.fancy-button:active, #attachmentBtn {
+    background-color: #004085; /* Even darker background when clicked */
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* Subtle shadow on click */
+}
+
+/* Disabled button */
+.fancy-button:disabled {
+    background-color: #d6d6d6; /* Grey background for disabled state */
+    color: #999; /* Lighter text color */
+    cursor: not-allowed; /* Not allowed cursor */
+    box-shadow: none; /* No shadow for disabled state */
+}
+
+#cancel {
+    background-color: #EEF2FF; 
+    color: black;
+}
+
+.report-menu .mat-mdc-menu-content {
+  padding: 0px !important; 
+}
+
+.row {
+    display: flex;
+    gap: 20px; /* Space between combobox and listbox */
+    align-items: flex-start; /* Align items to the top */
+    justify-content: center;
+    padding-bottom: 20px;
+}
+.hide-ripple .mat-ripple{
+  display: none !important;
+}
+.inline-block {
+  display: inline-block;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
